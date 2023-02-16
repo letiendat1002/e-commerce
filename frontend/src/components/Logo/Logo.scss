@@ -1,0 +1,26 @@
+.logo {
+    display: inline-block;
+    font-size: 32px;
+    font-weight: 600;
+    color: transparent;
+    text-shadow: 0 0 4px 0 0 4px 4px rgba(224, 47, 47, 0.5);
+    background: linear-gradient(to right, #e02f2f, #dc6f08, #f0de0f, #a7cf21, #aa63ed, #e02f2f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: slide 5s linear infinite;
+    font-family: 'DancingRegular', cursive;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400% 400%;
+    animation: slide 5s linear infinite;
+  }
+  
+  @keyframes slide {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }

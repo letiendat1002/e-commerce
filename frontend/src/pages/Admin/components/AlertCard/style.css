@@ -1,0 +1,187 @@
+.alert-card-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow-y: hidden;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+.alert-card-container .ant-space-item {
+    width: 100%;
+}
+
+.alarm-card{
+    box-shadow:  0 3px 3px #d5d5d5!important;
+    border-radius: 16px!important;
+}
+.alert-card-container .card-header {
+    width: 100%;
+    height: 30px;
+
+    font-weight: 600;
+    font-size: 20px;
+    text-align: left;
+    color: var(--text);
+    padding-bottom: 1rem!important;
+}
+
+.alert-card-container .card-content {
+    width: 100%;
+    height: 51px;
+
+    display: flex;
+}
+
+.alert-card-container .card-content .card-on-dashboard {
+    width: 264.67px;
+    height: 51px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.alert-card-container .card-content .card-on-dashboard .amount-warning {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.alert-card-container .card-content .card-on-dashboard-primary .amount-warning {
+    background-color: var(--orange-600);
+    box-shadow: 0px 0px 0px 4px rgba(240, 142, 5, 0.32);
+}
+
+.alert-card-container .card-content .card-on-dashboard-secondary .amount-warning {
+    background-color: var(--green-600);
+    box-shadow: 0px 0px 0px 4px rgba(30, 200, 4, 0.32);
+}
+
+.alert-card-container .card-content .card-on-dashboard .secondary-section {
+    text-align: left;
+}
+
+.alert-card-container .card-content .card-on-dashboard .secondary-section .amount-customer {
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--text);
+}
+
+.alert-card-container .card-content .card-on-dashboard .secondary-section .amount-label {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--blue-200);
+}
+
+.alert-card-container .card-info {
+    width: 100%;
+    height: 350px;
+    padding: 12px 12px 01rem 12px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    background: linear-gradient(180deg, #ff7337, #40a20300);
+    border-top: 2px solid var(--blue-500);
+}
+
+.alert-card-container .card-info .warning-data-table-container {
+    width: 100%;
+    height: 100%;
+}
+
+.warning-data-table-container .data-table-header {
+    width: 100%;
+    height: 25px;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    text-align: left;
+    justify-content: space-between;
+}
+
+.warning-data-table-container .data-table-header h5:nth-child(3),
+.warning-data-table-container .data-table-header h5:nth-child(4) {
+    width: 17%
+}
+
+.warning-data-table-container .data-table-header h5:nth-child(1) {
+    width: 15%;
+}
+
+.warning-data-table-container .data-table-header h5:nth-child(2) {
+    width: 30%;
+}
+
+.warning-data-table-container .data-table-body {
+    height: calc(100%);
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* hide scrollbar in IE 10+ */
+    scrollbar-width: none; /* hide scrollbar in Firefox */
+}
+
+.warning-data-table-container .data-table-body::-webkit-scrollbar {
+    width: 0 !important; /* hide scrollbar in Chrome, Safari and Opera */
+}
+
+.warning-data-table-container .data-table-header .table-header-col {
+    width: calc(100%/4);
+    height: 100%;
+
+    font-weight: 600;
+    font-size: 16px;
+    text-align: left;
+
+    color: var(--text);
+}
+
+/* ./ */
+
+.warning-data-table-container .data-table-body {
+    height: calc(100% - 10rem);
+
+    overflow-y: scroll;
+
+    font-weight: 400;
+    font-size: 16px;
+    text-align: left;
+
+    color: var(--text);
+}
+
+.warning-data-table-container .data-table-row {
+    width: 100%;
+    height: 64px;
+    margin-bottom: 10px;
+    /* background-color: rgba(255, 255, 0, 0.438); */
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.warning-data-table-container .data-table-row .date-time-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.warning-data-table-container .data-table-row .date-time-col,
+.warning-data-table-container .data-table-row .container-id-col {
+    width: 110px;
+    height: 100%;
+}
+
+.warning-data-table-container .data-table-row .content-col {
+    width: 287px;
+}

@@ -1,0 +1,30 @@
+.modalview{
+    padding: 1rem;
+     table{
+        th{
+            text-align: center!important;
+            font-size: 20px;
+            font-weight: 600;
+            background-color: #d6d6d6!important;
+            border: 2px solid #ffffff!important;
+        }
+        td{
+            font-size: 18px;
+            border: 1px solid #d5d5d5!important;
+            span{
+                display: -webkit-box;
+                max-width: 100%;
+                margin: 0 auto;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                white-space:  normal;
+                text-overflow: ellipsis;
+            }
+            img{
+                max-height: 200px;
+                max-width: 200px;
+            }
+        }
+    }
+}
