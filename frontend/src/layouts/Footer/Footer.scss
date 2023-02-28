@@ -1,0 +1,130 @@
+.footer__top {
+  display: flex;
+}
+
+.grid__container__footer {
+  // display: flex !important;
+  // flex-wrap: wrap !important;
+  padding: 2rem 4rem 0;
+
+  ul {
+    padding-inline-start: 0px;
+  }
+
+  li {
+    list-style-type: none;
+    margin: 0.5rem 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: #3399d2;
+
+    &:hover {
+      text-decoration: underline;
+      color: black;
+      transition: all 0.8s;
+    }
+  }
+}
+
+.footer__item {
+  //   display: flex;
+  justify-content: start;
+  flex-direction: column;
+}
+
+.footer__cc {
+  display: flex;
+  flex-wrap: wrap;
+  .footer__cc--pay {
+    & a {
+      display: inline-block;
+      height: 2.5rem;
+      background-repeat: no-repeat;
+      width: 3.6rem;
+      background-image: url('./2.png');
+    }
+
+    .icon__cc {
+      background-position: -104px -34px;
+    }
+
+    .icon__sp {
+      background-position: -179px -34px;
+    }
+
+    .icon__thieuvn {
+      background-position: -247px -34px;
+    }
+  }
+}
+
+.footer__item {
+  .img__cc {
+    // display: flex;
+    a {
+      display: inline-block;
+      background-image: url('./2.png');
+      height: 2.1rem;
+      width: 3.2rem;
+      font-size: 1.3rem;
+      border-radius: 0.2rem;
+      background-repeat: no-repeat;
+      margin: 0.2rem 0.4rem 0.2rem 0;
+      padding: 0;
+      vertical-align: middle;
+    }
+
+    .icon__cc--vc {
+      background-position: 0 0;
+    }
+
+    .icon__cc--mc {
+      background-position: -53px 0;
+    }
+
+    .icon__cc--atm {
+      background-position: -106px 0;
+    }
+
+    .icon__cc--red {
+      width: 4rem;
+      height: 3rem;
+      background-position: -329px -32px;
+    }
+
+    .icon__cc--ct {
+      width: 13.2rem;
+      height: 4rem;
+      margin: 0.4rem 0;
+      background-position: 0 -148px;
+    }
+  }
+
+  .icon__cc--brand {
+    a {
+      background-image: url('./2.png');
+      display: inline-block;
+      background-repeat: no-repeat;
+    }
+
+    .icon__fstd {
+      background-position: 0 -120px;
+      width: 148px;
+      height: 24px;
+    }
+
+    .icon__fcare {
+      width: 120px;
+      height: 24px;
+      background-position: -180px -120px;
+    }
+
+    .icon__ilc {
+      width: 128px;
+      height: 30px;
+      background-position: -224px -75px;
+    }
+  }
+}
