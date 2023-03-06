@@ -16,8 +16,8 @@ section{
 .navbar{
     background-color: var(--background-color);
     width: 100%;
-    padding: 0 7%;
-    border: 1px solid #d5d5d5;
+    padding: 0 0%;
+    box-shadow: 3px 3px 3px 0px #d5d5d5;
 }
 
 .navbar img {
@@ -81,7 +81,7 @@ ul.catagory li.catagory-item:hover{
     border: 2px solid var(--primary-color);
 }
 
-// .container-fluid {
-//     padding: 0 !important;
-//     margin: 0 !important;
-// }
+.container-fluid {
+    padding: 0 !important;
+    margin: 0 !important;
+}

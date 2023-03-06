@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <div className="container-fluid p-0 m-0 col-lg-12 col-sm-12 col-md-12 ">
       <div className="headerTop col-lg-12 col-md-12 col-sm-12 " />
-      <div className="container-fluid navbar col-lg-12 col-md-12 col-sm-12 flex justify-content-around">
+      <div className="navbar col-lg-12 col-md-12 col-sm-12 flex justify-content-around">
           <img src={Logo} alt=""/>
           <InputGroup className='w-50'>
             <Form.Control 

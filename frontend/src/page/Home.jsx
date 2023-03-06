@@ -17,6 +17,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import data from '../assets/data/product';
 import Products from '../assets/data/product'
 import AutoSlice from '../components/AutoSlide/AutoSlice'
+import Footer from '../layouts/Footer'
 
 const slides = [
     slider1,
@@ -38,7 +39,6 @@ const menuCard = [
 const Home = () => {
   return (
     <div className="container-fluid home col-lg-12 col-sm-12 col-md-12">
-        <Header />
         <Carousel />
         <Container>
                 <Row className='container--item'>
@@ -255,7 +255,9 @@ const Home = () => {
                         <AutoSlice slides={menuCard} />
                      </Col>
                 </Row>
-            </Container>
+
+                {/* CAM KẾT */}
+        </Container>
     </div>
   )
 }
