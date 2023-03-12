@@ -1,17 +1,13 @@
-import Footer from "./layouts/Footer";
+import { RouterProvider } from 'react-router-dom'
 import Header from "./layouts/Header";
-import Home from "./page/Home";
-import Menu from "./page/Menu";
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-
+// import Home from "./pages/Home";
+import router from './routes';
 function App() {
   return (
-    <>
-      <Header />
-      {/* <Menu /> */}
-      <Home />
-      <Footer />
-    </>
+    <div className="App">
+      {/* <Home /> */}
+      <RouterProvider router={router} />
+    </div>
   );
 }
 
