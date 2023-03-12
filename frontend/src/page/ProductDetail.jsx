@@ -19,7 +19,7 @@ const ProductDetail = () => {
           <div className="product-main">
          <div className="product-header">
          <div className="col-6">
-         <div className="container">
+         
          
          <div className="product">
           <div className="breadcrumb">
@@ -37,9 +37,11 @@ const ProductDetail = () => {
 
           </div>
           
+       
          </div>
+         
          </div>
-         <div className="container">
+         <div className="a-container">
           <div className="single-product">
               <div className="row">
 
@@ -161,7 +163,6 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
-         </div>
          <div className="product-body">
           <div className="b-container">
             <div className="body-wrapper">

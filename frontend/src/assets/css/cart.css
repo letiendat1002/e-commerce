@@ -83,6 +83,8 @@
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
+  height: 170px;
+  margin-top:37px;
 }
 .price-1 {
   font-family: "Roboto";
@@ -91,11 +93,43 @@
   color: #f15e2c;
   line-height: 32px;
   text-align: right;
-  margin-top: 34px;
+  margin-top: 0px;
   margin-bottom: 0;
   min-height: 50px;
-  font-size: 20px;
+  font-size: 23px;
+  font-weight: bold;
+  
 }
+.row-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  
+}
+.quantity{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.quantity h5{
+  margin-top: 0px;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-family: "Roboto";
+  font-size: 14px;
+  font-weight: bold;
+}
+.quantity select{
+  height: 40px;
+  width: 126px;
+  cursor: pointer;
+  margin-top: 0;
+}
+
+
+
+
 .status {
   color: #f15e2c;
   font-size: 16px;
@@ -106,19 +140,21 @@
 .divider {
   border-bottom: #000 2px solid;
   height: 1px;
-  margin: 40px 0px;
+  margin: 70px 0px;
 }
+
 .btn-clear button {
   border-radius: 0px;
   height: 40px;
   width: 126px;
-
+  
   border: none;
   background-color: #303030;
   color: #fff;
 
   font-size: 18px;
   text-transform: uppercase;
+  margin-top: 10px;
 }
 .title-3 {
   display: flex;

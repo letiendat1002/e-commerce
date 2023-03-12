@@ -20,16 +20,24 @@
   position: relative;
   align-items: center;
   justify-content: center;
+  margin: 0 0 0 0;
+  width: 100%;
 }
 
 .row {
   display: flex;
   flex-wrap: nowrap;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 85px;
 }
 
 .col-6 {
   width: 50%;
+}
+.a-container {
+  width: 1200px;
+  margin: 0 auto;
+  position: relative;
 }
 .product-left {
   width: calc(50% - 15px);
@@ -46,23 +54,15 @@
 }
 
 .product-param ul {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
+
   flex-direction: column;
   list-style: none;
 }
 
 .product-param ul li {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
+
   flex-direction: column;
   list-style: none;
 }
@@ -79,7 +79,7 @@
   margin-bottom: 16px;
 }
 .product-right {
-  width: calc(50% - 15px);
+  width: 600px;
   position: sticky;
   top: 15px;
   float: left;
@@ -120,6 +120,7 @@
   position: relative;
   display: block;
   height: 480px;
+  width: 555px;
   background: var(--bg-grey);
   padding: 10px;
 }
@@ -201,7 +202,7 @@
 }
 .product-details p {
   margin: 5px 0;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.2rem;
 }
 
@@ -239,9 +240,12 @@
   -ms-flex-align: start;
   align-items: flex-start;
 }
+.title.title--more {
+  width: 100%;
+}
 .box .title--more {
   padding: 0;
-  -webkit-box-shadow: inset 0 1px 0 0 #e9ecef;
+
   box-shadow: inset 0 1px 0 0 #e9ecef;
 }
 .box .title--more span {
@@ -265,10 +269,9 @@
   display: -ms-flexbox;
   display: flex;
   width: 100%;
-  -ms-flex-wrap: wrap;
+
   flex-wrap: wrap;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
+
   justify-content: space-between;
   margin-bottom: 16px;
 }
@@ -329,34 +332,32 @@
   color: #fff;
 }
 /*-------------------------------------------------------------------------*/
-.product-body{
+.product-body {
   background-color: #f8f9fa;
- 
   padding: 32px 0;
 }
-.b-container{
+.b-container {
   width: 1200px;
   margin: 0 auto;
   position: relative;
 }
-.body-wrapper{
+.body-wrapper {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.card-left{
+.card-left {
   width: 58.75%;
   align-self: auto;
   position: relative;
   box-sizing: border-box;
-
 }
-.st-card{
+.st-card {
   overflow: hidden;
   width: 100%;
   display: block;
 }
-.card-title{
+.card-title {
   position: relative;
   margin-bottom: 15px;
   display: flex;
@@ -364,31 +365,31 @@
   justify-content: space-between;
   color: #212529;
 }
-.card-title h2{
+.card-title h2 {
   font-size: 20px;
   font-weight: 500;
   line-height: 24px;
 }
-.card-content{
+.card-content {
   font-size: 20px;
   line-height: 28px;
 }
-.card-content h2{
+.card-content h2 {
   font-size: 20px;
   font-weight: 500;
   line-height: 24px;
 }
-.card-content b{
+.card-content b {
   font-size: 15px;
   font-weight: 500;
   line-height: 24px;
 }
-.card-content p{
+.card-content p {
   font-size: 15px;
   font-weight: 500;
   line-height: 24px;
 }
-.card-right{
+.card-right {
   margin: 0;
   padding: 0;
   border: 0;
@@ -397,7 +398,7 @@
   vertical-align: baseline;
   background: 0 0;
 }
-.card{
+.card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -408,33 +409,30 @@
   box-shadow: 0 0 3px 0 #dee2e6;
   border-radius: 6px;
 }
-.st-card{
+.st-card {
   margin-bottom: 32px;
-
 }
-.re-card{
+.re-card {
   padding: 16px 20px 0;
-
 }
-.card .card-title{
+.card .card-title {
   font-size: 17px;
   line-height: 17px;
   font-weight: 500;
   margin-bottom: 10px;
 }
-.card .card-title h2{
+.card .card-title h2 {
   margin-bottom: 0;
 }
-.card .card-body{
+.card .card-body {
   padding: 0;
   flex: 1 1 auto;
-
 }
-.st-pd-table{
+.st-pd-table {
   border-collapse: collapse;
   width: 100%;
 }
-.st-pd-table tbody{
+.st-pd-table tbody {
   margin: 0;
   padding: 0;
   border: 0;
@@ -444,7 +442,7 @@
   background: 0 0;
 }
 
-.st-pd-table tr{
+.st-pd-table tr {
   margin: 0;
   padding: 0;
   border: 0;
@@ -457,15 +455,14 @@
   border: 1px solid #dee2e6;
   padding: 6px 10px;
 }
-td{
+td {
   display: table-cell;
   vertical-align: top;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
-  padding:6px 10px;
+  padding: 6px 10px;
   text-align: left;
-
 }
 .st-pd-table-viewDetail {
   padding: 10px 0;

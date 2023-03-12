@@ -23,10 +23,20 @@ const Cart = () => {
                     <p>
                       <strong>Giá</strong> {item.UnitPrice}
                     </p>
+                    <div className="row-bottom">
+                      <div className="quantity">
+                        <h5>Số lượng</h5>
+                        <select name="" id="">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   <div className="price">
                     <div className="price-1">{item.UnitPrice}</div>
-                    <div className="status">{item.Status}</div>
+                    
                     <div className="btn-clear">
                     <button>Icon xóa</button>
                   </div>
