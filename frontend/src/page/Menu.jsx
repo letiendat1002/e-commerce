@@ -12,7 +12,7 @@ import '../assets/css/menu.scss'
 import '../assets/css/home.scss'
 import {FcPrevious, FcNext} from 'react-icons/fc'
 import Catagory from '../assets/data/catagory';
-import Products from '../assets/data/product';
+import Products from '../assets/data/Product';
 
 const slides = [
     Item1,
@@ -55,7 +55,7 @@ const Menu = () => {
                 <div className="catagory__container col-lg-3 col-md-4" style={{paddingTop: "1rem"}}>
                 {
                         Catagory.map((catalog, key) => {
-                            if (catalog.nameCatalogory == "Laptop"){
+                            if (catalog.CategoryID == "3"){
                                 return (
                                     catalog.attribute.map((attribute, key) => {
                                         return (
@@ -92,27 +92,29 @@ const Menu = () => {
                             <Col lg={12} md={12} sm={12} className='container__item--child'>
                                 {
                                     Products.map((product, key) => {
-                                        return (
-                                            <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
-                                                <div className="child--contains--img">
-                                                    <img src={product.Image} alt="" />
-                                                </div>
-                                                <h3>{product.Name}</h3>
-                                                <div className="child--contains--price">
-                                                    <div>
-                                                        <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                        <h4 className="contains--price-unit">{product.UnitPrice}</h4>
+                                        if (product.CategoryID === '3'){
+                                            return (
+                                                <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                                    <div className="child--contains--img">
+                                                        <img src={product.Image} alt="" />
                                                     </div>
-                                                    <div className="contains--price-pecent">
-                                                        <p>1%</p>
+                                                    <h3>{product.Name}</h3>
+                                                    <div className="child--contains--price">
+                                                        <div>
+                                                            {/* <span className="contains--price--discount"><del>22.000.000đ</del></span> */}
+                                                            <h4 className="contains--price-unit">{product.UnitPrice}</h4>
+                                                        </div>
+                                                        {/* <div className="contains--price-pecent">
+                                                            <p>1%</p>
+                                                        </div> */}
+                                                    </div>
+                                                    <div className="child--contains--action">
+                                                        <button className='contains--action--buy'>Mua Hàng</button>
+                                                        <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
                                                     </div>
                                                 </div>
-                                                <div className="child--contains--action">
-                                                    <button className='contains--action--buy'>Mua Hàng</button>
-                                                    <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
-                                                </div>
-                                            </div>
-                                        )
+                                            )
+                                        }
                                     })
                                 }
                             </Col>

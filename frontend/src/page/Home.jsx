@@ -14,8 +14,8 @@ import Banner4 from '../assets/images/banner4.webp'
 import Banner5 from '../assets/images/banner5.webp'
 import {FaHotjar} from 'react-icons/fa'
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import data from '../assets/data/product';
-import Products from '../assets/data/product'
+// import data from '../assets/data/product';
+import Products from '../assets/data/Product'
 import AutoSlice from '../components/AutoSlide/AutoSlice'
 import Footer from '../layouts/Footer'
 

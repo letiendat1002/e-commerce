@@ -2,15 +2,16 @@ import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import Home from "./page/Home";
 import Menu from "./page/Menu";
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Header />
-      {/* <Home /> */}
-      <Menu />
+      {/* <Menu /> */}
+      <Home />
       <Footer />
-    </div>
+    </>
   );
 }
 

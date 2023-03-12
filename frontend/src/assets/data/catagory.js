@@ -1,5 +1,6 @@
 const Catagory = [
     {
+        CategoryID : '2',
         nameCatalogory: 'Máy tính bảng', 
         slug: 'may-tinh-bang',
         attribute: [
@@ -110,6 +111,7 @@ const Catagory = [
         ]
     }, 
     {
+        CategoryID : '1',
         nameCatalogory: 'Laptop', 
         slug: 'laptop', 
         attribute: [
@@ -323,6 +325,7 @@ const Catagory = [
         ]
     },
     {
+        CategoryID : '3',
         nameCatalogory: 'Điện Thoại', 
         slug: 'dienthoai', 
         attribute: [
