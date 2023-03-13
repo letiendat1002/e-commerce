@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Slider from 'react-slick';
 import { Container, Row, Col, Carousel } from 'react-bootstrap'
-import Item1 from '../assets/images/item1.webp'
-import Item2 from '../assets/images/item2.webp'
-import Item3 from '../assets/images/item3.webp'
-import Item4 from '../assets/images/item4.webp'
-import Item5 from '../assets/images/item5.webp'
-import Item6 from '../assets/images/item6.webp'
-import Item7 from '../assets/images/item7.webp'
-import '../assets/css/menu.scss'
-import '../assets/css/home.scss'
+import Item1 from '../../assets/images/item1.webp'
+import Item2 from '../../assets/images/item2.webp'
+import Item3 from '../../assets/images/item3.webp'
+import Item4 from '../../assets/images/item4.webp'
+import Item5 from '../../assets/images/item5.webp'
+import Item6 from '../../assets/images/item6.webp'
+import Item7 from '../../assets/images/item7.webp'
+import '../../assets/css/menu.scss'
+import '../../assets/css/home.scss'
 import {FcPrevious, FcNext} from 'react-icons/fc'
-import Catagory from '../assets/data/catagory';
-import Products from '../assets/data/Product';
+import Catagory from '../../assets/data/catagory';
+import Products from '../../assets/data/product';
+import {Link, useParams} from 'react-router-dom' 
+import formatProductPrice from '../../Helper';
 
 const slides = [
     Item1,
@@ -24,7 +26,22 @@ const slides = [
     Item7,
 ]
 
-const Menu = () => {
+const Menu = ({match, history}) => {
+
+    
+
+    const {slug} = useParams();
+    
+    const [catagoryId, setCatagoryID] = useState("");
+
+    useEffect(() => {
+        Catagory.map((catagory) => {
+            if (catagory.slug === slug){
+                setCatagoryID(catagory.CategoryID)
+            }
+        })
+    })
+
     const settings = {
         infinite: true,
         slidesToShow: 1,
@@ -37,7 +54,15 @@ const Menu = () => {
     return (
         <div className="container-fluid col-lg-12 col-md-12 col-sm-12 col-12" style={{backgroundColor: '#f1f0f1'}}>
             <div className="catagory">
-            <p style={{padding: '1rem 0'}}>Trang Chủ / Apple</p>
+            {
+                Catagory.map((catagory, key) => {
+                    if (catagory.slug === slug){
+                        return (
+                            <h6><Link to={'/'}>Trang chủ</Link> / {catagory.nameCatalogory}</h6>
+                        )
+                    }
+                })   
+            }
             <div className='slider'>
                 <Slider {...settings}>
                     {
@@ -55,7 +80,7 @@ const Menu = () => {
                 <div className="catagory__container col-lg-3 col-md-4" style={{paddingTop: "1rem"}}>
                 {
                         Catagory.map((catalog, key) => {
-                            if (catalog.CategoryID == "3"){
+                            if (catalog.slug === slug){
                                 return (
                                     catalog.attribute.map((attribute, key) => {
                                         return (
@@ -80,34 +105,45 @@ const Menu = () => {
                 </div>
                 <div className="catagory__item col-lg-9">
                     <div className="catagory__item--title">
-                        <h3>Điện thoại <span>(36 sản phẩm)</span></h3>
+                    {
+                        Catagory.map((catagory, key) => {
+                            if (catagory.slug === slug){
+                                return (
+                                    <h3>{catagory.nameCatalogory} <span>(36 sản phẩm)</span></h3>
+                                )
+                            }
+                        })   
+                    }
                     </div>
                     <div className="catagory__item--container col-lg-12 col-md-12 col-sm-12">
-                        <select style={{position: 'absolute', right: '0%', padding: '5px 20px', border: '1px solid #d5d5d5', borderRadius: '5px', margin: '0 15px'}}>
+                        <div className="catagory__item--container--item">
+                            <span>Sản phẩm dành cho bạn</span>
+                            <select style={{position: 'absolute', right: '0%', padding: '5px 20px', border: '1px solid #d5d5d5', borderRadius: '5px', margin: '0 15px'}}>
                             <option>Bán chạy nhất</option>
                             <option>Theo tên từ A - Z</option>
                             <option>Sắp xếp theo giá giảm dần</option>
-                        </select>
+                            </select>
+                        </div>
                         <div className="catagory__item--container--child">
                             <Col lg={12} md={12} sm={12} className='container__item--child'>
                                 {
                                     Products.map((product, key) => {
-                                        if (product.CategoryID === '3'){
+                                        if (product.CategoryID === catagoryId){
                                             return (
                                                 <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
-                                                    <div className="child--contains--img">
+                                                    <Link to = {product.Slug}><div className="child--contains--img">
                                                         <img src={product.Image} alt="" />
                                                     </div>
                                                     <h3>{product.Name}</h3>
                                                     <div className="child--contains--price">
                                                         <div>
-                                                            {/* <span className="contains--price--discount"><del>22.000.000đ</del></span> */}
-                                                            <h4 className="contains--price-unit">{product.UnitPrice}</h4>
+                                                            <span className="contains--price--discount"><del>22.000.000đ</del></span>
+                                                            <h4 className="contains--price-unit">{formatProductPrice(product.UnitPrice)}</h4>
                                                         </div>
-                                                        {/* <div className="contains--price-pecent">
+                                                        <div className="contains--price-pecent">
                                                             <p>1%</p>
-                                                        </div> */}
-                                                    </div>
+                                                        </div>
+                                                    </div></Link>
                                                     <div className="child--contains--action">
                                                         <button className='contains--action--buy'>Mua Hàng</button>
                                                         <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>

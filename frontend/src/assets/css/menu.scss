@@ -1,5 +1,5 @@
 .catagory{
-    padding: 0 10%;
+    padding: 1rem 10%;
 }
 .catagory__container h5{
     font-size: 18px;
@@ -46,9 +46,36 @@
 }
 
 .catagory__item--container--child{
-    padding: 2rem 0;
-    // border: 2px solid #d5d5d5;
-    box-shadow: 0 0 3px 0 #d5d5d5;
+    border: 2px solid #d5d5d5;
+    box-shadow: 0 0 3px 0 #716f6f;
     margin-top: 3rem;
     border-radius: 5px;
 }
+
+.catagory h6{
+    font-size: 20px;
+    padding-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.catagory h6 a{
+    font-size: 18px;
+    color: #0275d8;
+}
+
+.catagory__item--title h3 span{
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 22px
+}
+
+.catagory__item--container--item{
+    display: flex;
+}
+
+.catagory__item--container--item span{
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+

@@ -16,12 +16,12 @@ section{
 .navbar{
     background-color: var(--background-color);
     width: 100%;
-    padding: 0 0%;
-    box-shadow: 3px 3px 3px 0px #d5d5d5;
+    padding: 0 7%;
 }
 
 .navbar img {
-    width: 150px;
+    width: 200px;
+    height: 200px;
     padding: 0;
     margin: 0;
     height: 100px;
@@ -55,6 +55,7 @@ p.menu-show{
     display: none;
     position: absolute;
     // display: block;
+    z-index: 1000;
     padding: 0;
     margin: 0;
     background-color: #fff;
@@ -84,4 +85,27 @@ ul.catagory li.catagory-item:hover{
 .container-fluid {
     padding: 0 !important;
     margin: 0 !important;
+}
+
+.headerBottom{
+    display: flex;
+    justify-content: space-around;
+    height: 60px;
+    background-color: var(--primary-color);
+    padding: 0 7% !important;
+}
+
+.headerBottom__item{
+    line-height: 60px;
+    display: flex;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+    
+    span{
+        margin-top: -2px;
+        padding-right: 5px;
+        font-size: 20px;
+        font-weight: 500;
+    }
 }
