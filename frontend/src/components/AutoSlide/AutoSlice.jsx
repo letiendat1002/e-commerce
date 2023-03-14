@@ -1,6 +1,6 @@
 import React from 'react'
 import Slider from 'react-slick';
-import '../../assets/css/home.scss'
+import '../../assets/css/Home.scss'
 
 const AutoSlice = ({slides}) => {
     const settings = {

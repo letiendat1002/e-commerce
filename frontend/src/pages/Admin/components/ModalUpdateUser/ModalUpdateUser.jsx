@@ -1,31 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { toast } from 'react-toastify';
-import { createNewUser } from '../../../services/apiServiceUser';
-import './ModalCreateUser.scss';
+import _ from 'lodash';
+import { createNewUser } from '../../../../services/apiServiceUser';
+import './ModalUpdateUser.scss';
 
-const ModalCreateUser = (props) => {
-  const { show, setShow, callApi } = props;
+const ModalUpdateUser = (props) => {
+  const { setShowModal, callApi, showUpdate, data1 } = props;
 
   const handleClose = () => {
-    setShow(false);
-    setEmail('');
-    setRole('USER');
-    setUsername('');
-    setImage('');
-    setPassword('');
-    setPreviewImage('');
+    setShowModal(false);
+    // setEmail('');
+    // setRole('USER');
+    // setUsername('');
+    // setImage('');
+    // setPassword('');
+    // setPreviewImage('');
   };
 
+  console.log(data1.role);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [role, setRole] = useState('USER');
+  const [role, setRole] = useState('');
   const [image, setImage] = useState('');
   const [previewImage, setPreviewImage] = useState('');
+
+  useEffect(() => {
+    if (!_.isEmpty(data1)) {
+      setEmail(data1.email);
+      setUsername(data1.username);
+      setRole(data1.role);
+      setImage('');
+      if (data1.image) {
+        setPreviewImage(`data:image/jpg;base64,${data1.image}`);
+      }
+    }
+  }, [data1]);
 
   const handleUploadImage = (e) => {
     if (e.target && e.target.files && e.target.files[0]) {
@@ -35,8 +49,6 @@ const ModalCreateUser = (props) => {
       setPreviewImage('');
     }
     console.log('Upload', e.target.files[0]);
-
-    console.log(image);
   };
 
   const validateEmail = (email) => {
@@ -71,10 +83,11 @@ const ModalCreateUser = (props) => {
       toast.error(data.EM);
     }
   };
+
   return (
     <div>
       <Modal
-        show={show}
+        show={showUpdate}
         // onHide={handleCloseModal}
         onHide={handleClose}
         size={'xl'}
@@ -140,12 +153,8 @@ const ModalCreateUser = (props) => {
                 className='form-select'
                 value={role}
                 onChange={(e) => setRole(e.target.value)}>
-                <option
-                  value='USER'
-                  checked>
-                  USER
-                </option>
-                <option value='ADMIN'>Admin</option>
+                <option value='USER'>USER</option>
+                <option value='ADMIN'>ADMIN</option>
               </select>
             </div>
 
@@ -197,6 +206,6 @@ const ModalCreateUser = (props) => {
   );
 };
 
-ModalCreateUser.propTypes = {};
+ModalUpdateUser.propTypes = {};
 
-export default ModalCreateUser;
+export default ModalUpdateUser;

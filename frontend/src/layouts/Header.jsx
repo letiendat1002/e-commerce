@@ -1,6 +1,6 @@
 import React from 'react'
 import Logo from '../assets/images/Logo.svg'
-import '../assets/css/header.scss'
+import '../assets/css/Header.scss'
 import '../assets/css/config.scss'
 import { Form, InputGroup, NavItem } from 'react-bootstrap'
 import {GiSmartphone} from 'react-icons/gi'
