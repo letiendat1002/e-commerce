@@ -10,15 +10,15 @@
     margin: 0;
 }
 
-.catagory__container--item ul a li{
+.catagory__container--item ul li{
     display: flex;
-    padding: 0 10px;
+    padding: 0 1rem;
     align-items: center;
     margin: 0;
     height: 40px;
 }
 
-.catagory__container--item ul a li p{
+.catagory__container--item ul li p{
    padding: 15px 10px 0 10px;
    font-size: 18px;
    font-weight: 400;

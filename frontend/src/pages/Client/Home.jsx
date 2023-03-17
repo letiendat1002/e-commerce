@@ -162,8 +162,8 @@ const Home = () => {
                                                     </div>
                                                 </div></Link>
                                                 <div className="child--contains--action">
-                                                    <button className='contains--action--buy'>Mua Hàng</button>
-                                                    <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
+                                                    <Link to = "#"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                    <Link to= "#"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
                                                 </div>
                                            </div>
                                         )
