@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getAllUser } from '../../../../services/apiGetAllUser';
+import Pagination from '../Pagination/Pagination';
+import Loading from '../../../../components/Loading/Loading';
+
+import './TableUser.scss';
 
 const TableUser = (props) => {
+  const { data, setShowModal, handleClickBtnDelete, callApiWithPaginate, handleClickBtnView } =
+    props;
   
-
-  const { data,setShowModal } = props;
-  console.log(data);
-
- 
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
-      <table className='table table-dark table-hover table-striped table-bordered  '>
+      <table className='table table-dark table-hover table-striped table-bordered table_users '>
         <thead>
           <tr>
             <th scope='col'>No</th>
@@ -23,7 +25,10 @@ const TableUser = (props) => {
           </tr>
         </thead>
         <tbody>
-          {data &&
+          {loading ? (
+            <Loading />
+          ) : (
+            data &&
             data.length > 0 &&
             data.map((x, idx) => (
               <tr key={idx}>
@@ -32,12 +37,25 @@ const TableUser = (props) => {
                 <td>{x.username}</td>
                 <td>{x.role}</td>
                 <td>
-                  <button className='btn btn-primary'>View</button>
-                  <button className='btn btn-success mx-3' onClick={()=>setShowModal(x)}>Update</button>
-                  <button className='btn btn-danger'>Delete</button>
+                  <button
+                    className='btn btn-primary'
+                    onClick={() => handleClickBtnView(x)}>
+                    View
+                  </button>
+                  <button
+                    className='btn btn-success mx-3'
+                    onClick={() => setShowModal(x)}>
+                    Update
+                  </button>
+                  <button
+                    className='btn btn-danger'
+                    onClick={() => handleClickBtnDelete(x)}>
+                    Delete
+                  </button>
                 </td>
               </tr>
-            ))}
+            ))
+          )}
 
           {data && data.length === 0 && (
             <tr>
@@ -50,6 +68,8 @@ const TableUser = (props) => {
           )}
         </tbody>
       </table>
+
+      {/* <PaginatedItems  />, */}
     </>
   );
 };

@@ -5,23 +5,23 @@ import { Button, Modal } from 'react-bootstrap';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import _ from 'lodash';
-import { createNewUser } from '../../../../services/apiServiceUser';
+import { putUpdateUser } from '../../../../services/apiServiceUser';
 import './ModalUpdateUser.scss';
 
 const ModalUpdateUser = (props) => {
-  const { setShowModal, callApi, showUpdate, data1 } = props;
+  const { setShowModal, callApi, showUpdate, data1 ,resetUpdateData,setCurrentPage,callApiWithPaginate,currentPage} = props;
 
   const handleClose = () => {
     setShowModal(false);
-    // setEmail('');
-    // setRole('USER');
-    // setUsername('');
-    // setImage('');
-    // setPassword('');
-    // setPreviewImage('');
+    setEmail('');
+    setRole('USER');
+    setUsername('');
+    setImage('');
+    setPassword('');
+    setPreviewImage('');
+    resetUpdateData()
   };
 
-  console.log(data1.role);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -36,7 +36,7 @@ const ModalUpdateUser = (props) => {
       setRole(data1.role);
       setImage('');
       if (data1.image) {
-        setPreviewImage(`data:image/jpg;base64,${data1.image}`);
+        setPreviewImage(`data:image/jpeg;base64,${data1.image}`);
       }
     }
   }, [data1]);
@@ -59,24 +59,28 @@ const ModalUpdateUser = (props) => {
       );
   };
 
+  const {id} =data1
+
   const handleCreateUser = async () => {
-    const isValidate = validateEmail(email);
-    if (!isValidate) {
-      // alert("Error")
-      toast.error('Invalid Email');
-      return;
-    }
+    // const isValidate = validateEmail(email);
+    // if (!isValidate) {
+    //   // alert("Error")
+    //   toast.error('Invalid Email');
+    //   return;
+    // }
 
-    if (!password) {
-      toast.error('Invalid password');
-      return;
-    }
+    // if (!password) {
+    //   toast.error('Invalid password');
+    //   return;
+    // }
 
-    let data = await createNewUser(email, password, username, role, image);
+    let data = await putUpdateUser(id,username, role, image);
     if (data && data.EC === 0) {
       toast.success(data.EM);
       handleClose();
-      await callApi();
+      // await callApi();
+      setCurrentPage(currentPage)
+      await callApiWithPaginate(currentPage);
     }
 
     if (data && data.EC !== 0) {
@@ -108,6 +112,7 @@ const ModalUpdateUser = (props) => {
                 type='email'
                 className='form-control'
                 id='inputEmail4'
+                disabled
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -124,6 +129,7 @@ const ModalUpdateUser = (props) => {
                 className='form-control'
                 id='inputPassword'
                 value={password}
+                disabled
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

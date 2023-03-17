@@ -1,20 +1,41 @@
 .admin-container {
-    display: flex;
-    .admin-sidebar {
-        .pro-sidebar {
-            height: 100vh !important;
-            }
+  display: flex;
+  .admin-sidebar {
+    .pro-sidebar {
+      height: 1000px !important;
+    }
+  }
+
+  .admin-content {
+    width: 100%;
+    .admin-header {
+      height: 60px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px 0 10px;
+
+      & .leftside {
+        cursor: pointer;
+        font-size: 20px ;
+        color: #666666;
+        // padding: 0 20px;
+      }
+
+      & .rightside {
+        display: flex;
+        gap: 10px;
+      }
     }
 
-    .admin-content{
-        width: 100%;
-        .admin-header{
-                height: 40px;
-                border:1px solid green;
-        }
-
-        .admin-main{
-                border: 1px solid red;
-        }
+    .admin-main {
+      // border: 1px solid red;
+      width: 100%;
     }
+
+    .header__admin--dropdown{
+
+    }
+  }
 }

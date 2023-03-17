@@ -3,13 +3,14 @@ import { STATIC_HOST_2 } from '../constant/common';
 
 const axiosClient = axios.create({
   baseURL: `${STATIC_HOST_2}/`,
-  headers: { 'Content-Type': 'application/json' },
+  // headers: { 'Content-Type': 'application/json' },
 });
 
 // Add a request interceptor
 axiosClient.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    console.log(config)
     return config;
   },
   function (error) {

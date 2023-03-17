@@ -16,4 +16,29 @@ const createNewUser = (email, password, username, role, image) => {
   return axiosClient.post(url, data);
 };
 
-export { createNewUser };
+const putUpdateUser = (id, username, role, image) => {
+  const data = new FormData();
+  data.append('id', id);
+  data.append('username', username);
+  data.append('role', role);
+  data.append('userImage', image);
+  console.log(data);
+
+  const url = `${STATIC_HOST_2}/participant`;
+
+  return axiosClient.put(url, data);
+};
+
+const deleteUpdateUser = (idUser) => {
+  const url = `${STATIC_HOST_2}/participant`;
+
+  return axiosClient.delete(url, { data: { id: idUser } });
+};
+
+const getUserWithPaginate = (page, limit) => {
+  const url = `${STATIC_HOST_2}/participant?page=${page}&limit=${limit}`;
+
+  return axiosClient.get(url);
+};
+
+export { createNewUser, putUpdateUser, deleteUpdateUser, getUserWithPaginate };

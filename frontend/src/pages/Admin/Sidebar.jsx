@@ -10,13 +10,15 @@ import {
   SidebarFooter,
   SidebarContent,
 } from 'react-pro-sidebar';
+import { useTranslation, Trans } from 'react-i18next';
 import { FaTachometerAlt, FaGem, FaList, FaGithub, FaRegLaughWink, FaHeart } from 'react-icons/fa';
 import { DiReact } from 'react-icons/di';
 import { RiDashboardLine } from 'react-icons/ri';
 import { Outlet, Link, NavLink } from 'react-router-dom';
 
 const Sidebar = (props) => {
-  const {  collapsed, toggled, handleToggleSidebar } = props;
+  const { collapsed, toggled, handleToggleSidebar } = props;
+  const { t } = useTranslation();
   return (
     <div>
       <ProSidebar
@@ -41,7 +43,7 @@ const Sidebar = (props) => {
                 size={'3em'}
                 color={'00bfff'}
               />
-              Admin Page
+              {t('sidebar.title')}
             </div>
           </SidebarHeader>
         </Link>
@@ -50,22 +52,27 @@ const Sidebar = (props) => {
           <Menu iconShape='circle'>
             <MenuItem
               icon={<RiDashboardLine />}
-              suffix={<span className='badge red'>Manage</span>}>
+              suffix={<span className='badge red'>{t('sidebar.title3')}</span>}>
               <Link to='/admin' />
-              Dashboard
+              {t('sidebar.title2')}
             </MenuItem>
-            <MenuItem icon={<FaGem />}> Products </MenuItem>
+            <MenuItem icon={<FaGem />}>{t('sidebar.title4')} </MenuItem>
           </Menu>
           <Menu iconShape='circle'>
             <SubMenu
               suffix={<span className='badge yellow'>3</span>}
               icon={<FaRegLaughWink />}>
               <MenuItem>
-                Quản lý người dùng
+                {t('sidebar.title5')}
+                {/* Quản lý người dùng */}
                 <Link to='manage-user' />
               </MenuItem>
-              <MenuItem>Quản lý danh mục </MenuItem>
-              <MenuItem>Quản lý đặt hàng </MenuItem>
+              <MenuItem>
+              {t('sidebar.title6')} {/* Quản lý danh mục */}
+              </MenuItem>
+              <MenuItem>
+              {t('sidebar.title7')}{/* Quản lý đặt hàng */}
+              </MenuItem>
             </SubMenu>
           </Menu>
         </SidebarContent>
@@ -75,8 +82,7 @@ const Sidebar = (props) => {
             className='sidebar-btn-wrapper'
             style={{
               padding: '20px 24px',
-            }}>
-          </div>
+            }}></div>
         </SidebarFooter>
       </ProSidebar>
     </div>
