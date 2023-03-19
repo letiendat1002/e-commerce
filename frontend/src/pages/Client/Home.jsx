@@ -47,7 +47,6 @@ const Home = () => {
     const [laptop, setLaptop] = useState(Products.filter(product => product.CategoryID === "1"))
     const [tablet, setTablet] = useState(Products.filter(product => product.CategoryID === "3"))
 
-    console.log(phone);
 
     const handleActive = () => {
         const laptop = document.querySelector('.container--item .laptop')   
@@ -144,7 +143,7 @@ const Home = () => {
                 <Row className='container__item'>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProduct(8, product).map((product) => {
+                            productData.getProductsForRecommendation(8, product).map((product) => {
                                         return (
                                             <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
                                                <Link to = {product.Slug}>
@@ -183,7 +182,7 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProducts(8).map((product, key) => {
+                            productData.getRandomProducts(8).map((product, key) => {
                                 return (
                                     <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
                                         <Link to = {product.Slug}>
@@ -223,7 +222,7 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProduct(8, phone).map((product, key) => {
+                            productData.getProductsForRecommendation(8, phone).map((product, key) => {
                                         return (
                                             <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
                                                 <Link to = {product.Slug}><div className="child--contains--img">
@@ -262,7 +261,7 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProduct(8, laptop).map((product, key) => {
+                            productData.getProductsForRecommendation(8, laptop).map((product, key) => {
                                     return (
                                         <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
                                             <Link to={product.Slug}><div className="child--contains--img">
@@ -301,7 +300,7 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProduct(8, tablet).map((product, key) => {
+                            productData.getProductsForRecommendation(8, tablet).map((product, key) => {
                                     return (
                                         <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
                                             <Link to={product.Slug}><div className="child--contains--img">
