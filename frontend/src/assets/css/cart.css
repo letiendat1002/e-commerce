@@ -1,0 +1,315 @@
+.main-cart {
+    min-height: 1200px;
+    background-color: #fff;
+    padding: 10px;
+  }
+  .main-cart-body {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .main-cart-left {
+    background-color: #ffffff;
+    width: 818px;
+    height: 464px;
+  }
+  .title {
+    display: flex;
+    margin: 10px auto;
+    width: 820px;
+    height: 40px;
+    box-sizing: border-box;
+    background-color: #f1f1f1;
+    box-shadow: 0 0 0 var(--shadow);
+  }
+  
+  .title .title-1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 10px;
+    padding: 5px 0 10px 10px;
+    text-transform: uppercase;
+  }
+  .cart-left-body {
+    display: flex;
+    justify-content: space-between;
+  }
+  .cart-left-body .image {
+    background-color: #484848;
+    width: 180px;
+    height: 180px;
+    background-color: #cccccc;
+    cursor: pointer;
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 400px;
+    height: 150px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .info h5 {
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  .info p {
+    display: inline;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #808080;
+  }
+  .price {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 170px;
+    margin-top:37px;
+  }
+  .price-1 {
+    font-family: "Roboto";
+    width: 130px;
+    height: 30px;
+    color: #f15e2c;
+    line-height: 32px;
+    text-align: right;
+    margin-top: 0px;
+    margin-bottom: 0;
+    min-height: 50px;
+    font-size: 23px;
+    font-weight: bold;
+    
+  }
+  .row-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    
+  }
+  .quantity{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+  .quantity h5{
+    margin-top: 0px;
+    cursor: pointer;
+    text-transform: capitalize;
+    font-family: "Roboto";
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .quantity select{
+    height: 40px;
+    width: 126px;
+    cursor: pointer;
+    margin-top: 0;
+  }
+  
+  
+  
+  
+  .status {
+    color: #f15e2c;
+    font-size: 16px;
+    margin-top: 10px;
+    height: 120%;
+    text-align: right;
+  }
+  .divider {
+    border-bottom: #000 2px solid;
+    height: 1px;
+    margin: 70px 0px;
+  }
+  
+  .btn-clear button {
+    border-radius: 0px;
+    height: 40px;
+    width: 126px;
+    
+    border: none;
+    background-color: #303030;
+    color: #fff;
+  
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+  .title-3 {
+    display: flex;
+    justify-content: space-between;
+    margin: 35px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+  }
+  .title-3 .btn-clear-all button {
+    border-radius: 0px;
+    height: 40px;
+    width: 240px;
+  
+    border: none;
+    background-color: #303030;
+    color: #fff;
+  
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+  .title-3 .btn-continue button {
+    border-radius: 0px;
+    height: 40px;
+    width: 240px;
+  
+    border: none;
+    background-color: #303030;
+    color: #fff;
+  
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+  
+  .main-cart-right {
+    background-color: #f1f1f1;
+    width: 374px;
+    height: 502px;
+    position: relative;
+  }
+  .main-cart-right .list-group {
+    background-color: #f1f1f1;
+    padding-bottom: 20px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .title-left {
+    justify-content: space-between;
+    margin: 10px 0px 5px;
+    font-size: 23px;
+    font-weight: 600;
+    color: #000;
+    text-transform: uppercase;
+  }
+  .divider-left {
+    border-bottom: #000 2px solid;
+    height: 1px;
+    margin: 0px;
+  }
+  .title-left-1 {
+    color: #000;
+    font-size: 18px;
+    margin: 30px 0px 0px 0px;
+    padding-bottom: 0px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .list-group-item {
+    position: relative;
+    display: block;
+    padding: 0;
+    margin-top: 5px;
+  
+    color: #212529;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+  }
+  .list-group-item .btn-apply {
+    border-radius: 0px;
+    background-color: #f15e2c;
+    /* padding: 0px; */
+    color: #fff;
+    font-family: "Roboto";
+    font-size: 18px;
+    height: 40px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .divider-left-1 {
+    border-bottom: #d0d0d0 2px dashed;
+    height: 1px;
+    margin-top: 20px;
+  }
+  .text-1,
+  .text-2,
+  .text-3 {
+    display: flex;
+    justify-content: space-between;
+  }
+  .text-1 {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0px 0px -1px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+  }
+  .title-left-2,
+  .title-left-2-1 {
+    color: #808080;
+    padding-top: 20px;
+    padding-bottom: 5px;
+    line-height: 22px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .text-2 {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0px 0px -1px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+  }
+  
+  .title-left-3,
+  .title-left-3-1 {
+    color: #808080;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    line-height: 22px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .devider-left-2 {
+    border-bottom: #d0d0d0 2px dashed;
+    height: 1px;
+    margin-top: 20px;
+  }
+  .text-3 {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 20px 0px -1px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+  }
+  
+  .title-left-4,
+  .title-left-4-1 {
+    color: #000000;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    line-height: 22px;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  
+  .list-group-item .btn-check-out {
+    position: absolute;
+    border-radius: 0px;
+    background-color: #f15e2c;
+    color: #fff;
+    font-family: "Roboto";
+    font-size: 23px;
+    height: 80px;
+    width: 100%;
+    margin-top: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+  } 

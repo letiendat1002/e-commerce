@@ -4,6 +4,8 @@ import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin
 import Dashboard from '../pages/Admin/Dasboard/Dashboard'
 import ManageUser from '../pages/Admin/ManageUser/MangeUser'
 import Home from '../pages/Client/Home'
+import Menu from '../pages/Client/Menu'
+import ProductDetail from '../pages/Client/ProductDetail'
 
 
 const router = createBrowserRouter([
@@ -16,10 +18,14 @@ const router = createBrowserRouter([
           path: '/',
           element: <Home />,
         },
-        // {
-        //   path: '/about',
-        //   element: <About />,
-        // },
+        {
+          path: '/category/:slug',
+          element: <Menu />,
+        },
+        {
+          path: '/:slug',
+          element: <ProductDetail />,
+        },
         // {
         //   path: '/contact',
         //   element: <Contact />,
