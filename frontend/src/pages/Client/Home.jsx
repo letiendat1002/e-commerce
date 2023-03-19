@@ -161,9 +161,9 @@ const Home = () => {
                                                         <p>1%</p>
                                                     </div>
                                                 </div></Link>
-                                                <div className="child--contains--action">
-                                                    <Link to = "#"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                    <Link to= "#"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
+                                                <div className="child--contain--action">
+                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
                                                 </div>
                                            </div>
                                         )
@@ -200,9 +200,9 @@ const Home = () => {
                                                 <p>1%</p>
                                             </div>
                                         </div></Link>
-                                        <div className="child--contains--action">
-                                            <button className='contains--action--buy'>Mua Hàng</button>
-                                            <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
+                                        <div className="child--contain--action">
+                                            <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                            <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
                                         </div>
                                     </div>
                                 )
@@ -239,9 +239,9 @@ const Home = () => {
                                                         <p>1%</p>
                                                     </div>
                                                 </div></Link>
-                                                <div className="child--contains--action">
-                                                    <button className='contains--action--buy'>Mua Hàng</button>
-                                                    <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
+                                                <div className="child--contain--action">
+                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
                                                 </div>
                                             </div>
                                         )
@@ -278,9 +278,9 @@ const Home = () => {
                                                     <p>1%</p>
                                                 </div>
                                             </div> </Link>
-                                            <div className="child--contains--action">
-                                                <button className='contains--action--buy'>Mua Hàng</button>
-                                                <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
+                                            <div className="child--contain--action">
+                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )
@@ -317,9 +317,9 @@ const Home = () => {
                                                     <p>1%</p>
                                                 </div>
                                             </div></Link>
-                                            <div className="child--contains--action">
-                                                <button className='contains--action--buy'>Mua Hàng</button>
-                                                <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
+                                            <div className="child--contain--action">
+                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )

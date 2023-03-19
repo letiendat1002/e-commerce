@@ -40,7 +40,7 @@ const Catagory = [
                     }, 
                     {
                         name: 'Oppo',
-                        value: 'Oppo',
+                        value: 'OPPO',
                         slug: 'oppo'
                     }
                 ]
@@ -109,6 +109,11 @@ const Catagory = [
                     {
                         name: 'Khoảng 7 - 8 inch', 
                         value: '07 - 08', 
+                        slug: 'khoang-7-8-inch'
+                    }, 
+                    {
+                        name: 'Khoảng 8 - 10 inch', 
+                        value: '08 - 10', 
                         slug: 'khoang-7-8-inch'
                     }, 
                     {
@@ -232,6 +237,11 @@ const Catagory = [
                         slug: 'khoang-14-inch'
                     }, 
                     {
+                        name: 'Khoảng 15 inch', 
+                        value: '00 - 15', 
+                        slug: 'khoang-14-inch'
+                    }, 
+                    {
                         name: 'Trên 15 inch', 
                         value: '15 - 20', 
                         slug: 'tren-15-inch'
@@ -287,6 +297,16 @@ const Catagory = [
                         value: 'Amd ryzen 9', 
                         slug: 'amd-ryzen-9'
                     }, 
+                    {
+                        name: 'Apple M1', 
+                        value: 'Apple M1', 
+                        slug: 'apple-m1',
+                    },
+                    {
+                        name: 'Apple M2', 
+                        value: 'Apple M2', 
+                        slug: 'apple-m2',
+                    },
                 ]
             },
             {
@@ -334,6 +354,16 @@ const Catagory = [
                         value: 'CARD ONBOARD', 
                         slug: 'Card-onboard'
                     }, 
+                    {
+                        name: 'Apple M1', 
+                        value: 'M1', 
+                        slug: 'apple-m1',
+                    }, 
+                    {
+                        name: 'Apple M2', 
+                        value: 'M2', 
+                        slug: 'apple-m2',
+                    },
                 ]
             },
             {

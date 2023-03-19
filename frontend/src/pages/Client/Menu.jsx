@@ -48,45 +48,6 @@ const Menu = ({match, history}) => {
 
     const [product, setProduct] = useState(Products);
     const [filter, setFilter] = useState(initFilter);
-    // const [manufactorer, setMenuFactorer] = useState([])
-    // const [unitPrice, setUnitPrice] = useState([0]);
-    // const [memory, setMemory] = useState([]);
-    // const [monitor, setMonitor] = useState([]);
-    // const [cpu, setCPU] = useState([]);
-    // const [ram, setRAM] = useState([]);
-    // const [vga, setVGA] = useState([]);
-    // const [hasdDisk, setHardDisk] = useState([]);
-    // const [battery, setBattery] = useState([]);
-    // const [filterProduct, setFilterProduct] = useState([
-    //     manufactorer,
-        
-    //     // {
-    //     //     UnitPrice : unitPrice
-    //     // }, 
-    //     // {
-    //     //     Memory : memory
-    //     // }, 
-    //     // {
-    //     //     Monitor : monitor
-    //     // }, 
-    //     // {
-    //     //     CPU : cpu
-    //     // }, 
-    //     // {
-    //     //     RAM: ram
-    //     // }, 
-    //     // {
-    //     //     VGA: vga
-    //     // }, 
-    //     // {
-    //     //     HardDisk: hasdDisk
-    //     // }, 
-    //     // {
-    //     //     Battery: battery
-    //     // }
-    // ]);
-
-
 
     useEffect(() => {
         Catagory.map((catagory) => {
@@ -106,88 +67,6 @@ const Menu = ({match, history}) => {
         cssEase: "linear", 
       };
 
-    // const handleFilter = (e) => {
-    //     const item = e.target.value;
-    //     const name = e.target.name;
-    //     const Checked = e.target.checked;
-    //     if (name == "Manufacturer"){
-    //         if (Checked){
-    //             setMenuFactorer([...manufactorer,item])
-    //         }
-    //         else {
-    //             setMenuFactorer(manufactorer.filter((e) => (e !== item)))
-    //         }
-    //         // setFilterProduct([...filterProduct,manufactorer])
-    //     }
-    //     else if (name === "UnitPrice"){
-    //         if (Checked){
-    //             setUnitPrice([...unitPrice,item])
-    //         }
-    //         else {
-    //             setUnitPrice(unitPrice.filter((e) => (e !== item)))
-    //         }
-    //         // setFilterProduct([...filterProduct,unitPrice])
-    //     }
-    //     else if (name === "Memory"){
-    //         if (Checked){
-    //             setMemory([...memory,item])
-    //         }
-    //         else {
-    //             setMemory(memory.filter((e) => (e !== item)))
-    //         }
-    //     }
-    //     else if (name === "CPU"){
-    //         if (Checked){
-    //             setCPU([...cpu,item])
-    //             // setFilterProduct([...filterProduct, cpu])
-    //         }
-    //         else {
-    //             setCPU(cpu.filter((e) => (e !== item)))
-    //             // setFilterProduct(filterProduct.filter((e) => (e !== item)))
-    //         }
-    //     }
-    //     else if (name === "RAM"){
-    //         if (Checked){
-    //             setRAM([...ram,item])
-    //         }
-    //         else {
-    //             setRAM(ram.filter((e) => (e !== item)))
-    //         }
-    //     }
-    //     else if (name === "VGA"){
-    //         if (Checked){
-    //             setVGA([...vga,item])
-    //         }
-    //         else {
-    //             setVGA(vga.filter((e) => (e !== item)))
-    //         }
-    //     }
-    //     else if (name === "HardDisk"){
-    //         if (Checked){
-    //             setHardDisk([...hasdDisk,item])
-    //         }
-    //         else {
-    //             setHardDisk(hasdDisk.filter((e) => (e !== item)))
-    //         }
-    //     }
-    //     else if (name === "Battery"){
-    //         if (Checked){
-    //             setBattery([...battery,item])
-    //         }
-    //         else {
-    //             setBattery(battery.filter((e) => (e !== item)))
-    //         }
-    //     }
-    //     else if (name === "Monitor"){
-    //         if (Checked){
-    //             setMonitor([...monitor,item])
-    //         }
-    //         else {
-    //             setMonitor(monitor.filter((e) => (e !== item)))
-    //         }
-    //     }
-    // }
-
     const filterSelect = (type, e) => {
         const item = e.target.value;
         const name = e.target.name;
@@ -196,7 +75,6 @@ const Menu = ({match, history}) => {
             switch(type){
                 case "Manufacturer":
                     setFilter({...filter, manufactorer: [...filter.manufactorer, item]})
-                    console.log(item);
                     break
                 case "UnitPrice":
                     setFilter({...filter, unitPrice: [...filter.unitPrice, item]})
@@ -230,7 +108,6 @@ const Menu = ({match, history}) => {
                 case "Manufacturer":
                     const newManufacturer = filter.manufactorer.filter(e => e !== item)
                     setFilter({...filter, manufactorer: newManufacturer})
-                    console.log(item);
                     break
                 case "UnitPrice":
                     const newUnitPrice = filter.unitPrice.filter(e => e !== item)
@@ -287,7 +164,6 @@ const Menu = ({match, history}) => {
                 temp = temp.filter(e => filter.vga.includes(e.VGA))
             }
             if (filter.cpu.length > 0) {
-                // temp = temp.filter(e => e?.CPU?.includes(filter.cpu))
                 temp = temp.filter((e) => {
                     for(var i = 0; i < filter.cpu.length; i++ ){
                         if (e?.CPU?.includes(filter.cpu[i])){
@@ -321,7 +197,6 @@ const Menu = ({match, history}) => {
                     for(var i = 0; i < filter.battery.length; i++ ){
                         const startPrice = filter.battery[i].match(/\d+/g).map(Number)[0];
                         const endPrice = filter.battery[i].match(/\d+/g).map(Number)[1];
-                        // console.log(e.Battery.slice(0,4));
                         if ((e?.Battery?.slice(0,4) > startPrice) && (e?.Battery?.slice(0,4) <= endPrice)){
                             return temp
                         }
@@ -350,7 +225,6 @@ const Menu = ({match, history}) => {
         updateProducts()
     }, [updateProducts])
 
-    console.log(filter);
 
     return (
         <div className="container-fluid col-lg-12 col-md-12 col-sm-12 col-12" style={{backgroundColor: '#f1f0f1'}}>
@@ -391,9 +265,7 @@ const Menu = ({match, history}) => {
                                                         return (
                                                             <li>
                                                                 <input type='checkbox' checked = {children.check} name={attribute.title} value = {children.value} onChange={(e) => filterSelect(attribute.title,e)} />
-                                                                {/* <input type='checkbox' checked = {children.check} name={attribute.title} value = {children.value} onChange={(e) => handleFilter(e)} /> */}
                                                                 <p>{children.name}</p>
-                                                                {/* <p>{children.title}</p> */}
                                                             </li>
                                                         )
                                                     })
@@ -432,11 +304,9 @@ const Menu = ({match, history}) => {
                                 {
                                     product.map((product, key) => {
                                         if (product.CategoryID === catagoryId){
-                                            // for(var i = 0; i <= cpu.length; i++){
-                                            //     if (product.CPU.includes(cpu[i])){
                                                     return (
                                                         <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
-                                                            <Link to = {product.Slug}><div className="child--contains--img">
+                                                            <Link to = {`/${product.Slug}`}><div className="child--contains--img">
                                                                 <img src={product.Image} alt="" />
                                                             </div>
                                                             <h3>{product.Name}</h3>
@@ -450,13 +320,11 @@ const Menu = ({match, history}) => {
                                                                 </div>
                                                             </div></Link>
                                                             <div className="child--contains--action">
-                                                                <button className='contains--action--buy'>Mua Hàng</button>
-                                                                <button className='contains--action-addcart'>Thêm Giỏ Hàng</button>
+                                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
                                                             </div>
                                                         </div>
                                                 )   
-                                            // }
-                                            // }
                                         }
                                     })
                                 }
