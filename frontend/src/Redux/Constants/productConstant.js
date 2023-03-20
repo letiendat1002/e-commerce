@@ -1,0 +1,3 @@
+export const PRODUCT_SET = "PRODUCT_SET";
+export const PRODUCT_SELECT = "PRODUCT_SELECT";
+export const PRODUCT_REMOVE = "PRODUCT_REMOVE";

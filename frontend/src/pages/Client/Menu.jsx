@@ -15,6 +15,8 @@ import Catagory from '../../assets/data/catagory';
 import Products from '../../assets/data/product';
 import {Link, useParams} from 'react-router-dom' 
 import formatProductPrice from '../../Helper';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
 
 const slides = [
     Item1,
@@ -225,6 +227,25 @@ const Menu = ({match, history}) => {
         updateProducts()
     }, [updateProducts])
 
+    const dispatch = useDispatch()
+    const cart = useSelector((state) => state.cart);
+    const cartItems  = cart.cartItems;
+    const AddToCartHandle = (item) => {
+        if (cartItems.length > 0) {
+            cartItems.map((cart) =>{
+                if (cart.slug === item.Slug){
+                    // dispatch(increaseToCart(item,1))
+                }
+                else {
+                    dispatch(addToCart(item, 1))    
+                }
+            })
+        }
+        else {
+            dispatch(addToCart(item, 1))
+        }
+        
+      };
 
     return (
         <div className="container-fluid col-lg-12 col-md-12 col-sm-12 col-12" style={{backgroundColor: '#f1f0f1'}}>
@@ -302,26 +323,26 @@ const Menu = ({match, history}) => {
                         <div className="catagory__item--container--child">
                             <Col lg={12} md={12} sm={12} className='container__item--child'>
                                 {
-                                    product.map((product, key) => {
-                                        if (product.CategoryID === catagoryId){
+                                    product.map((item, key) => {
+                                        if (item.CategoryID === catagoryId){
                                                     return (
                                                         <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
-                                                            <Link to = {`/${product.Slug}`}><div className="child--contains--img">
-                                                                <img src={product.Image} alt="" />
+                                                            <Link to = {`/${item.Slug}`}><div className="child--contains--img">
+                                                                <img src={item.Image} alt="" />
                                                             </div>
-                                                            <h3>{product.Name}</h3>
+                                                            <h3>{item.Name}</h3>
                                                             <div className="child--contains--price">
                                                                 <div>
                                                                     <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                                    <h4 className="contains--price-unit">{formatProductPrice(product.UnitPrice)}</h4>
+                                                                    <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
                                                                 </div>
                                                                 <div className="contains--price-pecent">
                                                                     <p>1%</p>
                                                                 </div>
                                                             </div></Link>
                                                             <div className="child--contains--action">
-                                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
+                                                                <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                                             </div>
                                                         </div>
                                                 )   

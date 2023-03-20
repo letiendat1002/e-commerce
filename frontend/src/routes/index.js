@@ -6,7 +6,8 @@ import ManageUser from '../pages/Admin/ManageUser/MangeUser'
 import Home from '../pages/Client/Home'
 import Menu from '../pages/Client/Menu'
 import ProductDetail from '../pages/Client/ProductDetail'
-
+import Cart from '../pages/Client/Cart'
+import Payment from '../pages/Client/Payment'
 
 const router = createBrowserRouter([
     {
@@ -26,18 +27,14 @@ const router = createBrowserRouter([
           path: '/:slug',
           element: <ProductDetail />,
         },
-        // {
-        //   path: '/contact',
-        //   element: <Contact />,
-        // },
-        // {
-        //   path: '/products',
-        //   element: <ProductList />,
-        // },
-        // {
-        //   path: '/products/:productId',
-        //   element: <ProductDetails />,
-        // },
+        {
+          path: '/cart',
+          element: <Cart />,
+        },
+        {
+          path: '/payment',
+          element: <Payment />,
+        },
       ],
     },
     {
