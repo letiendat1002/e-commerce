@@ -38,7 +38,7 @@ const MangeUser = (props) => {
   const callApiWithPaginate = async (page) => {
     const res = await getUserWithPaginate(page, LIMIT);
     if (res.EC === 0) {
-      console.log('Res:', res.DT.users);
+      // console.log('Res:', res.DT.users);
       setData(res.DT.users);
       setPageCount(res.DT.totalPages);
     }
@@ -50,7 +50,6 @@ const MangeUser = (props) => {
   };
 
   const handleClickBtnView = (x) => {
-    console.log('Done');
     setData1(x);
     setShowModalViewUser(true);
   };
@@ -62,7 +61,6 @@ const MangeUser = (props) => {
   const handleClickBtnDelete = (dataDelete) => {
     setShowModalDeleteUser(!false);
     setDataDelete(dataDelete);
-    // console.log(dataDelete)
   };
 
   return (

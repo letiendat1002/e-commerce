@@ -24,8 +24,8 @@ const Language = (props) => {
         title={i18n.language==='en'? 'English' :'Viet Nam '}
         id='basic-nav-dropdown'
         className='dropdown-header-admin'>
-        <NavDropdown.Item href='#action/3.2' onClick ={()=> handleChangeLang('en')}>English</NavDropdown.Item>
-        <NavDropdown.Item href='#action/3.1' onClick ={()=> handleChangeLang('vi')}>VietNam</NavDropdown.Item>
+        <NavDropdown.Item onClick ={()=> handleChangeLang('en')}>English</NavDropdown.Item>
+        <NavDropdown.Item onClick ={()=> handleChangeLang('vi')}>VietNam</NavDropdown.Item>
       </NavDropdown>
     </>
   );

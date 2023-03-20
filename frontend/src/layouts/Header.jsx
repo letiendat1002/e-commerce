@@ -12,6 +12,7 @@ import {
 } from 'react-icons/ai';
 import { IoIosTabletLandscape } from 'react-icons/io';
 import { FaRegUserCircle } from 'react-icons/fa';
+import { Link,useNavigate  } from 'react-router-dom';
 const Header = () => {
   return (
     <div className='container-fluid p-0 m-0 col-lg-12 col-sm-12 col-md-12 '>
@@ -65,6 +66,7 @@ const Header = () => {
             <span>
               <FaRegUserCircle />
             </span>
+            <Link to="/login"/>
             Tài Khoản
           </a>
         </div>

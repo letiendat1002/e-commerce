@@ -56,7 +56,9 @@ const Sidebar = (props) => {
               <Link to='/admin' />
               {t('sidebar.title2')}
             </MenuItem>
-            <MenuItem icon={<FaGem />}>{t('sidebar.title4')} </MenuItem>
+            <MenuItem icon={<FaGem />}>
+              {t('sidebar.title4')} <Link to='/products' />
+            </MenuItem>
           </Menu>
           <Menu iconShape='circle'>
             <SubMenu
@@ -68,10 +70,19 @@ const Sidebar = (props) => {
                 <Link to='manage-user' />
               </MenuItem>
               <MenuItem>
-              {t('sidebar.title6')} {/* Quản lý danh mục */}
+                <Link to='manage-categories' />
+                {t('sidebar.title6')} {/* Quản lý danh mục */}
               </MenuItem>
               <MenuItem>
-              {t('sidebar.title7')}{/* Quản lý đặt hàng */}
+                {t('sidebar.title7')}
+                <Link to='manage-orders' />
+                {/* Quản lý đặt hàng */}
+              </MenuItem>
+              <MenuItem>
+                {/* {t('sidebar.title8')} */}
+                Manage Products
+                <Link to='manage-products' />
+                {/* Quản lý sản phẩm */}
               </MenuItem>
             </SubMenu>
           </Menu>

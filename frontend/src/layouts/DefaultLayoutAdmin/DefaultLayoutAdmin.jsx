@@ -11,8 +11,8 @@ const DefaultLayoutAdmin = (props) => {
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    console.log('done')
-    console.log(collapsed);
+    // console.log('done')
+    // console.log(collapsed);
     if (collapsed === false) {
       // document.querySelector('.admin-content').style.marginLeft= "0px";
       // document.querySelector('.admin-content').style.width= "100%";

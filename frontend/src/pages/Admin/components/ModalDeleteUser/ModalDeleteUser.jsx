@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 const ModalDeleteUser = (props) => {
   const { showDelete, setShowModalDeleteUser, dataDelete, callApi, callApiWithPaginate,setCurrentPage } = props;
   const { id } = dataDelete;
-  console.log(id);
+  // console.log(id);
 
   const handleClose = () => {
     setShowModalDeleteUser(false);

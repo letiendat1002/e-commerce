@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { STATIC_HOST_2 } from '../constant/common';
+import { STATIC_HOST_2, STATIC_HOST } from '../constant/common';
 import axiosClient from '../API/axiosClient';
+import axiosClientProducts from '../API/axiosClientProducts';
 
 const createNewUser = (email, password, username, role, image) => {
   const data = new FormData();
@@ -41,4 +42,33 @@ const getUserWithPaginate = (page, limit) => {
   return axiosClient.get(url);
 };
 
-export { createNewUser, putUpdateUser, deleteUpdateUser, getUserWithPaginate };
+const postUserLogin = (email, password) => {
+  const url = `${STATIC_HOST_2}/login`;
+
+  return axiosClient.post(url, { email, password });
+};
+
+const register = (data) => {
+  const url = `/${STATIC_HOST}/local/register`;
+  return axiosClient.post(url, data);
+};
+
+const login = (identifier, password) => {
+
+  //user:adminHuy@gmail.com
+  //pw:123456
+  //user:admin@gmail.com
+  //pw:123123
+  const url = `/auth/local`;
+  return axiosClientProducts.post(url, { identifier, password });
+};
+
+export {
+  createNewUser,
+  putUpdateUser,
+  deleteUpdateUser,
+  getUserWithPaginate,
+  postUserLogin,
+  register,
+  login,
+};
