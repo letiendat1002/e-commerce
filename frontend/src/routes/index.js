@@ -60,6 +60,10 @@ const router = createBrowserRouter([
         path: 'products',
         element: <ManageUser />,
       },
+      {
+        path: 'products-filters',
+        element: <ManageUser />,
+      },
       // {
       //   path: 'manage-category',
       //   element: <ManageUser />,

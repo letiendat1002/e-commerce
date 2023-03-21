@@ -117,140 +117,144 @@ const Dashboard = (props) => {
   };
 
   return (
-    <div className='dashboard-container'>
+    <div className='dashboard-container '>
       <div className='dashboard-title'>{t('dashboard.title1')}</div>
-      <div className='dashboard-content'>
-        <div className='content-left'>
-          <div className='item-right'>
-            <div className='item-right-title'>{t('dashboard.item_right1')}</div>
-            <div className='item-right-content'>
-              <h5>$559.25K</h5>
-              <div className='item-right-icon'>
-                <MdAttachMoney />
+      <div className='container'>
+        <div className='dashboard-content row'>
+          <div className='content-left  col-lg-5 col-md-12 col-sm-12'>
+            <div className='item-right'>
+              <div className='item-right-title'>{t('dashboard.item_right1')}</div>
+              <div className='item-right-content'>
+                <h5>$559K</h5>
+                <div className='item-right-icon'>
+                  <MdAttachMoney />
+                </div>
+              </div>
+              <div className='item-right-footer'>
+                <h6>
+                  {t('dashboard.item_right_footer')} <span className='span-up'>+14%</span>
+                </h6>
               </div>
             </div>
-            <div className='item-right-footer'>
-              <h6>
-                {t('dashboard.item_right_footer')} <span className='span-up'>+14%</span>
-              </h6>
-            </div>
-          </div>
-          <div className='item-right'>
-            <div className='item-right-title'>{t('dashboard.item_right2')}</div>
-            <div className='item-right-content'>
-              <h5>36,894</h5>
-              <div className='item-right-icon-bag'>
-                <BsFillBagFill />
+            <div className='item-right'>
+              <div className='item-right-title'>{t('dashboard.item_right2')}</div>
+              <div className='item-right-content'>
+                <h5>36,894</h5>
+                <div className='item-right-icon-bag'>
+                  <BsFillBagFill />
+                </div>
+              </div>
+              <div className='item-right-footer'>
+                <h6>
+                  {t('dashboard.item_right_footer')} <span className='span-down'>-5%</span>
+                </h6>
               </div>
             </div>
-            <div className='item-right-footer'>
-              <h6>
-                {t('dashboard.item_right_footer')} <span className='span-down'>-5%</span>
-              </h6>
-            </div>
-          </div>
-          <div className='item-right'>
-            <div className='item-right-title'>{t('dashboard.item_right3')}</div>
-            <div className='item-right-content'>
-              <h5>183.35M</h5>
-              <div className='item-right-icon-avatar'>
-                <RxAvatar />
+            <div className='item-right'>
+              <div className='item-right-title'>{t('dashboard.item_right3')}</div>
+              <div className='item-right-content'>
+                <h5>183.5M</h5>
+                <div className='item-right-icon-avatar'>
+                  <RxAvatar />
+                </div>
+              </div>
+              <div className='item-right-footer'>
+                <h6>
+                  {t('dashboard.item_right_footer')} <span className='span-up'>+14%</span>
+                </h6>
               </div>
             </div>
-            <div className='item-right-footer'>
-              <h6>
-                {t('dashboard.item_right_footer')} <span className='span-up'>+14%</span>
-              </h6>
-            </div>
-          </div>
-          <div className='item-right'>
-            <div className='item-right-title'>{t('dashboard.item_right4')}</div>
-            <div className='item-right-content'>
-              <h5>$165.89k</h5>
-              <div className='item-right-icon-wallet'>
-                <BsWallet />
+            <div className='item-right'>
+              <div className='item-right-title'>{t('dashboard.item_right4')}</div>
+              <div className='item-right-content'>
+                <h5>$165k</h5>
+                <div className='item-right-icon-wallet'>
+                  <BsWallet />
+                </div>
+              </div>
+              <div className='item-right-footer'>
+                <h6>
+                  {t('dashboard.item_right_footer')} <span className='span-down'>-4%</span>
+                </h6>
               </div>
             </div>
-            <div className='item-right-footer'>
-              <h6>
-                {t('dashboard.item_right_footer')} <span className='span-down'>-4%</span>
-              </h6>
-            </div>
           </div>
-        </div>
-        <div className='content-right'>
-          <ResponsiveContainer
-            width='100%'
-            height='100%'>
-            <BarChart
-              width={'100%'}
-              height={250}
-              data={dataChart}>
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='name' />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar
-                dataKey='pv'
-                fill='#8884d8'
-              />
-              <Bar
-                dataKey='uv'
-                fill='#82ca9d'
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className='content-right col-lg-7 col-md-12 col-sm-12'>
+            <ResponsiveContainer
+              width='100%'
+              height='100%'>
+              <BarChart
+                width={'100%'}
+                height={250}
+                data={dataChart}>
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='name' />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  dataKey='pv'
+                  fill='#8884d8'
+                />
+                <Bar
+                  dataKey='uv'
+                  fill='#82ca9d'
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      <div className='dashboard-content-2'>
-        <div className='content-left-2'>
-          <ResponsiveContainer
-            width='100%'
-            height='100%'>
-            <AreaChart
-              data={dataChart3}
-              syncId='anyId'
-              margin={{
-                top: 10,
-                right: 30,
-                left: 0,
-                bottom: 0,
-              }}>
-              <CartesianGrid strokeDasharray='3 3' />
-              <XAxis dataKey='name' />
-              <YAxis />
-              <Tooltip />
-              <Area
-                type='monotone'
-                dataKey='pv'
-                stroke='#82ca9d'
-                fill='#82ca9d'
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+      <div className='container'>
+        <div className='dashboard-content-2 row'>
+          <div className='content-left-2 col-lg-8 col-md-12 col-sm-12'>
+            <ResponsiveContainer
+              width='100%'
+              height='100%'>
+              <AreaChart
+                data={dataChart3}
+                syncId='anyId'
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 0,
+                  bottom: 0,
+                }}>
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='name' />
+                <YAxis />
+                <Tooltip />
+                <Area
+                  type='monotone'
+                  dataKey='pv'
+                  stroke='#82ca9d'
+                  fill='#82ca9d'
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
 
-        <div className='content-right-2'>
-          <ResponsiveContainer
-            width='100%'
-            height='100%'>
-            <PieChart>
-              <Pie
-                activeIndex={activeIndex.activeIndex}
-                activeShape={renderActiveShape}
-                data={dataChart2}
-                cx='50%'
-                cy='50%'
-                innerRadius={60}
-                outerRadius={80}
-                fill='#8884d8'
-                dataKey='value'
-                onMouseEnter={onPieEnter}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <div className='content-right-2 col-lg-4 col-md-12 col-sm-12'>
+            <ResponsiveContainer
+              width='100%'
+              height='100%'>
+              <PieChart>
+                <Pie
+                  activeIndex={activeIndex.activeIndex}
+                  activeShape={renderActiveShape}
+                  data={dataChart2}
+                  cx='50%'
+                  cy='50%'
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill='#8884d8'
+                  dataKey='value'
+                  onMouseEnter={onPieEnter}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

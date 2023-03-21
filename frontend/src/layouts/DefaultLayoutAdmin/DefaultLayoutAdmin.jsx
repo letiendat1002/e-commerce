@@ -9,6 +9,7 @@ import './DefaultLayoutAdmin.scss';
 import HeaderAdmin from '../../pages/Admin/HeaderAdmin/HeaderAdmin';
 const DefaultLayoutAdmin = (props) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [display, setdisplay] = useState("");
 
   useEffect(() => {
     // console.log('done')
@@ -25,7 +26,7 @@ const DefaultLayoutAdmin = (props) => {
     <>
       <div className='admin-container'>
         <div className='admin-sidebar'>
-          <Sidebar collapsed={collapsed} />
+          <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} className={display} />
         </div>
         <div className='admin-content'>
           <div className='admin-header'>

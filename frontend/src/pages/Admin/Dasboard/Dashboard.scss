@@ -11,30 +11,29 @@
   }
 
   .dashboard-content {
-    // border: 1px solid green;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
     margin-bottom: 10px;
-    gap: 10px;
-    height: 400px;
+    gap: 10px 10px;
 
     .content-right {
-      width: 60%;
       overflow: hidden;
       border-radius: 15px;
       box-shadow: rgba(50, 50, 93, 0.24) 0px 2px 5px -1px, rgba(0, 0, 0, 0.05) 0px 1px 3px -1px;
       background-color: rgba(255, 255, 255, 0.589);
       padding: 30px 20px 10px 10px;
+      margin: 0 -10px;
     }
 
     .content-left {
       display: grid;
-      width: 40%;
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(2, 1fr);
       gap: 10px;
       box-sizing: border-box;
+      padding: 0;
+      margin: 0 -10px;
     }
 
     .item-right {
@@ -47,9 +46,6 @@
       box-shadow: rgba(50, 50, 93, 0.3) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       background-image: none;
       position: relative;
-      // height: 100%;
-      // border: 1px salmon solid;
-      // margin: 10px 0 10px 10px;
       padding: 24px;
       font-weight: 500;
       transition: all 0.4s;
@@ -68,6 +64,7 @@
       .item-right-content {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
         margin-bottom: 24px;
       }
@@ -157,22 +154,42 @@
     justify-content: space-between;
     height: 300px;
     width: 100%;
+    gap: 10px 10px;
 
     .content-left-2 {
-      width: 68%;
       box-shadow: rgba(50, 50, 93, 0.3) 0px 2px 5px -2px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       background-color: rgba(255, 255, 255, 0.589);
       border-radius: 15px;
       padding: 20px 5px 20px 0px;
+      margin: 0 -10px;
     }
 
     .content-right-2 {
-      width: 30%;
       display: flex;
       justify-content: center;
       box-shadow: rgba(50, 50, 93, 0.3) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       background-color: rgba(255, 255, 255, 0.589);
       border-radius: 15px;
+      margin: 0 -10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .dashboard-content {
+    .content-right {
+      height: 350px;
+    }
+  }
+}
+
+@media only screen and (max-width: 1025px ) {
+  .dashboard-content {
+    .item-right{
+      h5{
+        font-size: 20px !important;
+        font-weight: 500;
+      }
     }
   }
 }

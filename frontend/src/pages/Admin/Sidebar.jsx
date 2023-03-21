@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import 'react-pro-sidebar/dist/css/styles.css';
 import {
@@ -12,19 +12,47 @@ import {
 } from 'react-pro-sidebar';
 import { useTranslation, Trans } from 'react-i18next';
 import { FaTachometerAlt, FaGem, FaList, FaGithub, FaRegLaughWink, FaHeart } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import { DiReact } from 'react-icons/di';
 import { RiDashboardLine } from 'react-icons/ri';
 import { Outlet, Link, NavLink } from 'react-router-dom';
+import './Sidebar.scss';
 
 const Sidebar = (props) => {
-  const { collapsed, toggled, handleToggleSidebar } = props;
+  const { collapsed, toggled, handleToggleSidebar,setCollapsed } = props;
   const { t } = useTranslation();
+
+  const [sizeWidth, setSizeWidth] = useState();
+  const [display, setDisplay] = useState('');
+  const [breakPoint, setBreakPoint] = useState(true);
+
+  const getSize = () => {
+    setSizeWidth(window.innerWidth);
+
+  };
+  useEffect(() => {
+    window.addEventListener('resize', getSize);
+
+    if (sizeWidth <= 1000){
+      setCollapsed(true)
+      setDisplay("")
+      setBreakPoint(true)
+    }
+    
+    if (sizeWidth >= 1000) {
+      setCollapsed(false)
+      setDisplay("display")
+      setBreakPoint(false)
+    }
+  }, [setCollapsed, sizeWidth]);
+
+
   return (
     <div>
       <ProSidebar
         collapsed={collapsed}
         toggled={toggled}
-        breakPoint='md'
+        breakPoint={breakPoint ?"md":""}
         onToggle={handleToggleSidebar}>
         <Link to='/admin'>
           <SidebarHeader>
@@ -57,7 +85,7 @@ const Sidebar = (props) => {
               {t('sidebar.title2')}
             </MenuItem>
             <MenuItem icon={<FaGem />}>
-              {t('sidebar.title4')} <Link to='/products' />
+              {t('sidebar.title4')} <Link to='products-filters' />
             </MenuItem>
           </Menu>
           <Menu iconShape='circle'>
@@ -96,6 +124,10 @@ const Sidebar = (props) => {
             }}></div>
         </SidebarFooter>
       </ProSidebar>
+
+      {/* <span onClick={() => setCollapsed(!collapsed)}>
+              <FaBars className='leftside' />
+            </span> */}
     </div>
   );
 };

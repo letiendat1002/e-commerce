@@ -14,7 +14,7 @@ export const dataChart = [
   {
     name: 'Mainboard',
     uv: 2000,
-    pv: 9800,
+    pv: 3000,
     amt: 2290,
   },
   {
@@ -26,7 +26,7 @@ export const dataChart = [
   {
     name: 'Monitor',
     uv: 1890,
-    pv: 4800,
+    pv: 3800,
     amt: 2181,
   },
   {

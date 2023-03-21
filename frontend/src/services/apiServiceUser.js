@@ -54,7 +54,6 @@ const register = (data) => {
 };
 
 const login = (identifier, password) => {
-
   //user:adminHuy@gmail.com
   //pw:123456
   //user:admin@gmail.com

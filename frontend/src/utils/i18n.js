@@ -32,10 +32,10 @@ i18n
           },
           dashboard: {
             title1: 'Analytics Dashboard',
-            item_right1: 'TOTAL EARNINGS',
+            item_right1: 'EARNINGS',
             item_right2: 'ORDERS',
             item_right3: 'CUSTOMERS',
-            item_right4: 'MY BALANCE',
+            item_right4: 'BALANCE',
             item_right_footer: 'Since last week',
           },
         },
@@ -54,7 +54,7 @@ i18n
           },
           dashboard: {
             title1: 'Bảng Điều Khiển Phân Tích',
-            item_right1: 'Tổng Thu Nhập',
+            item_right1: 'Thu Nhập',
             item_right2: 'Đơn Hàng',
             item_right3: 'Khác Hàng',
             item_right4: 'Chí Phí',
