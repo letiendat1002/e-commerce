@@ -4,21 +4,22 @@
   width: 100%;
 }
 
-.carousel__item {
-  display: flex;
-  height: auto;
-  width: 150px;
-  justify-content: space-between;
-  margin-top: -100px;
-  // top: 5%;
-  z-index: 100;
-  position: relative;
-  padding: 3rem 0;
+.carousel__item{
+    display: flex;
+    height: auto;
+    width: 150px;
+    justify-content: space-between;
+    margin-top: -100px;
+    z-index: 100;
+    position: relative;
+    padding: 3rem 0;
 }
 
-.carousel__item--child {
-  padding: 0 20px;
-  border-radius: 10px;
+
+.carousel__item--child{
+    padding: 1rem 20px;
+    border-radius: 10px;
+    margin-top: 1rem;
 }
 
 .carousel__item--child img {
@@ -123,38 +124,40 @@ p.item--title-show:hover {
 }
 
 .child--contains--img img {
-  width: 100%;
-  // position: absolute;
-  object-fit: cover;
-  transition: 0.3s ease-in;
+    width: 100%;
+    height: 250px;
+    // position: absolute;
+    object-fit: cover;
+    transition: 0.3s ease-in;
 }
 
 .child--contains--img img:hover {
   transform: scale(1.05);
 }
 
-.container__item {
-  background-color: #fff;
-  padding: 1rem 1rem;
-  border-radius: 5px;
-  box-shadow: 3px 3px 6px 6px #d5d5d5;
+.container__item{
+    background-color: #fff;
+    padding: 1rem 1rem;
+    border-radius: 5px;
+    box-shadow: 3px 3px 6px 3px #d5d5d5;
 }
 
-.item--child--contains h3 {
-  padding: 10px 0;
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--text-color);
-  display: -webkit-box;
-  max-width: 100%;
-  height: 48px;
-  margin: 0 auto;
-  line-height: 1;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  white-space: normal;
-  text-overflow: ellipsis;
+
+.item--child--contains h3{
+    padding: 10px 0;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-color);
+    display: -webkit-box;
+    max-width: 100%;
+    height: 47px;
+    margin: 0 auto;
+    line-height: 1;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space:  normal;
+    text-overflow: ellipsis;
 }
 
 .child--contains--price {
@@ -188,19 +191,33 @@ h4.contains--price-unit {
   display: flex;
 }
 
-.child--contains--action button {
-  height: 40px;
-  width: 140px;
+.child--contains--action button{
+    height: 40px;
+    width: 130px;
+    max-width: 130px;
+    // width: 100%;
+}
+.child--contain--action button{
+    height: 40px;
+    width: 140px;
+    // width: 100%;
 }
 
-.contains--action--buy {
-  border-radius: 3px;
-  border: 2px solid var(--primary-color);
-  background-color: var(--primary-color);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  transition: 0.3s ease;
+a.button{
+    padding: 0;
+    margin: 0;
+}
+
+.contains--action--buy{
+    border-radius: 3px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    transition: 0.3s ease;
+    height: 50px;
+    width: 150px;
 }
 
 .contains--action--buy:hover {
