@@ -503,6 +503,8 @@ const ProductDetail = ({match, history}) => {
             </div>
         </div>      
         <div className="product__category--slider">
+          <div className="container__cart--slide--contain">
+          <h1>Sản phẩm liên quan</h1>
           <Slider {...setting} >
             {
               Products.map((product) => {
@@ -550,6 +552,7 @@ const ProductDetail = ({match, history}) => {
                 
               }
           </Slider>
+        </div>
         </div>
       </div>
     </div>

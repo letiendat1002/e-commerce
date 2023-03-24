@@ -61,7 +61,7 @@
     form{
         box-shadow: 0px 0px 0px 2px #d5d5d5;
         margin-top: 2rem;
-        background-color: #f1f0f1;
+        background-color: #f5f5f5;
         padding: 1rem;
 
         .form__container--item{
@@ -142,7 +142,49 @@
     }
 }
 
+
 .payment__container--right--item{
+    background-color: #ffffff;
+    width: 100%;
+    padding: 1rem 2rem;
+    height: auto;
+    h1{
+        color: #cb1e23;
+        font-weight: 500;
+        text-align: center;
+    }
+    .contain--container--item--bill{
+        padding: 1rem;
+        box-shadow: 0px 0px 0px 0.5px #d5d5d5;
+        margin-top: 2rem;
+        background-color: #f5f5f5;
+        img {
+            width: 150px;
+            height: 100px;
+            // background-col   or: #f1f0f1;
+        }
+    }
+    .contain--container--item--bill--total{
+        border-top:  3px solid #cb1e23;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        display: flex;
+        justify-content: space-between;
+        p{
+            font-size: 22px;
+            font-weight: 500;
+            color: #010101;
+            padding: 0;
+        }
+        h3{
+            font-size: 20px;
+            font-weight: 500;
+            color: #cb1e23;
+        }
+    }
+}
+.payment__container--right--bill{
+    margin-top: 4rem;
     background-color: #ffffff;
     width: 100%;
     padding: 1rem 2rem;
@@ -156,7 +198,12 @@
         padding: 1rem;
         box-shadow: 0px 0px 0px 1px #d5d5d5;
         margin-top: 2rem;
-        background-color: #f1f0f1;
+        background-color: #f5f5f5;
+        img {
+            width: 150px;
+            height: 100px;
+            // background-col   or: #f1f0f1;
+        }
     }
     .contain--container--item--bill--total{
         border-top:  3px solid #cb1e23;
@@ -168,6 +215,7 @@
             font-size: 22px;
             font-weight: 500;
             color: #010101;
+            padding: 0;
         }
         h3{
             font-size: 20px;
@@ -176,7 +224,6 @@
         }
     }
 }
-
 .payment__container--slider{
     background-color: #ffffff;
     padding: 1.5rem 1rem;
