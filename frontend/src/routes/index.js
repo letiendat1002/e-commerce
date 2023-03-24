@@ -6,8 +6,9 @@ import ManageUser from '../pages/Admin/ManageUser/MangeUser'
 import Home from '../pages/Client/Home'
 import Menu from '../pages/Client/Menu'
 import ProductDetail from '../pages/Client/ProductDetail'
-import Cart from '../pages/Client/Cart'
-import Payment from '../pages/Client/Payment'
+import Login from '../pages/Client/Login'
+import Register from '../pages/Client/Register'
+import NotFound from '../pages/Client/NotFound/NotFound'
 
 const router = createBrowserRouter([
     {
@@ -34,6 +35,18 @@ const router = createBrowserRouter([
         {
           path: '/payment',
           element: <Payment />,
+        },
+        {
+          path: '/login',
+          element: <Login />,
+        },
+        {
+          path: '/register',
+          element: <Register/>,
+        },
+        {
+          path: 'not-found',
+          element: <NotFound />,
         },
       ],
     },
