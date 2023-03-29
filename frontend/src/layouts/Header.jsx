@@ -28,20 +28,20 @@ const Header = () => {
             </InputGroup.Text>
           </InputGroup>
           <div className="nav-item">
-            <a href="#">
+            <Link to={'/login'}>
               <span>
                 <FaRegUserCircle />
               </span>
               Tài Khoản
-            </a>
+            </Link>
           </div>
           <div className="nav-item">
-            <a href="#">
+            <Link to={"/cart"}>
             <span>
               <AiOutlineShoppingCart/>
             </span>  
             Giỏ hàng
-            </a>
+            </Link>
           </div>
           <div className="nav-item">
             <a href="#">
@@ -71,13 +71,13 @@ const Header = () => {
               <p>TABLET</p>
             </div>
           </Link>
-          <Link to={""}>
+          <Link to={"/"}>
             <div className="headerBottom__item">
               <span><AiOutlineApple /></span>
               <p>APPLE</p>
             </div>
           </Link>
-          <Link to={""}>
+          <Link to={"/category/pc-linh-kien"}>
             <div className="headerBottom__item">
               <span><RiComputerLine /></span>
               <p>PC - LINH KIỆN</p>

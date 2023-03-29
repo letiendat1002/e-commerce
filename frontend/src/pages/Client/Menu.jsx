@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Slider from 'react-slick';
 import { Container, Row, Col, Carousel } from 'react-bootstrap'
-import Item1 from '../../assets/images/item1.webp'
-import Item2 from '../../assets/images/item2.webp'
-import Item3 from '../../assets/images/item3.webp'
-import Item4 from '../../assets/images/item4.webp'
-import Item5 from '../../assets/images/item5.webp'
-import Item6 from '../../assets/images/item6.webp'
-import Item7 from '../../assets/images/item7.webp'
+import Item1 from '../../assets/images/item1.png'
+import Item2 from '../../assets/images/item2.png'
+import Item3 from '../../assets/images/item3.png'
+import Item4 from '../../assets/images/item4.png'
+import Item5 from '../../assets/images/item5.jpeg'
+import Item6 from '../../assets/images/item6.png'
+import Item7 from '../../assets/images/item7.png'
 import '../../assets/css/menu.scss'
 import '../../assets/css/home.scss'
 import {FcPrevious, FcNext} from 'react-icons/fc'
@@ -17,7 +17,8 @@ import {Link, useParams} from 'react-router-dom'
 import formatProductPrice from '../../Helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
-
+import NotFoundItem from '../../assets/images/noti-search.png'
+import NotFoundItem2 from '../../assets/images/notFound.webp'
 const slides = [
     Item1,
     Item2, 
@@ -29,8 +30,6 @@ const slides = [
 ]
 
 const Menu = ({match, history}) => {
-
-    
 
     const {slug} = useParams();
     
@@ -46,11 +45,18 @@ const Menu = ({match, history}) => {
         vga: [],
         haskdisk: [],
         battery: [],  
+        demand: [],
     }
 
     const [product, setProduct] = useState(Products);
     const [filter, setFilter] = useState(initFilter);
 
+    const [filterItem, setFilterItem] = useState("Tất cả");
+
+    const handleChangeOption = (e) => {
+          setFilterItem(e.target.value)
+          setFilterProduct();
+    }
     useEffect(() => {
         Catagory.map((catagory) => {
             if (catagory.slug === slug){
@@ -58,6 +64,15 @@ const Menu = ({match, history}) => {
             }
         })
     })
+
+    const setFilterProduct = (filterItem)  => {
+        if (filterItem === "Theo tên từ A - Z"){
+            const product = product.filter((e) => e.Name.sort())
+            setProduct(product)
+        }
+    }
+
+    console.log(product);
 
     const settings = {
         infinite: true,
@@ -102,6 +117,9 @@ const Menu = ({match, history}) => {
                 case "Battery":
                     setFilter({...filter, battery: [...filter.battery, item]})
                     break
+                case "demand":
+                    setFilter({...filter, demand: [...filter.demand, item]})
+                    break
                 default:
             }
         }
@@ -143,6 +161,10 @@ const Menu = ({match, history}) => {
                     const newBattery = filter.battery.filter(e => e !== item)
                     setFilter({...filter, battery: newBattery})
                     break
+                case "demand":
+                    const newDemand = filter.demand.filter(e => e !== item)
+                    setFilter({...filter, demand: newDemand})
+                    break
                 default:
             }
         }
@@ -164,6 +186,9 @@ const Menu = ({match, history}) => {
             }
             if (filter.vga.length > 0) {
                 temp = temp.filter(e => filter.vga.includes(e.VGA))
+            }
+            if (filter.demand.length > 0) {
+                temp = temp.filter(e => filter.demand.includes(e.demand))
             }
             if (filter.cpu.length > 0) {
                 temp = temp.filter((e) => {
@@ -246,7 +271,6 @@ const Menu = ({match, history}) => {
         }
         
       };
-
     return (
         <div className="container-fluid col-lg-12 col-md-12 col-sm-12 col-12" style={{backgroundColor: '#f1f0f1'}}>
             <div className="catagory">
@@ -305,7 +329,9 @@ const Menu = ({match, history}) => {
                         Catagory.map((catagory, key) => {
                             if (catagory.slug === slug){
                                 return (
-                                    <h3>{catagory.nameCatalogory} <span>(36 sản phẩm)</span></h3>
+                                    <><h3>{catagory.nameCatalogory}</h3>
+                                        <span>({product.length} sản phẩm)</span>
+                                        </>
                                 )
                             }
                         })   
@@ -314,8 +340,8 @@ const Menu = ({match, history}) => {
                     <div className="catagory__item--container col-lg-12 col-md-12 col-sm-12">
                         <div className="catagory__item--container--item">
                             <span>Sản phẩm dành cho bạn</span>
-                            <select style={{position: 'absolute', right: '0%', padding: '5px 20px', border: '1px solid #d5d5d5', borderRadius: '5px', margin: '0 15px'}}>
-                            <option>Bán chạy nhất</option>
+                            <select style={{position: 'absolute', right: '0%', padding: '5px 20px', border: '1px solid #d5d5d5', borderRadius: '5px', margin: '0 15px'}} onChange = {(e) => handleChangeOption(e)}>
+                            <option>Tất cả</option>
                             <option>Theo tên từ A - Z</option>
                             <option>Sắp xếp theo giá giảm dần</option>
                             </select>
@@ -323,31 +349,71 @@ const Menu = ({match, history}) => {
                         <div className="catagory__item--container--child">
                             <Col lg={12} md={12} sm={12} className='container__item--child'>
                                 {
-                                    product.map((item, key) => {
-                                        if (item.CategoryID === catagoryId){
-                                                    return (
-                                                        <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
-                                                            <Link to = {`/${item.Slug}`}><div className="child--contains--img">
-                                                                <img src={item.Image} alt="" />
-                                                            </div>
-                                                            <h3>{item.Name}</h3>
-                                                            <div className="child--contains--price">
-                                                                <div>
-                                                                    <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                                    <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                    product.length > 0 ? (  
+                                        (filterItem === "Tất cả") ? (
+                                            product.map((item, key) => {
+                                                if (item.CategoryID === catagoryId){
+                                                        return (
+                                                            <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                                                <Link to = {`/${item.Slug}`}><div className="child--contains--img">
+                                                                    <img src={item.Image} alt="" />
                                                                 </div>
-                                                                <div className="contains--price-pecent">
-                                                                    <p>1%</p>
+                                                                <h3>{item.Name}</h3>
+                                                                <div className="child--contains--price">
+                                                                    <div>
+                                                                        <span className="contains--price--discount"><del>22.000.000đ</del></span>
+                                                                        <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                                                    </div>
+                                                                    <div className="contains--price-pecent">
+                                                                        <p>1%</p>
+                                                                    </div>
+                                                                </div></Link>
+                                                                <div className="child--contains--action">
+                                                                    <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                                                 </div>
-                                                            </div></Link>
-                                                            <div className="child--contains--action">
-                                                                <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                                             </div>
-                                                        </div>
-                                                )   
-                                        }
-                                    })
+                                                        )
+                                                   }
+                                            }
+                                        ))
+                                        : ( filterItem === "Theo tên từ A - Z") ? (
+                                            product.map((item, key) => {
+                                                if (item.CategoryID === catagoryId){
+                                                        return (
+                                                            <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                                                <Link to = {`/${item.Slug}`}><div className="child--contains--img">
+                                                                    <img src={item.Image} alt="" />
+                                                                </div>
+                                                                <h3>{item.Name}</h3>
+                                                                <div className="child--contains--price">
+                                                                    <div>
+                                                                        <span className="contains--price--discount"><del>22.000.000đ</del></span>
+                                                                        <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                                                    </div>
+                                                                    <div className="contains--price-pecent">
+                                                                        <p>1%</p>
+                                                                    </div>
+                                                                </div></Link>
+                                                                <div className="child--contains--action">
+                                                                    <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                   }
+                                            })
+                                        ) : (
+                                            <></>
+                                        ))
+                                    : (
+                                        <div className='not-found-item'>
+                                            <img src={NotFoundItem} alt="" />
+                                            <p>Rất tiếc chúng tôi không tìm thấy kết quả theo yêu cầu của bạn.</p>
+                                            <span>Vui lòng thử lại .</span>
+                                            {/* <img className='temp' src={NotFoundItem2} alt="" /> */}
+                                        </div>
+                                    )
                                 }
                             </Col>
                         </div>

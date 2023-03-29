@@ -226,3 +226,31 @@ section#cart{
     }
   }
 }
+
+.container__cart--contain--none{
+  height: auto;
+  width: 100%;
+}
+
+.container--cart--emty{
+  height: 300px;
+  width: 100%;
+  align-items: center;
+  margin: 0 auto;
+  justify-content: center;
+  text-align: center;
+  
+  p{
+    font-size: 18px;
+    font-weight: 500;
+  }
+  button{
+    padding: 0.5rem 2rem;
+    border-radius: 8px;
+    border: 2px solid #cb1e23;
+    background-color: #cb1e23;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+  }
+}

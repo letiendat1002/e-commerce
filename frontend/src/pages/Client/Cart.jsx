@@ -10,6 +10,7 @@ import Slider from "react-slick";
 import { useSelector , useDispatch} from "react-redux";
 import { addToCart, removeFromCart, clearCart, descreaseToCart, increaseToCart } from "../../Redux/Actions/cartAction";
 import { CART_DESCREASE_ITEM } from "../../Redux/Constants/cartConstant.js";
+import EmptyCart from '../../assets/images/empty-cart.png' 
 
 const Cart = () => {
   const { slug } = useParams();
@@ -115,14 +116,22 @@ const Cart = () => {
                       </div> 
               ) : (
                   <div className="container__cart--contain--none col-lg-12 col-md-12 col-sm-12 col-12">
-                          <p>Hiện tại bạn chưa có sản phẩm nào trong giỏ hàng</p>
-                          <Link to = {'/collections/coffee'}>Thưởng Thức Ngay</Link>
-                      </div>
+                    <div className="container--cart--emty">
+                        <img src={EmptyCart} alt="" />
+                        <p>Không có sản phẩm nào trong giỏ hàng</p>
+                        <Link to = {'/'}>
+                          <button>
+                            VỀ TRANG CHỦ
+                          </button>
+                        </Link>  
+                    </div>       
+                  </div>
               )}
           </div>
     </div>
     <div className="container container__cart-slide col-lg-12 col-md-12 col-sm-12 col-12 py-4">
-      <div className="container__cart--slide--contain">
+      { (cartItems.length > 0) && (
+        <div className="container__cart--slide--contain">
         <h1>Sản phẩm liên quan</h1>
         <Slider {...setting} >
           {
@@ -138,6 +147,8 @@ const Cart = () => {
           }
         </Slider>
       </div>
+      ) 
+      }
     </div>
     </section>
     

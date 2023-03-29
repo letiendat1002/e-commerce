@@ -9,12 +9,12 @@ import AutoSlice from '../../components/AutoSlide/AutoSlice'
 import formatProductPrice from '../../Helper/index.js'
 const Payment = () => {
     const menuCard = [ 
-        require('../../assets/images/card2.webp'),
-        require('../../assets/images/card3.webp'),
-        require('../../assets/images/card4.webp'),
-        require('../../assets/images/card5.webp'),
-        require('../../assets/images/card6.webp'),
-        require('../../assets/images/card7.webp')
+        require('../../assets/images/card2.jpeg'),
+        require('../../assets/images/card3.png'),
+        require('../../assets/images/card4.png'),
+        require('../../assets/images/card5.jpeg'),
+        require('../../assets/images/card6.png'),
+        require('../../assets/images/card7.jpeg')
     ] 
     const initialValue = {name: "", phone: "", email: "", address: ""};
     const [formValue, setFormValue] = useState(initialValue);

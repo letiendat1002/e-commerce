@@ -6,9 +6,14 @@ import ManageUser from '../pages/Admin/ManageUser/MangeUser'
 import Home from '../pages/Client/Home'
 import Menu from '../pages/Client/Menu'
 import ProductDetail from '../pages/Client/ProductDetail'
-import Login from '../pages/Client/Login'
-import Register from '../pages/Client/Register'
+import Login from '../layouts/login/Login'
+import Cart from '../pages/Client/Cart'
+import Payment from '../pages/Client/Payment'
 import NotFound from '../pages/Client/NotFound/NotFound'
+import Profile from '../pages/Client/Profile'
+import AccountOrder from '../pages/Client/AccountOrder'
+import AccountInfo from '../pages/Client/AccountInfo'
+import AccountAddress from '../pages/Client/AccountAddress'
 
 const router = createBrowserRouter([
     {
@@ -41,8 +46,20 @@ const router = createBrowserRouter([
           element: <Login />,
         },
         {
-          path: '/register',
-          element: <Register/>,
+          path: '/account/profile',
+          element: <Profile />,
+        },
+        {
+          path: '/account/order',
+          element: <AccountOrder />,
+        },
+        {
+          path: '/account/infor',
+          element: <AccountInfo />,
+        },
+        {
+          path: '/account/address',
+          element: <AccountAddress />,
         },
         {
           path: 'not-found',

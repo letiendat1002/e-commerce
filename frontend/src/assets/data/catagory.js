@@ -536,7 +536,7 @@ const Catagory = [
     }, 
     {
         CategoryID : '4', 
-        nameCatalogory: "PC-LINH KIỆN",
+        nameCatalogory: "PC Linh Kiện",
         slug: 'pc-linh-kien', 
         attribute: [
             {

@@ -117,7 +117,7 @@ const ProductDetail = ({match, history}) => {
         </div>
         <div className="a-container col-lg-12 col-md-12 col-sm-12 col-12 py-3">
           <div className="single-product col-lg-12 col-md-12 col-sm-12 col-12 d-flex">
-                    <div className="product-left col-lg-6 col-sm-12 col-md-6 col-12 pe-4">
+                    <div className="product-left col-lg-6 col-sm-12 col-md-6 col-12 pe-2 ps-2">
                   <div className="product-image-main">
                     <img src={previewImg} alt="" id="product-main-image" />
                   </div>
