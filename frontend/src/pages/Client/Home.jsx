@@ -3,15 +3,15 @@ import Carousel from '../../components/Carousel/CarouselItem'
 import '../../assets/css/home.scss'
 import Header from '../../layouts/Header'
 import slider1 from '../../assets/images/banner.jpg'
-import slider2 from '../../assets/images/slideshow_8.webp'
-import slider3 from '../../assets/images/slideshow_10.webp'
-import slider4 from '../../assets/images/slideshow_11.webp'
-import slider5 from '../../assets/images/slideshow_12.webp'
-import slider6 from '../../assets/images/slideshow_13.webp'
-import Banner2 from '../../assets/images/banner2.webp'
-import Banner3 from '../../assets/images/banner3.webp'
-import Banner4 from '../../assets/images/banner4.webp'
-import Banner5 from '../../assets/images/banner5.webp'
+import slider2 from '../../assets/images/slideshow_8.jpeg'
+import slider3 from '../../assets/images/slideshow_10.png'
+import slider4 from '../../assets/images/slideshow_11.jpeg'
+import slider5 from '../../assets/images/slideshow_12.jpeg'
+import slider6 from '../../assets/images/banner1.jpg'
+import Banner2 from '../../assets/images/banner2.png'
+import Banner3 from '../../assets/images/banner3.png'
+import Banner4 from '../../assets/images/banner4.png'
+import Banner5 from '../../assets/images/banner5.png'
 import {FaHotjar} from 'react-icons/fa'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Products from '../../assets/data/product.js'
@@ -21,7 +21,8 @@ import formatProductPrice from '../../Helper'
 import productData from '../../Helper/GetProduct'
 import catagoryFilter from '../../assets/data/catagoryFilter'
 import { Link } from 'react-router-dom'
-
+import { useDispatch, useSelector } from 'react-redux'
+import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 const slides = [
     slider1,
     slider2, 
@@ -32,21 +33,20 @@ const slides = [
 ]
 
 const menuCard = [ 
-    require('../../assets/images/card2.webp'),
-    require('../../assets/images/card3.webp'),
-    require('../../assets/images/card4.webp'),
-    require('../../assets/images/card5.webp'),
-    require('../../assets/images/card6.webp'),
-    require('../../assets/images/card7.webp')
+    require('../../assets/images/card2.jpeg'),
+    require('../../assets/images/card3.png'),
+    require('../../assets/images/card4.png'),
+    require('../../assets/images/card5.jpeg'),
+    require('../../assets/images/card6.png'),
+    require('../../assets/images/card7.jpeg')
 ] 
 const Home = () => {
-
+    const dispatch = useDispatch()
     const [category, setCategory]  = useState('1')
     const [product, setProduct] = useState(Products.filter(product => product.CategoryID === "1"));
     const [phone, setPhone] = useState(Products.filter(product => product.CategoryID === "2"))
     const [laptop, setLaptop] = useState(Products.filter(product => product.CategoryID === "1"))
     const [tablet, setTablet] = useState(Products.filter(product => product.CategoryID === "3"))
-
 
     const handleActive = () => {
         const laptop = document.querySelector('.container--item .laptop')   
@@ -118,6 +118,24 @@ const Home = () => {
         setProduct(product)
     }, [category])
 
+    const cart = useSelector((state) => state.cart);
+    const cartItems  = cart.cartItems;
+    const AddToCartHandle = (item) => {
+        if (cartItems.length > 0) {
+            cartItems.map((cart) =>{
+                if (cart.slug === item.Slug){
+                    // dispatch(increaseToCart(item,1))
+                }
+                else {
+                    dispatch(addToCart(item, 1))    
+                }
+            })
+        }
+        else {
+            dispatch(addToCart(item, 1))
+        }
+        
+      };
     return (
     <div className="container-fluid home col-lg-12 col-sm-12 col-md-12" style={{padding: '2rem 0'}}>
         <Carousel />
@@ -143,26 +161,26 @@ const Home = () => {
                 <Row className='container__item'>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, product).map((product) => {
+                            productData.getProductsForRecommendation(8, product).map((item) => {
                                         return (
                                             <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
-                                               <Link to = {product.Slug}>
+                                               <Link to = {item.Slug}>
                                                <div className="child--contains--img">
-                                                    <img src={product.Image} alt="" />
+                                                    <img src={item.Image} alt="" />
                                                 </div>
-                                                <h3>{product.Name}</h3>
+                                                <h3>{item.Name}</h3>
                                                 <div className="child--contains--price">
                                                     <div>
                                                         <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                        <h4 className="contains--price-unit">{formatProductPrice(product.UnitPrice)}</h4>
+                                                        <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
                                                     </div>
                                                     <div className="contains--price-pecent">
                                                         <p>1%</p>
                                                     </div>
                                                 </div></Link>
                                                 <div className="child--contain--action">
-                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
+                                                    <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                                 </div>
                                            </div>
                                         )
@@ -178,30 +196,30 @@ const Home = () => {
                 <Row className='container__item'>
                      <Col lg={12} md={12} sm={12} style= {{display: 'flex', justifyContent: 'space-between'}} className='container__item--title'>
                         <h3 style={{color: '#e02f2f' }}><FaHotjar style={{marginBottom: '5px'}} /> KHUYẾN MÃI HOT</h3>
-                        <p className='item--title-show'>Xem tất cả</p>
+                        <Link to={'/category/laptop'}><p className='item--title-show'>Xem tất cả</p></Link>
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getRandomProducts(8).map((product, key) => {
+                            productData.getRandomProducts(8).map((item, key) => {
                                 return (
                                     <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
-                                        <Link to = {product.Slug}>
+                                        <Link to = {item.Slug}>
                                         <div className="child--contains--img">
-                                            <img src={product.Image} alt="" />
+                                            <img src={item.Image} alt="" />
                                         </div>
-                                        <h3>{product.Name}</h3>
+                                        <h3>{item.Name}</h3>
                                         <div className="child--contains--price">
                                             <div>
                                                 <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                <h4 className="contains--price-unit">{product.UnitPrice}</h4>
+                                                <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
                                             </div>
                                             <div className="contains--price-pecent">
                                                 <p>1%</p>
                                             </div>
                                         </div></Link>
                                         <div className="child--contain--action">
-                                            <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                            <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
+                                            <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                            <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                         </div>
                                     </div>
                                 )
@@ -218,29 +236,29 @@ const Home = () => {
                 <Row className='container__item'>
                      <Col lg={12} md={12} sm={12} style= {{display: 'flex', justifyContent: 'space-between'}} className='container__item--title'>
                         <h4 style={{color: '#000' }}>ĐIỆN THOẠI NỔI BẬT</h4>
-                        <p className='item--title-show'>Xem tất cả</p>
+                        <Link to={'/category/dienthoai'}><p className='item--title-show'>Xem tất cả</p></Link>
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, phone).map((product, key) => {
+                            productData.getProductsForRecommendation(8, phone).map((item, key) => {
                                         return (
                                             <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
-                                                <Link to = {product.Slug}><div className="child--contains--img">
-                                                    <img src={product.Image} alt="" />
+                                                <Link to = {item.Slug}><div className="child--contains--img">
+                                                    <img src={item.Image} alt="" />
                                                 </div>
-                                                <h3>{product.Name}</h3>
+                                                <h3>{item.Name}</h3>
                                                 <div className="child--contains--price">
                                                     <div>
                                                         <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                        <h4 className="contains--price-unit">{formatProductPrice(product.UnitPrice)}</h4>
+                                                        <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
                                                     </div>
                                                     <div className="contains--price-pecent">
                                                         <p>1%</p>
                                                     </div>
                                                 </div></Link>
                                                 <div className="child--contain--action">
-                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                    <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
+                                                    <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                                 </div>
                                             </div>
                                         )
@@ -257,29 +275,29 @@ const Home = () => {
                 <Row className='container__item'>
                      <Col lg={12} md={12} sm={12} style= {{display: 'flex', justifyContent: 'space-between'}} className='container__item--title'>
                         <h4 style={{color: '#000' }}>LAPTOP BÁN CHẠY</h4>
-                        <p className='item--title-show'>Xem tất cả</p>
+                        <Link to={'/category/laptop'}><p className='item--title-show'>Xem tất cả</p></Link>
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, laptop).map((product, key) => {
+                            productData.getProductsForRecommendation(8, laptop).map((item, key) => {
                                     return (
                                         <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
-                                            <Link to={product.Slug}><div className="child--contains--img">
-                                                <img src={product.Image} alt="" />
+                                            <Link to={item.Slug}><div className="child--contains--img">
+                                                <img src={item.Image} alt="" />
                                             </div>
-                                            <h3>{product.Name}</h3>
+                                            <h3>{item.Name}</h3>
                                             <div className="child--contains--price">
                                                 <div>
                                                     <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                    <h4 className="contains--price-unit">{formatProductPrice(product.UnitPrice)}</h4>
+                                                    <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
                                                 </div>
                                                 <div className="contains--price-pecent">
                                                     <p>1%</p>
                                                 </div>
                                             </div> </Link>
                                             <div className="child--contain--action">
-                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
+                                                <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )
@@ -296,29 +314,29 @@ const Home = () => {
                 <Row className='container__item'>
                      <Col lg={12} md={12} sm={12} style= {{display: 'flex', justifyContent: 'space-between'}} className='container__item--title'>
                         <h4 style={{color: '#000' }}>TABLET BÁN CHẠY</h4>
-                        <p className='item--title-show'>Xem tất cả</p>
+                        <Link to={'/category/may-tinh-bang'}><p className='item--title-show'>Xem tất cả</p></Link>
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, tablet).map((product, key) => {
+                            productData.getProductsForRecommendation(8, tablet).map((item, key) => {
                                     return (
                                         <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
-                                            <Link to={product.Slug}><div className="child--contains--img">
-                                                <img src={product.Image} alt="" />
+                                            <Link to={item.Slug}><div className="child--contains--img">
+                                                <img src={item.Image} alt="" />
                                             </div>
-                                            <h3>{product.Name}</h3>
+                                            <h3>{item.Name}</h3>
                                             <div className="child--contains--price">
                                                 <div>
                                                     <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                    <h4 className="contains--price-unit">{formatProductPrice(product.UnitPrice)}</h4>
+                                                    <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
                                                 </div>
                                                 <div className="contains--price-pecent">
                                                     <p>1%</p>
                                                 </div>
                                             </div></Link>
                                             <div className="child--contain--action">
-                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                <Link to = {`/${product.Slug}`} className = "button"><button className='contains--action-addcart'>Thêm Giỏ Hàng</button></Link>
+                                                <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )

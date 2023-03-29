@@ -1,0 +1,320 @@
+.login{
+    width: 100%;
+    height: auto;
+    background-color: var(--background-color);
+    padding: 1rem 0;
+}
+
+.login__container{
+    display: flex;
+    padding: 3rem 0;
+    // max-height: 800px;
+    height: 100%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+.login__left{
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 0 3px #d5d5d5;
+    img {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+        align-items: center;
+    }
+    h3{
+        font-size: 25px;
+        // text-align: center;
+        font-weight: 500;
+        color: #DB4437;
+        padding-left: 1rem;
+
+    }
+    form {
+        padding: 0.5rem 1rem;
+        .login__left--item{
+            padding: 0.5rem 0;
+            .form__input{
+                display: flex;
+                i{
+                    position: absolute;
+                    margin-top: 0px;
+                    margin-left: 10px;
+                    font-size: 23px;
+                    font-weight: 500;
+                    color: #000000;
+                }
+            }
+            p{
+                font-size: 18px;
+                font-weight: 500;
+                padding-bottom: 5px;
+                // // padding-top: 0;
+                // padding: 0;
+                margin: 0;
+            }
+            p.errorMessage{
+                font-size: 18px;
+                font-weight: 500;
+                padding-bottom: 5px;
+                color: #e02f2f;
+                margin: 0;
+            }
+            input{
+                width: 100%;
+                padding: 8px 40px;
+                border-radius: 8px;
+                border: 3px solid #d5d5d5;
+                font-size: 16px;
+                font-weight: 500;
+                color: #000000;
+            }
+            span.icon-form{
+                position: absolute;
+                margin-left: 35%;
+                margin-top: 2px;
+                font-size: 18px;
+            }
+        }
+        .login__left--contains{
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0 1rem 0;
+            .login__left--contains--child {
+                padding: 5px 0;
+                input{
+                    width: 20px;
+                    font-size: 20px;
+                }
+                span{
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: #000000;
+                }                
+                a span{
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: #216CE3;
+                }                
+            }
+        }
+        button{
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 0;
+            border: 1px solid #e02f2f;
+            background-color: #e02f2f;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+        .login__left--account{
+            padding: 1rem 0;
+            span{
+                font-size: 17px;
+                font-weight: 500;
+                color: #000000;
+                padding-right: 10px;
+            }
+            a span{
+                font-size: 18px;
+                font-weight: 500;
+                color: #216CE3;
+            }
+        }
+    }
+    .login__left--difference{
+        margin: 0 auto;
+        display: block;
+        justify-content: center;
+        text-align: center;
+        h5{
+            font-size: 20px;
+            font-weight: 500;
+            color:#DB4437;
+        }
+        .left__difference--icon{
+            margin: 0 10px;
+            padding: 0 1rem;
+            i.facebook{
+                font-size: 34px;
+                // background-color: #4267B2;
+                color: #4267B2;
+                padding: 0 5px;
+            }
+            i.twitter{
+                font-size: 38px;
+                padding-top: 5px;
+                color: #1DA1F2;
+                padding: 0 5px;
+            }
+            i.google{
+                font-size: 38px;
+                padding-top: 5px;
+                color: #DB4437;
+                padding: 0 5px;
+            }
+        }
+    }
+}
+.signin__left{
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 0 3px #d5d5d5;
+    img {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+        align-items: center;
+    }
+    h3{
+        font-size: 25px;
+        // text-align: center;
+        font-weight: 500;
+        color: #DB4437;
+        padding-left: 1rem;
+
+    }
+    form {
+        padding: 0.5rem 1rem;
+        p.errorMessage{
+            font-size: 18px;
+            font-weight: 500;
+            padding-bottom: 5px;
+            color: #e02f2f;
+            margin: 0;
+        }
+        .login__left--item{
+            padding: 0.5rem 0;
+            .form__input{
+                display: flex;
+                i{
+                    position: absolute;
+                    margin-top: 0px;
+                    margin-left: 10px;
+                    font-size: 23px;
+                    font-weight: 500;
+                    color: #000000;
+                }
+            }
+            p{
+                font-size: 18px;
+                font-weight: 500;
+                padding-bottom: 5px;
+                // // padding-top: 0;
+                // padding: 0;
+                margin: 0;
+            }
+            input{
+                width: 100%;
+                padding: 8px 40px;
+                border-radius: 8px;
+                border: 3px solid #d5d5d5;
+                font-size: 16px;
+                font-weight: 500;
+                color: #000000;
+            }
+            span.icon-form{
+                position: absolute;
+                margin-left: 35%;
+                margin-top: 2px;
+                font-size: 18px;
+            }
+        }
+        .login__left--contains{
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0 1rem 0;
+            .login__left--contains--child {
+                padding: 5px 0;
+                input{
+                    width: 20px;
+                    font-size: 20px;
+                }
+                span{
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: #000000;
+                }                
+                a span{
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: #216CE3;
+                }                
+            }
+        }
+        button{
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 0;
+            border: 1px solid #e02f2f;
+            background-color: #e02f2f;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+        .login__left--account{
+            padding: 1rem 0;
+            span{
+                font-size: 17px;
+                font-weight: 500;
+                color: #000000;
+                padding-right: 10px;
+            }
+            a span{
+                font-size: 18px;
+                font-weight: 500;
+                color: #216CE3;
+            }
+        }
+    }
+    .login__left--difference{
+        margin: 0 auto;
+        display: block;
+        justify-content: center;
+        text-align: center;
+        h5{
+            font-size: 20px;
+            font-weight: 500;
+            color:#DB4437;
+        }
+        .left__difference--icon{
+            margin: 0 10px;
+            padding: 0 1rem;
+            i.facebook{
+                font-size: 34px;
+                // background-color: #4267B2;
+                color: #4267B2;
+                padding: 0 5px;
+            }
+            i.twitter{
+                font-size: 38px;
+                padding-top: 5px;
+                color: #1DA1F2;
+                padding: 0 5px;
+            }
+            i.google{
+                font-size: 38px;
+                padding-top: 5px;
+                color: #DB4437;
+                padding: 0 5px;
+            }
+        }
+    }
+}
