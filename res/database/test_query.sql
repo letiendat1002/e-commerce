@@ -3,16 +3,16 @@
 select * from myecommerce.Users;
 -- test insert -> Result: Success | Passed
 insert into myecommerce.Users 
-values (null, "nguyenvana", "123456", 1, "Nguyen Van A", "Male", "nguyenvana@email.com", "0123456789");
+values (null, "nguyenvana", "123456", "user", "Nguyen Van A", "Male", "nguyenvana@email.com", "0123456789");
 -- test insert duplicate username -> Result: Fail | Passed
 insert into myecommerce.Users 
-values (null, "nguyenvana", "123456", 1, "Nguyen Van A", "Male", "x", "x");
+values (null, "nguyenvana", "123456", "user", "Nguyen Van A", "Male", "x", "x");
 -- test insert duplicate email -> Result: Fail | Passed
 insert into myecommerce.Users 
-values (null, "x", "123456", 1, "Nguyen Van A", "Male", "nguyenvana@email.com", "x");
+values (null, "x", "123456", "user", "Nguyen Van A", "Male", "nguyenvana@email.com", "x");
 -- test insert duplicate phone -> Result: Fail | Passed
 insert into myecommerce.Users 
-values (null, "x", "123456", 1, "Nguyen Van A", "Male", "x", "0123456789");
+values (null, "x", "123456", "user", "Nguyen Van A", "Male", "x", "0123456789");
 -- test update one User information -> Result: Success | Passed
 update myecommerce.Users
 set Fullname = "test update info"
