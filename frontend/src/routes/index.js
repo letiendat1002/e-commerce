@@ -15,6 +15,7 @@ import AccountOrder from '../pages/Client/AccountOrder'
 import AccountInfo from '../pages/Client/AccountInfo'
 import AccountAddress from '../pages/Client/AccountAddress'
 
+
 const router = createBrowserRouter([
     {
       path: '/',
@@ -65,6 +66,7 @@ const router = createBrowserRouter([
           path: 'not-found',
           element: <NotFound />,
         },
+       
       ],
     },
     {
