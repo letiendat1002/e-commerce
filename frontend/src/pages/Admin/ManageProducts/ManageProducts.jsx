@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TableProducts from '../TableProducts/TableProducts';
 import apiService from '../../../services/apiServiceProducts';
+import { useDispatch, useSelector } from 'react-redux';
+import productApi from '../../../services/apiServiceProducts';
 
 const ManageProducts = (props) => {
   const [productsList, setProductsList] = useState([]);
@@ -11,6 +13,7 @@ const ManageProducts = (props) => {
     page: 1,
   });
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
   const [filters, setFilters] = useState({ _page: 1, _limit: 6 });
   // const [currentPage, setCurrentPage] = useState(1);
   const countPage = Math.ceil(pagination.total / pagination.limit);
@@ -30,7 +33,7 @@ const ManageProducts = (props) => {
       }
     };
     callApiProdcuts();
-  }, [filters]);
+  }, [filters, dispatch]);
 
   const handlePageChange = (page) => {
     setFilters((prev) => ({

@@ -47,6 +47,11 @@ const productApi = {
       },
     };
   },
+  async getAllProduct() {
+    const productListFilter = await axiosClientProducts.get(`/${SCHEMA}`);
+    // console.log(productListFilter)
+    return productListFilter
+  }
 };
 
 export default productApi;

@@ -59,6 +59,10 @@ const router = createBrowserRouter([
           element: <ManageProducts />,
         },
         {
+          path: 'manage-products/:id',
+          element: <ManageProducts />,
+        },
+        {
           path: 'login',
           element: <Login />,
         },
@@ -69,7 +73,8 @@ const router = createBrowserRouter([
         {
           path: 'products-filters',
           element: <ManageUser />,
-        },]
+        },
+      ]
       }
     // {
     //   path: '*',

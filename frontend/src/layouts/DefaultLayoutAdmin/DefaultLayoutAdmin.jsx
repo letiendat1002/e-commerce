@@ -3,36 +3,54 @@ import PropTypes from 'prop-types';
 import { Outlet } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
+import apiService from '../../services/apiServiceProducts';
 import Sidebar from '../../pages/Admin/Sidebar';
-import './DefaultLayoutAdmin.scss';
 import HeaderAdmin from '../../pages/Admin/HeaderAdmin/HeaderAdmin';
+import FormFilterProducts from '../../pages/Admin/components/FormFilterProducts/FormFilterProducts';
+import './DefaultLayoutAdmin.scss';
+import SearchBox from '../../pages/Admin/components/SearchBox/SearchBox';
+
 const DefaultLayoutAdmin = (props) => {
   const [collapsed, setCollapsed] = useState(false);
-  const [display, setdisplay] = useState("");
+  const [display, setdisplay] = useState('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log('done')
-    // console.log(collapsed);
-    if (collapsed === false) {
-      // document.querySelector('.admin-content').style.marginLeft= "0px";
-      // document.querySelector('.admin-content').style.width= "100%";
-      // document.querySelector('.admin-header').style.width= "100%";
-      // document.querySelector('.admin-content').style.marginLeft= "0";
-    }
-  }, [collapsed]);
+    const callProductsFilter = async () => {
+      try {
+        const dataProduct = await apiService.getAllProduct();
+        // console.log(dataProduct);
+        dispatch({
+          type: 'PRODUCT_SUCCESS',
+          payload: dataProduct,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    callProductsFilter();
+  }, [collapsed,dispatch]);
 
   return (
     <>
       <div className='admin-container'>
         <div className='admin-sidebar'>
-          <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} className={display} />
+          <Sidebar
+            collapsed={collapsed}
+            setCollapsed={setCollapsed}
+            className={display}
+          />
         </div>
         <div className='admin-content'>
           <div className='admin-header'>
             <span onClick={() => setCollapsed(!collapsed)}>
               <FaBars className='leftside' />
             </span>
+
+            {/* <FormFilterProducts /> */}
+            <SearchBox/>
 
             <div className='header__admin--dropdown rightside'>
               <HeaderAdmin />

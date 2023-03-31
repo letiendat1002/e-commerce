@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { postUserLogin, login } from '../../../../services/apiServiceUser';
 import { USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS } from '../../../../constant/userContants';
+import { loginActions } from '../../../../actions/userAction';
 
 const Login = (props) => {
   const [email, setEmail] = useState('');
@@ -40,38 +41,29 @@ const Login = (props) => {
       return;
     }
 
-    try {
-      // let data = await postUserLogin(email, password);
-      let data = await login(identifier,password);
-      console.log(data);
-      // if (data && data.EC === 0) {
-      //   dispatch({
-      //     type: USER_LOGIN_SUCCESS,
-      //     payload: data,
-      //   });
-      //   toast.success(data.EM);
-      //   navigate('/admin');
-      // }
-
-      // if (data && data.EC !== 0) {
-      //   toast.error(data.EM);
-      // }
+    // try {
+    //   let data = await login(identifier,password);
+    //   console.log(data);
       
-      if (data && data.user.confirmed===true) {
-        dispatch({
-          type: USER_LOGIN_SUCCESS,
-          payload: data,
-        });
-        toast.success(data.user.role.name);
-        navigate('/admin');
-      }
+    //   if (data && data.user.confirmed===true) {
+    //     dispatch({
+    //       type: USER_LOGIN_SUCCESS,
+    //       payload: data,
+    //     });
+    //     toast.success(data.user.role.name);
+    //     navigate('/admin');
+    //   }
 
-      if (data && data.statusCode===400) {
-        toast.error(data.error);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    //   if (data && data.statusCode===400) {
+    //     toast.error(data.error);
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    // }
+
+    dispatch(loginActions(identifier, password))
+    
+    navigate('/admin')
   };
 
   return (

@@ -53,7 +53,7 @@ const register = (data) => {
   return axiosClient.post(url, data);
 };
 
-const login = (identifier, password) => {
+const login = ({ identifier, password },config) => {
   //user:adminHuy@gmail.com
   //pw:123456
   //user:admin@gmail.com
