@@ -1,45 +1,79 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Button, Modal } from 'react-bootstrap'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import { Button, Modal } from 'react-bootstrap';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { toast } from 'react-toastify';
+import { createNewUser } from '../../../services/apiServiceUser';
 import './ModalCreateUser.scss';
 
-const ModalCreateUser = props => {
+const ModalCreateUser = (props) => {
+  const { show, setShow, callApi, callApiWithPaginate, setCurrentPage } = props;
 
-    const { show, setShow } = props;
+  const handleClose = () => {
+    setShow(false);
+    setEmail('');
+    setRole('USER');
+    setUsername('');
+    setImage('');
+    setPassword('');
+    setPreviewImage('');
+  };
 
-    const handleClose = () => setShow(false);
-    // const handleOpen = () => setShow(true);
-  
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
-    const [role, setRole] = useState('USER');
-    const [img, setImg] = useState('');
-    const [previewImage, setPreviewImage] = useState('');
-  
-    const handleUploadImage = (e) => {
-      if (e.target && e.target.files && e.target.files[0]) {
-        setPreviewImage(URL.createObjectURL(e.target.files[0]));
-        setImg(e.target.files[0]);
-      } else {
-        setPreviewImage('');
-      }
-      console.log('Upload', e.target.files[0]);
-    };
- 
-    const handleCreateUser = () => {
-   
-      let data = {
-        email:email,
-        password:password,
-        username:username,
-        role:role,
-        userImg:previewImage,
-      }
-  
-      console.log(data);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('USER');
+  const [image, setImage] = useState('');
+  const [previewImage, setPreviewImage] = useState('');
+
+  const handleUploadImage = (e) => {
+    if (e.target && e.target.files && e.target.files[0]) {
+      setPreviewImage(URL.createObjectURL(e.target.files[0]));
+      setImage(e.target.files[0]);
+    } else {
+      setPreviewImage('');
     }
+    console.log('Upload', e.target.files[0]);
+
+    console.log(image);
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const handleCreateUser = async () => {
+    const isValidate = validateEmail(email);
+    if (!isValidate) {
+      // alert("Error")
+      toast.error('Invalid Email');
+      return;
+    }
+
+    if (!password) {
+      toast.error('Invalid password');
+      return;
+    }
+
+    let data = await createNewUser(email, password, username, role, image);
+    if (data && data.EC === 0) {
+      toast.success(data.EM);
+      handleClose();
+      // await callApi();
+      setCurrentPage(1);
+      await callApiWithPaginate(1);
+    }
+    console.log(data)
+
+    if (data && data.EC !== 0) {
+      toast.error(data.EM);
+    }
+  };
   return (
     <div>
       <Modal
@@ -68,10 +102,11 @@ const ModalCreateUser = props => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
+
             <div className='col-md-6'>
               <label
                 className='form-label'
-                hmtlFor='inputPassword'>
+                htmlFor='inputPassword'>
                 Password
               </label>
               <input
@@ -85,30 +120,35 @@ const ModalCreateUser = props => {
 
             <div className='col-md-6'>
               <label
-                htmlFor='inputCity'
+                htmlFor='inputUsername'
                 className='form-label'>
                 Username
               </label>
               <input
                 type='text'
                 className='form-control'
-                id='inputCity'
+                id='inputUsername'
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className='col-md-4'>
               <label
-                htmlFor='inputState'
+                htmlFor='inputRole'
                 className='form-label'>
                 Role
               </label>
               <select
-                id='inputState'
+                id='inputRole'
                 className='form-select'
+                value={role}
                 onChange={(e) => setRole(e.target.value)}>
-                <option value='User' checked>User</option>
-                <option value='Admin'>Admin</option>
+                <option
+                  value='USER'
+                  checked>
+                  USER
+                </option>
+                <option value='ADMIN'>ADMIN</option>
               </select>
             </div>
 
@@ -157,9 +197,9 @@ const ModalCreateUser = props => {
         </Modal.Footer>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-ModalCreateUser.propTypes = {}
+ModalCreateUser.propTypes = {};
 
-export default ModalCreateUser
+export default ModalCreateUser;

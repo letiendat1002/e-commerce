@@ -14,6 +14,8 @@ import Profile from '../pages/Client/Profile'
 import AccountOrder from '../pages/Client/AccountOrder'
 import AccountInfo from '../pages/Client/AccountInfo'
 import AccountAddress from '../pages/Client/AccountAddress'
+// import Login from '../pages/Admin/components/Login/Login';
+import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
 
 const router = createBrowserRouter([
     {
@@ -68,19 +70,39 @@ const router = createBrowserRouter([
       ],
     },
     {
-        path: 'admin',
-        element: <DefaultLayoutAdmin />,
-        children: [
-            {
-                index: true,
-                element:<Dashboard/>
-            },
-            {
-                path: 'manage-user',
-                element:<ManageUser/>
-            }
-        ]
-    }
+      path: 'admin',
+      element: <DefaultLayoutAdmin />,
+      children: [
+        {
+          index: true,
+          element: <Dashboard />,
+        },
+        {
+          path: 'manage-user',
+          element: <ManageUser />,
+        },
+        {
+          path: 'manage-products',
+          element: <ManageProducts />,
+        },
+        {
+          path: 'manage-products/:id',
+          element: <ManageProducts />,
+        },
+        {
+          path: 'login',
+          element: <Login />,
+        },
+        {
+          path: 'products',
+          element: <ManageUser />,
+        },
+        {
+          path: 'products-filters',
+          element: <ManageUser />,
+        },
+      ]
+      }
     // {
     //   path: '*',
     //   element: <NotFound />,
