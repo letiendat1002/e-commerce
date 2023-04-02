@@ -1,14 +1,14 @@
 import React from 'react'
 import Carousel from 'react-bootstrap/Carousel';
-import slide1 from '../../assets/images/slideshow_7.webp'
-import slide2 from '../../assets/images/slideshow_8.webp'
-import slide3 from '../../assets/images/slideshow_10.webp'
-import slide4 from '../../assets/images/slideshow_11.webp'
-import slide5 from '../../assets/images/slideshow_12.webp'
-import slide6 from '../../assets/images/slideshow_13.webp'
-import laptop from '../../assets/images/laptop.webp'
-import pc from '../../assets/images/pc.webp'
-import screen from '../../assets/images/screen.webp'
+import slide1 from '../../assets/images/slideshow_7.jpeg'
+import slide2 from '../../assets/images/slideshow_8.jpeg'
+import slide3 from '../../assets/images/slideshow_10.png'
+import slide4 from '../../assets/images/slideshow_11.jpeg'
+import slide5 from '../../assets/images/slideshow_12.jpeg'
+import slide6 from '../../assets/images/banner1.jpg'
+import laptop from '../../assets/images/laptop.jpeg'
+import pc from '../../assets/images/pc.png'
+import screen from '../../assets/images/screen.png'
 import gaming from '../../assets/images/gaming.webp'
 const CarouselItem = () => {
     return (

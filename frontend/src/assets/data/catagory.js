@@ -533,6 +533,260 @@ const Catagory = [
                 ]
             },
         ]
+    }, 
+    {
+        CategoryID : '4', 
+        nameCatalogory: "PC Linh Kiện",
+        slug: 'pc-linh-kien', 
+        attribute: [
+            {
+                name: "Hãng sản xuất",
+                title: 'Manufacturer', 
+                childrend: [
+                    {
+                        name: "E-Power", 
+                        value: "E-Power", 
+                        slug: 'E-Power'
+                    }, 
+                    {
+                        name: "Apple (iMac)", 
+                        value: "Apple (iMac)", 
+                        slug: 'Apple'
+                    }, 
+                    {
+                        name: "Apple (Mac mini)", 
+                        value: "Apple (Mac mini)", 
+                        slug: 'Apple'
+                    }, 
+                    {
+                        name: "Lenovo", 
+                        value: "Lenovo", 
+                        slug: 'Lenovo'
+                    }, 
+                    {
+                        name: "Dell", 
+                        value: "Dell", 
+                        slug: 'Dell'
+                    }, 
+                    {
+                        name: "HP", 
+                        value: "HP", 
+                        slug: 'HP'
+                    }, 
+                    {
+                        name: "Asus", 
+                        value: "Asus", 
+                        slug: 'Asus'
+                    }, 
+                ]
+            }, 
+            {
+                name: "Nhu Cầu", 
+                title: 'demand', 
+                childrend: [
+                    {
+                        name: "PC Gaming", 
+                        value: "PC Gaming", 
+                        slug: "PC-Gaming"
+                    }, 
+                    {
+                        name: "PC Văn phòng", 
+                        value: "PC Văn phòng", 
+                        slug: "PC-van-phong"
+                    }, 
+                    {
+                        name: "PC Đồ họa", 
+                        value: "PC Đồ họa", 
+                        slug: "PC-do-hoa"
+                    }, 
+                ]
+            }, 
+            {
+                name: 'Mức giá',
+                title: 'UnitPrice',
+                childrend: [
+                    {
+                        name: 'Tất cả', 
+                        value: '0-100000000', 
+                        slug: 'all'
+                    }, 
+                    {
+                        name: 'Dưới 10 triệu', 
+                        value: '0-10000000', 
+                        slug: 'duoi-10-trieu'
+                    }, 
+                    {
+                        name: 'Từ 10 đến 15 triệu', 
+                        value: '10000000-14999999', 
+                        slug: 'tu-10-den-15-trieu'
+                    }, 
+                    {
+                        name: 'Từ 15 đến 20 triệu', 
+                        value: '15000000-19999999', 
+                        slug: 'tu-15-den-20-trieu'
+                    }, 
+                    {
+                        name: 'Từ 20 đến 30 triệu', 
+                        value: '20000000-30000000', 
+                        slug: 'tu-20-den-30-trieu'
+                    }, 
+                    {
+                        name: 'Từ 30 đến 40 triệu', 
+                        value: '30000000-40000000', 
+                        slug: 'tu-30-den-40-trieu'
+                    }, 
+                    {
+                        name: 'Trên 40 triệu', 
+                        value: '40000000-100000000', 
+                        slug: 'tren-40-trieu'
+                    }, 
+                ]
+            },
+            {
+                name: 'CPU',
+                title: "CPU",
+                childrend: [
+                    {
+                        name: 'Intel celeron', 
+                        value: 'Intel celeron', 
+                        slug: 'intel-celeron'
+                    }, 
+                    {
+                        name: 'Intel pentium', 
+                        value: 'Intel pentium', 
+                        slug: 'intel-pentium'
+                    }, 
+                    {
+                        name: 'Intel core i3', 
+                        value: 'Intel core i3', 
+                        slug: 'intel-core-i3'
+                    }, 
+                    {
+                        name: 'Intel core i5', 
+                        value: 'Intel core i5', 
+                        slug: 'intel-core-i5'
+                    }, 
+                    {
+                        name: 'Intel core i7', 
+                        value: 'Intel core i7', 
+                        slug: 'intel-core-i7'
+                    }, 
+                    {
+                        name: 'Amd ryzen 3', 
+                        value: 'Amd ryzen 3', 
+                        slug: 'amd-ryzen-3'
+                    }, 
+                    {
+                        name: 'Amd ryzen 5', 
+                        value: 'Amd ryzen 5', 
+                        slug: 'amd-ryzen-5'
+                    }, 
+                    {
+                        name: 'Amd ryzen 7', 
+                        value: 'Amd ryzen 7', 
+                        slug: 'amd-ryzen-7'
+                    }, 
+                    {
+                        name: 'Amd ryzen 9', 
+                        value: 'Amd ryzen 9', 
+                        slug: 'amd-ryzen-9'
+                    }, 
+                    {
+                        name: 'Apple M1', 
+                        value: 'Apple M1', 
+                        slug: 'apple-m1',
+                    },
+                    {
+                        name: 'Apple M2', 
+                        value: 'Apple M2', 
+                        slug: 'apple-m2',
+                    },
+                ]
+            },
+            {
+                name: 'RAM',
+                title: "RAM",
+                childrend: [
+                    {
+                        name: '4gb', 
+                        value: '4 GB', 
+                        slug: '4gb'
+                    }, 
+                    {
+                        name: '8 gb', 
+                        value: '8 GB', 
+                        slug: '8gb'
+                    }, 
+                    {
+                        name: '16 gb', 
+                        value: '16 GB', 
+                        slug: '16gb'
+                    }, 
+                    {
+                        name: '32 gb', 
+                        value: '32 GB', 
+                        slug: '32gb'
+                    }, 
+                ]
+            },
+            {
+                name: 'Ổ cứng',
+                title: "HardDisk",
+                childrend: [
+                    {
+                        name: 'Ssd 1tb', 
+                        value: 'SSD 1 TB', 
+                        slug: 'ssd-1tb'
+                    }, 
+                    {
+                        name: 'Ssd 512gb', 
+                        value: 'SSD 512 GB', 
+                        slug: 'ssd-512gb'
+                    }, 
+                    {
+                        name: 'Ssd 256gb', 
+                        value: 'SSD 256 GB', 
+                        slug: 'ssd-256gb'
+                    }, 
+                    {
+                        name: 'Ssd 128gb', 
+                        value: 'SSD 128 GB', 
+                        slug: 'ssd-128gb'
+                    }, 
+                ]
+            },
+            {
+                name: 'Card đồ họa',
+                title: "VGA",
+                childrend: [
+                    {
+                        name: 'Nvidia geforce series', 
+                        value: 'NVIDIA', 
+                        slug: 'Nvidia-geforce-series'
+                    }, 
+                    {
+                        name: 'Amd radeon series', 
+                        value: 'AMD', 
+                        slug: 'Amd-radeon-series'
+                    }, 
+                    {
+                        name: 'Card onboard', 
+                        value: 'CARD ONBOARD', 
+                        slug: 'Card-onboard'
+                    }, 
+                    {
+                        name: 'Apple M1', 
+                        value: 'M1', 
+                        slug: 'apple-m1',
+                    }, 
+                    {
+                        name: 'Apple M2', 
+                        value: 'M2', 
+                        slug: 'apple-m2',
+                    },
+                ]
+            },
+        ]
     }
 ]
 
