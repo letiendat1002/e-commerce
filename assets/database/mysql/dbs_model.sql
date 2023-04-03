@@ -15,17 +15,18 @@ CREATE SCHEMA IF NOT EXISTS `myecommerce` ;
 USE `myecommerce` ;
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`Users`
+-- Table `myecommerce`.`User`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`Users` (
+CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
   `UserID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `Username` VARCHAR(255) NOT NULL,
   `Password` VARCHAR(255) NOT NULL,
   `Role` VARCHAR(255) NOT NULL,
   `Fullname` VARCHAR(255) NOT NULL,
-  `Gender` VARCHAR(255) NOT NULL,
+  `Gender` VARCHAR(255) NULL,
   `Email` VARCHAR(255) NOT NULL,
-  `Phone` VARCHAR(255) NOT NULL,
+  `Phone` VARCHAR(255) NULL,
+  `Image` VARCHAR(255) NULL,
   PRIMARY KEY (`UserID`),
   UNIQUE INDEX `username_UNIQUE` (`Username` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`Email` ASC) VISIBLE,
@@ -34,26 +35,26 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`UserAddresses`
+-- Table `myecommerce`.`UserAddress`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`UserAddresses` (
+CREATE TABLE IF NOT EXISTS `myecommerce`.`UserAddress` (
   `UserAddressID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `UserID` BIGINT UNSIGNED NOT NULL,
   `Address` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`UserAddressID`, `UserID`),
-  INDEX `fk_UserAddresses_Users1_idx` (`UserID` ASC) VISIBLE,
-  CONSTRAINT `fk_UserAddresses_Users1`
+  INDEX `fk_UserAddress_User1_idx` (`UserID` ASC) VISIBLE,
+  CONSTRAINT `fk_UserAddress_User1`
     FOREIGN KEY (`UserID`)
-    REFERENCES `myecommerce`.`Users` (`UserID`)
+    REFERENCES `myecommerce`.`User` (`UserID`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`Orders`
+-- Table `myecommerce`.`Order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`Orders` (
+CREATE TABLE IF NOT EXISTS `myecommerce`.`Order` (
   `OrderID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `UserID` BIGINT UNSIGNED NOT NULL,
   `Total` BIGINT UNSIGNED NOT NULL,
@@ -61,19 +62,19 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Orders` (
   `Status` VARCHAR(255) NOT NULL,
   `DateOrder` DATE NOT NULL,
   PRIMARY KEY (`OrderID`, `UserID`),
-  INDEX `fk_Orders_Users1_idx` (`UserID` ASC) VISIBLE,
-  CONSTRAINT `fk_Orders_Users1`
+  INDEX `fk_Order_User1_idx` (`UserID` ASC) VISIBLE,
+  CONSTRAINT `fk_Order_User1`
     FOREIGN KEY (`UserID`)
-    REFERENCES `myecommerce`.`Users` (`UserID`)
+    REFERENCES `myecommerce`.`User` (`UserID`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`Categories`
+-- Table `myecommerce`.`Category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`Categories` (
+CREATE TABLE IF NOT EXISTS `myecommerce`.`Category` (
   `CategoryID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(255) NOT NULL,
   `Slug` VARCHAR(255) NOT NULL,
@@ -83,9 +84,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`Products`
+-- Table `myecommerce`.`Product`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`Products` (
+CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `ProductID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `CategoryID` BIGINT UNSIGNED NULL,
   `Name` VARCHAR(255) NOT NULL,
@@ -105,43 +106,43 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Products` (
   `Camera` VARCHAR(255) NOT NULL,
   `Battery` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`ProductID`),
-  INDEX `fk_Products_Categories1_idx` (`CategoryID` ASC) VISIBLE,
-  CONSTRAINT `fk_Products_Categories1`
+  INDEX `fk_Product_Category1_idx` (`CategoryID` ASC) VISIBLE,
+  CONSTRAINT `fk_Product_Category1`
     FOREIGN KEY (`CategoryID`)
-    REFERENCES `myecommerce`.`Categories` (`CategoryID`)
+    REFERENCES `myecommerce`.`Category` (`CategoryID`)
     ON DELETE SET NULL
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`OrderDetails`
+-- Table `myecommerce`.`OrderDetail`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`OrderDetails` (
+CREATE TABLE IF NOT EXISTS `myecommerce`.`OrderDetail` (
   `OrderID` BIGINT UNSIGNED NOT NULL,
   `ProductID` BIGINT UNSIGNED NOT NULL,
   `PurchasePrice` BIGINT UNSIGNED NOT NULL,
   `Quantity` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`OrderID`, `ProductID`),
-  INDEX `fk_OrderDetails_Orders1_idx` (`OrderID` ASC) VISIBLE,
-  INDEX `fk_OrderDetails_Products1_idx` (`ProductID` ASC) VISIBLE,
-  CONSTRAINT `fk_OrderDetails_Orders1`
+  INDEX `fk_OrderDetail_Order1_idx` (`OrderID` ASC) VISIBLE,
+  INDEX `fk_OrderDetail_Product1_idx` (`ProductID` ASC) VISIBLE,
+  CONSTRAINT `fk_OrderDetail_Order1`
     FOREIGN KEY (`OrderID`)
-    REFERENCES `myecommerce`.`Orders` (`OrderID`)
+    REFERENCES `myecommerce`.`Order` (`OrderID`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT,
-  CONSTRAINT `fk_OrderDetails_Products1`
+  CONSTRAINT `fk_OrderDetail_Product1`
     FOREIGN KEY (`ProductID`)
-    REFERENCES `myecommerce`.`Products` (`ProductID`)
+    REFERENCES `myecommerce`.`Product` (`ProductID`)
     ON DELETE RESTRICT
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`Ratings`
+-- Table `myecommerce`.`Rating`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`Ratings` (
+CREATE TABLE IF NOT EXISTS `myecommerce`.`Rating` (
   `UserID` BIGINT UNSIGNED NOT NULL,
   `OrderID` BIGINT UNSIGNED NOT NULL,
   `ProductID` BIGINT UNSIGNED NOT NULL,
@@ -149,15 +150,15 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Ratings` (
   `Comment` VARCHAR(255) NOT NULL,
   `DateRating` DATE NOT NULL,
   PRIMARY KEY (`UserID`, `OrderID`, `ProductID`),
-  INDEX `fk_Ratings_OrderDetails1_idx` (`OrderID` ASC, `ProductID` ASC) VISIBLE,
-  CONSTRAINT `fk_Ratings_Users1`
+  INDEX `fk_Rating_OrderDetail1_idx` (`OrderID` ASC, `ProductID` ASC) VISIBLE,
+  CONSTRAINT `fk_Rating_User1`
     FOREIGN KEY (`UserID`)
-    REFERENCES `myecommerce`.`Users` (`UserID`)
+    REFERENCES `myecommerce`.`User` (`UserID`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT,
-  CONSTRAINT `fk_Ratings_OrderDetails1`
+  CONSTRAINT `fk_Rating_OrderDetail1`
     FOREIGN KEY (`OrderID` , `ProductID`)
-    REFERENCES `myecommerce`.`OrderDetails` (`OrderID` , `ProductID`)
+    REFERENCES `myecommerce`.`OrderDetail` (`OrderID` , `ProductID`)
     ON DELETE CASCADE
     ON UPDATE RESTRICT)
 ENGINE = InnoDB;
