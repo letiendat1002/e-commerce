@@ -9,7 +9,7 @@ const DefaultLayout = props => {
       <div>
           <Header />
           <Outlet/>
-          <Footer />
+          {/* <Footer /> */}
     </div>
   )
 }

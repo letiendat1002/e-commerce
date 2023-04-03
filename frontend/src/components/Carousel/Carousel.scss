@@ -1,0 +1,19 @@
+.carousel{
+    padding: 0 7%;
+}
+
+// RESPONSIVE IN TABLET
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .carousel{
+        padding: 3.4rem 0;
+    }
+}
+
+// RESPONSIVE IN MOBILE
+@media screen and (min-width: 600px) and (max-width: 768px){
+    .carousel{
+        padding: 3.4rem 0;
+        // height: 200px;
+    }
+}
+

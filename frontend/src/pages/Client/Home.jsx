@@ -139,7 +139,7 @@ const Home = () => {
     return (
     <div className="container-fluid home col-lg-12 col-sm-12 col-md-12" style={{padding: '2rem 0'}}>
         <Carousel />
-        <Container>
+        <div className='home__contain container-fluid col-lg-12 col-md-12 col-sm-12 col-12'>
                 <Row className='container--item'>
                     <Col lg={3} md={3} sm={6} className = "select-item laptop active" onClick={handleActive}>
                         <h3 defaultValue= "Laptop">Laptop</h3>
@@ -360,7 +360,7 @@ const Home = () => {
                 </Row>
 
                 {/* CAM KẾT */}
-        </Container>
+        </div>
     </div>
   )
 }

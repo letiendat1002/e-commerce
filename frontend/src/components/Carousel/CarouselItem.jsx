@@ -10,9 +10,10 @@ import laptop from '../../assets/images/laptop.jpeg'
 import pc from '../../assets/images/pc.png'
 import screen from '../../assets/images/screen.png'
 import gaming from '../../assets/images/gaming.webp'
+import './Carousel.scss'
 const CarouselItem = () => {
     return (
-        <div className="container">
+        <div className="container-fluid carousel">
             <Carousel className='col-lg-12 col-sm-12 col-md-12' style={{height: 'auto', width: '100%', alignItems: 'center', margin: '0 auto', display: "flex", alignItems: 'center', justifyContent:'center', position: 'relative'}}>
             <Carousel.Item interval={3000} style = {{width: "100%"}}>
                 <img src={slide1} style={{height: "550px" ,width: '100%'}}/>
@@ -39,7 +40,7 @@ const CarouselItem = () => {
                 />
             </Carousel.Item>
             </Carousel>
-            <div className="carousel__item col-lg-12 col-md-12 col-sm-12">
+            {/* <div className="carousel__item col-lg-12 col-md-12 col-sm-12">
                 <div className="carousel__item--child">
                     <img src={laptop} alt="" />
                 </div>
@@ -52,7 +53,7 @@ const CarouselItem = () => {
                 <div className="carousel__item--child">
                     <img src={gaming} alt="" />
                 </div>
-            </div>
+            </div> */}
         </div>
       );
 }

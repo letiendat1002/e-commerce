@@ -4,6 +4,10 @@
     width: 100%;
 }
 
+.home .home__contain{
+    padding: 2rem 7% !important;
+}
+
 .carousel__item{
     display: flex;
     height: auto;
@@ -243,3 +247,40 @@ a.button{
 }
 
 
+// RESPONSIVE IN TABLET
+@media screen and (min-width: 768px) and (max-width: 992px){
+    .home .home__contain{
+        padding: 0 0% !important;
+    }
+}
+
+// RESPONSIVE IN MOBILE
+@media screen and (min-width: 600px) and (max-width: 768px){
+    .home .home__contain{
+        padding: 0 0% !important;
+    }
+    .child--contain--action button{
+        height: 40px;
+        width: 50%;
+        // width: 100%;
+    }
+}
+
+// RESPONSIVE IN SMALL MOBILE
+@media screen and (max-width: 600px) {
+    // .container--item{
+    //     display: none;
+    // }
+    // .container__item:first-child{
+    //     display: none;
+    // }
+    .child--contain--action button{
+        height: 40px;
+        width: 50%;
+        // width: 100%;
+    }   
+    .container__item h3{
+        font-size: 20px;
+        font-weight: 500;
+    }
+}
