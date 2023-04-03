@@ -50,13 +50,36 @@ const Menu = ({match, history}) => {
 
     const [product, setProduct] = useState(Products);
     const [filter, setFilter] = useState(initFilter);
-
+    const [value, setValue] = useState('0')
     const [filterItem, setFilterItem] = useState("Tất cả");
 
     const handleChangeOption = (e) => {
           setFilterItem(e.target.value)
-          setFilterProduct();
+
     }
+    const handleChange = (e) => {
+        setValue(e.target.value);
+        const temp = product
+        if (!e.target.value) {
+          return temp;
+         }
+     
+         if (e.target.value == 1) {
+           temp = temp.sort(function (a, b) {
+             return a.Name.localeCompare(b.Name);
+           });
+         
+           
+         }
+         if (e.target.value == 2) {
+           temp = temp.sort(function (a, b) {
+             return b.UnitPrice - a.UnitPrice;
+           });
+          }
+        setProduct(temp);
+      };
+
+
     useEffect(() => {
         Catagory.map((catagory) => {
             if (catagory.slug === slug){
@@ -64,15 +87,9 @@ const Menu = ({match, history}) => {
             }
         })
     })
-
-    const setFilterProduct = (filterItem)  => {
-        if (filterItem === "Theo tên từ A - Z"){
-            const product = product.filter((e) => e.Name.sort())
-            setProduct(product)
-        }
-    }
-
-    console.log(product);
+       
+   
+    
 
     const settings = {
         infinite: true,
@@ -271,6 +288,9 @@ const Menu = ({match, history}) => {
         }
         
       };
+        
+     
+       
     return (
         <div className="container-fluid col-lg-12 col-md-12 col-sm-12 col-12" style={{backgroundColor: '#f1f0f1'}}>
             <div className="catagory">
@@ -340,10 +360,10 @@ const Menu = ({match, history}) => {
                     <div className="catagory__item--container col-lg-12 col-md-12 col-sm-12">
                         <div className="catagory__item--container--item">
                             <span>Sản phẩm dành cho bạn</span>
-                            <select style={{position: 'absolute', right: '0%', padding: '5px 20px', border: '1px solid #d5d5d5', borderRadius: '5px', margin: '0 15px'}} onChange = {(e) => handleChangeOption(e)}>
-                            <option>Tất cả</option>
-                            <option>Theo tên từ A - Z</option>
-                            <option>Sắp xếp theo giá giảm dần</option>
+                            <select value={value} onChange={handleChange} style={{position: 'absolute', right: '0%', padding: '5px 20px', border: '1px solid #d5d5d5', borderRadius: '5px', margin: '0 15px'}}>
+                            <option value="DEFAULT">Tất cả</option>
+                            <option value="1">Theo tên từ A - Z</option>
+                            <option  value="2">Sắp xếp theo giá giảm dần</option>
                             </select>
                         </div>
                         <div className="catagory__item--container--child">

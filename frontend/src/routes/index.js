@@ -17,6 +17,7 @@ import AccountAddress from '../pages/Client/AccountAddress'
 // import Login from '../pages/Admin/components/Login/Login';
 import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
 
+
 const router = createBrowserRouter([
     {
       path: '/',
@@ -67,6 +68,7 @@ const router = createBrowserRouter([
           path: 'not-found',
           element: <NotFound />,
         },
+       
       ],
     },
     {
