@@ -6,5 +6,3 @@ git-credential-manager/
 # VS Code
 .vscode/
 
-# backend directory
-backend/
