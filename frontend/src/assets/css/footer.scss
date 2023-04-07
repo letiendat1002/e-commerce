@@ -38,3 +38,48 @@ li.chinhsach--item img{
     height: 40px;
     width: 50px;
 }
+
+// RESPONSIVE IN SREEN NORMAL 
+@media screen and (max-width: 1200px) and (min-width: 992px){
+
+}
+
+// RESPONSIVE IN TABLET
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .footer__container{
+        background-color: #fff;
+        padding: 2rem 6%;
+        // display: flex;   
+        flex-wrap: wrap;
+        word-wrap: 2;
+        word-break: 2;
+    }
+}
+
+// RESPONSIVE IN MOBILE
+@media screen and (min-width: 600px) and (max-width: 768px){
+    .footer__container{
+        background-color: #fff;
+        padding: 2rem 6%;
+        // display: flex;   
+        flex-wrap: wrap;
+        word-wrap: 2;
+        word-break: 2;
+    }
+}
+
+// RESPONSIVE IN SMALL MOBILE
+@media screen and (max-width: 600px) {
+    .footer__container{
+        background-color: #fff;
+        padding: 2rem 6%;
+        // display: flex;   
+        flex-wrap: wrap;
+        word-wrap: 2;
+        word-break: 2;
+
+        ul.chinhsach:nth-child(2), ul.chinhsach:nth-child(4){
+            display: none;
+        }
+    }
+}

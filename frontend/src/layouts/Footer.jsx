@@ -19,7 +19,7 @@ const Footer = () => {
   return (
     <div className='footer'>
       <div className='footer__container'>
-        <ul className='container chinhsach col-lg-3 col-md-6 col-sm-12 col-12'>
+        <ul className='chinhsach col-lg-3 col-md-6 col-sm-6 col-6'>
           <li className='chinhsach--item'>
             <a
               href='#'
@@ -77,7 +77,7 @@ const Footer = () => {
             />
           </li>
         </ul>
-        <ul className='chinhsach col-lg-3 col-md-6 col-sm-12 col-12'>
+        <ul className='chinhsach col-lg-3 col-md-6 col-sm-6 col-6'>
           <li className='chinhsach--item'>
             <a
               href='#'
@@ -141,7 +141,7 @@ const Footer = () => {
           </li>
         </ul>
 
-        <ul className='chinhsach col-lg-3 col-md-6 col-sm-12 col-12'>
+        <ul className='chinhsach col-lg-3 col-md-6 col-sm-6 col-6'>
           <li className='chinhsach--item'>
             <a
               href='#'
@@ -179,7 +179,7 @@ const Footer = () => {
           </li>
         </ul>
 
-        <ul className='chinhsach col-lg-3 col-md-6 col-sm-12 col-12'>
+        <ul className='chinhsach col-lg-3 col-md-6 col-sm-6 col-6'>
           <li className='chinhsach--item'>
             <span>Tư vấn mua hàng (Miễn phí)</span>
             <p>

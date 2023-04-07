@@ -296,7 +296,7 @@ const Menu = ({match, history}) => {
                     }
                 </Slider>
             </div>
-            <div style={{display: 'flex', padding: '2rem 0'}}>
+            <div className='tablet' style={{display: 'flex', padding: '2rem 0'}}>
                 <div className="catagory__container col-lg-3 col-md-4" style={{paddingTop: "1rem"}}>
                 {
                         Catagory.map((catalog, key) => {
@@ -321,6 +321,47 @@ const Menu = ({match, history}) => {
                                 )
                             }
                         })
+                    }
+                </div>
+                <div className="catagory__container--tablet col-sm-12 col-md-12 col-12">
+                {
+                    <select>
+                        {
+                            Catagory.map((catalog, key) => {
+                                if (catalog.slug === slug){
+                                    return (
+                                        catalog.attribute.map((attribute, key) => {
+                                            return (
+                                                <option value={attribute.name}>{attribute.name}</option>
+                                            )
+                                        })
+                                    )
+                                }
+                            })
+                        }
+                    </select>
+                        // Catagory.map((catalog, key) => {
+                        //     if (catalog.slug === slug){
+                        //         return (
+                        //             catalog.attribute.map((attribute, key) => {
+                        //                 return (
+                        //                     <div className='catagory__container--item'><h5>{attribute.name}</h5>
+                        //                         <ul>{
+                        //                             attribute?.childrend.map((children, key) => {
+                        //                                 return (
+                        //                                     <li>
+                        //                                         <input type='checkbox' checked = {children.check} name={attribute.title} value = {children.value} onChange={(e) => filterSelect(attribute.title,e)} />
+                        //                                         <p>{children.name}</p>
+                        //                                     </li>
+                        //                                 )
+                        //                             })
+                        //                         }</ul>
+                        //                     </div>
+                        //                 )
+                        //             })
+                        //         )
+                        //     }
+                        // })
                     }
                 </div>
                 <div className="catagory__item col-lg-9">
@@ -354,7 +395,7 @@ const Menu = ({match, history}) => {
                                             product.map((item, key) => {
                                                 if (item.CategoryID === catagoryId){
                                                         return (
-                                                            <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                                            <div className="item--child--contains col-lg-4 col-md-6 col-sm-6 col-12 ">
                                                                 <Link to = {`/${item.Slug}`}><div className="child--contains--img">
                                                                     <img src={item.Image} alt="" />
                                                                 </div>
@@ -370,7 +411,7 @@ const Menu = ({match, history}) => {
                                                                 </div></Link>
                                                                 <div className="child--contains--action">
                                                                     <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                                                 </div>
                                                             </div>
                                                         )
@@ -381,7 +422,7 @@ const Menu = ({match, history}) => {
                                             product.map((item, key) => {
                                                 if (item.CategoryID === catagoryId){
                                                         return (
-                                                            <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                                            <div className="item--child--contains col-lg-4 col-md-6 col-sm-6 col-12 ">
                                                                 <Link to = {`/${item.Slug}`}><div className="child--contains--img">
                                                                     <img src={item.Image} alt="" />
                                                                 </div>
@@ -397,7 +438,7 @@ const Menu = ({match, history}) => {
                                                                 </div></Link>
                                                                 <div className="child--contains--action">
                                                                     <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                                                 </div>
                                                             </div>
                                                         )

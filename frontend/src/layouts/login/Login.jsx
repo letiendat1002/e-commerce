@@ -212,8 +212,8 @@ const Login = () => {
    
   return (
     <div className="container-fluid login">
-        <div className="container login__container col-lg-12 col-md-12 col-sm-12 col-12">
-            <div className="login__left col-lg-6 col-md-6 col-sm-6 col-6 ">
+        <div className="login__container col-lg-12 col-md-12 col-sm-12 col-12">
+            <div className="login__left col-lg-6 col-md-8 col-sm-10 col-11 ">
             <img src={Logo} alt="" />
             <h3>Đăng Nhập Tài Khoản</h3>
             <form onSubmit={handleSubmitLogin}>
@@ -261,7 +261,7 @@ const Login = () => {
                 </div>
             </div>
             </div>
-            <div className="signin__left col-lg-6 col-md-6 col-sm-6 col-6 d-none">
+            <div className="signin__left col-lg-6 col-md-8 col-sm-10 col-11 d-none">
             <img src={Logo} alt="" />
             <h3>Đăng Ký Tài Khoản</h3>
             <form onSubmit={handleSubmitRegister}>

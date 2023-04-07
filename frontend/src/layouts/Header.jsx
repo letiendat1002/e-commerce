@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Logo from '../assets/images/Logo.svg'
 import '../assets/css/Header.scss'
 import '../assets/css/config.scss'
@@ -16,46 +16,68 @@ import {TfiMenuAlt} from 'react-icons/tfi'
 import {AiOutlineMenu} from 'react-icons/ai'
 import {BsCartFill} from 'react-icons/bs'
 import {AiFillCloseCircle} from 'react-icons/ai'
+import '../../src/assets/images/Logo.svg'
 const Header = () => {
+  const [active, setActive] = useState(false)
   const handleShowMenu = () => {
     const menuTabletItem = document.querySelector('.menu__tablet--item')
     const menuOverlay = document.querySelector('.menu__tablet--overlay')
 
-    if (menuOverlay.classList.contains('d-none') && menuTabletItem.classList.contains('d-none')){
-      menuTabletItem.classList.remove('d-none')
+    if (menuOverlay.classList.contains('d-none') && menuTabletItem.classList.contains('d--none')){
+      menuTabletItem.classList.remove('d--none')
       menuOverlay.classList.remove('d-none')
+      menuTabletItem.style.transform = "translateX(0)"
+      menuTabletItem.style.transitionDuration = '0.5s'
     }
-    else if ((!menuOverlay.classList.contains('d-none')) && (!menuTabletItem.classList.contains('d-none'))){
-      menuTabletItem.classList.add('d-none')
+    else{
+      menuTabletItem.classList.add('d--none')
       menuOverlay.classList.add('d-none')
+      menuTabletItem.style.transform = "translateX(-100%)"
+      menuTabletItem.style.transitionDuration = '0.5s'
     }
   }
 
   const handleCloseMenu = (() => {
-    const closeItem = document.querySelector('i.closeIcon')
     const menuTabletItem = document.querySelector('.menu__tablet--item')
     const menuOverlay = document.querySelector('.menu__tablet--overlay')
 
-    // if (!menuTabletItem.classList.contains('d-none') && (!menuOverlay.classList.contains)){
-        menuTabletItem.classList.add('d-none')
-        menuOverlay.classList.add('d-none')
-    // }
+    if (menuOverlay.classList.contains('d-none') && menuTabletItem.classList.contains('d--none')){
+      menuTabletItem.classList.remove('d--none')
+      menuOverlay.classList.remove('d-none')
+      menuTabletItem.style.transform = "translateX(0)"
+      menuTabletItem.style.transitionDuration = '0.5s'
+    }
+    else{
+      menuTabletItem.classList.add('d--none')
+      menuOverlay.classList.add('d-none')
+      menuTabletItem.style.transform = "translateX(-100%)"
+      menuTabletItem.style.transitionDuration = '0.5s'
+    }
   })
   return (
     <div className="container-fluid p-0 m-0 col-lg-12 col-sm-12 col-md-12" style={{paddingBottom: "2rem"}}>
       <div className="headerTop col-lg-12 col-md-12 col-sm-12 " />
       <div className="navbar col-lg-12 col-md-12 col-sm-12 flex">
           <div className="nav__tablet">
-              <i><AiOutlineMenu onClick={() => handleShowMenu()}/></i>
+              <i><AiOutlineMenu  onClick={() => handleShowMenu()}/></i>
           </div>
           <div className="menu__tablet">
-          <div className="menu__tablet--item">
+          <div className="menu__tablet--item d--none">
+              <Link to="/" className='menu__tablet--item--child' onClick={() => handleCloseMenu()}>
+                  <div className="tablet--item--child">
+                    <img src={Logo}></img>
+                  </div>
+                  <i className='closeIcon' onClick={() => handleCloseMenu()}><AiFillCloseCircle onClick={() => handleCloseMenu()}/></i>
+                </Link>
+            <div className='menu__tablet--item--child'>
+                <Link to = "/" onClick={() => handleCloseMenu()}><i><AiOutlineHome /></i>
+                <p>Trang chủ</p></Link>
+            </div>
             <Link to="/category/dienthoai" className='menu__tablet--item--child' onClick={() => handleCloseMenu()}>
               <div className="tablet--item--child">
                 <span><GiSmartphone /></span>
                 <p>ĐIỆN THOẠI</p>
               </div>
-              <i className='closeIcon' onClick={() => handleCloseMenu()}><AiFillCloseCircle /></i>
             </Link>
             <Link to="/category/laptop" className='menu__tablet--item--child' onClick={() => handleCloseMenu()}>
               <div className="tablet--item--child">
@@ -112,10 +134,9 @@ const Header = () => {
               </div>
             </Link>
           </div>
-          <div className="menu__tablet--overlay" onClick={() => handleCloseMenu()}>
+          <div className="menu__tablet--overlay d-none" onClick={() => handleCloseMenu()}>
           </div>
           </div>
-          
           <img src={Logo} alt=""/>
           <InputGroup className='input__form__search'>
             <Form.Control 
@@ -157,6 +178,15 @@ const Header = () => {
             </span>  
             </Link>
           </div>
+          <InputGroup className='input__form__search--tablet' style = {{width: '100%', padding: '0 0 3rem 0'}}>
+            <Form.Control 
+              as="input" 
+              aria-label="Nhập tên thiết bị cần tìm" 
+              placeholder="Nhập tên thiết bị cần tìm"/>
+            <InputGroup.Text style={{backgroundColor: "#e02f2f", border: "none", outline: "none"}}>
+                <AiOutlineSearch style={{color: '#fff', fontSize: '25px', fontWeight: '600'}} />
+            </InputGroup.Text>
+          </InputGroup>
       </div>
       <div className="headerBottom container-fluid col-lg-12 col-md-12 col-sm-12 col-12">
           <Link to="/category/dienthoai">
@@ -201,12 +231,12 @@ const Header = () => {
               <p>MÁY CŨ GIÁ RẺ</p>
             </div>
           </Link>
-          <Link to={""}>
+          {/* <Link to={""}>
             <div className="headerBottom__item">
               <span><AiOutlineHome /></span>
               <p>HÀNG GIA DỤNG</p>
             </div>
-          </Link>
+          </Link> */}
           <Link to={""}>
             <div className="headerBottom__item">
               <span><BsSim /></span>

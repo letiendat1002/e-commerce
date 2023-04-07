@@ -1,6 +1,9 @@
 .product__detail{
   background-color: var(--background-color);
 }
+.product-main{
+  padding: 0 7%;
+}
 
 .a-container {
   margin: 0 auto;
@@ -525,5 +528,113 @@ a.re-link-js--open-modal2:hover{
     font-size: 32px;
     font-weight: 500;
     color: #cb1e23;
+  }
+}
+
+
+// RESPONSIVE IN DESKTOP
+@media screen and (min-width: 1200px) and (max-width:1400px){
+  .catagory{
+      padding: 1rem 1%;
+  }
+}
+
+// RESPONSIVE IN DESKTOP
+@media screen and (max-width: 1200px){
+  .product-main{
+    padding: 0 0%;
+  }
+}
+
+// RESPONSIVE IN TABLET
+@media screen and (min-width: 768px) and (max-width: 992px){
+  .product{
+    margin-top: 2rem;
+  }
+  .product-main{
+    padding: 0 0%;
+  }
+  .product__descript--contain{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+
+  .descript--contain--right{
+    margin-top: 2rem;
+    padding-right: 1.5rem;
+  }
+  
+  .single-product{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+  .product-right{
+    padding: 3rem 0 1rem 0 !important;
+  }
+}
+
+// RESPONSIVE IN MOBILE
+@media screen and (min-width: 600px) and (max-width: 768px){
+  .product-main{
+    padding: 0 0%;
+  }
+
+  .product{
+    margin-top: 1rem;
+  }
+  .product__descript--contain{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+
+  .descript--contain--right{
+    margin-top: 2rem;
+    padding-right: 1.5rem;
+  }
+  .single-product{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+  .product-right{
+    padding: 3rem 0 1rem 0 !important;
+  }
+}
+
+// RESPONSIVE IN SMALL MOBILE
+@media screen and (max-width: 600px) {
+  .product{
+    margin-top: 1rem;
+  }
+  .product-main{
+    padding: 0 0%;
+  }
+  .product__descript--contain{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+
+  .descript--contain--right{
+    margin-top: 2rem;
+    padding: 0.5rem 0 !important;
+  }
+
+  .single-product{
+      display: flex;
+      flex-wrap: wrap;
+      word-break: 2;
+      word-wrap: 2;
+  }
+  .product-right{
+    padding: 3rem 0 1rem 0 !important;
   }
 }

@@ -203,7 +203,7 @@ h4.contains--price-unit{
 }
 .child--contain--action button{
     height: 40px;
-    width: 140px;
+    width: 50%;
     // width: 100%;
 }
 
@@ -246,11 +246,26 @@ a.button{
     color: #000;
 }
 
+.container--item--tablet{
+    display: none;
+}
+
+// RESPONSIVE IN DESKTOP
+@media screen and (max-width: 1200px){
+    .container--item--tablet{
+        display: none;
+    }
+}
 
 // RESPONSIVE IN TABLET
 @media screen and (min-width: 768px) and (max-width: 992px){
     .home .home__contain{
         padding: 0 0% !important;
+    }
+    .child--contain--action button{
+        height: 40px;
+        width: 50%;
+        // width: 100%;
     }
 }
 
@@ -263,6 +278,12 @@ a.button{
         height: 40px;
         width: 50%;
         // width: 100%;
+    }
+    .container--item--laptop{
+        display: none;
+    }
+    .container--item--tablet{
+        display: block;
     }
 }
 
@@ -282,5 +303,21 @@ a.button{
     .container__item h3{
         font-size: 20px;
         font-weight: 500;
+    }
+    .select-item{
+        h3{
+            font-size: 22px;
+        }
+    }
+    .item--child--contains{
+        h3{
+            font-size: 18px;
+        }
+    }
+
+    .container__item--title{
+        h4{
+            font-size: 18px;
+        }
     }
 }

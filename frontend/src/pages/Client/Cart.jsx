@@ -38,8 +38,8 @@ const Cart = () => {
       localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
   }
   return (
-    <section id="cart">
-    <div className="container container__cart col-lg-12 col-md-12 col-sm-12 col-12">
+    <section id="cart" className="container-fluid">
+    <div className="container__cart col-lg-12 col-md-12 col-sm-12 col-12">
           <div className="container__cart--title">
               <Link to = {'/'}><AiOutlineHome /></Link>
               <i><GrFormNext /></i>
@@ -48,7 +48,7 @@ const Cart = () => {
           <div className="container__cart--contain col-lg-12 col-md-12 col-sm-12 col-12">
               { (cartItems.length > 0) ? (
                   <div className="container__cart--contain--container col-lg-12 col-md-12 col-sm-12 col-12">
-                          <div className="container__cart--contain--container--item col-lg-8 col-md-7 col-sm-12 col-12 pe-4">
+                          <div className="container__cart--contain--container--item col-lg-8 col-md-12 col-sm-12 col-12 pe-4">
                           <h5>Giỏ hàng của bạn {cartItems.length} sản phẩm</h5>
                           <div className="  ">
                           <tr>
@@ -88,7 +88,7 @@ const Cart = () => {
                           }
                       </div>
                       </div>
-                      <div className="container__cart--contain--container--item col-lg-4 col-md-5 col-sm-12 col-12 ps-4">
+                      <div className="container__cart--contain--container--item col-lg-4 col-md-12 col-sm-12 col-12 ps-4">
                           <h5>Tiến hành thanh toán</h5>
                           <div className="contain--container--item--bill">
                               <p className="title">Thanh Toán Hóa Đơn</p>
@@ -129,26 +129,28 @@ const Cart = () => {
               )}
           </div>
     </div>
-    <div className="container container__cart-slide col-lg-12 col-md-12 col-sm-12 col-12 py-4">
-      { (cartItems.length > 0) && (
-        <div className="container__cart--slide--contain">
-        <h1>Sản phẩm liên quan</h1>
-        <Slider {...setting} >
-          {
-            productData.getRandomProducts(8).map((product) => {
-              return (
-                <Link to = {`/${product.Slug}`}><div className="descript-slider--item">
-                    <img src={product.Image} alt="" />
-                    <p className="name">{product.Name}</p>
-                    <p className="price">{formatProductPrice(product.UnitPrice)}</p>
-                </div></Link>
-            )
-            })
-          }
-        </Slider>
+    <div className="container--fluid">
+      <div className="container__cart-slide col-lg-12 col-md-12 col-sm-12 col-12 py-4">
+        { (cartItems.length > 0) && (
+          <div className="container__cart--slide--contain">
+          <h1>Sản phẩm liên quan</h1>
+          <Slider {...setting} >
+            {
+              productData.getRandomProducts(8).map((product) => {
+                return (
+                  <Link to = {`/${product.Slug}`}><div className="descript-slider--item">
+                      <img src={product.Image} alt="" />
+                      <p className="name">{product.Name}</p>
+                      <p className="price">{formatProductPrice(product.UnitPrice)}</p>
+                  </div></Link>
+              )
+              })
+            }
+          </Slider>
+        </div>
+        ) 
+        }
       </div>
-      ) 
-      }
     </div>
     </section>
     
