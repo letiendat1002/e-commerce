@@ -19,16 +19,14 @@ USE `myecommerce` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
   `UserID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Username` VARCHAR(255) NOT NULL,
+  `Email` VARCHAR(255) NOT NULL,
   `Password` VARCHAR(255) NOT NULL,
   `Role` VARCHAR(255) NOT NULL,
   `Fullname` VARCHAR(255) NOT NULL,
   `Gender` VARCHAR(255) NULL,
-  `Email` VARCHAR(255) NOT NULL,
   `Phone` VARCHAR(255) NULL,
   `Image` VARCHAR(255) NULL,
   PRIMARY KEY (`UserID`),
-  UNIQUE INDEX `username_UNIQUE` (`Username` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`Email` ASC) VISIBLE,
   UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -94,8 +92,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `Image` VARCHAR(255) NOT NULL,
   `UnitPrice` BIGINT UNSIGNED NOT NULL,
   `Quantity` INT UNSIGNED NOT NULL,
-  `Description` VARCHAR(255) NOT NULL,
-  `Status` BIT(1) NOT NULL,
+  `Description` LONGTEXT NOT NULL,
   `YearRelease` SMALLINT(4) NOT NULL,
   `Manufacturer` VARCHAR(255) NOT NULL,
   `Monitor` VARCHAR(255) NOT NULL,
@@ -105,6 +102,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `HardDisk` VARCHAR(255) NOT NULL,
   `Camera` VARCHAR(255) NOT NULL,
   `Battery` VARCHAR(255) NOT NULL,
+  `Status` BIT(1) NOT NULL,
   PRIMARY KEY (`ProductID`),
   INDEX `fk_Product_Category1_idx` (`CategoryID` ASC) VISIBLE,
   CONSTRAINT `fk_Product_Category1`
@@ -147,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Rating` (
   `OrderID` BIGINT UNSIGNED NOT NULL,
   `ProductID` BIGINT UNSIGNED NOT NULL,
   `RateAmount` TINYINT(1) UNSIGNED NOT NULL,
-  `Comment` VARCHAR(255) NOT NULL,
+  `Comment` LONGTEXT NOT NULL,
   `DateRating` DATE NOT NULL,
   PRIMARY KEY (`UserID`, `OrderID`, `ProductID`),
   INDEX `fk_Rating_OrderDetail1_idx` (`OrderID` ASC, `ProductID` ASC) VISIBLE,
