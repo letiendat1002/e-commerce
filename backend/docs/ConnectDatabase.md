@@ -3,7 +3,7 @@
 
 
 ### Step By Step
-1. Run file [docker-compose.yml](..%2Fdocker-compose.yml)
+1. Run file [docker-compose.yml](..%2Fbuild%2Fdocker-compose.yml)
 ![docker_run](../assets/images/database/docker_run.png)
 
     **Result:** (Message: ... ready for connections ... port: 3306  MySQL Community Server - GPL.)
