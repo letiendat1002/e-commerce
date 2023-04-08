@@ -53,10 +53,12 @@ public class ProductServiceImpl implements ProductService {
         product.setName(request.Name());
         product.setSlug(request.Slug());
         product.setImage(request.Image());
+        product.setImageReview1(request.ImageReview1());
+        product.setImageReview2(request.ImageReview2());
+        product.setImageReview3(request.ImageReview3());
         product.setUnitPrice(request.UnitPrice());
         product.setQuantity(request.Quantity());
         product.setDescription(request.Description());
-        product.setStatus(request.Status());
         product.setYearRelease(request.YearRelease());
         product.setManufacturer(request.Manufacturer());
         product.setMonitor(request.Monitor());
@@ -66,6 +68,7 @@ public class ProductServiceImpl implements ProductService {
         product.setHardDisk(request.HardDisk());
         product.setCamera(request.Camera());
         product.setBattery(request.Battery());
+        product.setStatus(request.Status());
         return product;
     }
 }
