@@ -12,7 +12,8 @@ import {BiMemoryCard} from 'react-icons/bi'
 import Slider from "react-slick";
 import productData from "../../Helper/GetProduct.js";
 import { useSelector, useDispatch } from "react-redux";
-import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
+import { addToCart } from "../../Redux/slice/cartSlice.js";
+// import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 
 const ProductDetail = ({match, history}) => {
   const {slug} = useParams();
@@ -66,21 +67,8 @@ const ProductDetail = ({match, history}) => {
   const [laptop, setLaptop] = useState(Products.filter(product => product.CategoryID === "1"))
   const [tablet, setTablet] = useState(Products.filter(product => product.CategoryID === "3"))
 
-  // const cart = useSelector((state) => state.cart);
-  // const  cartItems  = cart.cartItems;
   const AddToCartHandle = (product) => {
-    // console.log(product)
-    dispatch(addToCart(product,1))
-    // cartItems.map((cart) =>{
-    //   if (cart.slug === slug){
-    //     console.log('tonf tai')
-    //     // dispatch(increaseToCart(product, 1))
-    //     // dispatch(addToCart(product, 1));
-    //   }
-    //   else {
-    //     console.log("chua ton tai");
-    //   }
-    // })
+    dispatch(addToCart(product))
   };
 
   return (
@@ -295,7 +283,7 @@ const ProductDetail = ({match, history}) => {
                       Products.map((product) => {
                         if (product.Slug == slug){
                           return (
-                            <Link to = {`/cart`} onClick= {AddToCartHandle(product)} >
+                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(product)} >
                               <i className="bx bxs-zap"></i> Mua Ngay
                             </Link>
                           )

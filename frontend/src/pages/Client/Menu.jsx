@@ -16,9 +16,10 @@ import Products from '../../assets/data/product';
 import {Link, useParams} from 'react-router-dom' 
 import formatProductPrice from '../../Helper';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
+// import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
 import NotFoundItem from '../../assets/images/noti-search.png'
 import NotFoundItem2 from '../../assets/images/notFound.webp'
+import { addToCart } from '../../Redux/slice/cartSlice';
 const slides = [
     Item1,
     Item2, 
@@ -254,21 +255,21 @@ const Menu = ({match, history}) => {
 
     const dispatch = useDispatch()
     const cart = useSelector((state) => state.cart);
-    const cartItems  = cart.cartItems;
+    // const cartItems  = cart.cartItems;
     const AddToCartHandle = (item) => {
-        if (cartItems.length > 0) {
-            cartItems.map((cart) =>{
-                if (cart.slug === item.Slug){
-                    // dispatch(increaseToCart(item,1))
-                }
-                else {
-                    dispatch(addToCart(item, 1))    
-                }
-            })
-        }
-        else {
-            dispatch(addToCart(item, 1))
-        }
+        // if (cartItems.length > 0) {
+        //     cartItems.map((cart) =>{
+        //         if (cart.slug === item.Slug){
+        //             // dispatch(increaseToCart(item,1))
+        //         }
+        //         else {
+        //             dispatch(addToCart(item, 1))    
+        //         }
+        //     })
+        // }
+        // else {
+        //     dispatch(addToCart(item, 1))
+        // }
         
       };
     return (
@@ -411,7 +412,7 @@ const Menu = ({match, history}) => {
                                                                 </div></Link>
                                                                 <div className="child--contains--action">
                                                                     <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                                                 </div>
                                                             </div>
                                                         )
@@ -438,7 +439,7 @@ const Menu = ({match, history}) => {
                                                                 </div></Link>
                                                                 <div className="child--contains--action">
                                                                     <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                                                 </div>
                                                             </div>
                                                         )

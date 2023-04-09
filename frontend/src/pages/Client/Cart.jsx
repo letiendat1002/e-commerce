@@ -5,24 +5,16 @@ import { useFetcher, useParams, Link } from "react-router-dom";
 import formatProductPrice from "../../Helper/index.js";
 import {AiOutlineHome, AiOutlineDelete} from 'react-icons/ai'
 import {GrFormNext} from 'react-icons/gr'
-import productData from "../../Helper/GetProduct.js";
-import Slider from "react-slick";
 import { useSelector , useDispatch} from "react-redux";
-import { addToCart, removeFromCart, clearCart, descreaseToCart, increaseToCart } from "../../Redux/Actions/cartAction";
-import { CART_DESCREASE_ITEM } from "../../Redux/Constants/cartConstant.js";
 import EmptyCart from '../../assets/images/empty-cart.png' 
+import { decreamentFromCart, increamentFromCart, removeFromToCart } from "../../Redux/slice/cartSlice.js";
 
 const Cart = () => {
   const { slug } = useParams();
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
-  const  cartItems  = cart.cartItems;
-  const total = cartItems.reduce((a, i) => a + i.qty * i.price, 0);
-  const remove = (id) => {
-    dispatch(removeFromCart(id));
-  };
-
-
+  const cart = useSelector((state) => state.allCart);
+  const  cartItems  = cart.cart;
+  const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.UnitPrice, 0);
   const setting = {
     infinite: true,
     slidesToShow: 5,
@@ -36,6 +28,10 @@ const Cart = () => {
   const handleSubmit = () => {
       localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
       localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
+  }
+
+  const handleRemoveFromCart = (product) => {
+    dispatch(removeFromToCart(product))
   }
   return (
     <section id="cart" className="container-fluid">
@@ -63,25 +59,18 @@ const Cart = () => {
                               cartItems.map((product) => {
                                   return (
                                       <tr>
-                                          <td><img src={product.image} alt="" /></td>
-                                          <td style={{width: "100px"}}><p className = "product--name">{product.name}</p></td>
+                                          <td><img src={product.Image} alt="" /></td>
+                                          <td style={{width: "100px"}}><p className = "product--name">{product.Name}</p></td>
                                           <td><div>
-                                              <button onClick={() => {
-                                                if (product.qty > 1){
-                                                  dispatch(descreaseToCart(product,1))
-                                                }
-                                                else {
-                                                  dispatch(removeFromCart(product.product));
-                                                }
-                                              }}>
+                                              <button onClick={() => {dispatch(decreamentFromCart(product))}}>
                                                   <span>-</span>
                                               </button>   
-                                              <p>{product.qty}</p>    
-                                              <button onClick={() => dispatch(increaseToCart(product,1))}>+</button>    
+                                              <p>{product.cartQuantity}</p>    
+                                              <button onClick={() => dispatch(increamentFromCart(product))}>+</button>    
                                           </div></td>
-                                          <td>{formatProductPrice(product.price)}</td>
-                                          <td>{formatProductPrice(product.price*product.qty)}</td>
-                                          <td><button className="delete-item" onClick={() => remove(product.product)}><AiOutlineDelete /></button></td>
+                                          <td>{formatProductPrice(product.UnitPrice)}</td>
+                                          <td>{formatProductPrice(product.UnitPrice*product.cartQuantity)}</td>
+                                          <td><button className="delete-item" onClick={() => handleRemoveFromCart(product)}><AiOutlineDelete /></button></td>
                                       </tr>
                                   )
                               })
@@ -131,7 +120,7 @@ const Cart = () => {
     </div>
     <div className="container--fluid">
       <div className="container__cart-slide col-lg-12 col-md-12 col-sm-12 col-12 py-4">
-        { (cartItems.length > 0) && (
+        {/* { (cartItems.length > 0) && (
           <div className="container__cart--slide--contain">
           <h1>Sản phẩm liên quan</h1>
           <Slider {...setting} >
@@ -149,7 +138,7 @@ const Cart = () => {
           </Slider>
         </div>
         ) 
-        }
+        } */}
       </div>
     </div>
     </section>
