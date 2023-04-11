@@ -18,7 +18,7 @@
 - Naming: ecommerce@localhost
 - Port: 3333
 - User: root
-- Password: Ecommerc3
+- Password: root
 - Then Apply -> OK
 ![try_to_connect_database](../assets/images/database/try_to_connect_database.png)
 

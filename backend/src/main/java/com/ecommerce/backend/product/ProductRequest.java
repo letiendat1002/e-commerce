@@ -7,10 +7,12 @@ public record ProductRequest(
         String Name,
         String Slug,
         String Image,
+        String ImageReview1,
+        String ImageReview2,
+        String ImageReview3,
         BigInteger UnitPrice,
         Long Quantity,
         String Description,
-        Boolean Status,
         String YearRelease,
         String Manufacturer,
         String Monitor,
@@ -19,6 +21,7 @@ public record ProductRequest(
         String VGA,
         String HardDisk,
         String Camera,
-        String Battery
+        String Battery,
+        Boolean Status
 ) {
 }

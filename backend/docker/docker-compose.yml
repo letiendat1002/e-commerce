@@ -5,7 +5,7 @@ services:
     cap_add:
       - SYS_NICE
     environment:
-      MYSQL_ROOT_PASSWORD: Ecommerc3
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - db:/var/lib/mysql
     ports:

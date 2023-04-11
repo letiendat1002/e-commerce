@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(ProductRequest request) {
+    public void addProduct(@RequestBody ProductRequest request) {
         var product = new Product();
         var formedProduct = addRequestDataToProduct(request, product);
         productRepository.save(formedProduct);
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(ProductRequest request, BigInteger productID) {
+    public void updateProduct(@RequestBody ProductRequest request, BigInteger productID) {
         var product = productRepository
                 .findById(productID)
                 .orElseThrow(
@@ -48,15 +48,17 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(formedProduct);
     }
 
-    private Product addRequestDataToProduct(@RequestBody ProductRequest request, Product product) {
+    private Product addRequestDataToProduct(ProductRequest request, Product product) {
         product.setCategoryID(request.CategoryID());
         product.setName(request.Name());
         product.setSlug(request.Slug());
         product.setImage(request.Image());
+        product.setImageReview1(request.ImageReview1());
+        product.setImageReview2(request.ImageReview2());
+        product.setImageReview3(request.ImageReview3());
         product.setUnitPrice(request.UnitPrice());
         product.setQuantity(request.Quantity());
         product.setDescription(request.Description());
-        product.setStatus(request.Status());
         product.setYearRelease(request.YearRelease());
         product.setManufacturer(request.Manufacturer());
         product.setMonitor(request.Monitor());
@@ -66,6 +68,7 @@ public class ProductServiceImpl implements ProductService {
         product.setHardDisk(request.HardDisk());
         product.setCamera(request.Camera());
         product.setBattery(request.Battery());
+        product.setStatus(request.Status());
         return product;
     }
 }

@@ -28,10 +28,12 @@ public class Product {
     private String Name;
     private String Slug;
     private String Image;
+    private String ImageReview1;
+    private String ImageReview2;
+    private String ImageReview3;
     private BigInteger UnitPrice;
     private Long Quantity;
     private String Description;
-    private Boolean Status;
     private String YearRelease;
     private String Manufacturer;
     private String Monitor;
@@ -41,6 +43,7 @@ public class Product {
     private String HardDisk;
     private String Camera;
     private String Battery;
+    private Boolean Status;
 
     @Override
     public boolean equals(Object o) {
