@@ -1,16 +1,28 @@
-### IntelliJ Plugins Requirements
-1. Docker
+### Requirements
+1. [Docker Desktop](https://www.docker.com/)
+
 
 
 ### Step By Step
-1. Run file [docker-compose.yml](..%2Fbuild%2Fdocker-compose.yml)
-![docker_run](../assets/images/database/docker_run.png)
+1. Docker Desktop -> Dev Environments -> Create a new environment
 
-    **Result:** (Message: ... ready for connections ... port: 3306  MySQL Community Server - GPL.)
-    ![docker_result](../assets/images/database/docker_result.png)
+![docker-desktop](../assets/images/database/docker-desktop.png)
+
+2. Include these steps:
+   1. On step 1, choose `Get Started`.
+   2. On step 2, `Choose source` -> `Local directory` -> `Select` path to /backend -> `Continue`.
+
+   ![step-3-select-path](../assets/images/database/docker-select-path.png)
+
+   3. Wait for Docker setting up successfully -> `Continue` -> `Done`.
+
+   ![docker-setting-up-sucessfully](../assets/images/database/docker-setting-up-sucessfully.png)
+   ![docker-done](../assets/images/database/docker-done.png)
+   ![docker-service-running](../assets/images/database/docker-service-running.png)
 
 
-2. Go to tab Database and connect to mysql server
+3. Go to tab Database and connect to mysql server
+
 - New -> Data Source -> MySQL
 ![connect_instruction](../assets/images/database/connect_instruction.png)
 
@@ -23,39 +35,24 @@
 ![try_to_connect_database](../assets/images/database/try_to_connect_database.png)
 
 
-- Copy all [dbs_model.sql](..%2Fassets%2Fdatabases%2Fmysql%2Fdbs_model.sql) and paste to console tab -> Execute
+- Copy all [dbs_model.sql](../assets/databases/mysql/dbs_model.sql) and paste to console tab.
+  
+  - Pick any database drop down 
+
+![connection-picking-database](../assets/images/database/connection-picking-database.png)
+
+
+> **No Console tab?** -> On tab Database, New -> Query Console (Ctrl + Shift + Q)
+
+   - `Execute`(Ctrl + Enter)
+![connection-run](../assets/images/database/connection-run.png)
 ![connection_result](../assets/images/database/connection_result.png)
 
-- On tab Database, New -> Query Console (Ctrl + Shift + Q), paste the below query then execute (Category API is not currently available):
+
+- On tab **Database**, New -> Query Console (Ctrl + Shift + Q), paste the below query then execute (because Category API is not currently available):
 
 
     INSERT INTO myecommerce.Category VALUES (1, "laptop", "slug", "image");
 
 
-- Now you can work with product API. Check [APIs documentation](APIs.md) for more information.
-
-### Issues
-1. [Fix soon] Data retrieves from Product API /get not in order (ProductID in bottom):
-
-
-    {
-        "name": "Laptop Asus ROG Strix Gaming G513IE-HN246W R7 4800H/8GB/512GB/15.6FHD/GeForce RTX 3050 Ti 4GB/Win 11",
-        "status": true,
-        "description": "ASUS ROG Strix Gaming G513IE-HN246W tập trung vào sức mạnh và trải nghiệm chơi game nhưng cũng không kém phần thu hút bởi thiết kế cao cấp, đèn LED ấn tượng. Mạnh mẽ ở cả CPU Ryzen 7 4800H và GPU RTX 3550 Ti, ROG Strix G513IE-HN246W hoàn hảo cho cả chơi game và làm việc đa nhiệm.",
-        "categoryID": 1,
-        "slug": "Asus-ROG-Strix-Gaming-G513IE-HN246W",
-        "image": "",
-        "unitPrice": 26990000,
-        "quantity": 9999,
-        "yearRelease": "2022",
-        "manufacturer": "Asus",
-        "monitor": "15.6 inch, 1920 x 1080 Pixels, IPS, 144 Hz, 250 nits, FHD",
-        "cpu": "Amd ryzen 7",
-        "ram": "8 GB",
-        "vga": "NVIDIA",
-        "hardDisk": "SSD 512 GB",
-        "camera": "No",
-        "battery": "1234mAh",
-        **"productID": 3**
-    }
-
+Now you can work with Product API. Check [APIs documentation](APIs.md) for more information.
