@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addProduct(@RequestBody ProductRequest request) {
+    public void addProduct(ProductRequest request) {
         var product = new Product();
         var formedProduct = addRequestDataToProduct(request, product);
         productRepository.save(formedProduct);
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(@RequestBody ProductRequest request, BigInteger productID) {
+    public void updateProduct(ProductRequest request, BigInteger productID) {
         var product = productRepository
                 .findById(productID)
                 .orElseThrow(
@@ -49,26 +49,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product addRequestDataToProduct(ProductRequest request, Product product) {
-        product.setCategoryID(request.CategoryID());
-        product.setName(request.Name());
-        product.setSlug(request.Slug());
-        product.setImage(request.Image());
-        product.setImageReview1(request.ImageReview1());
-        product.setImageReview2(request.ImageReview2());
-        product.setImageReview3(request.ImageReview3());
-        product.setUnitPrice(request.UnitPrice());
-        product.setQuantity(request.Quantity());
-        product.setDescription(request.Description());
-        product.setYearRelease(request.YearRelease());
-        product.setManufacturer(request.Manufacturer());
-        product.setMonitor(request.Monitor());
-        product.setCPU(request.CPU());
-        product.setRAM(request.RAM());
-        product.setVGA(request.VGA());
-        product.setHardDisk(request.HardDisk());
-        product.setCamera(request.Camera());
-        product.setBattery(request.Battery());
-        product.setStatus(request.Status());
+        product.setCategoryID(request.categoryID());
+        product.setName(request.name());
+        product.setSlug(request.slug());
+        product.setImage(request.image());
+        product.setImageReview1(request.imageReview1());
+        product.setImageReview2(request.imageReview2());
+        product.setImageReview3(request.imageReview3());
+        product.setUnitPrice(request.unitPrice());
+        product.setQuantity(request.quantity());
+        product.setDescription(request.description());
+        product.setYearRelease(request.yearRelease());
+        product.setManufacturer(request.manufacturer());
+        product.setMonitor(request.monitor());
+        product.setCpu(request.cpu());
+        product.setRam(request.ram());
+        product.setVga(request.vga());
+        product.setHardDisk(request.hardDisk());
+        product.setCamera(request.camera());
+        product.setBattery(request.battery());
+        product.setStatus(request.status());
         return product;
     }
 }

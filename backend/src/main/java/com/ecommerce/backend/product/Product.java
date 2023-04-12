@@ -12,49 +12,65 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
+@Table(name = "Product")
 public class Product {
     @Id
-    @SequenceGenerator(
-            name = "product_id_sequence",
-            sequenceName = "product_id_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "product_id_sequence"
+            strategy = GenerationType.SEQUENCE
     )
-    private BigInteger ProductID;
-    private BigInteger CategoryID;
-    private String Name;
-    private String Slug;
-    private String Image;
-    private String ImageReview1;
-    private String ImageReview2;
-    private String ImageReview3;
-    private BigInteger UnitPrice;
-    private Long Quantity;
-    private String Description;
-    private String YearRelease;
-    private String Manufacturer;
-    private String Monitor;
-    private String CPU;
-    private String RAM;
-    private String VGA;
-    private String HardDisk;
-    private String Camera;
-    private String Battery;
-    private Boolean Status;
+    @Column(name = "ProductID")
+    private BigInteger productID;
+    @Column(name = "CategoryID")
+    private BigInteger categoryID;
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Slug")
+    private String slug;
+    @Column(name = "Image")
+    private String image;
+    @Column(name = "ImageReview1")
+    private String imageReview1;
+    @Column(name = "ImageReview2")
+    private String imageReview2;
+    @Column(name = "ImageReview3")
+    private String imageReview3;
+    @Column(name = "UnitPrice")
+    private BigInteger unitPrice;
+    @Column(name = "Quantity")
+    private Long quantity;
+    @Column(name = "Description")
+    private String description;
+    @Column(name = "YearRelease")
+    private String yearRelease;
+    @Column(name = "Manufacturer")
+    private String manufacturer;
+    @Column(name = "Monitor")
+    private String monitor;
+    @Column(name = "CPU")
+    private String cpu;
+    @Column(name = "RAM")
+    private String ram;
+    @Column(name = "VGA")
+    private String vga;
+    @Column(name = "HardDisk")
+    private String hardDisk;
+    @Column(name = "Camera")
+    private String camera;
+    @Column(name = "Battery")
+    private String battery;
+    @Column(name = "Status")
+    private Boolean status;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Objects.equals(ProductID, product.ProductID) && Objects.equals(CategoryID, product.CategoryID) && Objects.equals(Name, product.Name) && Objects.equals(Slug, product.Slug) && Objects.equals(Image, product.Image) && Objects.equals(UnitPrice, product.UnitPrice) && Objects.equals(Quantity, product.Quantity) && Objects.equals(Description, product.Description) && Objects.equals(Status, product.Status) && Objects.equals(YearRelease, product.YearRelease) && Objects.equals(Manufacturer, product.Manufacturer) && Objects.equals(Monitor, product.Monitor) && Objects.equals(CPU, product.CPU) && Objects.equals(RAM, product.RAM) && Objects.equals(VGA, product.VGA) && Objects.equals(HardDisk, product.HardDisk) && Objects.equals(Camera, product.Camera) && Objects.equals(Battery, product.Battery);
+        return Objects.equals(productID, product.productID) && Objects.equals(categoryID, product.categoryID) && Objects.equals(name, product.name) && Objects.equals(slug, product.slug) && Objects.equals(image, product.image) && Objects.equals(imageReview1, product.imageReview1) && Objects.equals(imageReview2, product.imageReview2) && Objects.equals(imageReview3, product.imageReview3) && Objects.equals(unitPrice, product.unitPrice) && Objects.equals(quantity, product.quantity) && Objects.equals(description, product.description) && Objects.equals(yearRelease, product.yearRelease) && Objects.equals(manufacturer, product.manufacturer) && Objects.equals(monitor, product.monitor) && Objects.equals(cpu, product.cpu) && Objects.equals(ram, product.ram) && Objects.equals(vga, product.vga) && Objects.equals(hardDisk, product.hardDisk) && Objects.equals(camera, product.camera) && Objects.equals(battery, product.battery) && Objects.equals(status, product.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ProductID, CategoryID, Name, Slug, Image, UnitPrice, Quantity, Description, Status, YearRelease, Manufacturer, Monitor, CPU, RAM, VGA, HardDisk, Camera, Battery);
+        return Objects.hash(productID, categoryID, name, slug, image, imageReview1, imageReview2, imageReview3, unitPrice, quantity, description, yearRelease, manufacturer, monitor, cpu, ram, vga, hardDisk, camera, battery, status);
     }
 }
