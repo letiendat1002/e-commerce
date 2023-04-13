@@ -15,8 +15,14 @@ import java.util.Objects;
 @Table(name = "Product")
 public class Product {
     @Id
+    @SequenceGenerator(
+            name = "product_id_seq",
+            sequenceName = "product_id_seq",
+            allocationSize = 1
+    )
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.SEQUENCE,
+            generator = "product_id_seq"
     )
     @Column(name = "ProductID")
     private BigInteger productID;

@@ -1,35 +1,36 @@
 package com.ecommerce.backend.product;
 
-import com.ecommerce.backend.exception.ApiRequestException;
-import lombok.AllArgsConstructor;
+import com.ecommerce.backend.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigInteger;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
+    @Override
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
+    @Override
     public Product getProduct(BigInteger productID) {
         return productRepository
                 .findById(productID)
                 .orElseThrow(
-                        () -> new ApiRequestException("Product not found")
+                        () -> new ResourceNotFoundException("Product not found")
                 );
     }
 
     @Override
-    public void addProduct(ProductRequest request) {
+    public Product addProduct(ProductRequest request) {
         var product = new Product();
         var formedProduct = addRequestDataToProduct(request, product);
-        productRepository.save(formedProduct);
+        return productRepository.save(formedProduct);
     }
 
     @Override
@@ -38,14 +39,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(ProductRequest request, BigInteger productID) {
-        var product = productRepository
+    public Product updateProduct(ProductRequest request, BigInteger productID) {
+        return productRepository
                 .findById(productID)
+                .map(
+                        product -> productRepository.save(addRequestDataToProduct(request, product))
+                )
                 .orElseThrow(
-                        () -> new ApiRequestException("Product not found")
+                        () -> new ResourceNotFoundException("Product not found")
                 );
-        var formedProduct = addRequestDataToProduct(request, product);
-        productRepository.save(formedProduct);
     }
 
     private Product addRequestDataToProduct(ProductRequest request, Product product) {

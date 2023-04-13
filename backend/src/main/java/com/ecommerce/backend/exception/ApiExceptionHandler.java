@@ -1,24 +1,30 @@
 package com.ecommerce.backend.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ApiExceptionHandler {
     @ExceptionHandler(ApiRequestException.class)
-    public ResponseEntity<Object> handleApiRequestException(ApiRequestException exception) {
-        var badRequest = HttpStatus.BAD_REQUEST;
-        var apiException = new ApiException(
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse apiExceptionHandler(ApiRequestException exception) {
+        return new ExceptionResponse(
                 exception.getMessage(),
-                badRequest,
+                HttpStatus.BAD_REQUEST,
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
-        return new ResponseEntity<>(apiException, badRequest);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse resourceNotFoundExceptionHandler(ResourceNotFoundException exception) {
+        return new ExceptionResponse(
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+    }
 }

@@ -16,7 +16,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-    show-sql: true
+    show-sql: false
+    open-in-view: true
 
   main:
     web-application-type: servlet
