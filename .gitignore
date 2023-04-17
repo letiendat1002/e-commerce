@@ -2,3 +2,7 @@ git-credential-manager/
 
 # idea folder
 .idea/
+
+# VS Code
+.vscode/
+

@@ -1,0 +1,15 @@
+services:
+  db:
+    container_name: mysql
+    image: mysql
+    cap_add:
+      - SYS_NICE
+    environment:
+      MYSQL_ROOT_PASSWORD: Ecommerc3
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3333:3306"
+    restart: unless-stopped
+volumes:
+  db:
