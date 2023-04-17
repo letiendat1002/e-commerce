@@ -11,37 +11,44 @@ const Catagory = [
                     {
                         name: 'Samsung', 
                         value: 'Samsung', 
-                        slug: 'samsung'
+                        slug: 'samsung', 
+                        image: require('../images/samsung.webp')
                     }, 
                     {
                         name: 'Lenovo', 
                         value: 'Lenovo', 
-                        slug: 'lenovo'
+                        slug: 'lenovo',
+                        image:require('../images/lenovo.png')
                     }, 
                     {
                         name: 'Coolpad', 
                         value: 'Coolpad', 
-                        slug: 'coolpad'
+                        slug: 'coolpad', 
+                        image: require('../images/coolpad.png')
                     }, 
                     {
                         name: 'Apple', 
                         value: 'Apple', 
-                        slug: 'apple'
+                        slug: 'apple', 
+                        image: require('../images/iphone.webp')
                     }, 
                     {
                         name: 'Masstel', 
                         value: 'Masstel', 
-                        slug: 'masstel'
+                        slug: 'masstel', 
+                        image: require('../images/masstel.png')
                     }, 
                     {
                         name: 'Xiaomi', 
                         value: 'Xiaomi', 
-                        slug: 'xiaomi'
+                        slug: 'xiaomi', 
+                        image: require('../images/redmi.webp')
                     }, 
                     {
                         name: 'Oppo',
                         value: 'OPPO',
-                        slug: 'oppo'
+                        slug: 'oppo', 
+                        image: require('../images/oppo.webp')
                     }
                 ]
             }, 
@@ -49,6 +56,11 @@ const Catagory = [
                 name: 'Mức giá',  
                 title: "UnitPrice",
                 childrend: [
+                    {
+                        name: 'Tất cả', 
+                        value: '0-50000000', 
+                        slug: 'all', 
+                    },
                     {
                         name: 'Dưới 3 triệu', 
                         value: '0-2999999', 
@@ -65,10 +77,20 @@ const Catagory = [
                         slug: 'tu-8-den-15-trieu'
                     }, 
                     {
-                        name: 'Trên 15 triệu',
+                        name: 'Từ 15 - 20 triệu',
                         value: '15000000-20000000',
-                        slug: 'tren-15-trieu'
-                    }
+                        slug: 'tu-15-den-20-trieu'
+                    },
+                    {
+                        name: 'Từ 20 - 30 triệu',
+                        value: '20000000-30000000',
+                        slug: 'tu-20-den-30-trieu'
+                    },
+                    {
+                        name: 'Trên 30 triệu',
+                        value: '30000000-50000000',
+                        slug: 'tren-30-trieu'
+                    },
                 ]
             },
             {
@@ -142,42 +164,50 @@ const Catagory = [
                     {
                         name: 'Asus', 
                         value: 'Asus', 
-                        slug: 'Asus'
+                        slug: 'Asus', 
+                        image: require('../images/asus.webp')
                     }, 
                     {
                         name: 'Lenovo', 
                         value: 'Lenovo', 
-                        slug: 'lenovo'
+                        slug: 'lenovo',
+                        image: require('../images/lenovo.png')
                     }, 
                     {
                         name: 'Gigabyte', 
                         value: 'Gigabyte', 
-                        slug: 'gigabyte'
+                        slug: 'gigabyte',
+                        image: require('../images/gigabyte.png')
                     }, 
                     {
                         name: 'Acer', 
                         value: 'Acer', 
-                        slug: 'acer'
+                        slug: 'acer',
+                        image: require('../images/acre.webp')
                     }, 
                     {
                         name: 'Apple', 
                         value: 'Apple', 
-                        slug: 'apple'
+                        slug: 'apple',
+                        image: require('../images/apple.png')
                     }, 
                     {
                         name: 'HP', 
                         value: 'HP', 
-                        slug: 'hp'
+                        slug: 'hp',
+                        image: require('../images/hp.webp')
                     }, 
                     {
                         name: 'DELL',
                         value: 'DELL',
-                        slug: 'dell'
+                        slug: 'dell',
+                        image: require('../images/dell.webp')
                     },
                     {
                         name: 'MSI',
                         value: 'MSI',
-                        slug: 'MSI'
+                        slug: 'MSI',
+                        image: require('../images/msi.png')
                     }
                 ]
             }, 
@@ -188,12 +218,12 @@ const Catagory = [
                     {
                         name: 'Tất cả', 
                         value: '0-100000000', 
-                        slug: 'all'
+                        slug: 'all', 
                     }, 
                     {
                         name: 'Dưới 2 triệu', 
                         value: '0-1999999', 
-                        slug: 'duoi-2-trieu'
+                        slug: 'duoi-2-trieu', 
                     }, 
                     {
                         name: 'Từ 10 đến 15 triệu', 
@@ -404,34 +434,52 @@ const Catagory = [
                 title: "Manufacturer",
                 childrend: [
                     {
+                        name: 'Asus', 
+                        value: 'Asus', 
+                        slug: 'Asus', 
+                        image: require('../images/asus.webp')
+                    }, 
+                    {
+                        name: 'Vivo', 
+                        value: 'Vivo', 
+                        slug: 'Vivo', 
+                        image: require('../images/vivo.webp')
+                    }, 
+                    {
                         name: 'Samsung', 
                         value: 'Samsung', 
-                        slug: 'samsung'
+                        slug: 'samsung', 
+                        image: require('../images/samsung.webp')
                     }, 
                     {
                         name: 'OPPO', 
                         value: 'OPPO', 
-                        slug: 'oppo'
+                        slug: 'oppo', 
+                        image: require('../images/oppo.webp')
                     }, 
                     {
                         name: 'Redmi', 
                         value: 'Redmi', 
-                        slug: 'redmi'
+                        slug: 'redmi', 
+                        image: require('../images/redmi.webp')
                     }, 
                     {
                         name: 'Apple', 
                         value: 'Apple', 
-                        slug: 'apple'
+                        slug: 'apple', 
+                        image: require('../images/iphone.webp')
                     }, 
                     {
                         name: 'Nokia', 
                         value: 'Nokia', 
-                        slug: 'nokia'
+                        slug: 'nokia', 
+                        image: require('../images/nokia.webp')
                     }, 
                     {
                         name: 'Realme', 
                         value: 'Realme', 
-                        slug: 'realme'
+                        slug: 'realme', 
+                        image: require('../images/realme.webp')
                     }, 
                 ]
             }, 
@@ -465,9 +513,14 @@ const Catagory = [
                         slug: 'tu-7-den-13-trieu'
                     }, 
                     {
-                        name: 'Trên 13 triệu', 
-                        value: '13000000-30000000', 
-                        slug: 'tren-13-trieu'
+                        name: 'Từ 13 đến 15 triệu', 
+                        value: '13000000-15000000', 
+                        slug: 'tu-13-den-15-trieu'
+                    },
+                    {
+                        name: 'Trên 15 triệu', 
+                        value: '15000000-30000000', 
+                        slug: 'tren-15-trieu'
                     }
                 ]
             },
@@ -546,37 +599,44 @@ const Catagory = [
                     {
                         name: "E-Power", 
                         value: "E-Power", 
-                        slug: 'E-Power'
+                        slug: 'E-Power', 
+                        image: require('../images/e-power.webp')
                     }, 
                     {
                         name: "Apple (iMac)", 
                         value: "Apple (iMac)", 
-                        slug: 'Apple'
+                        slug: 'Apple', 
+                        image: require('../images/imac.webp')
                     }, 
                     {
                         name: "Apple (Mac mini)", 
                         value: "Apple (Mac mini)", 
-                        slug: 'Apple'
+                        slug: 'Apple',
+                        image: require('../images/macmini.webp')
                     }, 
                     {
                         name: "Lenovo", 
                         value: "Lenovo", 
-                        slug: 'Lenovo'
+                        slug: 'Lenovo', 
+                        image: require('../images/lenovo.png')
                     }, 
                     {
                         name: "Dell", 
                         value: "Dell", 
-                        slug: 'Dell'
+                        slug: 'Dell', 
+                        image: require('../images/dell.webp')
                     }, 
                     {
                         name: "HP", 
                         value: "HP", 
-                        slug: 'HP'
+                        slug: 'HP', 
+                        image: require('../images/hp.webp')
                     }, 
                     {
                         name: "Asus", 
                         value: "Asus", 
-                        slug: 'Asus'
+                        slug: 'Asus', 
+                        image: require('../images/asus.webp')
                     }, 
                 ]
             }, 
@@ -587,7 +647,7 @@ const Catagory = [
                     {
                         name: "PC Gaming", 
                         value: "PC Gaming", 
-                        slug: "PC-Gaming"
+                        slug: "PC-Gaming", 
                     }, 
                     {
                         name: "PC Văn phòng", 

@@ -17,8 +17,16 @@ import {AiOutlineMenu} from 'react-icons/ai'
 import {BsCartFill} from 'react-icons/bs'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import '../../src/assets/images/Logo.svg'
+import { useDispatch, useSelector } from 'react-redux'
 const Header = () => {
   const [active, setActive] = useState(false)
+
+  const dispatch = useDispatch()
+
+  const cart = useSelector((state) => state.allCart);
+  const  cartItems  = cart.cart;
+
+  const totalItem = cartItems.reduce((a, i) => a + i.cartQuantity, 0);
   const handleShowMenu = () => {
     const menuTabletItem = document.querySelector('.menu__tablet--item')
     const menuOverlay = document.querySelector('.menu__tablet--overlay')
@@ -157,9 +165,10 @@ const Header = () => {
           </div>
           <div className="nav-item">
             <Link to={"/cart"}>
-            <span>
+            <span className='cart_icon'>
               <AiOutlineShoppingCart/>
             </span>  
+            <span className='cart_number'>{totalItem}</span>
             Giỏ hàng
             </Link>
           </div>
@@ -173,9 +182,10 @@ const Header = () => {
           </div>
           <div className="nav__table--item">
             <Link to={"/cart"}>
-            <span>
+            <span className='cart_icon'>
               <AiOutlineShoppingCart/>
             </span>  
+            <span className='cart_number'>{totalItem}</span>
             </Link>
           </div>
           <InputGroup className='input__form__search--tablet' style = {{width: '100%', padding: '0 0 3rem 0'}}>

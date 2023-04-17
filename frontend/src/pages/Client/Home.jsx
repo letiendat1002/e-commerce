@@ -55,7 +55,7 @@ const Home = () => {
 
     const handleActive = () => {
         const laptop = document.querySelector('.container--item .laptop')   
-        const tablet = document.querySelector('.container--item .tablet')  
+        const tablet = document.querySelector('.container--item .tablet-menu')  
         const phone = document.querySelector('.container--item .phone')   
         const linhkien = document.querySelector('.container--item .linhkien')   
         if (!laptop.classList.contains('ative')){
@@ -88,7 +88,7 @@ const Home = () => {
 
     const handleActivePhone = () => {
         const laptop = document.querySelector('.container--item .laptop')   
-        const tablet = document.querySelector('.container--item .tablet')   
+        const tablet = document.querySelector('.container--item .tablet-menu')   
         const phone = document.querySelector('.container--item .phone')   
         const linhkien = document.querySelector('.container--item .linhkien')   
         if (!phone.classList.contains('ative')){
@@ -120,7 +120,7 @@ const Home = () => {
     }
     const handleActiveTablet = () => {
         const laptop = document.querySelector('.container--item .laptop')   
-        const tablet = document.querySelector('.container--item .tablet')   
+        const tablet = document.querySelector('.container--item .tablet-menu')   
         const phone = document.querySelector('.container--item .phone')   
         const linhkien = document.querySelector('.container--item .linhkien')   
         if (!tablet.classList.contains('ative')){
@@ -136,7 +136,7 @@ const Home = () => {
     }
     const handleActiveTabletScreenTablet = () => {
         // const laptop = document.querySelector('.container--item--tablet .container--item .laptop')   
-        const tablet = document.querySelector('.container--item--tablet .container--item .tablet')   
+        const tablet = document.querySelector('.container--item--tablet .container--item .tablet-menu')   
         // const phone = document.querySelector('.container--item--tablet .container--item .phone')   
         const linhkien = document.querySelector('.container--item--tablet .container--item .linhkien')   
         if (!tablet.classList.contains('ative')){
@@ -152,7 +152,7 @@ const Home = () => {
     }
     const handleActiveAttribute = () => {
         const laptop = document.querySelector('.container--item .laptop')   
-        const tablet = document.querySelector('.container--item .tablet')   
+        const tablet = document.querySelector('.container--item .tablet-menu')   
         const phone = document.querySelector('.container--item .phone')   
         const linhkien = document.querySelector('.container--item .linhkien')   
         if (!linhkien.classList.contains('ative')){
@@ -167,7 +167,7 @@ const Home = () => {
     }
     const handleActiveAttributeSreenTablet = () => {
         // const laptop = document.querySelector('.container--item--tablet .container--item .laptop')   
-        const tablet = document.querySelector('.container--item--tablet .container--item .tablet')   
+        const tablet = document.querySelector('.container--item--tablet .container--item .tablet-menu')   
         // const phone = document.querySelector('.container--item--tablet .container--item .phone')   
         const linhkien = document.querySelector('.container--item--tablet .container--item .linhkien')   
         if (!linhkien.classList.contains('ative')){
@@ -204,7 +204,7 @@ const Home = () => {
                             <h3 defaultValue= "Điện Thoại">Điện Thoại</h3>
                             <p>Giảm đến 6%</p>
                         </Col>
-                        <Col lg={3} md={3} sm={6} className = "select-item tablet" onClick={handleActiveTablet}>
+                        <Col lg={3} md={3} sm={6} className = "select-item tablet-menu" onClick={handleActiveTablet}>
                             <h3 defaultValue= "Máy tính bảng">Máy tính bảng</h3>
                             <p>Giảm đến 8%</p>
                         </Col>
@@ -218,11 +218,12 @@ const Home = () => {
                             {
                                 productData.getProductsForRecommendation(8, product).map((item) => {
                                             return (
-                                                <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
+                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
                                                 <Link to = {item.Slug}>
                                                 <div className="child--contains--img">
                                                         <img src={item.Image} alt="" />
                                                     </div>
+                                                    <div className="contains--title">
                                                     <h3>{item.Name}</h3>
                                                     <div className="child--contains--price">
                                                         <div>
@@ -232,7 +233,7 @@ const Home = () => {
                                                         <div className="contains--price-pecent">
                                                             <p>1%</p>
                                                         </div>
-                                                    </div></Link>
+                                                    </div></div></Link>
                                                     <div className="child--contain--action">
                                                         <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                         <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
@@ -261,11 +262,12 @@ const Home = () => {
                             {
                                 productData.getProductsForRecommendation(6, productTop).map((item) => {
                                             return (
-                                                <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
+                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
                                                 <Link to = {item.Slug}>
                                                 <div className="child--contains--img">
                                                         <img src={item.Image} alt="" />
                                                     </div>
+                                                    <div className="contains--title">
                                                     <h3>{item.Name}</h3>
                                                     <div className="child--contains--price">
                                                         <div>
@@ -275,6 +277,7 @@ const Home = () => {
                                                         <div className="contains--price-pecent">
                                                             <p>1%</p>
                                                         </div>
+                                                    </div>
                                                     </div></Link>
                                                     <div className="child--contain--action">
                                                         <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
@@ -287,10 +290,14 @@ const Home = () => {
                         </Col>
                     </Row>
                     <Row className='container--item'>
-                        <Col lg={3} md={3} sm={6} className = "select-item tablet active" onClick={handleActiveTabletScreenTablet}>
+                        <Col lg={3} md={3} sm={6} className = "select-item tablet-menu active" onClick={handleActiveTabletScreenTablet}>
                             <h3 defaultValue= "Máy tính bảng">Máy tính bảng</h3>
                             <p>Giảm đến 8%</p>
                         </Col>
+                        {/* <Col lg={3} md={3} sm={6} className = "select-item tablet active" onClick={handleActiveTabletScreenTablet}>
+                            <h3 defaultValue= "Máy tính bảng">Máy tính bảng</h3>
+                            <p>Giảm đến 8%</p>
+                        </Col> */}
                         <Col lg={3} md={3} sm={6} className = "select-item linhkien" onClick={handleActiveAttributeSreenTablet}>
                             <h3 defaultValue= "Phụ kiện">Phụ kiện</h3>
                             <p>Giảm đến 15%</p>
@@ -301,7 +308,7 @@ const Home = () => {
                             {
                                 productData.getProductsForRecommendation(6, productBottom).map((item) => {
                                             return (
-                                                <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
+                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
                                                 <Link to = {item.Slug}>
                                                 <div className="child--contains--img">
                                                         <img src={item.Image} alt="" />
@@ -329,7 +336,7 @@ const Home = () => {
                 </div>
                 <Row style={{padding : '2rem 0'}}>
                      <Col lg={12} md={12} sm={12}>
-                        <img src={Banner3} alt="" style={{width: '100%'}}/>
+                        <img src={Banner3} alt="" style={{width: '100%', minHeight: "70px"}}/>
                      </Col>
                 </Row>
                 <Row className='container__item'>
@@ -341,11 +348,12 @@ const Home = () => {
                         {
                             productData.getRandomProducts(8).map((item, key) => {
                                 return (
-                                    <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
+                                    <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
                                         <Link to = {item.Slug}>
                                         <div className="child--contains--img">
                                             <img src={item.Image} alt="" />
                                         </div>
+                                        <div className="contains--title">
                                         <h3>{item.Name}</h3>
                                         <div className="child--contains--price">
                                             <div>
@@ -355,7 +363,8 @@ const Home = () => {
                                             <div className="contains--price-pecent">
                                                 <p>1%</p>
                                             </div>
-                                        </div></Link>
+                                        </div></div>
+                                        </Link>
                                         <div className="child--contain--action">
                                             <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                             <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
@@ -381,10 +390,11 @@ const Home = () => {
                         {
                             productData.getProductsForRecommendation(8, phone).map((item, key) => {
                                         return (
-                                            <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
+                                            <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
                                                 <Link to = {item.Slug}><div className="child--contains--img">
                                                     <img src={item.Image} alt="" />
                                                 </div>
+                                                <div className="contains--title">
                                                 <h3>{item.Name}</h3>
                                                 <div className="child--contains--price">
                                                     <div>
@@ -394,7 +404,8 @@ const Home = () => {
                                                     <div className="contains--price-pecent">
                                                         <p>1%</p>
                                                     </div>
-                                                </div></Link>
+                                                </div></div>
+                                                </Link>
                                                 <div className="child--contain--action">
                                                     <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                     <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
@@ -420,10 +431,11 @@ const Home = () => {
                         {
                             productData.getProductsForRecommendation(8, laptop).map((item, key) => {
                                     return (
-                                        <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
+                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
                                             <Link to={item.Slug}><div className="child--contains--img">
                                                 <img src={item.Image} alt="" />
                                             </div>
+                                            <div className="contains--title">
                                             <h3>{item.Name}</h3>
                                             <div className="child--contains--price">
                                                 <div>
@@ -433,7 +445,8 @@ const Home = () => {
                                                 <div className="contains--price-pecent">
                                                     <p>1%</p>
                                                 </div>
-                                            </div> </Link>
+                                            </div></div>
+                                            </Link>
                                             <div className="child--contain--action">
                                                 <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                 <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
@@ -459,10 +472,11 @@ const Home = () => {
                         {
                             productData.getProductsForRecommendation(8, tablet).map((item, key) => {
                                     return (
-                                        <div className="item--child--contains col-lg-3 col-md-4 col-sm-6 col-12 ">
+                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
                                             <Link to={item.Slug}><div className="child--contains--img">
                                                 <img src={item.Image} alt="" />
                                             </div>
+                                            <div className="contains--title">
                                             <h3>{item.Name}</h3>
                                             <div className="child--contains--price">
                                                 <div>
@@ -472,7 +486,8 @@ const Home = () => {
                                                 <div className="contains--price-pecent">
                                                     <p>1%</p>
                                                 </div>
-                                            </div></Link>
+                                            </div></div>
+                                            </Link>
                                             <div className="child--contain--action">
                                                 <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                 <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>

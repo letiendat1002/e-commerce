@@ -62,7 +62,7 @@ const Cart = () => {
                                           <td><img src={product.Image} alt="" /></td>
                                           <td style={{width: "100px"}}><p className = "product--name">{product.Name}</p></td>
                                           <td><div>
-                                              <button onClick={() => {dispatch(decreamentFromCart(product))}}>
+                                              <button onClick={() => dispatch(decreamentFromCart(product))}>
                                                   <span>-</span>
                                               </button>   
                                               <p>{product.cartQuantity}</p>    

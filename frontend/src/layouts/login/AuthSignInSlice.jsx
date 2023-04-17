@@ -15,7 +15,6 @@ export const authenticate = createAsyncThunk('signIn', async (data) => {
     }
     Cookies.set('token', signIn.token, { expires: 7 });
     Cookies.set('refreshToken', signIn.refreshToken, { expires: 7 });
-  
     return signIn;
 });
 
