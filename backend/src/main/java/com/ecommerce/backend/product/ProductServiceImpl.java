@@ -13,7 +13,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
@@ -22,55 +22,61 @@ public class ProductServiceImpl implements ProductService {
         return productRepository
                 .findById(productID)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Product not found")
+                        () -> new ResourceNotFoundException(
+                                "product with id [%s] not found".formatted(productID)
+                        )
                 );
     }
 
     @Override
-    public Product addProduct(ProductRequest request) {
-        var product = new Product();
-        var formedProduct = addRequestDataToProduct(request, product);
-        return productRepository.save(formedProduct);
+    public void addProduct(ProductAddRequest request) {
+        var product = new Product(
+                request.categoryID(),
+                request.name(),
+                request.slug(),
+                request.image(),
+                request.imageReview1(),
+                request.imageReview2(),
+                request.imageReview3(),
+                request.unitPrice(),
+                request.quantity(),
+                request.description(),
+                request.yearRelease(),
+                request.manufacturer(),
+                request.monitor(),
+                request.cpu(),
+                request.ram(),
+                request.vga(),
+                request.hardDisk(),
+                request.camera(),
+                request.battery(),
+                request.status()
+        );
+        productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(BigInteger productID) {
+//        checkIfProductExistsOrThrow(productID);
         productRepository.deleteById(productID);
     }
 
-    @Override
-    public Product updateProduct(ProductRequest request, BigInteger productID) {
-        return productRepository
-                .findById(productID)
-                .map(
-                        product -> productRepository.save(addRequestDataToProduct(request, product))
-                )
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Product not found")
-                );
-    }
+//    private void checkIfProductExistsOrThrow(BigInteger productID) {
+//        if (!ProductDAO.existsProductById(productID)) {
+//            throw new ResourceNotFoundException(
+//                    "product with id [%s] not found".formatted(productID)
+//            );
+//        }
+//    }
 
-    private Product addRequestDataToProduct(ProductRequest request, Product product) {
-        product.setCategoryID(request.categoryID());
-        product.setName(request.name());
-        product.setSlug(request.slug());
-        product.setImage(request.image());
-        product.setImageReview1(request.imageReview1());
-        product.setImageReview2(request.imageReview2());
-        product.setImageReview3(request.imageReview3());
-        product.setUnitPrice(request.unitPrice());
-        product.setQuantity(request.quantity());
-        product.setDescription(request.description());
-        product.setYearRelease(request.yearRelease());
-        product.setManufacturer(request.manufacturer());
-        product.setMonitor(request.monitor());
-        product.setCpu(request.cpu());
-        product.setRam(request.ram());
-        product.setVga(request.vga());
-        product.setHardDisk(request.hardDisk());
-        product.setCamera(request.camera());
-        product.setBattery(request.battery());
-        product.setStatus(request.status());
-        return product;
+    @Override
+    public void updateProduct(ProductUpdateRequest request, BigInteger productID) {
+        productRepository
+                .findById(productID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "product with id [%s] not found".formatted(productID)
+                        )
+                );
     }
 }

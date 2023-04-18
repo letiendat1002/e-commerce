@@ -2,7 +2,7 @@ package com.ecommerce.backend.product;
 
 import java.math.BigInteger;
 
-public record ProductRequest(
+public record ProductUpdateRequest(
         BigInteger categoryID,
         String name,
         String slug,

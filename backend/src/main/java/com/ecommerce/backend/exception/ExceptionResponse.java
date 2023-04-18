@@ -1,12 +1,11 @@
 package com.ecommerce.backend.exception;
 
-import org.springframework.http.HttpStatus;
-
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public record ExceptionResponse(
+        String path,
         String message,
-        HttpStatus httpStatus,
-        ZonedDateTime zonedDateTime
+        int httpStatusCode,
+        LocalDateTime localDateTime
 ) {
 }

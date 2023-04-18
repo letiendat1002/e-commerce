@@ -14,33 +14,40 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getProducts() {
-        return ResponseEntity.ok(productService.getProducts());
+    public List<Product> getProducts() {
+        return productService.getAllProducts();
     }
 
     @GetMapping("{productID}")
-    public ResponseEntity<Product> getProduct(@PathVariable("productID") BigInteger productID) {
-        return ResponseEntity.ok(productService.getProduct(productID));
+    public Product getProduct(
+            @PathVariable("productID") BigInteger productID) {
+        return productService.getProduct(productID);
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody ProductRequest request) {
-        var product = productService.addProduct(request);
-        return ResponseEntity.ok(product);
+    public ResponseEntity<?> addProduct(@RequestBody ProductAddRequest request) {
+        productService.addProduct(request);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
     @DeleteMapping("{ProductID}")
     public ResponseEntity<?> deleteProduct(@PathVariable("ProductID") BigInteger productID) {
         productService.deleteProduct(productID);
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     @PutMapping("{productID}")
-    public ResponseEntity<Product> updateProduct(
-            @RequestBody ProductRequest request,
+    public ResponseEntity<?> updateProduct(
+            @RequestBody ProductUpdateRequest request,
             @PathVariable("productID") BigInteger productID
     ) {
-        var product = productService.updateProduct(request, productID);
-        return ResponseEntity.ok(product);
+        productService.updateProduct(request, productID);
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
