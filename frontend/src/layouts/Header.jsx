@@ -236,7 +236,7 @@ const Header = () => {
           </InputGroup.Text>
         </InputGroup>
         <div className='nav-item'>
-          {current && current ? (
+          {current.confirmed === true ? (
             <Link to={'/account/profile'}>
               <span>
                 <FaRegUserCircle />
