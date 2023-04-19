@@ -24,3 +24,7 @@ spring:
     open-in-view: true
   profiles:
     active: dev
+
+springdoc:
+  api-docs:
+    path: /api-docs

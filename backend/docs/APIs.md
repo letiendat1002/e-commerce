@@ -1,27 +1,3 @@
-General: api/v1/?
+## All API documentation is at http://localhost:8080/swagger-ui/index.html
 
-/login
-
-
-/users
-
-
-/useraddresses
-
-
-/categories
-
-
-/products
-GET / - List of products
-GET /{productID} - View product
-POST - Add product
-DELETE /{productID} - Delete product
-PUT /{productID} - Update product
-
-
-/orders
-
-
-/orderdetails
-
+![api_documentation.png](../assets/images/api/api_documentation.png)
