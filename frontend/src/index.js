@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import App from './App';
 // import { store, persistor } from './redux/store';
 
-import store from './Redux/store';
+import store from './redux/store';
 
 import './utils/i18n';
 

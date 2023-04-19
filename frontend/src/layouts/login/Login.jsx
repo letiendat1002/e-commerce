@@ -11,7 +11,7 @@ import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
 import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import { authenticate } from './AuthSignInSlice';
 import './style.scss';
-import { login } from '../../Redux/slice/userSlice';
+import { login } from '../../redux/slice/userSlice';
 import { toast } from 'react-toastify';
 const Login = () => {
   const dispatch = useDispatch();

@@ -19,7 +19,7 @@ import AutoSlice from '../../components/AutoSlide/AutoSlice'
 import Carousel from '../../components/Carousel/CarouselItem'
 import formatProductPrice from '../../Helper'
 import productData from '../../Helper/GetProduct'
-import { addToCart } from "../../Redux/slice/cartSlice.js"
+import { addToCart } from "../../redux/slice/cartSlice.js"
 // import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 const slides = [
     slider1,
