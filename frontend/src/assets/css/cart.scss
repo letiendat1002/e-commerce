@@ -1,8 +1,12 @@
 section#cart{
   background-color: #f1f0f1;
 }
+
+.container__cart-slide{
+  padding: 0 7%;
+}
 .container__cart{
-  padding: 1rem;
+  padding: 1rem 7%;
 
   &--title{
     padding: 1rem 0 0 0;
@@ -252,5 +256,121 @@ section#cart{
     font-size: 18px;
     font-weight: 500;
     color: #fff;
+  }
+}
+
+// RESPONSIVE IN DESKTOP
+@media screen and (min-width: 1200px) and (max-width:1400px){
+  .catagory{
+      padding: 1rem 1%;
+  }
+}
+
+// RESPONSIVE IN DESKTOP
+@media screen and (max-width: 1200px){
+  .container__cart{
+    padding: 1rem 3%;
+  }
+  .container__cart-slide{
+    padding: 0 3%;
+  }
+}
+
+// RESPONSIVE IN TABLET
+@media screen and (min-width: 768px) and (max-width: 992px){
+  .container__cart--contain--container{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+
+  tr th{
+    width: auto;
+  }
+  tr td{
+    width: auto;
+  }
+  .container__cart--contain--container--item{
+    padding: 1rem 0 !important;
+  }
+  .container__cart--title{
+    padding: 3rem 0 0 0;
+  }
+}
+
+// RESPONSIVE IN MOBILE
+@media screen and (min-width: 600px) and (max-width: 768px){
+  .container__cart--contain--container{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+  .container__cart--contain--container--item{
+    padding: 1rem 0 !important;
+  }
+  .container__cart--title{
+    padding: 8rem 0 0 0;
+  }
+  tr th{
+    width: auto;
+  }
+  // tr td{
+  //   width: auto;
+  // }
+
+  tr td{
+    width: auto;
+    padding: 2rem 0;
+    font-size: 18px;
+    min-height: 150px;
+  }
+
+  tr td:first-child{
+    display: none;
+  }
+  tr th:first-child{
+    display: none;
+  }
+}
+
+// RESPONSIVE IN SMALL MOBILE
+@media screen and (max-width: 600px) {
+  .container__cart{
+    padding: 0 1%;
+  }
+
+  tr th{
+    width: auto;
+  }
+  tr td{
+    width: auto;
+    padding: 2rem 0;
+    font-size: 18px;
+    min-height: 150px;
+  }
+
+   tr td:first-child{
+    display: none;
+  }
+  tr th:first-child{
+    display: none;
+  }
+
+  .container__cart-slide{
+    padding: 0 1%;
+  }
+  .container__cart--contain--container{
+    display: flex;
+    flex-wrap: wrap;
+    word-break: 2;
+    word-wrap: 2;
+  }
+  .container__cart--contain--container--item{
+    padding: 1rem 0 !important;
+  }
+  .container__cart--title{
+    padding: 3rem 0 0 0;
   }
 }

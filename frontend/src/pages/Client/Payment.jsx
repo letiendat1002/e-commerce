@@ -7,6 +7,7 @@ import '../../assets/css/payment.scss'
 import cod from '../../assets/images/cod.svg'
 import AutoSlice from '../../components/AutoSlide/AutoSlice'
 import formatProductPrice from '../../Helper/index.js'
+import ImageNoPayment from '../../assets/images/img-no-result.png'
 const Payment = () => {
     const menuCard = [ 
         require('../../assets/images/card2.jpeg'),
@@ -54,7 +55,7 @@ const Payment = () => {
     const total = cartItems.reduce((a, i) => a + i.qty * i.price, 0);
   return (
     <div className="container-fluid payment">
-        <div className="container payment__container col-lg-12 col-md-12 col-sm-12 col-12">
+        <div className="payment__container col-lg-12 col-md-12 col-sm-12 col-12">
             <div className="payment__container--title col-lg-12 col-md-12 col-sm-12 col-12">
                 <Link to = {'/'}><AiOutlineHome /></Link>
                 <i><GrFormNext /></i>
@@ -65,7 +66,7 @@ const Payment = () => {
             {
                 (cartItems.length > 0) ? (
                     <div className="payment__container--contain col-lg-12 col-md-12 col-sm-12 col-12 mt-4">
-                                    <div className="payment__container--form col-lg-6 col-md-6 col-sm-12 col-12 ps-4">
+                                    <div className="payment__container--form col-lg-6 col-md-12 col-sm-12 col-12 ps-4">
                                         <h1>Thanh Toán Đơn Hàng</h1>
                                         <form onSubmit={handleSubmit} >
                                             <div className="form__container--item">
@@ -101,7 +102,7 @@ const Payment = () => {
                                             <button type='submit'>Xác nhận đặt hàng</button>
                                         </form>
                                     </div>
-                                    <div className="payment__container--right col-lg-6 col-md-6 col-sm-12 col-12 ps-5">
+                                    <div className="payment__container--right col-lg-6 col-md-12 col-sm-12 col-12 ps-5">
                                         <div className="payment__container--right--item col-lg-12 col-sm-12 col-md-12 col-12"> 
                                             <h1>Chi Tiết Đơn Hàng</h1>
                                             <div className="contain--container--item--bill">
@@ -139,46 +140,30 @@ const Payment = () => {
                                                             </form>
                                             </div>
                                         </div>
-                                        {/* <div className="payment__container--right--bill">
-                                            <h1>Chi tiết hóa đơn</h1>
-                                            <div className="contain--container--item--bill">
-                                                <p className="title">Chi Tiết Hóa Đơn</p>
-                                                <form>
-                                                    <div className="contain--container--item--bill--child">
-                                                        <span>Tạm tính:</span>
-                                                        <p>{formatProductPrice(0)}</p>
-                                                    </div>
-                                                    <div className="contain--container--item--bill--child">
-                                                        <span>Phí vận chuyển:</span>
-                                                        <p>{formatProductPrice(0)}</p>
-                                                    </div>
-                                                    <div className="contain--container--item--bill--child">
-                                                        <span>Giảm giá:</span>
-                                                        <p>{formatProductPrice(0)}</p>
-                                                    </div>
-                                                    <div className="contain--container--item--bill--child">
-                                                        <span>Thành Tiền:</span>
-                                                        <h4>{formatProductPrice(0)}</h4>
-                                                    </div>
-                                                    <div className="contain--container--item--bill--total">
-                                                        <p>Tổng cộng: </p>
-                                                        <h3>{formatProductPrice(19000000)}</h3>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div> */}
                                     </div>
                                 </div>
                 ) : (
-                    <p>không có đơn hàng</p>
+                    <div className="container__cart--contain--none col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div className="container--cart--emty">
+                        <img src={ImageNoPayment} alt="" />
+                        <p>Không có đơn hàng chờ thanh toán</p>
+                        <Link to = {'/'}>
+                          <button>
+                            VỀ TRANG CHỦ
+                          </button>
+                        </Link>  
+                    </div>       
+                  </div>
                 )
             }
             
         </div>
-        <div className="container col-lg-12 col-md-12 col-sm-12 col-12">
-            <div className="payment__container--slider col-lg-12 col-md-12 col-sm-12 col-12">
-                <h4>ƯU ĐÃI KHI THANH TOÁN ONLINE</h4>
-                <AutoSlice slides={menuCard} />
+        <div className="container--fluid">
+            <div className="container--payment--slider col-lg-12 col-md-12 col-sm-12 col-12">
+                <div className="payment__container--slider col-lg-12 col-md-12 col-sm-12 col-12">
+                    <h4>ƯU ĐÃI KHI THANH TOÁN ONLINE</h4>
+                    <AutoSlice slides={menuCard} />
+                </div>
             </div>
         </div>
         <div className="container--bottom"></div>

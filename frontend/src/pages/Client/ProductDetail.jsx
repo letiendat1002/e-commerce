@@ -12,7 +12,8 @@ import {BiMemoryCard} from 'react-icons/bi'
 import Slider from "react-slick";
 import productData from "../../Helper/GetProduct.js";
 import { useSelector, useDispatch } from "react-redux";
-import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
+import { addToCart } from "../../Redux/slice/cartSlice.js";
+// import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 
 const ProductDetail = ({match, history}) => {
   const {slug} = useParams();
@@ -66,26 +67,13 @@ const ProductDetail = ({match, history}) => {
   const [laptop, setLaptop] = useState(Products.filter(product => product.CategoryID === "1"))
   const [tablet, setTablet] = useState(Products.filter(product => product.CategoryID === "3"))
 
-  // const cart = useSelector((state) => state.cart);
-  // const  cartItems  = cart.cartItems;
   const AddToCartHandle = (product) => {
-    // console.log(product)
-    dispatch(addToCart(product,1))
-    // cartItems.map((cart) =>{
-    //   if (cart.slug === slug){
-    //     console.log('tonf tai')
-    //     // dispatch(increaseToCart(product, 1))
-    //     // dispatch(addToCart(product, 1));
-    //   }
-    //   else {
-    //     console.log("chua ton tai");
-    //   }
-    // })
+    dispatch(addToCart(product))
   };
 
   return (
-    <div className="product__detail"> 
-      <div className="container product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
+    <div className="product__detail container-fluid"> 
+      <div className="product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
         <div className="product-header col-lg-12 col-md-12 col-sm-12 col-12">
           <div className="product col-lg-12 col-sm-12 col-md-12 col-12 px-4 py-2">
               {
@@ -117,7 +105,7 @@ const ProductDetail = ({match, history}) => {
         </div>
         <div className="a-container col-lg-12 col-md-12 col-sm-12 col-12 py-3">
           <div className="single-product col-lg-12 col-md-12 col-sm-12 col-12 d-flex">
-                    <div className="product-left col-lg-6 col-sm-12 col-md-6 col-12 pe-2 ps-2">
+                    <div className="product-left col-lg-6 col-sm-12 col-md-12 col-12 pe-2 ps-2">
                   <div className="product-image-main">
                     <img src={previewImg} alt="" id="product-main-image" />
                   </div>
@@ -228,7 +216,7 @@ const ProductDetail = ({match, history}) => {
                   </a>
                 </div>
               </div>
-              <div className="product-right col-lg-6 col-sm-12 col-md-6 col-12 ps-4">
+              <div className="product-right col-lg-6 col-sm-12 col-md-12 col-12 ps-4">
                 <div className="product">
                   <div className="product-price">
                     <span className="offer-price">{formatProductPrice(product.UnitPrice)}</span>
@@ -295,7 +283,7 @@ const ProductDetail = ({match, history}) => {
                       Products.map((product) => {
                         if (product.Slug == slug){
                           return (
-                            <Link to = {`/cart`} onClick= {AddToCartHandle(product)} >
+                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(product)} >
                               <i className="bx bxs-zap"></i> Mua Ngay
                             </Link>
                           )
@@ -318,7 +306,7 @@ const ProductDetail = ({match, history}) => {
         </div>
         <div className="product__descript py-4">
             <div className="product__descript--contain col-lg-12 col-md-12 col-sm-12 col-12">
-                <div className="descript--contain--left col-lg-7 col-md-7 col-sm-12 col-12" >
+                <div className="descript--contain--left col-lg-7 col-md-12 col-sm-12 col-12" >
                   {
                     Products.map((product) => {
                       if (product.Slug === slug){
@@ -375,7 +363,7 @@ const ProductDetail = ({match, history}) => {
                   }
                   <button className="xemthem hidden" onClick={handleReadMore}>Đọc Thêm</button>
                 </div>
-                <div className="descript--contain--right col-lg-5 col-md-5 col-sm-12 col-12 ps-4">
+                <div className="descript--contain--right col-lg-5 col-md-12 col-sm-12 col-12 ps-4">
                     {
                       Products.map((product) => {
                         if (product.Slug === slug && product.CategoryID == '1'){

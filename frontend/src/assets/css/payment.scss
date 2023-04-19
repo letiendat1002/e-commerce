@@ -5,6 +5,17 @@
     position: relative;
 }
 
+.payment__container{
+    padding: 0 7%;
+}
+
+.container--payment--slider{
+    padding: 0 7%;
+}
+
+.container__cart--contain--none{
+    padding-top: 3rem;
+}
 .payment__container--title{
     background-color: #ffffff;
     padding: 1rem 1rem 1rem 1rem;
@@ -237,3 +248,151 @@
     height: 2rem;
     background-color: #f1f0f1;
 }
+
+// RESPONSIVE IN DESKTOP
+@media screen and (min-width: 1200px) and (max-width:1400px){
+    
+  }
+  
+  // RESPONSIVE IN DESKTOP
+  @media screen and (max-width: 1200px){
+    
+  }
+  
+  // RESPONSIVE IN TABLET
+  @media screen and (min-width: 768px) and (max-width: 992px){
+    .payment__container{
+        padding: 0 3%;
+    }
+    .payment__container--contain{
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column-reverse;
+      word-break: 2;
+      word-wrap: 2;
+    }
+    .payment__container--right{
+        padding: 2rem 0 0 0 !important;
+    }
+
+    .payment__container--title{
+        padding: 4rem 0 0 0;
+    }
+
+    .container--payment--slider{
+        padding: 0 3%;
+    }
+
+    .payment__container--right{
+        padding: 0rem 0 3rem 0 !important;
+    }
+  }
+  
+  // RESPONSIVE IN MOBILE
+  @media screen and (min-width: 600px) and (max-width: 768px){
+    .payment__container--right--item{
+        h1{
+            font-size: 24px;
+        }
+    }
+    .contain--container--item--bill--child{
+        span{
+            font-size: 18px !important;
+        }
+    }
+
+    .contain--container--item--bill--total{
+        p{
+            font-size: 18px !important;
+        }
+        h3{
+            font-size: 18px;
+        }
+    }
+
+    .payment__container--form{
+        h1{
+            font-size: 24px;
+        }
+    }
+    .payment__container--contain{
+        display: flex;
+        flex-wrap: wrap;
+        word-break: 2;
+        flex-direction: column-reverse;
+        word-wrap: 2;
+    }
+
+    .payment__container--right{
+        padding: 2rem 0 0 0 !important;
+    }
+
+    .payment__container--title{
+        padding-top: 5rem;
+        padding-bottom: 0;
+    }
+
+    .payment__container--right{
+        padding: 0rem 0 3rem 0 !important;
+    }
+}
+  
+  // RESPONSIVE IN SMALL MOBILE
+  @media screen and (max-width: 600px) {
+    .payment__container--title{
+        padding-top: 3rem;
+        padding-bottom: 0;
+    }
+    .payment__container--contain{
+        display: flex;
+        flex-direction: column-reverse;
+        flex-wrap: wrap;
+        word-break: 2;
+        word-wrap: 2;
+    }
+    
+    .payment__container--right{
+        padding: 0rem 0 3rem 0 !important;
+    }
+
+    .payment__container{
+        padding: 0 1rem !important;
+    }
+
+    .container--payment--slider{
+        padding: 0 1rem !important;
+    }
+
+    .payment__container--right--item{
+        h1{
+            font-size: 22px;
+        }
+    }
+    .contain--container--item--bill--child{
+        img{
+            height: 70px !important;
+            width: 100px !important;
+        }
+        span{
+            font-size: 16px !important;
+        }
+        p{
+            font-size: 16px !important;
+        }
+    }
+
+    .contain--container--item--bill--total{
+        p{
+            font-size: 16px !important;
+        }
+        h3{
+            font-size: 16px;
+        }
+    }
+
+    .payment__container--form{
+        h1{
+            font-size: 22px;
+        }
+    }
+  }

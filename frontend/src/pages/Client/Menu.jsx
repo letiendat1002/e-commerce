@@ -1,24 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react';
+import { Col } from 'react-bootstrap';
+import { AiFillFilter } from 'react-icons/ai';
+import { HiSelector } from 'react-icons/hi';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import { Container, Row, Col, Carousel } from 'react-bootstrap'
-import Item1 from '../../assets/images/item1.png'
-import Item2 from '../../assets/images/item2.png'
-import Item3 from '../../assets/images/item3.png'
-import Item4 from '../../assets/images/item4.png'
-import Item5 from '../../assets/images/item5.jpeg'
-import Item6 from '../../assets/images/item6.png'
-import Item7 from '../../assets/images/item7.png'
-import '../../assets/css/menu.scss'
-import '../../assets/css/home.scss'
-import {FcPrevious, FcNext} from 'react-icons/fc'
+import formatProductPrice from '../../Helper';
+import '../../assets/css/home.scss';
+import '../../assets/css/menu.scss';
 import Catagory from '../../assets/data/catagory';
 import Products from '../../assets/data/product';
-import {Link, useParams} from 'react-router-dom' 
-import formatProductPrice from '../../Helper';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
-import NotFoundItem from '../../assets/images/noti-search.png'
-import NotFoundItem2 from '../../assets/images/notFound.webp'
+import Item1 from '../../assets/images/item1.png';
+import Item2 from '../../assets/images/item2.png';
+import Item3 from '../../assets/images/item3.png';
+import Item4 from '../../assets/images/item4.png';
+import Item5 from '../../assets/images/item5.jpeg';
+import Item6 from '../../assets/images/item6.png';
+import Item7 from '../../assets/images/item7.png';
+// import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
+import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import { MdOutlineRemove } from 'react-icons/md';
+import { addToCart } from '../../Redux/slice/cartSlice';
+import Logo from '../../assets/images/Logo.svg';
+import NotFoundItem from '../../assets/images/noti-search.png';
 const slides = [
     Item1,
     Item2, 
@@ -87,9 +91,13 @@ const Menu = ({match, history}) => {
             }
         })
     })
-       
-   
-    
+
+    const setFilterProduct = (filterItem)  => {
+        if (filterItem === "Theo tên từ A - Z"){
+            const product = product.filter((e) => e.Name.sort())
+            setProduct(product)
+        }
+    }
 
     const settings = {
         infinite: true,
@@ -99,22 +107,60 @@ const Menu = ({match, history}) => {
         speed: 2000,
         autoplaySpeed: 3000,
         cssEase: "linear", 
-      };
+    };
 
+    // Function handle Filter Attribute product
     const filterSelect = (type, e) => {
         const item = e.target.value;
-        const name = e.target.name;
         const Checked = e.target.checked;
+        
+        function getAttribute() {for(let i = 0; i < Catagory.length; i++){
+            if (Catagory[i].slug === slug){
+                return Catagory[i].attribute
+            }
+        }}
+
+        function getChildrend(title){
+            const attribute = getAttribute()
+            for(let i = 0; i < attribute.length; i++){
+                if (attribute[i].title === title){
+                    return attribute[i]
+                }
+            }
+        }
+
+        function getChildrendValue(children){
+            const childrend = getChildrend(children);
+            for(let i = 0; i < childrend.childrend.length; i++){
+                return childrend.childrend[i].value
+            }
+        }
         if (Checked){
             switch(type){
                 case "Manufacturer":
-                    setFilter({...filter, manufactorer: [...filter.manufactorer, item]})
+                    if (!filter.manufactorer.includes(item)){
+                        setFilter({...filter, manufactorer: [...filter.manufactorer, item]})
+                    }
                     break
                 case "UnitPrice":
-                    setFilter({...filter, unitPrice: [...filter.unitPrice, item]})
+                    const children = getChildrendValue("UnitPrice")
+                    if (!filter.unitPrice.includes(item) && item !== children) {
+                        const newUnitPrice = filter.unitPrice.filter(e => e !== children)
+                        setFilter({ ...filter, unitPrice: [...newUnitPrice, item] })
+                    } else if (!filter.unitPrice.includes(item) && !filter.unitPrice.includes(children)) {
+                        const newUnitPrice = filter.unitPrice.filter(e => e === children)
+                        setFilter({ ...filter, unitPrice: [...newUnitPrice, item]})
+                    } 
                     break
                 case "Memory":
-                    setFilter({...filter, memory: [...filter.memory, item]})
+                    const Memory = getChildrendValue("Memory")
+                    if (!filter.memory.includes(item) && item !== Memory) {
+                        const newMemory = filter.memory.filter(e => e !== Memory)
+                        setFilter({ ...filter, memory: [...newMemory, item] })
+                    } else if (!filter.memory.includes(item) && !filter.memory.includes(Memory)) {
+                        const newMemory = filter.memory.filter(e => e === Memory)
+                        setFilter({ ...filter, memory: [...newMemory, item]})
+                    } 
                     break
                 case "Monitor":
                     setFilter({...filter, monitor: [...filter.monitor, item]})
@@ -186,7 +232,178 @@ const Menu = ({match, history}) => {
             }
         }
     }
+
+    // Functiom handle Filter Product in Tablet and mobile Screen
+
+    console.log(filter)
+    const filterCheck = (children, attribute) => {
+        const item = children.value;
+        const name = children.name;
+        const Check = true;
+        const type = attribute.title
+        const manufactorerItem = document.querySelectorAll('input[name="Manufacturer"]')
+        for (let i = 0; i < manufactorerItem.length; i++){
+            if (manufactorerItem[i].value === item){
+                manufactorerItem[i].checked = true
+            }
+        }
+
+        const unitPriceItem = document.querySelectorAll('input[name="UnitPrice"]');
+        for (let i = 0; i < unitPriceItem.length; i++){
+            if (unitPriceItem[i].value === item){
+                unitPriceItem[i].checked = true
+            }
+        }
+
+
+        if (Check){
+            switch(type){
+                case "Manufacturer":
+                    if (!filter.manufactorer.includes(item)){
+                        setFilter({...filter, manufactorer: [...filter.manufactorer, item]})
+                    }
+                    break
+                case "UnitPrice":
+                    if (!filter.unitPrice.includes(item)){
+                        setFilter({...filter, unitPrice: [...filter.unitPrice, item]})
+                    }
+                    break
+                default:
+                    break
+            }
+        }
+        else{
+            switch(type){
+                case "Manufacturer":
+                    const newManufacturer = filter.manufactorer.filter(e => e !== item)
+                    setFilter({...filter, manufactorer: newManufacturer})
+                    break
+                case "UnitPrice":
+                    const newUnitPrice = filter.unitPrice.filter(e => e !== item)
+                    setFilter({...filter, unitPrice: newUnitPrice})
+                    break
+                default:
+                    break
+            }
+        }
+    }
+
+    // Function handle Remove Filter in Tablet and Mobile Screen
+
+    const removeFilter = (item, title) => {
+        const value = item
+        const type = title
+        const check = false;
+        const manufactorerItem = document.querySelectorAll('input[name="Manufacturer"]')
+        for (let i = 0; i < manufactorerItem.length; i++){
+            if (manufactorerItem[i].value === value){
+                manufactorerItem[i].checked = false
+            }
+        }
+        const UnitPriceItem = document.querySelectorAll('input[name="UnitPrice"]')
+        for (let i = 0; i < UnitPriceItem.length; i++){
+            if (UnitPriceItem[i].value === value){
+                UnitPriceItem[i].checked = false
+            }
+        }
+        const memoryItem = document.querySelectorAll('input[name="Memory"]')
+        for (let i = 0; i < memoryItem.length; i++){
+            if (memoryItem[i].value === value){
+                memoryItem[i].checked = false
+            }
+        }
+        const monitorItem = document.querySelectorAll('input[name="Monitor"]')
+        for (let i = 0; i < monitorItem.length; i++){
+            if (monitorItem[i].value === value){
+                monitorItem[i].checked = false
+            }
+        }
+        const cpuItem = document.querySelectorAll('input[name="CPU"]')
+        for (let i = 0; i < cpuItem.length; i++){
+            if (cpuItem[i].value === value){
+                cpuItem[i].checked = false
+            }
+        }
+        const ramItem = document.querySelectorAll('input[name="RAM"]')
+        for (let i = 0; i < ramItem.length; i++){
+            if (ramItem[i].value === value){
+                ramItem[i].checked = false
+            }
+        }
+        const vgaItem = document.querySelectorAll('input[name="VGA"]')
+        for (let i = 0; i < vgaItem.length; i++){
+            if (vgaItem[i].value === value){
+                vgaItem[i].checked = false
+            }
+        }
+        const haskDiskItem = document.querySelectorAll('input[name="HardDisk"]')
+        for (let i = 0; i < haskDiskItem.length; i++){
+            if (haskDiskItem[i].value === value){
+                haskDiskItem[i].checked = false
+            }
+        }
+        const batteryItem = document.querySelectorAll('input[name="Battery"]')
+        for (let i = 0; i < batteryItem.length; i++){
+            if (batteryItem[i].value === value){
+                batteryItem[i].checked = false
+            }
+        }
+        const demandItem = document.querySelectorAll('input[name="demand"]')
+        for (let i = 0; i < demandItem.length; i++){
+            if (demandItem[i].value === value){
+                demandItem[i].checked = false
+            }
+        }
+        if (check === false){
+            switch(type){
+                case "Manufactorer":
+                    const newManufacturer = filter.manufactorer.filter(e => e !== item)
+                    setFilter({...filter, manufactorer: newManufacturer})
+                    break;
+                case "UnitPrice":
+                    const newUnitPrice = filter.unitPrice.filter(e => e !== item)
+                    setFilter({...filter, unitPrice: newUnitPrice})
+                    break
+                case "Memory":
+                    const newMemory = filter.memory.filter(e => e !== item)
+                    setFilter({...filter, memory: newMemory})
+                    break
+                case "Monitor":
+                    const newMonitor = filter.monitor.filter(e => e !== item)
+                    setFilter({...filter, monitor: newMonitor})
+                    break
+                case "CPU":
+                    const newCPU = filter.cpu.filter(e => e !== item)
+                    setFilter({...filter, cpu: newCPU})
+                    break
+                case "RAM":
+                    const newRAM = filter.ram.filter(e => e !== item)
+                    setFilter({...filter, ram: newRAM})
+                    break
+                case "VGA":
+                    const newVGA = filter.vga.filter(e => e !== item)
+                    setFilter({...filter, vga: newVGA})
+                    break
+                case "HardDisk":
+                    const newHarkDisk = filter.haskdisk.filter(e => e !== item)
+                    setFilter({...filter, haskdisk: newHarkDisk})
+                    break
+                case "Battery":
+                    const newBattery = filter.battery.filter(e => e !== item)
+                    setFilter({...filter, battery: newBattery})
+                    break
+                case "demand":
+                    const newDemand = filter.demand.filter(e => e !== item)
+                    setFilter({...filter, demand: newDemand})
+                    break
+                default:
+            }
+        }
+
+    }
     const [itemFilter, setItemFilter] = useState([]) 
+    
+    // Function handle Update Product depend on filter state
 
     const updateProducts = useCallback(
         () => {
@@ -271,28 +488,176 @@ const Menu = ({match, history}) => {
 
     const dispatch = useDispatch()
     const cart = useSelector((state) => state.cart);
-    const cartItems  = cart.cartItems;
-    const AddToCartHandle = (item) => {
-        if (cartItems.length > 0) {
-            cartItems.map((cart) =>{
-                if (cart.slug === item.Slug){
-                    // dispatch(increaseToCart(item,1))
-                }
-                else {
-                    dispatch(addToCart(item, 1))    
-                }
-            })
+
+      const handleOpenMenu = (attribute) => {
+            const nameItem = attribute.title
+            const menuItem = document.querySelector(`.item__attribute__${nameItem}`)
+            const OpenIcon = document.querySelector(`span.plusIcon__${nameItem}`)
+            const CloseIcon = document.querySelector(`span.closeIcon__${nameItem}`)
+            if (menuItem.classList.contains('d-none')){
+                menuItem.classList.remove('d-none')
+                OpenIcon.classList.add('d-none')
+                CloseIcon.classList.remove('d-none')
+                
+            }
+            else {
+                menuItem.classList.add('d-none')
+                OpenIcon.classList.remove('d-none')
+                CloseIcon.classList.add('d-none')
+                
+            }
+      }
+
+    //   Function handle Open Menu With Tablet
+      const handleOpenMenuSelect = () => {
+        const menuTablet = document.querySelector('.menuTablet');
+        const overlayItem = document.querySelector('.overlay__menuTablet')
+        if (menuTablet.classList.contains('d-none')){
+            menuTablet.classList.remove('d-none');
+            overlayItem.classList.remove('d-none')
         }
-        else {
-            dispatch(addToCart(item, 1))
+        else{
+            menuTablet.classList.add('d-none')
+            overlayItem.classList.add('d-none')
+        }
+      }
+
+    const [checkedItem, setCheckedItem] = useState(true)
+
+    const type = Catagory.filter(item => item.slug === slug);
+
+    const catagoryID = type[0].CategoryID
+    
+    const CountProduct = () => {
+        let count = 0;
+        for (let i = 0; i < product.length; i++){
+            if (product[i].CategoryID === catagoryID){
+                count = count + 1;
+            }
+        }
+        return count
+    }
+
+    // State ProductLength of every type
+    const [productLength, setProductLength] = useState(product.filter(item => item.CategoryID === catagoryID).length)
+
+    useEffect(() => {
+        setProductLength(CountProduct)
+    }, [CountProduct]);
+
+    // Function handle Change Checked when change screen
+    useEffect(() => {
+        const manufactorerItem = document.querySelectorAll('input[name="Manufacturer"]')
+        for (let i = 0; i < manufactorerItem.length; i++){
+            if (filter.manufactorer.includes(manufactorerItem[i].value)){
+                manufactorerItem[i].checked =  true
+            }
+            else{
+                manufactorerItem[i].checked = false
+            }   
+        }
+
+        // Change UnitPrice Checked State
+        const UnitPriceItem = document.querySelectorAll('input[name="UnitPrice"]')
+        for (let i = 0; i < UnitPriceItem.length; i++){
+            if (filter.unitPrice.includes(UnitPriceItem[i].value)){
+                UnitPriceItem[i].checked =  true
+            }
+            else{
+                UnitPriceItem[i].checked = false
+            } 
+        }
+        // Change Memory Checked State
+        const memoryItem = document.querySelectorAll('input[name="Memory"]')
+        for (let i = 0; i < memoryItem.length; i++){
+            if (filter.memory.includes(memoryItem[i].value)){
+                memoryItem[i].checked =  true
+            }
+            else{
+                memoryItem[i].checked = false
+            } 
+        }
+
+        // Change Monitor Checked State
+        const monitorItem = document.querySelectorAll('input[name="Monitor"]')
+        for (let i = 0; i < monitorItem.length; i++){
+            if (filter.monitor.includes(monitorItem[i].value)){
+                monitorItem[i].checked =  true
+            }
+            else{
+                monitorItem[i].checked = false
+            } 
+        }
+
+        // Change CPU Checked State
+        const cpuItem = document.querySelectorAll('input[name="CPU"]')
+        for (let i = 0; i < cpuItem.length; i++){
+            if (filter.cpu.includes(cpuItem[i].value)){
+                cpuItem[i].checked =  true
+            }
+            else{
+                cpuItem[i].checked = false
+            } 
+        }
+
+        // Change RAM Checked State
+        const ramItem = document.querySelectorAll('input[name="RAM"]')
+        for (let i = 0; i < ramItem.length; i++){
+            if (filter.ram.includes(ramItem[i].value)){
+                ramItem[i].checked =  true
+            }
+            else{
+                ramItem[i].checked = false
+            } 
+        }
+
+        // Change VGA Checked State
+        const vgaItem = document.querySelectorAll('input[name="VGA"]')
+        for (let i = 0; i < vgaItem.length; i++){
+            if (filter.vga.includes(vgaItem[i].value)){
+                vgaItem[i].checked =  true
+            }
+            else{
+                vgaItem[i].checked = false
+            } 
         }
         
-      };
-        
-     
-       
+        // Change HaskDisk Checked State
+        const haskDiskItem = document.querySelectorAll('input[name="HardDisk"]')
+        for (let i = 0; i < haskDiskItem.length; i++){
+            if (filter.haskdisk.includes(haskDiskItem[i].value)){
+                haskDiskItem[i].checked =  true
+            }
+            else{
+                haskDiskItem[i].checked = false
+            } 
+        }
+
+        // Change Battery Checked State 
+        const batteryItem = document.querySelectorAll('input[name="Battery"]')
+        for (let i = 0; i < batteryItem.length; i++){
+            if (filter.battery.includes(batteryItem[i].value)){
+                batteryItem[i].checked =  true
+            }
+            else{
+                batteryItem[i].checked = false
+            } 
+        }
+
+        // Change Demand Checked State
+        const demandItem = document.querySelectorAll('input[name="demand"]')
+        for (let i = 0; i < demandItem.length; i++){
+            if (filter.demand.includes(demandItem[i].value)){
+                demandItem[i].checked =  true
+            }
+            else{
+                demandItem[i].checked = false
+            } 
+        }
+    },[filterSelect, filterCheck])
+
     return (
-        <div className="container-fluid col-lg-12 col-md-12 col-sm-12 col-12" style={{backgroundColor: '#f1f0f1'}}>
+        <div className="container-fluid col-lg-12 col-md-12 col-sm-12 col-12 col-xs-12" style={{backgroundColor: '#f1f0f1'}}>
             <div className="catagory">
             {
                 Catagory.map((catagory, key) => {
@@ -303,20 +668,20 @@ const Menu = ({match, history}) => {
                     }
                 })   
             }
-            <div className='slider'>
+            <div className='slider' style={{minHeight: "240px"}}>
                 <Slider {...settings}>
                     {
                         slides.map((slide, key) => {
                             return (
                                 <div style={{borderRadius: '10px', border: '1px solid #d5d5d5'}}>
-                                    <img src={slide} alt="" style={{width: '100%'}}/>
+                                    <img src={slide} alt="" style={{width: '100%', minHeight: "240px"}}/>
                                 </div>
                             )
                         })
                     }
                 </Slider>
             </div>
-            <div style={{display: 'flex', padding: '2rem 0'}}>
+            <div className='tablet' style={{display: 'flex', padding: '2rem 0'}}>
                 <div className="catagory__container col-lg-3 col-md-4" style={{paddingTop: "1rem"}}>
                 {
                         Catagory.map((catalog, key) => {
@@ -343,14 +708,422 @@ const Menu = ({match, history}) => {
                         })
                     }
                 </div>
-                <div className="catagory__item col-lg-9">
+                <div className="catagory__container--tablet col-sm-12 col-md-12 col-12">
+                    <h3 className="select__item--title">Hãng sản xuất</h3>
+                    <div className="select__item">
+                        {
+                            Catagory.map((catalog, key) => {
+                                if (catalog.slug === slug){
+                                    return (
+                                        catalog.attribute.map((attribute, key) => {
+                                            if (attribute.title === "Manufacturer"){
+                                                return (
+                                                    attribute.childrend.map((children, key) => {
+                                                        return (
+                                                            <div className="select__item--child" onClick={() =>filterCheck(children, attribute)}>
+                                                                <img src={children.image} alt="" />
+                                                            </div>
+                                                        )
+                                                    })
+                                                )
+                                            }
+                                        })
+                                    )
+                                }
+                            })
+                        }
+                    </div>
+                </div>
+                <div className="catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3">
+                    <h4 className="select__item--title">Mức Giá</h4>
+                    <div className="select__item">
+                        {
+                            Catagory.map((catalog, key) => {
+                                if (catalog.slug === slug){
+                                    return (
+                                        catalog.attribute.map((attribute, key) => {
+                                            if (attribute.title === "UnitPrice"){
+                                                return (
+                                                    attribute.childrend.map((children, key) => {
+                                                        return (
+                                                            <div className="select__item--child">
+                                                                <span onClick={() => filterCheck(children, attribute)} style={{whiteSpace: "nowrap"}}>{children.name}</span>
+                                                            </div>
+                                                        )
+                                                    })
+                                                )
+                                            }
+                                        })
+                                    )
+                                }
+                            })
+                        }
+                    </div>
+                </div>
+                <div className="catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3">
+                    <div className="container__tablet-sort">
+                        <button className="container__tablet--sort">
+                            <span>Sắp xếp</span>
+                            <HiSelector />
+                        </button>
+                        <button className="container__tablet--feature" onClick={() => handleOpenMenuSelect()}>
+                            <span>Tính năng</span>
+                            <AiFillFilter />
+                        </button>
+                    </div>
+                </div>
+                <div className="menuTablet d-none">
+                    <ul className="menuTablet__item">
+                        <li className="menuTablet__item--child">
+                            <img src={Logo} alt="" />
+                            <i onClick={() => handleOpenMenuSelect()}><AiOutlineClose /></i>
+                        </li>
+                        {
+                            Catagory.map((catagory, key) => {
+                                if (catagory.slug === slug){
+                                    return (
+                                        catagory.attribute.map((attribute) => {
+                                            return(
+                                                <div className="menuTablet__container">
+                                                    <li className="menuTablet__item--child" key={key}>
+                                                        <p>{attribute.name}</p>
+                                                        <span className={`plusIcon__${attribute.title}`} onClick={() => handleOpenMenu(attribute)}><AiOutlinePlus /></span>
+                                                        <span className= {`closeIcon__${attribute.title} d-none`} onClick={() => handleOpenMenu(attribute)}><MdOutlineRemove /></span>
+                                                    </li>
+                                                    <ul className={`item__child--select d-none item__attribute__${attribute.title}`}>
+                                                        {
+                                                            attribute?.childrend.map((children, key) => {
+                                                                return (
+                                                                    <li>
+                                                                        <input type='checkbox' checked = {children.check} name={attribute.title} value = {children.value} onChange={(e) => filterSelect(attribute.title,e)} />
+                                                                        <p>{children.name}</p>
+                                                                    </li>
+                                                                )
+                                                            })
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            )
+                                        })
+                                    )
+                                }
+                            })
+
+                        }
+                    </ul>
+                    <div className="actions__menu">
+                        <button className='search' onClick={() => handleOpenMenuSelect()}>Áp dụng</button>
+                        <button className='resetOption' onClick={() => setFilter(initFilter)}>Thiết Lập Lại</button>
+                    </div>
+                </div>
+                <div className="overlay__menuTablet d-none" onClick={() => handleOpenMenuSelect()}>
+                </div>
+                <div className="catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3">
+                    <div className="container__item--filter">
+                        {
+                            (filter.manufactorer.length > 0 || filter.unitPrice.length > 0
+                                || filter.memory.length > 0 || filter.monitor.length > 0
+                                || filter.cpu.length > 0 || filter.ram.length > 0
+                                || filter.vga.length > 0 || filter.haskdisk.length > 0
+                                || filter.battery.length > 0 || filter.demand.length > 0
+                                ) ? (
+                                <div className="item__filter">
+                                    Lọc theo:
+                                {
+                                    filter.manufactorer.map((item) => {
+                                        return (
+                                        Catagory.map((catagory) => {
+                                            {
+                                                if(catagory.slug === slug){
+                                                    return (
+                                                        catagory.attribute.map((attribute) => {
+                                                            if (attribute.title === "Manufacturer"){
+                                                                return(
+                                                                    attribute.childrend.map((children) => {
+                                                                        if (children.value === item){
+                                                                            return (
+                                                                                <div className="item__filter--contain">
+                                                                                    <span>{children.name}</span>
+                                                                                    <i onClick={() => removeFilter(item, "Manufactorer")}><AiOutlineClose /></i>
+                                                                                </div>
+                                                                            )
+                                                                        }
+                                                                    })
+                                                                )
+                                                            }
+                                                        }))
+                                                }
+                                            }
+                                            
+                                        }))
+                                        })
+                                }
+                                {
+                                    filter.unitPrice.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "UnitPrice"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "UnitPrice")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.memory.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "Memory"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "Memory")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.monitor.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "Monitor"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "Monitor")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.cpu.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "CPU"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "CPU")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.ram.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "RAM"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "RAM")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.vga.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "VGA"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "VGA")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.haskdisk.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "HardDisk"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "HardDisk")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.battery.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "Battery"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "Battery")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                {
+                                    filter.demand.map((item) => {
+                                        return (
+                                            Catagory.map((catagory) => {
+                                                {
+                                                    if(catagory.slug === slug){
+                                                        return (
+                                                            catagory.attribute.map((attribute) => {
+                                                                if (attribute.title === "demand"){
+                                                                    return(
+                                                                        attribute.childrend.map((children) => {
+                                                                            if (children.value === item){
+                                                                                return (
+                                                                                    <div className="item__filter--contain">
+                                                                                        <span>{children.name}</span>
+                                                                                        <i onClick={() => removeFilter(item, "demand")}><AiOutlineClose /></i>
+                                                                                    </div>
+                                                                                )
+                                                                            }
+                                                                        })
+                                                                    )
+                                                                }
+                                                            }))
+                                                    }
+                                                }
+                                            }))
+                                    })
+                                }
+                                </div>
+                            ) : ("")
+                        }
+                        
+                    </div>
+                </div>
+                <div className="catagory__item col-lg-9 col-md-12 col-sm-12">
                     <div className="catagory__item--title">
                     {
                         Catagory.map((catagory, key) => {
                             if (catagory.slug === slug){
                                 return (
                                     <><h3>{catagory.nameCatalogory}</h3>
-                                        <span>({product.length} sản phẩm)</span>
+                                        <span>({productLength} sản phẩm)</span>
                                         </>
                                 )
                             }
@@ -374,10 +1147,11 @@ const Menu = ({match, history}) => {
                                             product.map((item, key) => {
                                                 if (item.CategoryID === catagoryId){
                                                         return (
-                                                            <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                                            <div className="item--child--contains  col-lg-4 col-md-4 col-sm-6 col-6">
                                                                 <Link to = {`/${item.Slug}`}><div className="child--contains--img">
                                                                     <img src={item.Image} alt="" />
                                                                 </div>
+                                                                 <div className="contains--title">
                                                                 <h3>{item.Name}</h3>
                                                                 <div className="child--contains--price">
                                                                     <div>
@@ -387,10 +1161,12 @@ const Menu = ({match, history}) => {
                                                                     <div className="contains--price-pecent">
                                                                         <p>1%</p>
                                                                     </div>
-                                                                </div></Link>
+                                                                </div>
+                                                                </div>
+                                                                </Link>
                                                                 <div className="child--contains--action">
                                                                     <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                                                 </div>
                                                             </div>
                                                         )
@@ -401,7 +1177,7 @@ const Menu = ({match, history}) => {
                                             product.map((item, key) => {
                                                 if (item.CategoryID === catagoryId){
                                                         return (
-                                                            <div className="item--child--contains col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                                            <div className="item--child--contains col-lg-4 col-md-6 col-sm-6 col-12 ">
                                                                 <Link to = {`/${item.Slug}`}><div className="child--contains--img">
                                                                     <img src={item.Image} alt="" />
                                                                 </div>
@@ -417,7 +1193,7 @@ const Menu = ({match, history}) => {
                                                                 </div></Link>
                                                                 <div className="child--contains--action">
                                                                     <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick= {() => AddToCartHandle(item)}>Thêm Giỏ Hàng</button></Link>
+                                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                                                 </div>
                                                             </div>
                                                         )

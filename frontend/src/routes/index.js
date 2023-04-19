@@ -14,6 +14,7 @@ import Profile from '../pages/Client/Profile'
 import AccountOrder from '../pages/Client/AccountOrder'
 import AccountInfo from '../pages/Client/AccountInfo'
 import AccountAddress from '../pages/Client/AccountAddress'
+import { ToastContainer } from 'react-toastify'
 // import Login from '../pages/Admin/components/Login/Login';
 import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
 
