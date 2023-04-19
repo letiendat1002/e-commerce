@@ -13,7 +13,6 @@ const axiosClient = axios.create({
 // Add a request interceptor
 axiosClient.interceptors.request.use(
   function (config) {
-
     return config;
   },
   function (error) {
@@ -29,11 +28,11 @@ axiosClient.interceptors.response.use(
   function (error) {
     const token = Cookies.get('token');
     const refreshToken = Cookies.get('refreshToken');
-    if (refreshToken && (
-      !token ||
-      JSON.parse(atob(token.split('.')[1])).exp * 1000 < new Date().getTime())
+    if (
+      refreshToken &&
+      (!token || JSON.parse(atob(token.split('.')[1])).exp * 1000 < new Date().getTime())
     ) {
-      authApi.postAuthRefreshToken(refreshToken).then(response => {
+      authApi.postAuthRefreshToken(refreshToken).then((response) => {
         Cookies.set('token', response.token);
         Cookies.set('refreshToken', response.refreshToken);
       });

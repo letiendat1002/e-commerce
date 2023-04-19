@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import Carousel from '../../components/Carousel/CarouselItem'
+import { useEffect, useState } from 'react'
+import { Col, Row } from 'react-bootstrap'
+import { FaHotjar } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import '../../assets/css/home.scss'
-import Header from '../../layouts/Header'
+import Products from '../../assets/data/product.js'
 import slider1 from '../../assets/images/banner.jpg'
-import slider2 from '../../assets/images/slideshow_8.jpeg'
-import slider3 from '../../assets/images/slideshow_10.png'
-import slider4 from '../../assets/images/slideshow_11.jpeg'
-import slider5 from '../../assets/images/slideshow_12.jpeg'
 import slider6 from '../../assets/images/banner1.jpg'
 import Banner2 from '../../assets/images/banner2.png'
 import Banner3 from '../../assets/images/banner3.png'
 import Banner4 from '../../assets/images/banner4.png'
 import Banner5 from '../../assets/images/banner5.png'
-import {FaHotjar} from 'react-icons/fa'
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import Products from '../../assets/data/product.js'
+import slider3 from '../../assets/images/slideshow_10.png'
+import slider4 from '../../assets/images/slideshow_11.jpeg'
+import slider5 from '../../assets/images/slideshow_12.jpeg'
+import slider2 from '../../assets/images/slideshow_8.jpeg'
 import AutoSlice from '../../components/AutoSlide/AutoSlice'
-import Catagory from '../../assets/data/catagory'
+import Carousel from '../../components/Carousel/CarouselItem'
 import formatProductPrice from '../../Helper'
 import productData from '../../Helper/GetProduct'
-import catagoryFilter from '../../assets/data/catagoryFilter'
-import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { addToCart } from "../../Redux/slice/cartSlice.js";
+import { addToCart } from "../../Redux/slice/cartSlice.js"
 // import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 const slides = [
     slider1,
@@ -218,7 +215,7 @@ const Home = () => {
                             {
                                 productData.getProductsForRecommendation(8, product).map((item) => {
                                             return (
-                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
+                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={item.ProductID} >
                                                 <Link to = {item.Slug}>
                                                 <div className="child--contains--img">
                                                         <img src={item.Image} alt="" />
@@ -260,9 +257,9 @@ const Home = () => {
                     <Row className='container__item' style={{padding: '1rem 0'}}>
                         <Col lg={12} md={12} sm={12} className='container__item--child'>
                             {
-                                productData.getProductsForRecommendation(6, productTop).map((item) => {
+                                productData.getProductsForRecommendation(6, productTop).map((item,idx) => {
                                             return (
-                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
+                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.Slug}>
                                                 <div className="child--contains--img">
                                                         <img src={item.Image} alt="" />
@@ -306,9 +303,9 @@ const Home = () => {
                     <Row className='container__item'>
                         <Col lg={12} md={12} sm={12} className='container__item--child'>
                             {
-                                productData.getProductsForRecommendation(6, productBottom).map((item) => {
+                                productData.getProductsForRecommendation(6, productBottom).map((item,idx) => {
                                             return (
-                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
+                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.Slug}>
                                                 <div className="child--contains--img">
                                                         <img src={item.Image} alt="" />
@@ -346,9 +343,9 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getRandomProducts(8).map((item, key) => {
+                            productData.getRandomProducts(8).map((item, idx) => {
                                 return (
-                                    <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
+                                    <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                         <Link to = {item.Slug}>
                                         <div className="child--contains--img">
                                             <img src={item.Image} alt="" />
@@ -388,9 +385,9 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, phone).map((item, key) => {
+                            productData.getProductsForRecommendation(8, phone).map((item, idx) => {
                                         return (
-                                            <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
+                                            <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.Slug}><div className="child--contains--img">
                                                     <img src={item.Image} alt="" />
                                                 </div>
@@ -429,9 +426,9 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, laptop).map((item, key) => {
+                            productData.getProductsForRecommendation(8, laptop).map((item, idx) => {
                                     return (
-                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
+                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.Slug}><div className="child--contains--img">
                                                 <img src={item.Image} alt="" />
                                             </div>
@@ -470,9 +467,9 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, tablet).map((item, key) => {
+                            productData.getProductsForRecommendation(8, tablet).map((item, idx) => {
                                     return (
-                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6">
+                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.Slug}><div className="child--contains--img">
                                                 <img src={item.Image} alt="" />
                                             </div>

@@ -3,14 +3,12 @@
 // import { cartReducer } from "./cartReducer";
 
 //  const reducers = combineReducers({
-    
+
 //     allProducts: productReducer,
 //     cart: cartReducer,
-  
 
 // });
 // export default reducers;
-
 
 // const Reducer = (cart = [], action) => {
 //     if (action.type === "ADD"){
