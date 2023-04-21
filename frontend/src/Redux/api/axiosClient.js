@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { API_HOST } from '../../constant/path';
+// import { API_HOST } from '../../constant/path';
 import Cookies from 'js-cookie';
 import authApi from './auth';
 
 const axiosClient = axios.create({
-  baseURL: API_HOST,
+  baseURL: "test",
   headers: {
     'Content-type': 'application/json',
   },
