@@ -1,22 +1,21 @@
 import { createBrowserRouter } from 'react-router-dom'
 import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout"
 import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin'
+import Login from '../layouts/Login/Login'
 import Dashboard from '../pages/Admin/Dasboard/Dashboard'
 import ManageUser from '../pages/Admin/ManageUser/MangeUser'
+import AccountAddress from '../pages/Client/AccountAddress'
+import AccountInfo from '../pages/Client/AccountInfo'
+import AccountOrder from '../pages/Client/AccountOrder'
+import Cart from '../pages/Client/Cart'
 import Home from '../pages/Client/Home'
 import Menu from '../pages/Client/Menu'
-import ProductDetail from '../pages/Client/ProductDetail'
-import Login from '../layouts/login/Login'
-import Cart from '../pages/Client/Cart'
-import Payment from '../pages/Client/Payment'
 import NotFound from '../pages/Client/NotFound/NotFound'
+import Payment from '../pages/Client/Payment'
+import ProductDetail from '../pages/Client/ProductDetail'
 import Profile from '../pages/Client/Profile'
-import AccountOrder from '../pages/Client/AccountOrder'
-import AccountInfo from '../pages/Client/AccountInfo'
-import AccountAddress from '../pages/Client/AccountAddress'
-import { ToastContainer } from 'react-toastify'
 // import Login from '../pages/Admin/components/Login/Login';
-import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
+import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts'
 
 
 const router = createBrowserRouter([

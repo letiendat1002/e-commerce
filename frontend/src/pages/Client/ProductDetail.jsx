@@ -80,10 +80,10 @@ const ProductDetail = ({match, history}) => {
                 Products.map((product) => {
                   if (product.Slug === slug){
                     return(
-                      Catagory.map((catagory) => {
+                      Catagory.map((catagory,idx) => {
                         if (catagory.CategoryID === product.CategoryID){
                           return (
-                            <div className="breadcrumb">
+                            <div className="breadcrumb" key={idx}>
                             <Link to={"/"}>Trang Chủ /</Link>
                                 <span>
                                 <a href={`/category/${catagory.slug}`}>{catagory.nameCatalogory}</a>
@@ -137,10 +137,10 @@ const ProductDetail = ({match, history}) => {
                 </div>
                 <div className="product-param">
                   {
-                    Products.map((product) => {
-                      if (product.Slug == slug && product.CategoryID == "1"){
+                    Products.map((product,idx) => {
+                      if (product.Slug === slug && product.CategoryID === "1"){
                         return (
-                          <ul>
+                          <ul key={idx}>
                             <li data-info="Màn hình">
                               <span className="icon-screen-size"><FaMobileAlt /></span>
                               <p>{product.Monitor}</p>
@@ -164,9 +164,9 @@ const ProductDetail = ({match, history}) => {
                           </ul> 
                         )
                       }
-                      else if (product.Slug == slug && product.CategoryID == "2"){
+                      else if (product.Slug === slug && product.CategoryID === "2"){
                         return (
-                          <ul>
+                          <ul key={idx}>
                             <li data-info="Màn hình">
                               <span className="icon-screen-size"><FaMobileAlt /></span>
                               <p>{product.Monitor}</p>
@@ -190,7 +190,7 @@ const ProductDetail = ({match, history}) => {
                           </ul> 
                         )
                       }
-                      else if (product.Slug == slug && product.CategoryID == "3"){
+                      else if (product.Slug === slug && product.CategoryID === "3"){
                         return (
                           <ul>
                             <li data-info="Màn hình">
@@ -280,10 +280,10 @@ const ProductDetail = ({match, history}) => {
                   
                   <div className="button buy-now" >
                     {
-                      Products.map((product) => {
+                      Products.map((product ,idx) => {
                         if (product.Slug == slug){
                           return (
-                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(product)} >
+                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(product)}  key={idx}>
                               <i className="bx bxs-zap"></i> Mua Ngay
                             </Link>
                           )
@@ -308,10 +308,10 @@ const ProductDetail = ({match, history}) => {
             <div className="product__descript--contain col-lg-12 col-md-12 col-sm-12 col-12">
                 <div className="descript--contain--left col-lg-7 col-md-12 col-sm-12 col-12" >
                   {
-                    Products.map((product) => {
+                    Products.map((product,idx) => {
                       if (product.Slug === slug){
                         return (
-                          <div className="contain--left--container">
+                          <div className="contain--left--container" key={idx}>
                             <h1 className="title">{`Đặc điểm nổi bật của ${product.Name}`}</h1>
                             <div className="product__descript-slider">
                                 <Slider {...settings} >
@@ -365,10 +365,10 @@ const ProductDetail = ({match, history}) => {
                 </div>
                 <div className="descript--contain--right col-lg-5 col-md-12 col-sm-12 col-12 ps-4">
                     {
-                      Products.map((product) => {
+                      Products.map((product,idx) => {
                         if (product.Slug === slug && product.CategoryID == '1'){
                           return (
-                            <div className="contain--right--container">
+                            <div className="contain--right--container" key={idx}>
                               <h1 className="title">Thông số kỹ thuật</h1>
                               <table>
                                 <tr>
@@ -413,7 +413,7 @@ const ProductDetail = ({match, history}) => {
                         }
                         else if (product.Slug === slug && product.CategoryID == "2"){
                           return (
-                            <div className="contain--right--container">
+                            <div className="contain--right--container" key={idx}>
                               <h1 className="title">Thông số kỹ thuật</h1>
                               <table>
                                 <tr>
@@ -458,7 +458,7 @@ const ProductDetail = ({match, history}) => {
                         } 
                         else if (product.Slug === slug && product.CategoryID == "3"){
                           return (
-                            <div className="contain--right--container">
+                            <div className="contain--right--container" key={idx}>
                               <h1 className="title">Thông số kỹ thuật</h1>
                               <table>
                                 <tr>
@@ -498,9 +498,9 @@ const ProductDetail = ({match, history}) => {
               Products.map((product) => {
                 if (product.Slug == slug && product.CategoryID == "1"){
                   return (
-                    productData.getProductsForRecommendation(8, laptop).map((product) => {
+                    productData.getProductsForRecommendation(8, laptop).map((product,idx) => {
                       return (
-                        <Link to = {`/${product.Slug}`}><div className="descript-slider--item">
+                        <Link to = {`/${product.Slug}`}><div className="descript-slider--item" key={idx}>
                               <img src={product.Image} alt="" />
                               <p className="name">{product.Name}</p>
                               <p className="price">{formatProductPrice(product.UnitPrice)}</p>
@@ -509,11 +509,11 @@ const ProductDetail = ({match, history}) => {
                     })
                     )  
                   }
-                else if (product.Slug == slug && product.CategoryID == "2"){
+                else if (product.Slug ===slug && product.CategoryID === "2"){
                   return (
-                    productData.getProductsForRecommendation(8, phone).map((product) => {
+                    productData.getProductsForRecommendation(8, phone).map((product,idx) => {
                       return (
-                          <Link to = {`/${product.Slug}`}><div className="descript-slider--item">
+                          <Link to = {`/${product.Slug}`}><div className="descript-slider--item" key={idx}>
                               <img src={product.Image} alt="" />
                               <p className="name">{product.Name}</p>
                               <p className="price">{formatProductPrice(product.UnitPrice)}</p>
@@ -524,9 +524,9 @@ const ProductDetail = ({match, history}) => {
                   }
                 else if (product.Slug == slug && product.CategoryID == "3"){
                   return (
-                    productData.getProductsForRecommendation(8, tablet).map((product) => {
+                    productData.getProductsForRecommendation(8, tablet).map((product,idx) => {
                       return (
-                          <Link to = {`/${product.Slug}`}><div className="descript-slider--item">
+                          <Link to = {`/${product.Slug}`}><div className="descript-slider--item" key={idx}>
                               <img src={product.Image} alt="" />
                               <p className="name">{product.Name}</p>
                               <p className="price">{formatProductPrice(product.UnitPrice)}</p>

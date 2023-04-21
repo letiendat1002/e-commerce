@@ -16,9 +16,9 @@ const AutoSlice = ({slides}) => {
     <div>
         <Slider {...settings}>
             {
-                slides.map((slide, key) => {
+                slides.map((slide, idx) => {
                     return (
-                        <div style={{borderRadius: '10px'}}>
+                        <div style={{borderRadius: '10px'}} key={idx}>
                             <img src={slide} alt="" style={{width: '100%', padding: '0 10px'}}/>
                         </div>
                     )
