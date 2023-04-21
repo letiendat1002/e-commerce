@@ -11,7 +11,7 @@ import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
 import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import { authenticate } from './AuthSignInSlice';
 import './style.scss';
-import { login } from '../../redux/slice/userSlice';
+import { login } from '../../Redux/slice/userSlice';
 import { toast } from 'react-toastify';
 const Login = () => {
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ const Login = () => {
     // const username = email;
     // dispatch(authenticate({username, password}))
 
+    //login
     const { email: identifier, password } = values;
     console.log(values);
     console.log(identifier);
@@ -64,10 +65,12 @@ const Login = () => {
 
     if (meta.requestStatus === 'fulfilled') {
       toast.success(`Wellcom back ${payload.fullName}`);
-      }
-      console.log(values);
+    }
+    console.log(values);
     form.resetFields();
     navigate('/');
+
+    //resgi
   };
 
   const handleLogin = (item) => {

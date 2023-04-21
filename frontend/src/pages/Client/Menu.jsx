@@ -20,7 +20,7 @@ import Item7 from '../../assets/images/item7.png';
 // import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import { MdOutlineRemove } from 'react-icons/md';
-import { addToCart } from '../../redux/slice/cartSlice';
+import { addToCart } from '../../Redux/slice/cartSlice';
 import Logo from '../../assets/images/Logo.svg';
 import NotFoundItem from '../../assets/images/noti-search.png';
 const slides = [Item1, Item2, Item3, Item4, Item5, Item6, Item7];

@@ -12,7 +12,7 @@ import {BiMemoryCard} from 'react-icons/bi'
 import Slider from "react-slick";
 import productData from "../../Helper/GetProduct.js";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "../../redux/slice/cartSlice.js";
+import { addToCart } from "../../Redux/slice/cartSlice.js";
 // import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 
 const ProductDetail = ({match, history}) => {

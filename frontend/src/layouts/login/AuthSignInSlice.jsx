@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-import authApi from '../../redux/api/auth';
+import authApi from '../../Redux/api/auth';
 import { toast } from 'react-toastify';
 export const initialState = {
   token: '',

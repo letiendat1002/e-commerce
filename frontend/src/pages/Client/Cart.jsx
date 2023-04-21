@@ -11,7 +11,7 @@ import {
   decreamentFromCart,
   increamentFromCart,
   removeFromToCart,
-} from '../../redux/slice/cartSlice.js';
+} from '../../Redux/slice/cartSlice.js';
 
 const Cart = () => {
   const { slug } = useParams();
