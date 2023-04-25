@@ -4,13 +4,17 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getAllProducts();
+    List<ProductDTO> fetchAllProducts();
 
-    Product getProduct(BigInteger productID);
+    List<ProductDTO> fetchAllProductsByCategory(BigInteger categoryID);
 
-    void addProduct(ProductAddRequest request);
+    ProductDTO fetchProductByProductID(BigInteger productID);
 
-    void updateProduct(ProductUpdateRequest request, BigInteger productID);
+    ProductDTO fetchProductBySlug(String slug);
+
+    ProductDTO addProduct(ProductRequest request);
+
+    ProductDTO updateProduct(BigInteger productID, ProductRequest request);
 
     void deleteProduct(BigInteger productID);
 }

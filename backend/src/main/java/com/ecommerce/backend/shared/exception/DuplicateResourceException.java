@@ -1,4 +1,4 @@
-package com.ecommerce.backend.exception;
+package com.ecommerce.backend.shared.exception;
 
 public class DuplicateResourceException extends RuntimeException {
     public DuplicateResourceException(String message) {

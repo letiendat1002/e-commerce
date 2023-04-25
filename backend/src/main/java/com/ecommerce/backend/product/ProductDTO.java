@@ -2,7 +2,8 @@ package com.ecommerce.backend.product;
 
 import java.math.BigInteger;
 
-public record ProductAddRequest(
+public record ProductDTO(
+        BigInteger productID,
         BigInteger categoryID,
         String name,
         String slug,
