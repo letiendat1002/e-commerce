@@ -1,5 +1,3 @@
--- MySQL Workbench Forward Engineering
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -19,16 +17,14 @@ USE `myecommerce` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
   `UserID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Username` VARCHAR(255) NOT NULL,
+  `Email` VARCHAR(255) NOT NULL,
   `Password` VARCHAR(255) NOT NULL,
   `Role` VARCHAR(255) NOT NULL,
   `Fullname` VARCHAR(255) NOT NULL,
   `Gender` VARCHAR(255) NULL,
-  `Email` VARCHAR(255) NOT NULL,
   `Phone` VARCHAR(255) NULL,
   `Image` VARCHAR(255) NULL,
   PRIMARY KEY (`UserID`),
-  UNIQUE INDEX `username_UNIQUE` (`Username` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`Email` ASC) VISIBLE,
   UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -91,20 +87,23 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `CategoryID` BIGINT UNSIGNED NULL,
   `Name` VARCHAR(255) NOT NULL,
   `Slug` VARCHAR(255) NOT NULL,
-  `Image` VARCHAR(255) NOT NULL,
+  `Image` VARCHAR(255) NULL,
+  `ImageReview1` VARCHAR(255) NULL,
+  `ImageReview2` VARCHAR(255) NULL,
+  `ImageReview3` VARCHAR(255) NULL,
   `UnitPrice` BIGINT UNSIGNED NOT NULL,
   `Quantity` INT UNSIGNED NOT NULL,
-  `Description` VARCHAR(255) NOT NULL,
+  `Description` LONGTEXT NULL,
+  `YearRelease` SMALLINT(4) NULL,
+  `Manufacturer` VARCHAR(255) NULL,
+  `Monitor` VARCHAR(255) NULL,
+  `CPU` VARCHAR(255) NULL,
+  `RAM` VARCHAR(255) NULL,
+  `VGA` VARCHAR(255) NULL,
+  `HardDisk` VARCHAR(255) NULL,
+  `Camera` VARCHAR(255) NULL,
+  `Battery` VARCHAR(255) NULL,
   `Status` BIT(1) NOT NULL,
-  `YearRelease` SMALLINT(4) NOT NULL,
-  `Manufacturer` VARCHAR(255) NOT NULL,
-  `Monitor` VARCHAR(255) NOT NULL,
-  `CPU` VARCHAR(255) NOT NULL,
-  `RAM` VARCHAR(255) NOT NULL,
-  `VGA` VARCHAR(255) NOT NULL,
-  `HardDisk` VARCHAR(255) NOT NULL,
-  `Camera` VARCHAR(255) NOT NULL,
-  `Battery` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`ProductID`),
   INDEX `fk_Product_Category1_idx` (`CategoryID` ASC) VISIBLE,
   CONSTRAINT `fk_Product_Category1`
@@ -147,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Rating` (
   `OrderID` BIGINT UNSIGNED NOT NULL,
   `ProductID` BIGINT UNSIGNED NOT NULL,
   `RateAmount` TINYINT(1) UNSIGNED NOT NULL,
-  `Comment` VARCHAR(255) NOT NULL,
+  `Comment` LONGTEXT NOT NULL,
   `DateRating` DATE NOT NULL,
   PRIMARY KEY (`UserID`, `OrderID`, `ProductID`),
   INDEX `fk_Rating_OrderDetail1_idx` (`OrderID` ASC, `ProductID` ASC) VISIBLE,
