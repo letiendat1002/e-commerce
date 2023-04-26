@@ -7,4 +7,6 @@ spring:
 logging:
   level:
     org:
+      springframework:
+        web: DEBUG
       hibernate: ERROR
