@@ -263,6 +263,7 @@
         overflow-x: hidden;
         overflow: scroll;
         scroll-behavior: smooth;
+        overflow-y: visible;
         scroll-snap-type: mandatory x;
 
         .select__item--child{
@@ -521,7 +522,7 @@
         overflow: scroll;
         scroll-behavior: smooth;
         scroll-snap-type: mandatory x;
-
+        overflow-y: visible;
         .select__item--child{
             img{
                 max-width: 100px;
@@ -768,7 +769,7 @@
         justify-content: space-between;
         overflow-x: hidden;
         overflow: scroll;
-        scroll-behavior: smooth;
+        scroll-behavior: smooth;overflow-y: visible;
         scroll-snap-type: mandatory x;
 
         .select__item--child{

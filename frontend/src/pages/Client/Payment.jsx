@@ -50,9 +50,10 @@ const Payment = () => {
     }
 
     const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart);
-    const  cartItems  = cart.cartItems;
-    const total = cartItems.reduce((a, i) => a + i.qty * i.price, 0);
+    const cart = useSelector((state) => state.allCart);
+    const cartItems = cart.cart;
+    console.log(cartItems)
+    const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.UnitPrice, 0);
   return (
     <div className="container-fluid payment">
         <div className="payment__container col-lg-12 col-md-12 col-sm-12 col-12">
@@ -118,9 +119,9 @@ const Payment = () => {
                                                                     cartItems.map((item) => {
                                                                         return (
                                                                             <div className="contain--container--item--bill--child" style={{padding: "5px 0", textAlign: "center", display : "flex", alignItems : "center"}}>
-                                                                                <img src={item.image} />
-                                                                                <span>{item.qty}</span>
-                                                                                <p>{formatProductPrice(item.qty * item.price)}</p>
+                                                                                <img src={item.Image} />
+                                                                                <span style={{textAlign:"center"}}>{item.cartQuantity}</span>
+                                                                                <p>{formatProductPrice(item.cartQuantity * item.UnitPrice)}</p>
                                                                             </div>
                                                                         )
                                                                     })
