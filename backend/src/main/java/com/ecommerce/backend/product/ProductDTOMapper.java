@@ -29,6 +29,8 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
                 product.getHardDisk(),
                 product.getCamera(),
                 product.getBattery(),
+                product.getMemory(),
+                product.getDemand(),
                 product.getStatus()
         );
     }

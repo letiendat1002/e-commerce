@@ -62,6 +62,12 @@ public record ProductRequest(
         String battery,
 
         @NotNull
+        String memory,
+
+        @NotNull
+        String demand,
+
+        @NotNull
         Boolean status
 ) {
 }

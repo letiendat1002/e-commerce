@@ -19,21 +19,16 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ProductResponse getProducts() {
-        var productDTOList = productService.fetchAllProducts();
-
-        return new ProductResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                productDTOList
-        );
-    }
-
-    @GetMapping("category/{categoryID}")
-    public ProductResponse getProductByCategory(
-            @PathVariable("categoryID") BigInteger categoryID
+    public ProductResponse getProducts(
+            @RequestParam(value = "categoryID", required = false) BigInteger categoryID
     ) {
-        var productDTOList = productService.fetchAllProductsByCategory(categoryID);
+        List<ProductDTO> productDTOList = null;
+
+        if (categoryID == null) {
+            productDTOList = productService.fetchAllProducts();
+        } else {
+            productDTOList = productService.fetchAllProductsByCategory(categoryID);
+        }
 
         return new ProductResponse(
                 HttpStatus.OK.value(),

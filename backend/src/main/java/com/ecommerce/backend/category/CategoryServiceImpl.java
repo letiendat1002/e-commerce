@@ -18,7 +18,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> fetchAllCategories() {
-        return categoryDAO.selectAllCategories()
+        return categoryDAO
+                .selectAllCategories()
                 .stream()
                 .map(categoryDTOMapper)
                 .collect(Collectors.toList());
@@ -26,14 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO fetchCategoryByID(BigInteger categoryID) {
-        return categoryDAO
-                .selectCategoryByID(categoryID)
-                .map(categoryDTOMapper)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Category not found by categoryID {%d}".formatted(categoryID)
-                        )
-                );
+        return categoryDTOMapper.apply(selectCategoryByIdOrThrow(categoryID));
     }
 
     @Override
@@ -50,12 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO addCategory(CategoryRequest request) {
-        checkIfCategoryExistsBySlugOrThrow(request.slug());
+        checkIfCategoryNotExistsBySlugOrThrow(request.slug());
 
-        var category = new Category();
-        category.setName(request.name());
-        category.setSlug(request.slug());
-        category.setImage(request.image());
+        var category = new Category(
+                request.name(),
+                request.slug(),
+                request.image()
+        );
 
         return categoryDAO
                 .insertCategory(category)
@@ -67,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
                 );
     }
 
-    private void checkIfCategoryExistsBySlugOrThrow(String slug) {
+    private void checkIfCategoryNotExistsBySlugOrThrow(String slug) {
         var isExisted = categoryDAO.existsCategoryBySlug(slug);
         if (isExisted) {
             throw new DuplicateResourceException(
@@ -78,14 +73,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO updateCategory(BigInteger categoryID, CategoryRequest request) {
-        checkIfOtherCategoryExistsBySlugOrThrow(request.slug(), categoryID);
+        checkIfOtherCategoryNotExistsBySlugOrThrow(request.slug(), categoryID);
 
         var category = selectCategoryByIdOrThrow(categoryID);
-        category.setName(request.name());
-        category.setSlug(request.slug());
-        category.setImage(request.image());
 
-        return categoryDAO.updateCategory(category)
+        checkAndUpdateChangesOrThrow(request, category);
+
+        return categoryDAO
+                .updateCategory(category)
                 .map(categoryDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
@@ -94,7 +89,41 @@ public class CategoryServiceImpl implements CategoryService {
                 );
     }
 
-    private void checkIfOtherCategoryExistsBySlugOrThrow(String slug, BigInteger categoryID) {
+    private void checkAndUpdateChangesOrThrow(CategoryRequest request, Category category) {
+        var isChanged = false;
+
+        if (request.name() != null
+                && !request.name().equals(category.getName())
+        ) {
+            category.setName(request.name());
+            isChanged = true;
+        }
+
+        if (request.slug() != null
+                && !request.slug().equals(category.getSlug())
+        ) {
+            category.setSlug(request.slug());
+            isChanged = true;
+        }
+
+        if (request.image() != null
+                && !request.image().equals(category.getImage())
+        ) {
+            category.setImage(request.image());
+            isChanged = true;
+        }
+
+        if (!isChanged) {
+            throw new DuplicateResourceException(
+                    "No data changes detected"
+            );
+        }
+    }
+
+    private void checkIfOtherCategoryNotExistsBySlugOrThrow(
+            String slug,
+            BigInteger categoryID
+    ) {
         var isExisted = categoryDAO.existsOtherCategoryBySlug(slug, categoryID);
         if (isExisted) {
             throw new DuplicateResourceException(
@@ -104,7 +133,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private Category selectCategoryByIdOrThrow(BigInteger categoryID) {
-        return categoryDAO.selectCategoryByID(categoryID)
+        return categoryDAO
+                .selectCategoryByID(categoryID)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
                                 "Category not found by categoryID {%d}".formatted(categoryID)
@@ -119,7 +149,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void checkIfCategoryExistsByIdOrThrow(BigInteger categoryID) {
-        if (!categoryDAO.existsCategoryByID(categoryID)) {
+        var isExisted = categoryDAO.existsCategoryByID(categoryID);
+        if (!isExisted) {
             throw new ResourceNotFoundException(
                     "Category not found by categoryID {%d}".formatted(categoryID)
             );

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class CategoryDataAccessService implements CategoryDAO {
+public class CategoryJPADataAccessService implements CategoryDAO {
     private final CategoryRepository categoryRepository;
 
     @Override

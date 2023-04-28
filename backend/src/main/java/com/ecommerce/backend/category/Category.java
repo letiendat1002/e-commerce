@@ -41,6 +41,12 @@ public class Category {
     @ToString.Exclude
     private List<Product> products;
 
+    public Category(String name, String slug, String image) {
+        this.name = name;
+        this.slug = slug;
+        this.image = image;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
