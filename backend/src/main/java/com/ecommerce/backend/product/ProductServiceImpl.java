@@ -21,7 +21,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> fetchAllProducts() {
-        return productDAO.selectAllProducts()
+        return productDAO
+                .selectAllProducts()
                 .stream()
                 .map(productDTOMapper)
                 .collect(Collectors.toList());
@@ -31,7 +32,8 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> fetchAllProductsByCategory(BigInteger categoryID) {
         var category = selectCategoryByIdOrThrow(categoryID);
 
-        return productDAO.selectAllProductsByCategory(category)
+        return productDAO
+                .selectAllProductsByCategory(category)
                 .stream()
                 .map(productDTOMapper)
                 .collect(Collectors.toList());
@@ -39,14 +41,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO fetchProductByProductID(BigInteger productID) {
-        return productDAO
-                .selectProductByID(productID)
-                .map(productDTOMapper)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Product not found by productID {%d}".formatted(productID)
-                        )
-                );
+        return productDTOMapper
+                .apply(selectProductByIdOrThrow(productID));
     }
 
     @Override
@@ -63,12 +59,34 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO addProduct(ProductRequest request) {
-        checkIfProductExistsBySlugOrThrow(request.slug());
-
         var category = selectCategoryByIdOrThrow(request.categoryID());
-        var product = new Product();
 
-        putDataToProduct(request, category, product);
+        checkIfProductNotExistsBySlugOrThrow(request.slug());
+
+        var product = new Product(
+                category,
+                request.name(),
+                request.slug(),
+                request.image(),
+                request.imageReview1(),
+                request.imageReview2(),
+                request.imageReview3(),
+                request.unitPrice(),
+                request.quantity(),
+                request.description(),
+                request.yearRelease(),
+                request.manufacturer(),
+                request.monitor(),
+                request.cpu(),
+                request.ram(),
+                request.vga(),
+                request.hardDisk(),
+                request.camera(),
+                request.battery(),
+                request.memory(),
+                request.demand(),
+                request.status()
+        );
 
         return productDAO
                 .insertProduct(product)
@@ -80,6 +98,15 @@ public class ProductServiceImpl implements ProductService {
                 );
     }
 
+    private void checkIfProductNotExistsBySlugOrThrow(String slug) {
+        var isExisted = productDAO.existsAnyProductBySlug(slug);
+        if (isExisted) {
+            throw new DuplicateResourceException(
+                    "Product with slug {%s} is already existed".formatted(slug)
+            );
+        }
+    }
+
     private Category selectCategoryByIdOrThrow(BigInteger categoryID) {
         return categoryDAO
                 .selectCategoryByID(categoryID)
@@ -88,15 +115,6 @@ public class ProductServiceImpl implements ProductService {
                                 "Category not found by categoryID {%d}".formatted(categoryID)
                         )
                 );
-    }
-
-    private void checkIfProductExistsBySlugOrThrow(String slug) {
-        var isExisted = productDAO.existsAnyProductBySlug(slug);
-        if (isExisted) {
-            throw new DuplicateResourceException(
-                    "Product already exists by slug {%s}".formatted(slug)
-            );
-        }
     }
 
     @Override
@@ -116,12 +134,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(BigInteger productID, ProductRequest request) {
-        checkIfOtherProductExistsBySlugOrThrow(request.slug(), productID);
-
         var product = selectProductByIdOrThrow(productID);
-        var category = selectCategoryByIdOrThrow(request.categoryID());
 
-        putDataToProduct(request, category, product);
+        checkIfOtherProductNotExistsBySlugOrThrow(request.slug(), productID);
+        checkAndUpdateChangesOrThrow(request, product);
 
         return productDAO
                 .updateProduct(product)
@@ -132,14 +148,172 @@ public class ProductServiceImpl implements ProductService {
                         ));
     }
 
-    private void checkIfOtherProductExistsBySlugOrThrow(
+    private void checkAndUpdateChangesOrThrow(ProductRequest request, Product product) {
+        var isChanged = false;
+
+        if (request.categoryID() != null
+                && !request.categoryID().equals(product.getCategory().getCategoryID())
+        ) {
+            var category = selectCategoryByIdOrThrow(request.categoryID());
+            product.setCategory(category);
+            isChanged = true;
+        }
+
+        if (request.name() != null
+                && !request.name().equals(product.getName())
+        ) {
+            product.setName(request.name());
+            isChanged = true;
+        }
+
+        if (request.slug() != null
+                && !request.slug().equals(product.getSlug())
+        ) {
+            product.setSlug(request.slug());
+            isChanged = true;
+        }
+
+        if (request.image() != null
+                && !request.image().equals(product.getImage())
+        ) {
+            product.setImage(request.image());
+            isChanged = true;
+        }
+
+        if (request.imageReview1() != null
+                && !request.imageReview1().equals(product.getImageReview1())
+        ) {
+            product.setImageReview1(request.imageReview1());
+            isChanged = true;
+        }
+
+        if (request.imageReview2() != null
+                && !request.imageReview2().equals(product.getImageReview2())
+        ) {
+            product.setImageReview2(request.imageReview2());
+            isChanged = true;
+        }
+
+        if (request.imageReview3() != null
+                && !request.imageReview3().equals(product.getImageReview3())
+        ) {
+            product.setImageReview3(request.imageReview3());
+            isChanged = true;
+        }
+
+        if (request.unitPrice() != null
+                && !request.unitPrice().equals(product.getUnitPrice())
+        ) {
+            product.setUnitPrice(request.unitPrice());
+            isChanged = true;
+        }
+
+        if (request.quantity() != null
+                && !request.quantity().equals(product.getQuantity())
+        ) {
+            product.setQuantity(request.quantity());
+            isChanged = true;
+        }
+
+        if (request.description() != null
+                && !request.description().equals(product.getDescription())
+        ) {
+            product.setDescription(request.description());
+            isChanged = true;
+        }
+
+        if (request.yearRelease() != null
+                && !request.yearRelease().equals(product.getYearRelease())
+        ) {
+            product.setYearRelease(request.yearRelease());
+            isChanged = true;
+        }
+
+        if (request.manufacturer() != null
+                && !request.manufacturer().equals(product.getManufacturer())
+        ) {
+            product.setManufacturer(request.manufacturer());
+            isChanged = true;
+        }
+
+        if (request.monitor() != null
+                && !request.monitor().equals(product.getMonitor())
+        ) {
+            product.setMonitor(request.monitor());
+            isChanged = true;
+        }
+
+        if (request.cpu() != null
+                && !request.cpu().equals(product.getCpu())
+        ) {
+            product.setCpu(request.cpu());
+            isChanged = true;
+        }
+
+        if (request.ram() != null
+                && !request.ram().equals(product.getRam())
+        ) {
+            product.setRam(request.ram());
+            isChanged = true;
+        }
+
+        if (request.vga() != null
+                && !request.vga().equals(product.getVga())
+        ) {
+            product.setVga(request.vga());
+            isChanged = true;
+        }
+
+        if (request.hardDisk() != null
+                && !request.hardDisk().equals(product.getHardDisk())
+        ) {
+            product.setHardDisk(request.hardDisk());
+            isChanged = true;
+        }
+
+        if (request.camera() != null
+                && !request.camera().equals(product.getCamera())
+        ) {
+            product.setCamera(request.camera());
+            isChanged = true;
+        }
+
+        if (request.battery() != null
+                && !request.battery().equals(product.getBattery())
+        ) {
+            product.setBattery(request.battery());
+            isChanged = true;
+        }
+
+        if (request.memory() != null
+                && !request.memory().equals(product.getMemory())
+        ) {
+            product.setMemory(request.memory());
+            isChanged = true;
+        }
+
+        if (request.demand() != null
+                && !request.demand().equals(product.getDemand())
+        ) {
+            product.setDemand(request.demand());
+            isChanged = true;
+        }
+
+        if (!isChanged) {
+            throw new DuplicateResourceException(
+                    "No data changes detected"
+            );
+        }
+    }
+
+    private void checkIfOtherProductNotExistsBySlugOrThrow(
             String slug,
             BigInteger productID
     ) {
         var isExisted = productDAO.existsOtherProductBySlug(slug, productID);
         if (isExisted) {
             throw new DuplicateResourceException(
-                    "Product already exists by slug {%s}".formatted(slug)
+                    "Product with slug {%s} is already existed".formatted(slug)
             );
         }
     }
@@ -152,29 +326,5 @@ public class ProductServiceImpl implements ProductService {
                                 "Product not found by productID {%d}".formatted(productID)
                         )
                 );
-    }
-
-
-    private void putDataToProduct(ProductRequest request, Category category, Product product) {
-        product.setCategory(category);
-        product.setName(request.name());
-        product.setSlug(request.slug());
-        product.setImage(request.image());
-        product.setImageReview1(request.imageReview1());
-        product.setImageReview2(request.imageReview2());
-        product.setImageReview3(request.imageReview3());
-        product.setUnitPrice(request.unitPrice());
-        product.setQuantity(request.quantity());
-        product.setDescription(request.description());
-        product.setYearRelease(request.yearRelease());
-        product.setManufacturer(request.manufacturer());
-        product.setMonitor(request.monitor());
-        product.setCpu(request.cpu());
-        product.setRam(request.ram());
-        product.setVga(request.vga());
-        product.setHardDisk(request.hardDisk());
-        product.setCamera(request.camera());
-        product.setBattery(request.battery());
-        product.setStatus(request.status());
     }
 }

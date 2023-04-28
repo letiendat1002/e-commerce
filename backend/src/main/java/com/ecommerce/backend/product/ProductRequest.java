@@ -35,7 +35,7 @@ public record ProductRequest(
         String description,
 
         @NotNull
-        String yearRelease,
+        Integer yearRelease,
 
         @NotNull
         String manufacturer,
@@ -60,6 +60,12 @@ public record ProductRequest(
 
         @NotNull
         String battery,
+
+        @NotNull
+        String memory,
+
+        @NotNull
+        String demand,
 
         @NotNull
         Boolean status

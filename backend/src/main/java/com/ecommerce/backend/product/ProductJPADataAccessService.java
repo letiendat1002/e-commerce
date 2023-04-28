@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class ProductDataAccessService implements ProductDAO {
+public class ProductJPADataAccessService implements ProductDAO {
     private final ProductRepository productRepository;
 
     @Override

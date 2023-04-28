@@ -14,7 +14,7 @@ public record ProductDTO(
         BigInteger unitPrice,
         Long quantity,
         String description,
-        String yearRelease,
+        Integer yearRelease,
         String manufacturer,
         String monitor,
         String cpu,
@@ -23,6 +23,8 @@ public record ProductDTO(
         String hardDisk,
         String camera,
         String battery,
+        String memory,
+        String demand,
         Boolean status
 ) {
 }
