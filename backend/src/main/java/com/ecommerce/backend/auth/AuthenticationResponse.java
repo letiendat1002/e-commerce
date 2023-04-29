@@ -1,4 +1,4 @@
-package com.ecommerce.backend.user;
+package com.ecommerce.backend.auth;
 
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.response.BaseResponse;
@@ -7,20 +7,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @ToString
-public class UserResponse extends BaseResponse {
-    private List<UserDTO> data;
+public class AuthenticationResponse extends BaseResponse {
+    private String token;
 
-    public UserResponse(Integer status,
-                        MessageStatus message,
-                        List<UserDTO> data
-    ) {
+    public AuthenticationResponse(Integer status,
+                                  MessageStatus message,
+                                  String token) {
         super(status, message);
-        this.data = data;
+        this.token = token;
     }
 }

@@ -1,6 +1,5 @@
 package com.ecommerce.backend.user;
 
-import com.ecommerce.backend.shared.enums.Gender;
 import jakarta.validation.constraints.NotNull;
 
 public record UserRegistrationRequest(
@@ -10,8 +9,11 @@ public record UserRegistrationRequest(
         String password,
         @NotNull
         String fullName,
+        @NotNull
         Gender gender,
+        @NotNull
         String phone,
+        @NotNull
         String image
 ) {
 }

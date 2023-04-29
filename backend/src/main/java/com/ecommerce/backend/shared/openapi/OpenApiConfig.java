@@ -1,4 +1,4 @@
-package com.ecommerce.backend.shared.configuration;
+package com.ecommerce.backend.shared.openapi;
 
 
 import io.swagger.v3.oas.models.OpenAPI;

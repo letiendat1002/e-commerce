@@ -13,26 +13,6 @@ CREATE SCHEMA IF NOT EXISTS `myecommerce` ;
 USE `myecommerce` ;
 
 -- -----------------------------------------------------
--- Table `myecommerce`.`EmailValidationStatus`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`EmailValidationStatus` (
-  `EmailValidationStatusID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`EmailValidationStatusID`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `myecommerce`.`UserRole`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `myecommerce`.`UserRole` (
-  `UserRoleID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`UserRoleID`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `myecommerce`.`User`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
@@ -43,29 +23,17 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
   `Gender` VARCHAR(255) NOT NULL,
   `Phone` VARCHAR(255) NOT NULL,
   `Image` VARCHAR(255) NOT NULL,
+  `Role` VARCHAR(255) NOT NULL,
   `EmailConfirmationToken` VARCHAR(255) NULL,
   `EmailTokenGenerationTime` TIMESTAMP NOT NULL,
-  `EmailValidationStatusID` BIGINT UNSIGNED NOT NULL,
+  `EmailValidationStatus` VARCHAR(255) NOT NULL,
   `PasswordRecoveryToken` VARCHAR(255) NULL,
   `RecoveryTokenTime` TIMESTAMP NOT NULL,
-  `UserRoleID` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`UserID`, `EmailValidationStatusID`, `UserRoleID`),
+  PRIMARY KEY (`UserID`),
   UNIQUE INDEX `email_UNIQUE` (`Email` ASC) VISIBLE,
   UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE,
   UNIQUE INDEX `PasswordResetToken_UNIQUE` (`PasswordRecoveryToken` ASC) VISIBLE,
-  INDEX `fk_User_EmailValidationStatus1_idx` (`EmailValidationStatusID` ASC) VISIBLE,
-  UNIQUE INDEX `EmailConfirmationToken_UNIQUE` (`EmailConfirmationToken` ASC) VISIBLE,
-  INDEX `fk_User_UserRole1_idx` (`UserRoleID` ASC) VISIBLE,
-  CONSTRAINT `fk_User_EmailValidationStatus1`
-    FOREIGN KEY (`EmailValidationStatusID`)
-    REFERENCES `myecommerce`.`EmailValidationStatus` (`EmailValidationStatusID`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT,
-  CONSTRAINT `fk_User_UserRole1`
-    FOREIGN KEY (`UserRoleID`)
-    REFERENCES `myecommerce`.`UserRole` (`UserRoleID`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT)
+  UNIQUE INDEX `EmailConfirmationToken_UNIQUE` (`EmailConfirmationToken` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
