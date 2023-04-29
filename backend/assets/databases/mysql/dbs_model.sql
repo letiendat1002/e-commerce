@@ -24,16 +24,10 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
   `Phone` VARCHAR(255) NOT NULL,
   `Image` VARCHAR(255) NOT NULL,
   `Role` VARCHAR(255) NOT NULL,
-  `EmailConfirmationToken` VARCHAR(255) NULL,
-  `EmailTokenGenerationTime` TIMESTAMP NOT NULL,
   `EmailValidationStatus` VARCHAR(255) NOT NULL,
-  `PasswordRecoveryToken` VARCHAR(255) NULL,
-  `RecoveryTokenTime` TIMESTAMP NOT NULL,
   PRIMARY KEY (`UserID`),
   UNIQUE INDEX `email_UNIQUE` (`Email` ASC) VISIBLE,
-  UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE,
-  UNIQUE INDEX `PasswordResetToken_UNIQUE` (`PasswordRecoveryToken` ASC) VISIBLE,
-  UNIQUE INDEX `EmailConfirmationToken_UNIQUE` (`EmailConfirmationToken` ASC) VISIBLE)
+  UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 

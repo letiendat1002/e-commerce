@@ -1,5 +1,8 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.user.enums.EmailValidationStatus;
+import com.ecommerce.backend.user.enums.Gender;
+import com.ecommerce.backend.user.enums.UserRole;
 import com.ecommerce.backend.useraddress.UserAddress;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -55,28 +57,17 @@ public class User implements UserDetails {
     @Column(name = "Image")
     private String image;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private List<UserAddress> userAddresses;
-
     @Column(name = "Role")
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.CUSTOMER;
 
-    @Column(name = "EmailConfirmationToken")
-    private String emailConfirmationToken = "";
-
-    @Column(name = "EmailTokenGenerationTime")
-    private Timestamp emailTokenGenerationTime = new Timestamp(System.currentTimeMillis());
-
     @Column(name = "EmailValidationStatus")
-    private String emailValidationStatus = "NOT_VALIDATED";
+    @Enumerated(EnumType.STRING)
+    private EmailValidationStatus emailValidationStatus = EmailValidationStatus.NOT_VALIDATED;
 
-    @Column(name = "PasswordRecoveryToken")
-    private String passwordRecoveryToken = "";
-
-    @Column(name = "RecoveryTokenTime")
-    private Timestamp recoveryTokenTime = new Timestamp(System.currentTimeMillis());
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<UserAddress> userAddresses;
 
     public User(String email,
                 String password,

@@ -1,4 +1,4 @@
-package com.ecommerce.backend.user;
+package com.ecommerce.backend.user.enums;
 
 public enum Gender {
     MALE,

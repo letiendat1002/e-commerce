@@ -1,10 +1,14 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.user.enums.Gender;
+import com.ecommerce.backend.user.enums.UserRole;
 import jakarta.validation.constraints.NotNull;
 
-public record UserUpdateRequest (
+import java.util.List;
+
+public record UserUpdateRequest(
         @NotNull
-        String email,
+        List<UserRole> roles,
         @NotNull
         String fullName,
         @NotNull
@@ -13,5 +17,5 @@ public record UserUpdateRequest (
         String phone,
         @NotNull
         String image
-){
+) {
 }

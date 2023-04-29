@@ -2,7 +2,10 @@ package com.ecommerce.backend.shared.exception.handler;
 
 import com.ecommerce.backend.shared.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,14 +54,53 @@ public class DefaultExceptionHandler {
         );
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleException(
+            DataIntegrityViolationException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getCause().getCause().getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
     @ExceptionHandler(DuplicateResourceException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse handleException(
             DuplicateResourceException exception,
             HttpServletRequest request) {
         return new ApiResponse(
                 request.getRequestURI(),
-                HttpStatus.CONFLICT.value(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(InsufficientAuthenticationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiResponse handleException(
+            InsufficientAuthenticationException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.FORBIDDEN.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse handleException(
+            BadCredentialsException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.UNAUTHORIZED.value(),
                 exception.getMessage(),
                 LocalDateTime.now()
         );

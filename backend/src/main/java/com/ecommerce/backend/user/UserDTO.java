@@ -1,5 +1,7 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.user.enums.Gender;
+
 import java.math.BigInteger;
 import java.util.List;
 

@@ -107,36 +107,39 @@ public class UserServiceImpl implements UserService {
     private void checkAndUpdateChangesOrThrow(UserUpdateRequest request, User user) {
         var isChanged = false;
 
-        if (request.email() != null
-                && !request.email().equals(user.getEmail())
-        ) {
-            checkIfUserNotExistsByEmailOrThrow(request.email());
-            user.setEmail(request.email());
-            isChanged = true;
-        }
-
         if (request.fullName() != null
                 && !request.fullName().equals(user.getFullName())
         ) {
             user.setFullName(request.fullName());
+            isChanged = true;
         }
 
         if (request.gender() != null
                 && !request.gender().equals(user.getGender())
         ) {
             user.setGender(request.gender());
+            isChanged = true;
         }
 
         if (request.phone() != null
                 && !request.phone().equals(user.getPhone())
         ) {
             user.setPhone(request.phone());
+            isChanged = true;
         }
 
         if (request.image() != null
                 && !request.image().equals(user.getImage())
         ) {
             user.setImage(request.image());
+            isChanged = true;
+        }
+
+        if (request.roles() != null
+                && !request.roles().get(0).equals(user.getRole())
+        ) {
+            user.setRole(request.roles().get(0));
+            isChanged = true;
         }
 
         if (!isChanged) {
