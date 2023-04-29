@@ -23,6 +23,8 @@ public record ProductDTO(
         String hardDisk,
         String camera,
         String battery,
+        String memory,
+        String demand,
         Boolean status
 ) {
 }

@@ -48,11 +48,4 @@
 ![connection-run](../assets/images/database/connection-run.png)
 ![connection_result](../assets/images/database/connection_result.png)
 
-
-- On tab **Database**, New -> Query Console (Ctrl + Shift + Q), paste the below query then execute (because Category API is not currently available):
-
-
-    INSERT INTO myecommerce.Category VALUES (1, "laptop", "slug", "image");
-
-
-Now you can work with Product API. Check [APIs documentation](APIs.md) for more information.
+Now you can work with the API. Check [APIs documentation](APIs.md) for more information.
