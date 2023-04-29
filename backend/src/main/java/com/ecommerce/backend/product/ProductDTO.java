@@ -14,7 +14,7 @@ public record ProductDTO(
         BigInteger unitPrice,
         Long quantity,
         String description,
-        String yearRelease,
+        Integer yearRelease,
         String manufacturer,
         String monitor,
         String cpu,

@@ -66,17 +66,16 @@ public class CategoryServiceImpl implements CategoryService {
         var isExisted = categoryDAO.existsCategoryBySlug(slug);
         if (isExisted) {
             throw new DuplicateResourceException(
-                    "Category already exists by slug {%s}".formatted(slug)
+                    "Category with slug {%s} is already existed".formatted(slug)
             );
         }
     }
 
     @Override
     public CategoryDTO updateCategory(BigInteger categoryID, CategoryRequest request) {
-        checkIfOtherCategoryNotExistsBySlugOrThrow(request.slug(), categoryID);
-
         var category = selectCategoryByIdOrThrow(categoryID);
 
+        checkIfOtherCategoryNotExistsBySlugOrThrow(request.slug(), categoryID);
         checkAndUpdateChangesOrThrow(request, category);
 
         return categoryDAO
@@ -127,7 +126,7 @@ public class CategoryServiceImpl implements CategoryService {
         var isExisted = categoryDAO.existsOtherCategoryBySlug(slug, categoryID);
         if (isExisted) {
             throw new DuplicateResourceException(
-                    "Category already exists by slug {%s}".formatted(slug)
+                    "Category with slug {%s} is already existed".formatted(slug)
             );
         }
     }
