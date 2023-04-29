@@ -65,7 +65,7 @@ public class Product {
     private String description;
 
     @Column(name = "YearRelease")
-    private String yearRelease;
+    private Integer yearRelease;
 
     @Column(name = "Manufacturer")
     private String manufacturer;
@@ -110,7 +110,7 @@ public class Product {
                    BigInteger unitPrice,
                    Long quantity,
                    String description,
-                   String yearRelease,
+                   Integer yearRelease,
                    String manufacturer,
                    String monitor,
                    String cpu,

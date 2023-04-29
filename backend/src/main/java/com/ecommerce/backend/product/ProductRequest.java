@@ -35,7 +35,7 @@ public record ProductRequest(
         String description,
 
         @NotNull
-        String yearRelease,
+        Integer yearRelease,
 
         @NotNull
         String manufacturer,

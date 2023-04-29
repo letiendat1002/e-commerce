@@ -59,9 +59,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO addProduct(ProductRequest request) {
+        var category = selectCategoryByIdOrThrow(request.categoryID());
+
         checkIfProductNotExistsBySlugOrThrow(request.slug());
 
-        var category = selectCategoryByIdOrThrow(request.categoryID());
         var product = new Product(
                 category,
                 request.name(),
@@ -101,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
         var isExisted = productDAO.existsAnyProductBySlug(slug);
         if (isExisted) {
             throw new DuplicateResourceException(
-                    "Product already exists by slug {%s}".formatted(slug)
+                    "Product with slug {%s} is already existed".formatted(slug)
             );
         }
     }
@@ -133,10 +134,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(BigInteger productID, ProductRequest request) {
-        checkIfOtherProductNotExistsBySlugOrThrow(request.slug(), productID);
-
         var product = selectProductByIdOrThrow(productID);
 
+        checkIfOtherProductNotExistsBySlugOrThrow(request.slug(), productID);
         checkAndUpdateChangesOrThrow(request, product);
 
         return productDAO
@@ -285,6 +285,20 @@ public class ProductServiceImpl implements ProductService {
             isChanged = true;
         }
 
+        if (request.memory() != null
+                && !request.memory().equals(product.getMemory())
+        ) {
+            product.setMemory(request.memory());
+            isChanged = true;
+        }
+
+        if (request.demand() != null
+                && !request.demand().equals(product.getDemand())
+        ) {
+            product.setDemand(request.demand());
+            isChanged = true;
+        }
+
         if (!isChanged) {
             throw new DuplicateResourceException(
                     "No data changes detected"
@@ -299,7 +313,7 @@ public class ProductServiceImpl implements ProductService {
         var isExisted = productDAO.existsOtherProductBySlug(slug, productID);
         if (isExisted) {
             throw new DuplicateResourceException(
-                    "Product already exists by slug {%s}".formatted(slug)
+                    "Product with slug {%s} is already existed".formatted(slug)
             );
         }
     }
