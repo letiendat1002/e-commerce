@@ -1,12 +1,11 @@
 package com.ecommerce.backend.product;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigInteger;
 
 public record ProductRequest(
-        @NotBlank(message = "Category ID must not be blank")
+        @NotNull(message = "Category ID must not be null")
         BigInteger categoryID,
 
         @NotNull(message = "Name must not be null")

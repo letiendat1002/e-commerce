@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigInteger;
 
 public record UserAddressRequest(
-        @NotBlank(message = "User ID must not be blank")
+        @NotNull(message = "User ID must not be null")
         BigInteger userID,
         @NotNull(message = "Address must not be null")
         String address

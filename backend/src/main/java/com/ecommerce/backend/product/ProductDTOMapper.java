@@ -10,7 +10,7 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
     public ProductDTO apply(Product product) {
         return new ProductDTO(
                 product.getProductID(),
-                product.getCategory().getCategoryID(),
+                product.getCategory() != null ? product.getCategory().getCategoryID() : null,
                 product.getName(),
                 product.getSlug(),
                 product.getImage(),
