@@ -7,12 +7,10 @@ import com.ecommerce.backend.useraddress.UserAddress;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,8 +83,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        var authority = new SimpleGrantedAuthority(role.name());
-        return Collections.singletonList(authority);
+        return role.getGrantedAuthorities();
     }
 
     @Override

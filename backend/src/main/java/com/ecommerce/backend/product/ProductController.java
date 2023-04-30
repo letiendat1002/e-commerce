@@ -5,6 +5,7 @@ import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,11 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('product:read')")
     public ProductResponse getProducts(
             @RequestParam(value = "categoryID", required = false) BigInteger categoryID
     ) {
-        List<ProductDTO> productDTOList = null;
+        List<ProductDTO> productDTOList;
 
         if (categoryID == null) {
             productDTOList = productService.fetchAllProducts();
@@ -38,6 +40,7 @@ public class ProductController {
     }
 
     @GetMapping("{productID}")
+    @PreAuthorize("hasAuthority('product:read')")
     public ProductResponse getProductByProductID(
             @PathVariable("productID") BigInteger productID
     ) {
@@ -51,6 +54,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('product:write')")
     public ProductResponse postProduct(
             @Validated @RequestBody ProductRequest request,
             BindingResult errors
@@ -69,6 +73,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{productID}")
+    @PreAuthorize("hasAuthority('product:write')")
     public BaseResponse deleteProduct(
             @PathVariable("productID") BigInteger productID
     ) {
@@ -81,6 +86,7 @@ public class ProductController {
     }
 
     @PutMapping("{productID}")
+    @PreAuthorize("hasAuthority('product:write')")
     public ProductResponse putProduct(
             @PathVariable("productID") BigInteger productID,
             @Validated @RequestBody ProductRequest request,

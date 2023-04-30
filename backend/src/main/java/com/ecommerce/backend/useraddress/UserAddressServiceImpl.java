@@ -113,15 +113,14 @@ public class UserAddressServiceImpl implements UserAddressService {
     private void checkAndUpdateChangesOrThrow(UserAddressRequest request, UserAddress userAddress) {
         var isChanged = false;
 
-        if (request.userID() != null
-                && !request.userID().equals(userAddress.getUser().getUserID())
+        if (!request.userID().equals(userAddress.getUser().getUserID())
         ) {
             var user = selectUserByIdOrThrow(request.userID());
             userAddress.setUser(user);
             isChanged = true;
         }
 
-        if (!userAddress.getAddress().equals(request.address())) {
+        if (!request.address().equals(userAddress.getAddress())) {
             userAddress.setAddress(request.address());
             isChanged = true;
         }

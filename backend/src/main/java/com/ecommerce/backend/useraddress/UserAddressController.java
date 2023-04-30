@@ -6,6 +6,7 @@ import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class UserAddressController {
     private final UserAddressService userAddressService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('user_address:read')")
     public UserAddressResponse getUserAddresses(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
@@ -39,6 +41,7 @@ public class UserAddressController {
     }
 
     @GetMapping("{userAddressID}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
     public UserAddressResponse getUserAddressByID(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
@@ -52,6 +55,7 @@ public class UserAddressController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('user_address:write')")
     public UserAddressResponse postUserAddress(
             @Validated @RequestBody UserAddressRequest request,
             BindingResult errors
@@ -70,6 +74,7 @@ public class UserAddressController {
     }
 
     @DeleteMapping("{userAddressID}")
+    @PreAuthorize("hasAuthority('user_address:write')")
     public BaseResponse deleteUserAddress(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
@@ -82,6 +87,7 @@ public class UserAddressController {
     }
 
     @PutMapping("{userAddressID}")
+    @PreAuthorize("hasAuthority('user_address:write')")
     public UserAddressResponse putUserAddress(
             @PathVariable("userAddressID") BigInteger userAddressID,
             @Validated @RequestBody UserAddressRequest request,

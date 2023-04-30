@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO addUser(UserRegistrationRequest request) {
         checkIfUserNotExistsByEmailOrThrow(request.email());
+        checkIfUserExistsByPhoneOrThrow(request.phone());
 
         var user = new User(
                 request.email(),
@@ -88,10 +89,20 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    private void checkIfUserExistsByPhoneOrThrow(String phone) {
+        var isExisted = userDAO.existsUserByPhone(phone);
+        if (isExisted) {
+            throw new DuplicateResourceException(
+                    "Phone {%s} is already taken".formatted(phone)
+            );
+        }
+    }
+
     @Override
     public UserDTO updateUser(BigInteger userID, UserUpdateRequest request) {
         var user = selectUserByUserIdOrThrow(userID);
 
+        checkIfOtherUserExistsByPhoneOrThrow(request.phone(), userID);
         checkAndUpdateChangesOrThrow(request, user);
 
         return userDAO
@@ -104,39 +115,43 @@ public class UserServiceImpl implements UserService {
                 );
     }
 
+    private void checkIfOtherUserExistsByPhoneOrThrow(String phone, BigInteger userID) {
+        var isExisted = userDAO.existsOtherUserByPhone(phone, userID);
+        if (isExisted) {
+            throw new DuplicateResourceException(
+                    "Phone {%s} is already taken".formatted(phone)
+            );
+        }
+    }
+
     private void checkAndUpdateChangesOrThrow(UserUpdateRequest request, User user) {
         var isChanged = false;
 
-        if (request.fullName() != null
-                && !request.fullName().equals(user.getFullName())
+        if (!request.fullName().equals(user.getFullName())
         ) {
             user.setFullName(request.fullName());
             isChanged = true;
         }
 
-        if (request.gender() != null
-                && !request.gender().equals(user.getGender())
+        if (!request.gender().equals(user.getGender())
         ) {
             user.setGender(request.gender());
             isChanged = true;
         }
 
-        if (request.phone() != null
-                && !request.phone().equals(user.getPhone())
+        if (!request.phone().equals(user.getPhone())
         ) {
             user.setPhone(request.phone());
             isChanged = true;
         }
 
-        if (request.image() != null
-                && !request.image().equals(user.getImage())
+        if (!request.image().equals(user.getImage())
         ) {
             user.setImage(request.image());
             isChanged = true;
         }
 
-        if (request.roles() != null
-                && !request.roles().get(0).equals(user.getRole())
+        if (!request.roles().get(0).equals(user.getRole())
         ) {
             user.setRole(request.roles().get(0));
             isChanged = true;

@@ -149,149 +149,134 @@ public class ProductServiceImpl implements ProductService {
     private void checkAndUpdateChangesOrThrow(ProductRequest request, Product product) {
         var isChanged = false;
 
-        if (request.categoryID() != null
-                && !request.categoryID().equals(product.getCategory().getCategoryID())
-        ) {
+        if (product.getCategory() != null) {
+            if (!request.categoryID().equals(product.getCategory().getCategoryID())
+            ) {
+                var category = selectCategoryByIdOrThrow(request.categoryID());
+                product.setCategory(category);
+                isChanged = true;
+            }
+        } else {
             var category = selectCategoryByIdOrThrow(request.categoryID());
             product.setCategory(category);
             isChanged = true;
         }
 
-        if (request.name() != null
-                && !request.name().equals(product.getName())
+        if (!request.name().equals(product.getName())
         ) {
             product.setName(request.name());
             isChanged = true;
         }
 
-        if (request.slug() != null
-                && !request.slug().equals(product.getSlug())
+        if (!request.slug().equals(product.getSlug())
         ) {
             product.setSlug(request.slug());
             isChanged = true;
         }
 
-        if (request.image() != null
-                && !request.image().equals(product.getImage())
+        if (!request.image().equals(product.getImage())
         ) {
             product.setImage(request.image());
             isChanged = true;
         }
 
-        if (request.imageReview1() != null
-                && !request.imageReview1().equals(product.getImageReview1())
+        if (!request.imageReview1().equals(product.getImageReview1())
         ) {
             product.setImageReview1(request.imageReview1());
             isChanged = true;
         }
 
-        if (request.imageReview2() != null
-                && !request.imageReview2().equals(product.getImageReview2())
+        if (!request.imageReview2().equals(product.getImageReview2())
         ) {
             product.setImageReview2(request.imageReview2());
             isChanged = true;
         }
 
-        if (request.imageReview3() != null
-                && !request.imageReview3().equals(product.getImageReview3())
+        if (!request.imageReview3().equals(product.getImageReview3())
         ) {
             product.setImageReview3(request.imageReview3());
             isChanged = true;
         }
 
-        if (request.unitPrice() != null
-                && !request.unitPrice().equals(product.getUnitPrice())
+        if (!request.unitPrice().equals(product.getUnitPrice())
         ) {
             product.setUnitPrice(request.unitPrice());
             isChanged = true;
         }
 
-        if (request.quantity() != null
-                && !request.quantity().equals(product.getQuantity())
+        if (!request.quantity().equals(product.getQuantity())
         ) {
             product.setQuantity(request.quantity());
             isChanged = true;
         }
 
-        if (request.description() != null
-                && !request.description().equals(product.getDescription())
+        if (!request.description().equals(product.getDescription())
         ) {
             product.setDescription(request.description());
             isChanged = true;
         }
 
-        if (request.yearRelease() != null
-                && !request.yearRelease().equals(product.getYearRelease())
+        if (!request.yearRelease().equals(product.getYearRelease())
         ) {
             product.setYearRelease(request.yearRelease());
             isChanged = true;
         }
 
-        if (request.manufacturer() != null
-                && !request.manufacturer().equals(product.getManufacturer())
+        if (!request.manufacturer().equals(product.getManufacturer())
         ) {
             product.setManufacturer(request.manufacturer());
             isChanged = true;
         }
 
-        if (request.monitor() != null
-                && !request.monitor().equals(product.getMonitor())
+        if (!request.monitor().equals(product.getMonitor())
         ) {
             product.setMonitor(request.monitor());
             isChanged = true;
         }
 
-        if (request.cpu() != null
-                && !request.cpu().equals(product.getCpu())
+        if (!request.cpu().equals(product.getCpu())
         ) {
             product.setCpu(request.cpu());
             isChanged = true;
         }
 
-        if (request.ram() != null
-                && !request.ram().equals(product.getRam())
+        if (!request.ram().equals(product.getRam())
         ) {
             product.setRam(request.ram());
             isChanged = true;
         }
 
-        if (request.vga() != null
-                && !request.vga().equals(product.getVga())
+        if (!request.vga().equals(product.getVga())
         ) {
             product.setVga(request.vga());
             isChanged = true;
         }
 
-        if (request.hardDisk() != null
-                && !request.hardDisk().equals(product.getHardDisk())
+        if (!request.hardDisk().equals(product.getHardDisk())
         ) {
             product.setHardDisk(request.hardDisk());
             isChanged = true;
         }
 
-        if (request.camera() != null
-                && !request.camera().equals(product.getCamera())
+        if (!request.camera().equals(product.getCamera())
         ) {
             product.setCamera(request.camera());
             isChanged = true;
         }
 
-        if (request.battery() != null
-                && !request.battery().equals(product.getBattery())
+        if (!request.battery().equals(product.getBattery())
         ) {
             product.setBattery(request.battery());
             isChanged = true;
         }
 
-        if (request.memory() != null
-                && !request.memory().equals(product.getMemory())
+        if (!request.memory().equals(product.getMemory())
         ) {
             product.setMemory(request.memory());
             isChanged = true;
         }
 
-        if (request.demand() != null
-                && !request.demand().equals(product.getDemand())
+        if (!request.demand().equals(product.getDemand())
         ) {
             product.setDemand(request.demand());
             isChanged = true;

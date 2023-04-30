@@ -15,6 +15,10 @@ public interface UserDAO {
 
     boolean existsUserByID(BigInteger userID);
 
+    boolean existsUserByPhone(String phone);
+
+    boolean existsOtherUserByPhone(String phone, BigInteger userID);
+
     Optional<User> insertUser(User user);
 
     void deleteUserByID(BigInteger userID);

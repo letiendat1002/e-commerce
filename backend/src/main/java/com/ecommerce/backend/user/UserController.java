@@ -5,6 +5,7 @@ import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('user:read')")
     public UserResponse getUsers() {
         var userDTOList = userService.fetchAllUsers();
 
@@ -30,6 +32,7 @@ public class UserController {
     }
 
     @GetMapping("{userID}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
     public UserResponse getUserByUserID(
             @PathVariable("userID") BigInteger userID
     ) {
@@ -43,6 +46,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('user:write')")
     public UserResponse postUser(
             @Validated @RequestBody UserRegistrationRequest request,
             BindingResult errors
@@ -61,6 +65,7 @@ public class UserController {
     }
 
     @DeleteMapping("{userID}")
+    @PreAuthorize("hasAuthority('user:write')")
     public BaseResponse deleteUser(
             @PathVariable("userID") BigInteger userID
     ) {
@@ -73,6 +78,7 @@ public class UserController {
     }
 
     @PutMapping("{userID}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
     public UserResponse putUser(
             @PathVariable("userID") BigInteger userID,
             @Validated @RequestBody UserUpdateRequest request,

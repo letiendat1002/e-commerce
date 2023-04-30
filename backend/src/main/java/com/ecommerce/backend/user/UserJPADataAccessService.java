@@ -39,6 +39,16 @@ public class UserJPADataAccessService implements UserDAO {
     }
 
     @Override
+    public boolean existsUserByPhone(String phone) {
+        return userRepository.existsByPhone(phone);
+    }
+
+    @Override
+    public boolean existsOtherUserByPhone(String phone, BigInteger userID) {
+        return userRepository.existsByPhoneAndUserIDNot(phone, userID);
+    }
+
+    @Override
     public Optional<User> insertUser(User user) {
         return Optional.of(userRepository.save(user));
     }
