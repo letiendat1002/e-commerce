@@ -1,5 +1,3 @@
--- MySQL Workbench Forward Engineering
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -15,22 +13,59 @@ CREATE SCHEMA IF NOT EXISTS `myecommerce` ;
 USE `myecommerce` ;
 
 -- -----------------------------------------------------
+-- Table `myecommerce`.`EmailValidationStatus`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `myecommerce`.`EmailValidationStatus` (
+  `EmailValidationStatusID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`EmailValidationStatusID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `myecommerce`.`UserRole`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `myecommerce`.`UserRole` (
+  `UserRoleID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`UserRoleID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `myecommerce`.`User`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
   `UserID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Username` VARCHAR(255) NOT NULL,
+  `Email` VARCHAR(254) NOT NULL,
   `Password` VARCHAR(255) NOT NULL,
-  `Role` VARCHAR(255) NOT NULL,
-  `Fullname` VARCHAR(255) NOT NULL,
-  `Gender` VARCHAR(255) NULL,
-  `Email` VARCHAR(255) NOT NULL,
-  `Phone` VARCHAR(255) NULL,
-  `Image` VARCHAR(255) NULL,
-  PRIMARY KEY (`UserID`),
-  UNIQUE INDEX `username_UNIQUE` (`Username` ASC) VISIBLE,
+  `FullName` VARCHAR(255) NOT NULL,
+  `Gender` VARCHAR(255) NOT NULL,
+  `Phone` VARCHAR(255) NOT NULL,
+  `Image` VARCHAR(255) NOT NULL,
+  `EmailConfirmationToken` VARCHAR(255) NULL,
+  `EmailTokenGenerationTime` TIMESTAMP NOT NULL,
+  `EmailValidationStatusID` BIGINT UNSIGNED NOT NULL,
+  `PasswordRecoveryToken` VARCHAR(255) NULL,
+  `RecoveryTokenTime` TIMESTAMP NOT NULL,
+  `UserRoleID` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`UserID`, `EmailValidationStatusID`, `UserRoleID`),
   UNIQUE INDEX `email_UNIQUE` (`Email` ASC) VISIBLE,
-  UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE)
+  UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE,
+  UNIQUE INDEX `PasswordResetToken_UNIQUE` (`PasswordRecoveryToken` ASC) VISIBLE,
+  INDEX `fk_User_EmailValidationStatus1_idx` (`EmailValidationStatusID` ASC) VISIBLE,
+  UNIQUE INDEX `EmailConfirmationToken_UNIQUE` (`EmailConfirmationToken` ASC) VISIBLE,
+  INDEX `fk_User_UserRole1_idx` (`UserRoleID` ASC) VISIBLE,
+  CONSTRAINT `fk_User_EmailValidationStatus1`
+    FOREIGN KEY (`EmailValidationStatusID`)
+    REFERENCES `myecommerce`.`EmailValidationStatus` (`EmailValidationStatusID`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT,
+  CONSTRAINT `fk_User_UserRole1`
+    FOREIGN KEY (`UserRoleID`)
+    REFERENCES `myecommerce`.`UserRole` (`UserRoleID`)
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT)
 ENGINE = InnoDB;
 
 
@@ -79,7 +114,8 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Category` (
   `Name` VARCHAR(255) NOT NULL,
   `Slug` VARCHAR(255) NOT NULL,
   `Image` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`CategoryID`))
+  PRIMARY KEY (`CategoryID`),
+  UNIQUE INDEX `Slug_UNIQUE` (`Slug` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -92,10 +128,12 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `Name` VARCHAR(255) NOT NULL,
   `Slug` VARCHAR(255) NOT NULL,
   `Image` VARCHAR(255) NOT NULL,
+  `ImageReview1` VARCHAR(255) NOT NULL,
+  `ImageReview2` VARCHAR(255) NOT NULL,
+  `ImageReview3` VARCHAR(255) NOT NULL,
   `UnitPrice` BIGINT UNSIGNED NOT NULL,
   `Quantity` INT UNSIGNED NOT NULL,
-  `Description` VARCHAR(255) NOT NULL,
-  `Status` BIT(1) NOT NULL,
+  `Description` LONGTEXT NOT NULL,
   `YearRelease` SMALLINT(4) NOT NULL,
   `Manufacturer` VARCHAR(255) NOT NULL,
   `Monitor` VARCHAR(255) NOT NULL,
@@ -105,8 +143,12 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `HardDisk` VARCHAR(255) NOT NULL,
   `Camera` VARCHAR(255) NOT NULL,
   `Battery` VARCHAR(255) NOT NULL,
+  `Memory` VARCHAR(255) NOT NULL,
+  `Demand` VARCHAR(255) NOT NULL,
+  `Status` BIT(1) NOT NULL,
   PRIMARY KEY (`ProductID`),
   INDEX `fk_Product_Category1_idx` (`CategoryID` ASC) VISIBLE,
+  UNIQUE INDEX `Slug_UNIQUE` (`Slug` ASC) VISIBLE,
   CONSTRAINT `fk_Product_Category1`
     FOREIGN KEY (`CategoryID`)
     REFERENCES `myecommerce`.`Category` (`CategoryID`)
@@ -147,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Rating` (
   `OrderID` BIGINT UNSIGNED NOT NULL,
   `ProductID` BIGINT UNSIGNED NOT NULL,
   `RateAmount` TINYINT(1) UNSIGNED NOT NULL,
-  `Comment` VARCHAR(255) NOT NULL,
+  `Comment` LONGTEXT NOT NULL,
   `DateRating` DATE NOT NULL,
   PRIMARY KEY (`UserID`, `OrderID`, `ProductID`),
   INDEX `fk_Rating_OrderDetail1_idx` (`OrderID` ASC, `ProductID` ASC) VISIBLE,
