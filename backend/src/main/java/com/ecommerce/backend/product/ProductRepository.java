@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, BigInteger> {
@@ -15,6 +14,4 @@ public interface ProductRepository extends JpaRepository<Product, BigInteger> {
     boolean existsBySlug(String slug);
 
     boolean existsBySlugAndProductIDNot(String slug, BigInteger productID);
-
-    Optional<Product> findBySlug(String slug);
 }

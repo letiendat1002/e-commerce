@@ -27,7 +27,7 @@ public class ProductController {
         if (categoryID == null) {
             productDTOList = productService.fetchAllProducts();
         } else {
-            productDTOList = productService.fetchAllProductsByCategory(categoryID);
+            productDTOList = productService.fetchAllProductsByCategoryID(categoryID);
         }
 
         return new ProductResponse(
@@ -42,19 +42,6 @@ public class ProductController {
             @PathVariable("productID") BigInteger productID
     ) {
         var productDTOList = List.of(productService.fetchProductByProductID(productID));
-
-        return new ProductResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                productDTOList
-        );
-    }
-
-    @GetMapping("search/{slug}")
-    public ProductResponse getProductBySlug(
-            @PathVariable("slug") String slug
-    ) {
-        var productDTOList = List.of(productService.fetchProductBySlug(slug));
 
         return new ProductResponse(
                 HttpStatus.OK.value(),

@@ -23,11 +23,6 @@ public class CategoryJPADataAccessService implements CategoryDAO {
     }
 
     @Override
-    public Optional<Category> selectCategoryBySlug(String slug) {
-        return categoryRepository.findBySlug(slug);
-    }
-
-    @Override
     public Optional<Category> insertCategory(Category category) {
         return Optional.of(categoryRepository.save(category));
     }

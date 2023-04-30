@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> fetchAllProductsByCategory(BigInteger categoryID) {
+    public List<ProductDTO> fetchAllProductsByCategoryID(BigInteger categoryID) {
         var category = selectCategoryByIdOrThrow(categoryID);
 
         return productDAO
@@ -43,18 +43,6 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO fetchProductByProductID(BigInteger productID) {
         return productDTOMapper
                 .apply(selectProductByIdOrThrow(productID));
-    }
-
-    @Override
-    public ProductDTO fetchProductBySlug(String slug) {
-        return productDAO
-                .selectProductBySlug(slug)
-                .map(productDTOMapper)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Product not found by slug {%s}".formatted(slug)
-                        )
-                );
     }
 
     @Override
@@ -136,6 +124,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(BigInteger productID, ProductRequest request) {
         var product = selectProductByIdOrThrow(productID);
 
+        checkIfCategoryExistsByIdOrThrow(request.categoryID());
         checkIfOtherProductNotExistsBySlugOrThrow(request.slug(), productID);
         checkAndUpdateChangesOrThrow(request, product);
 
@@ -146,6 +135,15 @@ public class ProductServiceImpl implements ProductService {
                         () -> new FailedOperationException(
                                 "Failed to update product"
                         ));
+    }
+
+    private void checkIfCategoryExistsByIdOrThrow(BigInteger categoryID) {
+        var isExisted = categoryDAO.existsCategoryByID(categoryID);
+        if (!isExisted) {
+            throw new ResourceNotFoundException(
+                    "Category not found by categoryID {%d}".formatted(categoryID)
+            );
+        }
     }
 
     private void checkAndUpdateChangesOrThrow(ProductRequest request, Product product) {

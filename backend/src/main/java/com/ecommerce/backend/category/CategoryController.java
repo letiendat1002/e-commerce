@@ -42,19 +42,6 @@ public class CategoryController {
         );
     }
 
-    @GetMapping("search/{slug}")
-    public CategoryResponse getCategoryBySlug(
-            @PathVariable("slug") String slug
-    ) {
-        var categoryDTOList = List.of(categoryService.fetchCategoryBySlug(slug));
-
-        return new CategoryResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                categoryDTOList
-        );
-    }
-
     @PostMapping
     public CategoryResponse postCategory(
             @Validated @RequestBody CategoryRequest request,

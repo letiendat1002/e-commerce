@@ -1,73 +1,75 @@
 package com.ecommerce.backend.product;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigInteger;
 
 public record ProductRequest(
+        @NotBlank(message = "Category ID must not be blank")
         BigInteger categoryID,
 
-        @NotNull
+        @NotNull(message = "Name must not be null")
         String name,
 
-        @NotNull
+        @NotNull(message = "Slug must not be null")
         String slug,
 
-        @NotNull
+        @NotNull(message = "Image must not be null")
         String image,
 
-        @NotNull
+        @NotNull(message = "Image review 1 must not be null")
         String imageReview1,
 
-        @NotNull
+        @NotNull(message = "Image review 2 must not be null")
         String imageReview2,
 
-        @NotNull
+        @NotNull(message = "Image review 3 must not be null")
         String imageReview3,
 
-        @NotNull
+        @NotNull(message = "Unit price must not be null")
         BigInteger unitPrice,
 
-        @NotNull
+        @NotNull(message = "Quantity must not be null")
         Long quantity,
 
-        @NotNull
+        @NotNull(message = "Description must not be null")
         String description,
 
-        @NotNull
+        @NotNull(message = "Year release must not be null")
         Integer yearRelease,
 
-        @NotNull
+        @NotNull(message = "Manufacturer must not be null")
         String manufacturer,
 
-        @NotNull
+        @NotNull(message = "Monitor must not be null")
         String monitor,
 
-        @NotNull
+        @NotNull(message = "CPU must not be null")
         String cpu,
 
-        @NotNull
+        @NotNull(message = "RAM must not be null")
         String ram,
 
-        @NotNull
+        @NotNull(message = "VGA must not be null")
         String vga,
 
-        @NotNull
+        @NotNull(message = "Hard disk must not be null")
         String hardDisk,
 
-        @NotNull
+        @NotNull(message = "Camera must not be null")
         String camera,
 
-        @NotNull
+        @NotNull(message = "Battery must not be null")
         String battery,
 
-        @NotNull
+        @NotNull(message = "Memory must not be null")
         String memory,
 
-        @NotNull
+        @NotNull(message = "Demand must not be null")
         String demand,
 
-        @NotNull
+        @NotNull(message = "Status must not be null")
         Boolean status
 ) {
 }

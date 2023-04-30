@@ -31,18 +31,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO fetchCategoryBySlug(String slug) {
-        return categoryDAO
-                .selectCategoryBySlug(slug)
-                .map(categoryDTOMapper)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Category not found by slug {%s}".formatted(slug)
-                        )
-                );
-    }
-
-    @Override
     public CategoryDTO addCategory(CategoryRequest request) {
         checkIfCategoryNotExistsBySlugOrThrow(request.slug());
 

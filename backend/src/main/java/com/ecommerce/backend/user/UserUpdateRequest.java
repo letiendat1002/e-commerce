@@ -7,15 +7,15 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record UserUpdateRequest(
-        @NotNull
+        @NotNull(message = "Roles must not be null")
         List<UserRole> roles,
-        @NotNull
+        @NotNull(message = "Full name must not be null")
         String fullName,
-        @NotNull
+        @NotNull(message = "Gender must not be null")
         Gender gender,
-        @NotNull
+        @NotNull(message = "Phone number must not be null")
         String phone,
-        @NotNull
+        @NotNull(message = "Image must not be null")
         String image
 ) {
 }
