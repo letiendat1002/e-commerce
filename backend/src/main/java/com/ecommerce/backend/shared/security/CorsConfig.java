@@ -15,8 +15,7 @@ public class CorsConfig {
         var configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Collections.singletonList("*"));
-        configuration.setAllowedHeaders(Collections.singletonList("*"));
-        configuration.setExposedHeaders(Collections.singletonList("*"));
+        configuration.setAllowedHeaders(Collections.singletonList("Authorization"));
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
