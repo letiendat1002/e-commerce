@@ -71,7 +71,7 @@ public class JwtService {
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(
                         Date.from(
-                                Instant.now().plus(14, DAYS)
+                                Instant.now().plus(1, DAYS)
                         )
                 )
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
