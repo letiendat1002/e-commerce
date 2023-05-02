@@ -1,9 +1,10 @@
 package com.ecommerce.backend.auth;
 
+import com.ecommerce.backend.shared.response.BaseResponse;
 import com.ecommerce.backend.user.UserRegistrationRequest;
 
 public interface AuthenticationService {
-    String register(UserRegistrationRequest request);
+    BaseResponse register(UserRegistrationRequest request);
 
-    String authenticate(AuthenticationRequest request);
+    AuthenticationResponse authenticate(AuthenticationRequest request);
 }
