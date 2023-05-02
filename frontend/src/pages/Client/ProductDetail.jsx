@@ -13,20 +13,32 @@ import Slider from "react-slick";
 import productData from "../../Helper/GetProduct.js";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../Redux/slice/cartSlice.js";
-// import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
+import { getAllProducts } from "../../Redux/slice/productSlice.js";
+import { getAllCategories } from "../../Redux/slice/categorySlice.js";
+import { Skeleton } from "antd";
 
 const ProductDetail = ({match, history}) => {
   const {slug} = useParams();
   const [product, setProduct] = useState('')
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    Promise.all([dispatch(getAllProducts()),
+    dispatch(getAllCategories())
+  ])
+  }, [])
+
+  const item = useSelector(state => state.product?.data || [])
+  const productLoading = useSelector(state => state.product.productLoading);
+  const Products = item || []
   const [previewImg, setPreviewImg] = useState('');
+
   useEffect(() => {
     Products.map((product) => {
-      if (product.Slug === slug){
+      if (product.slug === slug){
         setProduct(product)
-        setPreviewImg(product.Image)
       }
-    })}, [product])
+  })},[Products])
 
   const settings = {
     infinite: true,
@@ -63,32 +75,38 @@ const ProductDetail = ({match, history}) => {
           }
   }
 
-  const [phone, setPhone] = useState(Products.filter(product => product.CategoryID === "2"))
-  const [laptop, setLaptop] = useState(Products.filter(product => product.CategoryID === "1"))
-  const [tablet, setTablet] = useState(Products.filter(product => product.CategoryID === "3"))
+    let phone = Products.filter(product => product.categoryID === 2);
+    let laptop = Products.filter(product => product.categoryID === 1);
+    let tablet = Products.filter(product => product.categoryID === 3);
+    let PC = Products.filter(product => product.categoryID === 4);
 
-  const AddToCartHandle = (product) => {
-    dispatch(addToCart(product))
+  const AddToCartHandle = (products) => {
+    dispatch(addToCart(products))
   };
 
   return (
     <div className="product__detail container-fluid"> 
-      <div className="product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
+      {
+        (productLoading === true) ? (
+          <Skeleton active />
+        ) : 
+        (
+          <div className="product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
         <div className="product-header col-lg-12 col-md-12 col-sm-12 col-12">
           <div className="product col-lg-12 col-sm-12 col-md-12 col-12 px-4 py-2">
               {
                 Products.map((product) => {
-                  if (product.Slug === slug){
+                  if (product.slug === slug){
                     return(
                       Catagory.map((catagory,idx) => {
-                        if (catagory.CategoryID === product.CategoryID){
+                        if (catagory.CategoryID == product.categoryID){
                           return (
                             <div className="breadcrumb" key={idx}>
                             <Link to={"/"}>Trang Chủ /</Link>
                                 <span>
                                 <a href={`/category/${catagory.slug}`}>{catagory.nameCatalogory}</a>
                                 </span>
-                              <span className="active">{product.Manufacturer}</span> 
+                              <span className="active">{product.manufacturer}</span> 
                             </div>  
                             )
                           }
@@ -98,7 +116,7 @@ const ProductDetail = ({match, history}) => {
                 })
               }
             <div className="product-title col-lg-9 col-md-12 col-sm-12 col-12">
-              <h2>{product.Name}</h2>
+              <h2>{product.name}</h2>
             </div>
             <span className="divider"></span>
           </div>
@@ -107,103 +125,124 @@ const ProductDetail = ({match, history}) => {
           <div className="single-product col-lg-12 col-md-12 col-sm-12 col-12 d-flex">
                     <div className="product-left col-lg-6 col-sm-12 col-md-12 col-12 pe-2 ps-2">
                   <div className="product-image-main">
-                    <img src={previewImg} alt="" id="product-main-image" />
+                    {
+                      Products.map((product) => {
+                        if (product.slug === slug && previewImg === ''){
+                          return (
+                            <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" id="product-main-image" />
+                          )
+                        }
+                        else if (product.slug === slug && previewImg != []){
+                          return (
+                            <img src={require(`../../assets/images/${product.productID}/${previewImg}`)} alt="" id="product-main-image" />
+                          )
+                        }
+                      })
+                    }
                   </div>
-                  <div className="product-image-slider col-lg-12 col-md-12 col-sm-12 col-12 pe-4">
-                    <img
-                      src={product.Image}
-                      alt=""
-                      className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
-                      onClick={() => setPreviewImg(product.Image)}
-                    />
-                    <img
-                      src={product.ImageReview2}
-                      alt=""
-                      className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
-                      onClick={() => setPreviewImg(product.ImageReview2)}
-                    />
-                    <img
-                      src={product.ImageReview3}
-                      alt=""
-                      className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
-                      onClick={() => setPreviewImg(product.ImageReview3)}
-                    />
-                    <img
-                      src={product.ImageReview4}
-                      alt=""
-                      className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
-                      onClick={() => setPreviewImg(product.ImageReview4)}
-                    />
-                </div>
+                    {
+                      Products.map((product) => {
+                        if (product.slug === slug){
+                          return (
+                            <div className="product-image-slider col-lg-12 col-md-12 col-sm-12 col-12 pe-4">
+                              <img
+                                  src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)}
+                                  alt=""
+                                  className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
+                                  onClick={() => setPreviewImg(product.imageReview1)}
+                                  />
+                              <img
+                                src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)}
+                                alt=""
+                                className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
+                                onClick={() => setPreviewImg(product.imageReview2)}
+                              />
+                              <img
+                                src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)}
+                                alt=""
+                                className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
+                                onClick={() => setPreviewImg(product.imageReview3)}
+                              />
+                              <img
+                                src={require(`../../assets/images/${product.productID}/${product.image}`)}
+                                alt=""
+                                className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
+                                onClick={() => setPreviewImg(product.image)}
+                              />
+                          </div>
+                          )
+                        }
+                      })
+                    }
                 <div className="product-param">
                   {
                     Products.map((product,idx) => {
-                      if (product.Slug === slug && product.CategoryID === "1"){
+                      if (product.slug === slug && product.categoryID === 1){
                         return (
                           <ul key={idx}>
                             <li data-info="Màn hình">
                               <span className="icon-screen-size"><FaMobileAlt /></span>
-                              <p>{product.Monitor}</p>
+                              <p>{product.monitor}</p>
                             </li>
                             <li data-info="CPU">
                               <span className="icon-screen-size"><MdOutlineCamera /></span>
-                              <p>{product.CPU}</p>
+                              <p>{product.cpu}</p>
                             </li>
                             <li data-info="RAM">
                               <span className="icon-screen-size"><AiOutlineCamera /></span>
-                              <p>{product.RAM}</p>
+                              <p>{product.ram}</p>
                             </li>
                             <li data-info="Ổ Cứng">
                               <span className="icon-screen-size"><CiMicrochip /></span>
-                              <p>{product.HardDisk}</p>
+                              <p>{product.hardDisk}</p>
                             </li>
                             <li data-info="Đồ họa">
                               <span className="icon-screen-size"><BiMemoryCard /></span>
-                              <p>{product.VGA}</p>
+                              <p>{product.vga}</p>
                             </li>
                           </ul> 
                         )
                       }
-                      else if (product.Slug === slug && product.CategoryID === "2"){
+                      else if (product.slug === slug && product.categoryID === 2){
                         return (
                           <ul key={idx}>
                             <li data-info="Màn hình">
                               <span className="icon-screen-size"><FaMobileAlt /></span>
-                              <p>{product.Monitor}</p>
+                              <p>{product.monitor}</p>
                             </li>
                             <li data-info="CPU">
                               <span className="icon-screen-size"><MdOutlineCamera /></span>
-                              <p>{product.Camera}</p>
+                              <p>{product.camera}</p>
                             </li>
                             <li data-info="RAM">
                               <span className="icon-screen-size"><AiOutlineCamera /></span>
-                              <p>{product.CameraSelfie}</p>
+                              <p>{product.yearRelease}</p>
                             </li>
                             <li data-info="Ổ Cứng">
                               <span className="icon-screen-size"><CiMicrochip /></span>
-                              <p>{product.Battery}</p>
+                              <p>{product.battery}</p>
                             </li>
                             <li data-info="Đồ họa">
                               <span className="icon-screen-size"><BiMemoryCard /></span>
-                              <p>{product.OperatingSystem}</p>
+                              <p>{product.monitor}</p>
                             </li>
                           </ul> 
                         )
                       }
-                      else if (product.Slug === slug && product.CategoryID === "3"){
+                      else if (product.slug === slug && product.categoryID === 3){
                         return (
                           <ul>
                             <li data-info="Màn hình">
                               <span className="icon-screen-size"><FaMobileAlt /></span>
-                              <p>{product.Monitor}</p>
+                              <p>{product.monitor}</p>
                             </li>
                             <li data-info="CPU">
                               <span className="icon-screen-size"><MdOutlineCamera /></span>
-                              <p>{product.Manufacturer}</p>
+                              <p>{product.manufacturer}</p>
                             </li>
                             <li data-info="RAM">
                               <span className="icon-screen-size"><AiOutlineCamera /></span>
-                              <p>{product.Memory}</p>
+                              <p>{product.memory}</p>
                             </li>
                           </ul> 
                         )
@@ -219,11 +258,11 @@ const ProductDetail = ({match, history}) => {
               <div className="product-right col-lg-6 col-sm-12 col-md-12 col-12 ps-4">
                 <div className="product">
                   <div className="product-price">
-                    <span className="offer-price">{formatProductPrice(product.UnitPrice)}</span>
+                    <span className="offer-price">{formatProductPrice(product.unitPrice)}</span>
                     <span className="sale-price"><del>30.000.000 đ</del></span>
                   </div>
                   <div className="product-details">
-                    <p> {product.Description}</p>
+                    <p> {product.description}</p>
                   </div>
                   <div className="box">
                     <div className="box-title">
@@ -280,10 +319,10 @@ const ProductDetail = ({match, history}) => {
                   
                   <div className="button buy-now" >
                     {
-                      Products.map((product ,idx) => {
-                        if (product.Slug == slug){
+                      Products.map((products ,idx) => {
+                        if (products.slug === slug){
                           return (
-                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(product)}  key={idx}>
+                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(products)}  key={idx}>
                               <i className="bx bxs-zap"></i> Mua Ngay
                             </Link>
                           )
@@ -309,23 +348,23 @@ const ProductDetail = ({match, history}) => {
                 <div className="descript--contain--left col-lg-7 col-md-12 col-sm-12 col-12" >
                   {
                     Products.map((product,idx) => {
-                      if (product.Slug === slug){
+                      if (product.slug === slug){
                         return (
                           <div className="contain--left--container" key={idx}>
-                            <h1 className="title">{`Đặc điểm nổi bật của ${product.Name}`}</h1>
+                            <h1 className="title">{`Đặc điểm nổi bật của ${product.name}`}</h1>
                             <div className="product__descript-slider">
                                 <Slider {...settings} >
                                     <div className="descript-slider--item">
-                                        <img src={product.Image} alt="" />
+                                        <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
                                     </div>
                                    <div className="descript-slider--item">
-                                        <img src={product.ImageReview2} alt="" />
+                                    <img src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)} alt="" />
                                     </div>
                                     <div className="descript-slider--item">
-                                        <img src={product.ImageReview3} alt="" />
+                                      <img src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)} alt="" />
                                     </div>
                                     <div className="descript-slider--item">
-                                        <img src={product.ImageReview4} alt="" />
+                                      <img src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)} alt="" />
                                     </div>
                                 </Slider>
                             </div>
@@ -336,7 +375,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={product.ImageReview3} alt=""/>
+                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)} alt="" />
                             </div>
                             <div className="product__descript--content-child">
                               <p className="danhgia">Tương lai công nghệ hiển thị</p>
@@ -345,7 +384,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={product.ImageReview4} alt=""/>
+                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)} alt="" />
                             </div>
                             <div className="product__descript--content-child">
                               <p className="danhgia">Vẻ đẹp từ sắc màu thiên nhiên tinh tế</p>
@@ -354,7 +393,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={product.ImageReview2} alt=""/>
+                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)} alt="" />
                             </div>
                           </div>
                         )
@@ -366,7 +405,7 @@ const ProductDetail = ({match, history}) => {
                 <div className="descript--contain--right col-lg-5 col-md-12 col-sm-12 col-12 ps-4">
                     {
                       Products.map((product,idx) => {
-                        if (product.Slug === slug && product.CategoryID == '1'){
+                        if (product.slug === slug && product.categoryID == '1'){
                           return (
                             <div className="contain--right--container" key={idx}>
                               <h1 className="title">Thông số kỹ thuật</h1>
@@ -377,41 +416,41 @@ const ProductDetail = ({match, history}) => {
                                 </tr>
                                 <tr>
                                   <td>Tên Sản phẩm</td>
-                                  <td>{product.Name}</td>
+                                  <td>{product.name}</td>
                                 </tr>
                                 <tr>
                                   <td>Đặc tả cấu trúc</td>
-                                  <td>{product.Description}</td>
+                                  <td>{product.description}</td>
                                 </tr>
                                 <tr>
                                   <td>Nhà sản xuất</td>
-                                  <td>{product.Manufacturer}</td>
+                                  <td>{product.manufacturer}</td>
                                 </tr>
                                 <tr>
                                   <td>CPU</td>
-                                  <td>{product.CPU}</td>
+                                  <td>{product.cpu}</td>
                                 </tr>
                                 <tr>
                                   <td>RAM</td>
-                                  <td>{product.RAM}</td>
+                                  <td>{product.ram}</td>
                                 </tr>
                                 <tr>
                                   <td>Card đồ họa</td>
-                                  <td>{product.VGA}</td>
+                                  <td>{product.vga}</td>
                                 </tr>
                                 <tr>
                                   <td>Bộ nhớ trong</td>                 
-                                  <td>{product.HardDisk}</td>
+                                  <td>{product.hardDisk}</td>
                                 </tr>
                                 <tr>
                                   <td>Màn hình</td>
-                                  <td>{product.Monitor}</td>
+                                  <td>{product.monitor}</td>
                                 </tr>
                               </table>
                             </div>
                           )
                         }
-                        else if (product.Slug === slug && product.CategoryID == "2"){
+                        else if (product.slug === slug && product.categoryID == "2"){
                           return (
                             <div className="contain--right--container" key={idx}>
                               <h1 className="title">Thông số kỹ thuật</h1>
@@ -422,41 +461,37 @@ const ProductDetail = ({match, history}) => {
                                 </tr>
                                 <tr>
                                   <td>Tên Sản phẩm</td>
-                                  <td>{product.Name}</td>
+                                  <td>{product.name}</td>
                                 </tr>
                                 <tr>
                                   <td>Đặc tả cấu trúc</td>
-                                  <td>{product.Description}</td>
+                                  <td>{product.description}</td>
                                 </tr>
                                 <tr>
                                   <td>Nhà sản xuất</td>
-                                  <td>{product.Manufacturer}</td>
+                                  <td>{product.manufacturer}</td>
                                 </tr>
                                 <tr>
                                   <td>Hệ điều hành</td>
-                                  <td>{product.OperatingSystem}</td>
+                                  <td>{product.cpu}</td>
                                 </tr>
                                 <tr>
                                   <td>Camera</td>
-                                  <td>{product.Camera}</td>
-                                </tr>
-                                <tr>
-                                  <td>Camera Selfie</td>
-                                  <td>{product.CameraSelfie}</td>
+                                  <td>{product.camera}</td>
                                 </tr>
                                 <tr>
                                   <td>Hiệu năng và pin</td>                 
-                                  <td>{product.Battery}</td>
+                                  <td>{product.battery}</td>
                                 </tr>
                                 <tr>
                                   <td>Màn hình</td>
-                                  <td>{product.Monitor}</td>
+                                  <td>{product.monitor}</td>
                                 </tr>
                               </table>
                             </div>
                           )
                         } 
-                        else if (product.Slug === slug && product.CategoryID == "3"){
+                        else if (product.slug === slug && product.categoryID == "3"){
                           return (
                             <div className="contain--right--container" key={idx}>
                               <h1 className="title">Thông số kỹ thuật</h1>
@@ -467,19 +502,19 @@ const ProductDetail = ({match, history}) => {
                                 </tr>
                                 <tr>
                                   <td>Tên Sản phẩm</td>
-                                  <td>{product.Name}</td>
+                                  <td>{product.name}</td>
                                 </tr>
                                 <tr>
                                   <td>Đặc tả cấu trúc</td>
-                                  <td>{product.Description}</td>
+                                  <td>{product.description}</td>
                                 </tr>
                                 <tr>
                                   <td>Nhà sản xuất</td>
-                                  <td>{product.Manufacturer}</td>
+                                  <td>{product.manufacturer}</td>
                                 </tr>
                                 <tr>
                                   <td>Màn hình</td>
-                                  <td>{product.Monitor}</td>
+                                  <td>{product.monitor}</td>
                                 </tr>
                               </table>
                             </div>
@@ -496,40 +531,40 @@ const ProductDetail = ({match, history}) => {
           <Slider {...setting} >
             {
               Products.map((product) => {
-                if (product.Slug == slug && product.CategoryID == "1"){
+                if (product.slug == slug && product.categoryID === 1){
                   return (
-                    productData.getProductsForRecommendation(8, laptop).map((product,idx) => {
+                    productData.GetProductsForRecommendation(8, laptop).map((product,idx) => {
                       return (
-                        <Link to = {`/${product.Slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={product.Image} alt="" />
-                              <p className="name">{product.Name}</p>
-                              <p className="price">{formatProductPrice(product.UnitPrice)}</p>
+                        <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
+                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <p className="name">{product.name}</p>
+                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
                         </div></Link>
                       )
                     })
                     )  
                   }
-                else if (product.Slug ===slug && product.CategoryID === "2"){
+                else if (product.slug ===slug && product.categoryID === 2){
                   return (
-                    productData.getProductsForRecommendation(8, phone).map((product,idx) => {
+                    productData.GetProductsForRecommendation(8, phone).map((product,idx) => {
                       return (
-                          <Link to = {`/${product.Slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={product.Image} alt="" />
-                              <p className="name">{product.Name}</p>
-                              <p className="price">{formatProductPrice(product.UnitPrice)}</p>
+                          <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
+                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <p className="name">{product.name}</p>
+                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
                           </div></Link>
                       )
                     })
                     )  
                   }
-                else if (product.Slug == slug && product.CategoryID == "3"){
+                else if (product.slug == slug && product.categoryID === 3){
                   return (
-                    productData.getProductsForRecommendation(8, tablet).map((product,idx) => {
+                    productData.GetProductsForRecommendation(8, tablet).map((product,idx) => {
                       return (
-                          <Link to = {`/${product.Slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={product.Image} alt="" />
-                              <p className="name">{product.Name}</p>
-                              <p className="price">{formatProductPrice(product.UnitPrice)}</p>
+                          <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
+                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <p className="name">{product.name}</p>
+                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
                           </div></Link>
                       )
                     })
@@ -542,7 +577,9 @@ const ProductDetail = ({match, history}) => {
           </Slider>
         </div>
         </div>
-      </div>
+          </div>
+        )
+      }
     </div>
   );
 };

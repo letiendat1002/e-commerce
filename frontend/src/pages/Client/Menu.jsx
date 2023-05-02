@@ -23,12 +23,21 @@ import { MdOutlineRemove } from 'react-icons/md';
 import { addToCart } from '../../Redux/slice/cartSlice';
 import Logo from '../../assets/images/Logo.svg';
 import NotFoundItem from '../../assets/images/noti-search.png';
+import { getAllProducts } from '../../Redux/slice/productSlice';
+import { getAllCategories } from '../../Redux/slice/categorySlice';
 const slides = [Item1, Item2, Item3, Item4, Item5, Item6, Item7];
 
 const Menu = ({ match, history }) => {
   const { slug } = useParams();
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    Promise.all([dispatch(getAllProducts()),
+    dispatch(getAllCategories())
+  ])
+  }, [])
   const [catagoryId, setCatagoryID] = useState('');
+
+  const category = useSelector(state => state.categories.data)
 
   const initFilter = {
     manufactorer: [],
@@ -43,10 +52,23 @@ const Menu = ({ match, history }) => {
     demand: [],
   };
 
-  const [product, setProduct] = useState(Products);
+  const item = useSelector(state => state.product?.data || [])
+
+  const loadingProduct = useSelector(state => state.product.productLoading);
+  const loadingCategory = useSelector(state => state.categories.loadingCategory);
+  const [product, setProduct] = useState([]);
   const [filter, setFilter] = useState(initFilter);
   const [value, setValue] = useState('0');
   const [filterItem, setFilterItem] = useState('Tất cả');
+  
+  useEffect(() => {
+    if (!loadingProduct && !loadingCategory){
+      setProduct(item)
+    }
+    else{
+      setProduct(item)
+    }
+  }, [loadingCategory, loadingProduct])
 
   const handleChangeOption = (e) => {
     setFilterItem(e.target.value);
@@ -60,21 +82,21 @@ const Menu = ({ match, history }) => {
 
     if (e.target.value == 1) {
       temp = temp.sort(function (a, b) {
-        return a.Name.localeCompare(b.Name);
+        return a.name.localeCompare(b.Name);
       });
     }
     if (e.target.value == 2) {
       temp = temp.sort(function (a, b) {
-        return b.UnitPrice - a.UnitPrice;
+        return b.unitPrice - a.unitPrice;
       });
     }
     setProduct(temp);
   };
 
   useEffect(() => {
-    Catagory.map((catagory) => {
+    category?.map((catagory) => {
       if (catagory.slug === slug) {
-        setCatagoryID(catagory.CategoryID);
+        setCatagoryID(catagory.categoryID);
       }
     });
   });
@@ -221,9 +243,11 @@ const Menu = ({ match, history }) => {
     }
   };
 
+  console.log(filter)
+  console.log(product)
+
   // Functiom handle Filter Product in Tablet and mobile Screen
 
-  console.log(filter);
   const filterCheck = (children, attribute) => {
     const item = children.value;
     const name = children.name;
@@ -391,19 +415,19 @@ const Menu = ({ match, history }) => {
   // Function handle Update Product depend on filter state
 
   const updateProducts = useCallback(() => {
-    let temp = Products;
+    let temp = product;
 
     if (filter.manufactorer.length > 0) {
-      temp = temp.filter((e) => filter.manufactorer.includes(e.Manufacturer));
+      temp = temp.filter((e) => filter.manufactorer.includes(e.manufacturer));
     }
     if (filter.ram.length > 0) {
-      temp = temp.filter((e) => filter.ram.includes(e.RAM));
+      temp = temp.filter((e) => filter.ram.includes(e.ram));
     }
     if (filter.haskdisk.length > 0) {
-      temp = temp.filter((e) => filter.haskdisk.includes(e.HardDisk));
+      temp = temp.filter((e) => filter.haskdisk.includes(e.hardDisk));
     }
     if (filter.vga.length > 0) {
-      temp = temp.filter((e) => filter.vga.includes(e.VGA));
+      temp = temp.filter((e) => filter.vga.includes(e.vga));
     }
     if (filter.demand.length > 0) {
       temp = temp.filter((e) => filter.demand.includes(e.demand));
@@ -411,7 +435,7 @@ const Menu = ({ match, history }) => {
     if (filter.cpu.length > 0) {
       temp = temp.filter((e) => {
         for (var i = 0; i < filter.cpu.length; i++) {
-          if (e?.CPU?.includes(filter.cpu[i])) {
+          if (e?.cpu?.includes(filter.cpu[i])) {
             return temp;
           }
         }
@@ -421,8 +445,8 @@ const Menu = ({ match, history }) => {
       temp = temp.filter((e) => {
         for (var i = 0; i < filter.monitor.length; i++) {
           if (
-            e?.Monitor?.slice(0, 3) > filter.monitor[i].slice(0, 2) &&
-            e?.Monitor?.slice(0, 3) <= filter.monitor[i].slice(5, 8)
+            e?.monitor?.slice(0, 3) > filter.monitor[i].slice(0, 2) &&
+            e?.monitor?.slice(0, 3) <= filter.monitor[i].slice(5, 8)
           ) {
             return temp;
           }
@@ -434,7 +458,7 @@ const Menu = ({ match, history }) => {
         for (var i = 0; i < filter.memory.length; i++) {
           const startMemory = filter.memory[i].match(/\d+/g).map(Number)[0];
           const endMemory = filter.memory[i].match(/\d+/g).map(Number)[1];
-          if (e?.Memory?.slice(0, 3) > startMemory && e?.Memory?.slice(0, 3) <= endMemory) {
+          if (e?.memory?.slice(0, 3) > startMemory && e?.memory?.slice(0, 3) <= endMemory) {
             return temp;
           }
         }
@@ -445,7 +469,7 @@ const Menu = ({ match, history }) => {
         for (var i = 0; i < filter.battery.length; i++) {
           const startPrice = filter.battery[i].match(/\d+/g).map(Number)[0];
           const endPrice = filter.battery[i].match(/\d+/g).map(Number)[1];
-          if (e?.Battery?.slice(0, 4) > startPrice && e?.Battery?.slice(0, 4) <= endPrice) {
+          if (e?.battery?.slice(0, 4) > startPrice && e?.battery?.slice(0, 4) <= endPrice) {
             return temp;
           }
         }
@@ -456,21 +480,18 @@ const Menu = ({ match, history }) => {
         for (var i = 0; i < filter.unitPrice.length; i++) {
           const startPrice = filter.unitPrice[i].match(/\d+/g).map(Number)[0];
           const endPrice = filter.unitPrice[i].match(/\d+/g).map(Number)[1];
-          if (e?.UnitPrice > startPrice && e?.UnitPrice <= endPrice) {
+          if (e?.unitPrice > startPrice && e?.unitPrice <= endPrice) {
             return temp;
           }
         }
       });
     }
-
     setProduct(temp);
-  }, [filter, Products]);
+  },[filter, product]);
 
   useEffect(() => {
     updateProducts();
-  }, [updateProducts]);
-
-  const dispatch = useDispatch();
+  }, [filter]);
   const cart = useSelector((state) => state.cart);
 
   const handleOpenMenu = (attribute) => {
@@ -511,7 +532,7 @@ const Menu = ({ match, history }) => {
   const CountProduct = () => {
     let count = 0;
     for (let i = 0; i < product.length; i++) {
-      if (product[i].CategoryID === catagoryID) {
+      if (product[i].categoryID === catagoryID) {
         count = count + 1;
       }
     }
@@ -519,13 +540,14 @@ const Menu = ({ match, history }) => {
   };
 
   // State ProductLength of every type
-  const [productLength, setProductLength] = useState(
-    product.filter((item) => item.CategoryID === catagoryID).length
-  );
+  // const [productLength, setProductLength] = useState(0);
+  // useEffect(() => {
+  //   setProductLength(product.filter((item) => item.categoryID === catagoryID).length)
+  // }, [product, catagoryID])
 
-  useEffect(() => {
-    setProductLength(CountProduct);
-  }, [CountProduct]);
+  // useEffect(() => {
+  //   setProductLength(CountProduct);
+  // }, [CountProduct]);
 
   // Function handle Change Checked when change screen
   useEffect(() => {
@@ -1104,7 +1126,7 @@ const Menu = ({ match, history }) => {
                   return (
                     <div key={key}>
                       <h3>{catagory.nameCatalogory}</h3>
-                      <span>({productLength} sản phẩm)</span>
+                      {/* <span>({productLength} sản phẩm)</span> */}
                     </div>
                   );
                 }
@@ -1138,27 +1160,24 @@ const Menu = ({ match, history }) => {
                   {product.length > 0 ? (
                     filterItem === 'Tất cả' ? (
                       product.map((item, key) => {
-                        if (item.CategoryID === catagoryId) {
+                        if (item.categoryID === catagoryId) {
                           return (
                             <div
                               className='item--child--contains  col-lg-4 col-md-4 col-sm-6 col-6'
                               key={key}>
                               <Link to={`/${item.Slug}`}>
                                 <div className='child--contains--img'>
-                                  <img
-                                    src={item.Image}
-                                    alt=''
-                                  />
+                                  <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                 </div>
                                 <div className='contains--title'>
-                                  <h3>{item.Name}</h3>
+                                  <h3>{item.name}</h3>
                                   <div className='child--contains--price'>
                                     <div>
                                       <span className='contains--price--discount'>
                                         <del>22.000.000đ</del>
                                       </span>
                                       <h4 className='contains--price-unit'>
-                                        {formatProductPrice(item.UnitPrice)}
+                                        {formatProductPrice(item.unitPrice)}
                                       </h4>
                                     </div>
                                     <div className='contains--price-pecent'>
@@ -1169,7 +1188,7 @@ const Menu = ({ match, history }) => {
                               </Link>
                               <div className='child--contains--action'>
                                 <Link
-                                  to={`/${item.Slug}`}
+                                  to={`/${item.slug}`}
                                   className='button'>
                                   <button className='contains--action--buy'>Mua Hàng</button>
                                 </Link>
@@ -1189,26 +1208,23 @@ const Menu = ({ match, history }) => {
                       })
                     ) : filterItem === 'Theo tên từ A - Z' ? (
                       product.map((item, key) => {
-                        if (item.CategoryID === catagoryId) {
+                        if (item.categoryID === catagoryId) {
                           return (
                             <div
                               className='item--child--contains col-lg-4 col-md-6 col-sm-6 col-12 '
                               key={key}>
-                              <Link to={`/${item.Slug}`}>
+                              <Link to={`/${item.slug}`}>
                                 <div className='child--contains--img'>
-                                  <img
-                                    src={item.Image}
-                                    alt=''
-                                  />
+                                  <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                 </div>
-                                <h3>{item.Name}</h3>
+                                <h3>{item.name}</h3>
                                 <div className='child--contains--price'>
                                   <div>
                                     <span className='contains--price--discount'>
                                       <del>22.000.000đ</del>
                                     </span>
                                     <h4 className='contains--price-unit'>
-                                      {formatProductPrice(item.UnitPrice)}
+                                      {formatProductPrice(item.unitPrice)}
                                     </h4>
                                   </div>
                                   <div className='contains--price-pecent'>
@@ -1218,7 +1234,7 @@ const Menu = ({ match, history }) => {
                               </Link>
                               <div className='child--contains--action'>
                                 <Link
-                                  to={`/${item.Slug}`}
+                                  to={`/${item.slug}`}
                                   className='button'>
                                   <button className='contains--action--buy'>Mua Hàng</button>
                                 </Link>

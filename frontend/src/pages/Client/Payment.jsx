@@ -52,7 +52,6 @@ const Payment = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.allCart);
     const cartItems = cart.cart;
-    console.log(cartItems)
     const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.UnitPrice, 0);
   return (
     <div className="container-fluid payment">
@@ -121,7 +120,7 @@ const Payment = () => {
                                                                             <div className="contain--container--item--bill--child" style={{padding: "5px 0", textAlign: "center", display : "flex", alignItems : "center"}}>
                                                                                 <img src={item.Image} />
                                                                                 <span style={{textAlign:"center"}}>{item.cartQuantity}</span>
-                                                                                <p>{formatProductPrice(item.cartQuantity * item.UnitPrice)}</p>
+                                                                                <p>{formatProductPrice(item.cartQuantity * item.unitPrice)}</p>
                                                                             </div>
                                                                         )
                                                                     })

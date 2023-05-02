@@ -111,7 +111,7 @@ const Cart = () => {
     return ({
         STT: <span>{index + 1}</span>, 
         name: <p>{item.Name}</p>,
-        image: <Image src={item.Image} preview = {true} />,
+        image: <Image src={item.image} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>
@@ -121,8 +121,8 @@ const Cart = () => {
             {/* <input type="number" className="quantity" defaultValue={item.cartQuantity} onInput={(e) => handleUpdate(item, e.target.value)} /> */}
           <button onClick={() => dispatch(increamentFromCart(item))}><span>+</span></button>    
         </div>,
-        cost: <span>{formatProductPrice(item.UnitPrice)}</span>,
-        SumCost: <span>{formatProductPrice(item.UnitPrice*item.cartQuantity)}</span>,
+        cost: <span>{formatProductPrice(item.unitPrice)}</span>,
+        SumCost: <span>{formatProductPrice(item.unitPrice*item.cartQuantity)}</span>,
         Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
       }
     )
@@ -131,8 +131,8 @@ const Cart = () => {
   const dataTablet =  cartItems.map((item, index) => {
     return ({
         STT: <span>{index + 1}</span>, 
-        name: <p>{item.Name}</p>,
-        image: <Image src={item.Image} preview = {true} />,
+        name: <p>{item.name}</p>,
+        image: <Image src={item.image} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>
@@ -142,7 +142,7 @@ const Cart = () => {
           <button onClick={() => dispatch(increamentFromCart(item))}><span>+</span></button>    
         </div>,
         cost: <span>{formatProductPrice(item.UnitPrice)}</span>,
-        SumCost: <span>{formatProductPrice(item.UnitPrice*item.cartQuantity)}</span>,
+        SumCost: <span>{formatProductPrice(item.unitPrice*item.cartQuantity)}</span>,
         Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
       }
     )
@@ -154,8 +154,8 @@ const Cart = () => {
         name: <p>{item.Name}</p>,
         image: <Image src={item.Image} preview = {true} />,
         name: <div style={{display:"block", textAlign: "left"}}>
-                <p className="title-mobile" style={{textAlign: "left"}}>{item.Name}</p>
-                <span style={{textAlign: "start", color: "#e02f2f"}}>{item.cartQuantity*item.UnitPrice}</span>
+                <p className="title-mobile" style={{textAlign: "left"}}>{item.name}</p>
+                <span style={{textAlign: "start", color: "#e02f2f"}}>{item.cartQuantity*item.unitPrice}</span>
             </div>,
         quantity: 
           <div>
@@ -165,9 +165,9 @@ const Cart = () => {
             <p>{item.cartQuantity}</p>    
             <button onClick={() => dispatch(increamentFromCart(item))}><span>+</span></button>    
           </div>,
-        // cost: <span>{formatProductPrice(item.UnitPrice)}</span>,
-        // SumCost: <span>{formatProductPrice(item.UnitPrice*item.cartQuantity)}</span>,
-        // Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
+        cost: <span>{formatProductPrice(item.UnitPrice)}</span>,
+        SumCost: <span>{formatProductPrice(item.UnitPrice*item.cartQuantity)}</span>,
+        Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
       }
     )
   })
