@@ -318,7 +318,7 @@ const ProductDetail = ({match, history}) => {
                           return (
                             <Link to={'/cart'}  onClick= {() => AddToCartHandle(products)}  key={idx}>
                               <i className="bx bxs-zap"></i> Mua Ngay
-                            </Link>
+                            </Link>        
                           )
                         }
                       })

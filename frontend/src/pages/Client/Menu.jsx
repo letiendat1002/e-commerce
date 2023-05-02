@@ -9,7 +9,6 @@ import formatProductPrice from '../../Helper';
 import '../../assets/css/home.scss';
 import '../../assets/css/menu.scss';
 import Catagory from '../../assets/data/catagory';
-import Products from '../../assets/data/product';
 import Item1 from '../../assets/images/item1.png';
 import Item2 from '../../assets/images/item2.png';
 import Item3 from '../../assets/images/item3.png';
@@ -18,14 +17,14 @@ import Item5 from '../../assets/images/item5.jpeg';
 import Item6 from '../../assets/images/item6.png';
 import Item7 from '../../assets/images/item7.png';
 // import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
+import { Skeleton } from 'antd';
 import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import { MdOutlineRemove } from 'react-icons/md';
 import { addToCart } from '../../Redux/slice/cartSlice';
+import { getAllCategories } from '../../Redux/slice/categorySlice';
+import { getAllProducts } from '../../Redux/slice/productSlice';
 import Logo from '../../assets/images/Logo.svg';
 import NotFoundItem from '../../assets/images/noti-search.png';
-import { getAllProducts } from '../../Redux/slice/productSlice';
-import { getAllCategories } from '../../Redux/slice/categorySlice';
-import { Skeleton } from 'antd';
 const slides = [Item1, Item2, Item3, Item4, Item5, Item6, Item7];
 
 const Menu = ({ match, history }) => {
@@ -71,28 +70,43 @@ const Menu = ({ match, history }) => {
     }
   }, [loadingCategory, loadingProduct])
 
-  const handleChangeOption = (e) => {
-    setFilterItem(e.target.value);
-  };
   const handleChange = (e) => {
     setValue(e.target.value);
-    const temp = product;
-    if (!e.target.value) {
-      return temp;
+    let temp = product;
+    if (e.target.value == "DEFAULT") {
+      temp = temp
     }
 
-    if (e.target.value == 1) {
-      temp = temp.sort(function (a, b) {
-        return a.name.localeCompare(b.Name);
+    else if (e.target.value == 1) {
+      temp = temp.sort((a, b) => {
+        return a.name.localeCompare(b.name);
       });
     }
-    if (e.target.value == 2) {
-      temp = temp.sort(function (a, b) {
+    else if (e.target.value == 2) {
+      temp = temp.sort((a, b) => {
         return b.unitPrice - a.unitPrice;
       });
     }
     setProduct(temp);
   };
+
+  const handleSortFilter = () => {
+    let temp = product;
+    if (value == "DEFAULT") {
+      temp = temp
+    }
+    else if (value == 1) {
+      temp = temp.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+    }
+    else if (value == 2) {
+      temp = temp.sort((a, b) => {
+        return b.unitPrice - a.unitPrice;
+      });
+    }
+    setProduct(temp);
+  }
 
   useEffect(() => {
     category?.map((catagory) => {
@@ -493,6 +507,10 @@ const Menu = ({ match, history }) => {
   useEffect(() => {
     updateProducts();
   }, [filter]);
+
+  // useEffect(() => {
+  //   handleSortFilter();
+  // }, [filter])
   const cart = useSelector((state) => state.cart);
 
   const handleOpenMenu = (attribute) => {

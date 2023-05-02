@@ -588,6 +588,11 @@ const Home = () => {
                         }
                      </Col>
                 </Row>
+                <Row style={{padding : '2rem 0'}}>
+                     <Col lg={12} md={12} sm={12}>
+                        <img src={Banner4} alt="" style={{width: '100%'}}/>
+                     </Col>
+                </Row>
                 <Row className='container__item'>
                      <Col lg={12} md={12} sm={12} style= {{display: 'flex', justifyContent: 'space-between', padding : '10px 0'}} className='container__item--title'>
                         <h4 style={{color: '#000' }}>ƯU ĐÃI KHI THANH TOÁN ONLINE</h4>

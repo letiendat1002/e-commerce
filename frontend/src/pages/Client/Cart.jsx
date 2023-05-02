@@ -18,7 +18,7 @@ const Cart = () => {
   // const  cartItems  = cart.cart;
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;
-  const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.UnitPrice, 0);
+  const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.unitPrice, 0);
   const setting = {
     infinite: true,
     slidesToShow: 5,
@@ -110,8 +110,8 @@ const Cart = () => {
   const data =  cartItems.map((item, index) => {
     return ({
         STT: <span>{index + 1}</span>, 
-        name: <p>{item.Name}</p>,
-        image: <Image src={item.image} preview = {true} />,
+        name: <p>{item.name}</p>,
+        image: <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>
@@ -132,7 +132,7 @@ const Cart = () => {
     return ({
         STT: <span>{index + 1}</span>, 
         name: <p>{item.name}</p>,
-        image: <Image src={item.image} preview = {true} />,
+        image: <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>
@@ -165,8 +165,8 @@ const Cart = () => {
             <p>{item.cartQuantity}</p>    
             <button onClick={() => dispatch(increamentFromCart(item))}><span>+</span></button>    
           </div>,
-        cost: <span>{formatProductPrice(item.UnitPrice)}</span>,
-        SumCost: <span>{formatProductPrice(item.UnitPrice*item.cartQuantity)}</span>,
+        cost: <span>{formatProductPrice(item.unitPrice)}</span>,
+        SumCost: <span>{formatProductPrice(item.unitPrice*item.cartQuantity)}</span>,
         Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
       }
     )

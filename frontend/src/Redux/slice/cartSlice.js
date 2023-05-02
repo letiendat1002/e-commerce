@@ -16,11 +16,11 @@ export const cartSlice = createSlice({
       const itemIndex = state.cart.findIndex((item) => item.productID === action.payload.productID);
       if (itemIndex >= 0) {
         state.cart[itemIndex].cartQuantity += 1;
-        toast.success(`${action.payload.Name.slice(0, 20)} đã được thêm vào giỏ hàng`);
+        toast.success(`${action.payload.name.slice(0, 20)} đã được thêm vào giỏ hàng`);
       } else {
         const tempProduct = { ...action.payload, cartQuantity: 1 };
         state.cart.push(tempProduct);
-        toast.success(`${action.payload.Name.slice(0, 20)} đã được thêm vào giỏ hàng`);
+        toast.success(`${action.payload.name.slice(0, 20)} đã được thêm vào giỏ hàng`);
       }
           localStorage.setItem('cartItem', JSON.stringify(state.cart));
           
