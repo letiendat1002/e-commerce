@@ -31,18 +31,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO fetchCategoryBySlug(String slug) {
-        return categoryDAO
-                .selectCategoryBySlug(slug)
-                .map(categoryDTOMapper)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Category not found by slug {%s}".formatted(slug)
-                        )
-                );
-    }
-
-    @Override
     public CategoryDTO addCategory(CategoryRequest request) {
         checkIfCategoryNotExistsBySlugOrThrow(request.slug());
 
@@ -91,22 +79,19 @@ public class CategoryServiceImpl implements CategoryService {
     private void checkAndUpdateChangesOrThrow(CategoryRequest request, Category category) {
         var isChanged = false;
 
-        if (request.name() != null
-                && !request.name().equals(category.getName())
+        if (!request.name().equals(category.getName())
         ) {
             category.setName(request.name());
             isChanged = true;
         }
 
-        if (request.slug() != null
-                && !request.slug().equals(category.getSlug())
+        if (!request.slug().equals(category.getSlug())
         ) {
             category.setSlug(request.slug());
             isChanged = true;
         }
 
-        if (request.image() != null
-                && !request.image().equals(category.getImage())
+        if (!request.image().equals(category.getImage())
         ) {
             category.setImage(request.image());
             isChanged = true;

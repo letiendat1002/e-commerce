@@ -13,8 +13,6 @@ public interface ProductDAO {
 
     Optional<Product> selectProductByID(BigInteger productID);
 
-    Optional<Product> selectProductBySlug(String slug);
-
     Optional<Product> insertProduct(Product product);
 
     void deleteProductByID(BigInteger productID);

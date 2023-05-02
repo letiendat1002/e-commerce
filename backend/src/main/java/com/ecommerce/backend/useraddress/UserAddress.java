@@ -38,6 +38,11 @@ public class UserAddress {
     @Column(name = "Address")
     private String address;
 
+    public UserAddress(User user, String address) {
+        this.user = user;
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
