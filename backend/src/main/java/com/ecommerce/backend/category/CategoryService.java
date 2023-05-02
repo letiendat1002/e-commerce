@@ -8,8 +8,6 @@ public interface CategoryService {
 
     CategoryDTO fetchCategoryByID(BigInteger categoryID);
 
-    CategoryDTO fetchCategoryBySlug(String slug);
-
     CategoryDTO addCategory(CategoryRequest request);
 
     CategoryDTO updateCategory(BigInteger categoryID, CategoryRequest request);

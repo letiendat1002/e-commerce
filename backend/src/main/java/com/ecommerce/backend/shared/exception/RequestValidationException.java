@@ -11,18 +11,11 @@ public class RequestValidationException extends RuntimeException {
 
     private static String getValidationMessage(ObjectError error) {
         if (error instanceof FieldError fieldError) {
-            String className = fieldError.getObjectName();
-            String property = fieldError.getField();
-            Object invalidValue = fieldError.getRejectedValue();
-            String message = fieldError.getDefaultMessage();
-            return String.format(
-                    "%s.%s %s, but it was {%s}",
-                    className,
-                    property,
-                    message,
-                    invalidValue);
+            var message = fieldError.getDefaultMessage();
+            var invalidValue = fieldError.getRejectedValue();
+            return "%s, but it was {%s}".formatted(message, invalidValue);
         }
-        return String.format("%s: %s", error.getObjectName(), error.getDefaultMessage());
+        return error.getDefaultMessage();
     }
 
     public String getMessage() {

@@ -1,14 +1,16 @@
 package com.ecommerce.backend.user;
 
-import com.ecommerce.backend.shared.enums.Gender;
+import com.ecommerce.backend.user.enums.EmailValidationStatus;
+import com.ecommerce.backend.user.enums.Gender;
+import com.ecommerce.backend.user.enums.UserRole;
 import com.ecommerce.backend.useraddress.UserAddress;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +20,7 @@ import java.util.Objects;
 @ToString
 @Entity
 @Table(name = "User")
-public class User {
+public class User implements UserDetails {
     @Id
     @SequenceGenerator(
             name = "user_id_seq",
@@ -36,9 +38,11 @@ public class User {
     private String email;
 
     @Column(name = "Password")
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     private String password;
 
-    @Column(name = "Fullname")
+    @Column(name = "FullName")
     private String fullName;
 
     @Column(name = "Gender")
@@ -51,9 +55,82 @@ public class User {
     @Column(name = "Image")
     private String image;
 
+    @Column(name = "Role")
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.CUSTOMER;
+
+    @Column(name = "EmailValidationStatus")
+    @Enumerated(EnumType.STRING)
+    private EmailValidationStatus emailValidationStatus = EmailValidationStatus.NOT_VALIDATED;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<UserAddress> userAddresses;
+
+    public User(String email,
+                String password,
+                String fullName,
+                Gender gender,
+                String phone,
+                String image) {
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phone = phone;
+        this.image = image;
+    }
+
+    public User(String email,
+                String password,
+                String fullName,
+                Gender gender,
+                String phone,
+                String image,
+                UserRole role) {
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phone = phone;
+        this.image = image;
+        this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getGrantedAuthorities();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     @Override
     public boolean equals(Object o) {

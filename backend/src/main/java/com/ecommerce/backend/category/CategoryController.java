@@ -5,6 +5,7 @@ import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('category:read')")
     public CategoryResponse getCategories() {
         var categoryDTOList = categoryService.fetchAllCategories();
 
@@ -30,6 +32,7 @@ public class CategoryController {
     }
 
     @GetMapping("{categoryID}")
+    @PreAuthorize("hasAuthority('category:read')")
     public CategoryResponse getCategoryByID(
             @PathVariable("categoryID") BigInteger categoryID
     ) {
@@ -42,20 +45,8 @@ public class CategoryController {
         );
     }
 
-    @GetMapping("search/{slug}")
-    public CategoryResponse getCategoryBySlug(
-            @PathVariable("slug") String slug
-    ) {
-        var categoryDTOList = List.of(categoryService.fetchCategoryBySlug(slug));
-
-        return new CategoryResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                categoryDTOList
-        );
-    }
-
     @PostMapping
+    @PreAuthorize("hasAuthority('category:write')")
     public CategoryResponse postCategory(
             @Validated @RequestBody CategoryRequest request,
             BindingResult errors
@@ -74,6 +65,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("{categoryID}")
+    @PreAuthorize("hasAuthority('category:write')")
     public BaseResponse deleteCategory(
             @PathVariable("categoryID") BigInteger categoryID
     ) {
@@ -86,6 +78,7 @@ public class CategoryController {
     }
 
     @PutMapping("{categoryID}")
+    @PreAuthorize("hasAuthority('category:write')")
     public CategoryResponse putCategory(
             @PathVariable("categoryID") BigInteger categoryID,
             @Validated @RequestBody CategoryRequest request,

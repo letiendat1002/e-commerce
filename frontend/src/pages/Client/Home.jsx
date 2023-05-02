@@ -1,10 +1,15 @@
+import { Skeleton } from 'antd'
 import { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { FaHotjar } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import formatProductPrice from '../../Helper'
+import productData from '../../Helper/GetProduct'
+import { addToCart } from "../../Redux/slice/cartSlice.js"
+import { getAllCategories } from '../../Redux/slice/categorySlice'
+import { getAllProducts } from '../../Redux/slice/productSlice'
 import '../../assets/css/home.scss'
-import Products from '../../assets/data/product.js'
 import slider1 from '../../assets/images/banner.jpg'
 import slider6 from '../../assets/images/banner1.jpg'
 import Banner2 from '../../assets/images/banner2.png'
@@ -17,9 +22,6 @@ import slider5 from '../../assets/images/slideshow_12.jpeg'
 import slider2 from '../../assets/images/slideshow_8.jpeg'
 import AutoSlice from '../../components/AutoSlide/AutoSlice'
 import Carousel from '../../components/Carousel/CarouselItem'
-import formatProductPrice from '../../Helper'
-import productData from '../../Helper/GetProduct'
-import { addToCart } from "../../Redux/slice/cartSlice.js"
 // import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 const slides = [
     slider1,
@@ -40,15 +42,47 @@ const menuCard = [
 ] 
 const Home = () => {
     const dispatch = useDispatch()
-    const [category, setCategory]  = useState('1')
-    const [categoryTabletTop, setCategoryTabletTop] = useState('1')
-    const [categoryTabletBottom, setCategoryTabletBottom] = useState('3')
-    const [product, setProduct] = useState(Products.filter(product => product.CategoryID === "1"));
-    const [productTop, setProductTop] = useState(Products.filter(product => product.CategoryID === "1"));
-    const [productBottom, setProductBottom] = useState(Products.filter(product => product.CategoryID === "3"));
-    const [phone, setPhone] = useState(Products.filter(product => product.CategoryID === "2"))
-    const [laptop, setLaptop] = useState(Products.filter(product => product.CategoryID === "1"))
-    const [tablet, setTablet] = useState(Products.filter(product => product.CategoryID === "3"))
+
+    const state = useSelector((state) => state.product);
+    useEffect(() => {
+        Promise.all([dispatch(getAllProducts()),
+        dispatch(getAllCategories())
+    ])
+    }, [])
+
+    const item = useSelector(state => state.product?.data || [])
+    const TypeProduct = useSelector((state) => state.categories?.data || [])
+
+    
+    const loadingProduct = useSelector(state => state.product.productLoading);
+    const loadingCategory = useSelector(state => state.categories.loadingCategory);
+    const loadingProductForType = useSelector(state => state.product.productLoading);
+    
+    const products = item || [];
+    let phone = products.filter(product => product.categoryID === 2);
+    let laptop = products.filter(product => product.categoryID === 1);
+    let tablet = products.filter(product => product.categoryID === 3);
+    let PC = products.filter(product => product.categoryID === 4);
+    const [category, setCategory]  = useState(1)
+    const [categoryTabletTop, setCategoryTabletTop] = useState(1)
+    const [categoryTabletBottom, setCategoryTabletBottom] = useState(3)
+    const [product, setProduct] = useState([]);
+    const [productTop, setProductTop] = useState([]);
+    const [productBottom, setProductBottom] = useState([]);
+    useEffect(() => {
+        if (!loadingProduct && !loadingProductForType && !loadingCategory){
+            setProduct(products?.filter(product => product.categoryID === 1))
+        }
+        else{
+            setProduct(products?.filter(product => product.categoryID === category))
+        }
+    }, [loadingProduct, loadingCategory, loadingProductForType, category])
+
+
+    useEffect(() => {
+        setProductTop(products?.filter(product => product.categoryID == categoryTabletTop))
+        setProductBottom(products?.filter(product => product.categoryID == categoryTabletBottom))
+    }, [categoryTabletTop, categoryTabletBottom])
 
     const handleActive = () => {
         const laptop = document.querySelector('.container--item .laptop')   
@@ -64,7 +98,7 @@ const Home = () => {
         else{
             laptop.classList.remove('active')
         }
-        setCategory("1")
+        setCategory(1)
     }
     const handleActiveScreenTablet = () => {
         const laptop = document.querySelector('.container--item--tablet .container--item .laptop')   
@@ -80,7 +114,7 @@ const Home = () => {
         else{
             laptop.classList.remove('active')
         }
-        setCategoryTabletTop("1")
+        setCategoryTabletTop(1)
     }
 
     const handleActivePhone = () => {
@@ -97,7 +131,7 @@ const Home = () => {
         else{
             phone.classList.remove('active')
         }
-        category = setCategory("2")
+        category = setCategory(2)
     }
     const handleActivePhoneTablet = () => {
         const laptop = document.querySelector('.container--item--tablet .container--item .laptop')   
@@ -113,7 +147,7 @@ const Home = () => {
         else{
             phone.classList.remove('active')
         }
-        categoryTabletTop = setCategoryTabletTop("2")
+        setCategoryTabletTop(2)
     }
     const handleActiveTablet = () => {
         const laptop = document.querySelector('.container--item .laptop')   
@@ -129,7 +163,7 @@ const Home = () => {
         else{
             tablet.classList.remove('active')
         }
-        category = setCategory("3")
+        category = setCategory(3)
     }
     const handleActiveTabletScreenTablet = () => {
         // const laptop = document.querySelector('.container--item--tablet .container--item .laptop')   
@@ -145,7 +179,7 @@ const Home = () => {
         else{
             tablet.classList.remove('active')
         }
-        categoryTabletBottom = setCategoryTabletBottom("3")
+        categoryTabletBottom = setCategoryTabletBottom(3)
     }
     const handleActiveAttribute = () => {
         const laptop = document.querySelector('.container--item .laptop')   
@@ -161,6 +195,7 @@ const Home = () => {
         else{
             linhkien.classList.remove('active')
         }
+        category = setCategory(4)
     }
     const handleActiveAttributeSreenTablet = () => {
         // const laptop = document.querySelector('.container--item--tablet .container--item .laptop')   
@@ -176,17 +211,17 @@ const Home = () => {
         else{
             linhkien.classList.remove('active')
         }
+        categoryTabletBottom = setCategoryTabletBottom(4)
     }
 
     useEffect(() => {
-        const product = Products.filter(product => product.CategoryID === category).map(item => (item))
-        const productTop = Products.filter(product => product.CategoryID === categoryTabletTop).map(item => (item))
-        const productBottom = Products.filter(product => product.CategoryID === categoryTabletBottom).map(item => (item))
+        const product = products.filter(product => product.categoryID === category).map(item => (item))
+        const productTop = products.filter(product => product.categoryID === categoryTabletTop).map(item => (item))
+        const productBottom = products.filter(product => product.categoryID === categoryTabletBottom).map(item => (item))
         setProduct(product)
         setCategoryTabletTop(productTop)
         setCategoryTabletBottom(productBottom)
     }, [category])
-
     return (
     <div className="container-fluid home col-lg-12 col-sm-12 col-md-12" style={{padding: '2rem 0'}}>
         <Carousel />
@@ -213,32 +248,36 @@ const Home = () => {
                     <Row className='container__item'>
                         <Col lg={12} md={12} sm={12} className='container__item--child'>
                             {
-                                productData.getProductsForRecommendation(8, product).map((item) => {
-                                            return (
-                                                <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={item.ProductID} >
-                                                <Link to = {item.Slug}>
-                                                <div className="child--contains--img">
-                                                        <img src={item.Image} alt="" />
+                                (loadingProduct) ? (
+                                    <Skeleton active/>
+                                ) : (
+                                        productData.GetProductsForRecommendation(8, product).map((item) => {
+                                                    return (
+                                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={item.productID} >
+                                                        <Link to = {item.slug}>
+                                                        <div className="child--contains--img">
+                                                            <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
+                                                            </div>
+                                                            <div className="contains--title">
+                                                            <h3>{item.name}</h3>
+                                                            <div className="child--contains--price">
+                                                                <div>
+                                                                    <span className="contains--price--discount"><del>22.000.000đ</del></span>
+                                                                    <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
+                                                                </div>
+                                                                <div className="contains--price-pecent">
+                                                                    <p>1%</p>
+                                                                </div>
+                                                            </div></div></Link>
+                                                            <div className="child--contain--action">
+                                                                <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
+                                                            </div>
                                                     </div>
-                                                    <div className="contains--title">
-                                                    <h3>{item.Name}</h3>
-                                                    <div className="child--contains--price">
-                                                        <div>
-                                                            <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                            <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
-                                                        </div>
-                                                        <div className="contains--price-pecent">
-                                                            <p>1%</p>
-                                                        </div>
-                                                    </div></div></Link>
-                                                    <div className="child--contain--action">
-                                                        <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                        <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
-                                                    </div>
-                                            </div>
-                                            )
-                                        })
-                                    }
+                                                    )
+                                                })
+                                )
+                            }
                         </Col>
                     </Row>
                 </div>
@@ -257,19 +296,19 @@ const Home = () => {
                     <Row className='container__item' style={{padding: '1rem 0'}}>
                         <Col lg={12} md={12} sm={12} className='container__item--child'>
                             {
-                                productData.getProductsForRecommendation(6, productTop).map((item,idx) => {
+                                productData.GetProductsForRecommendation(6, productTop).map((item,idx) => {
                                             return (
                                                 <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
-                                                <Link to = {item.Slug}>
+                                                <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                        <img src={item.Image} alt="" />
+                                                        <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                     </div>
                                                     <div className="contains--title">
-                                                    <h3>{item.Name}</h3>
+                                                    <h3>{item.name}</h3>
                                                     <div className="child--contains--price">
                                                         <div>
                                                             <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                            <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                                            <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
                                                         </div>
                                                         <div className="contains--price-pecent">
                                                             <p>1%</p>
@@ -277,7 +316,7 @@ const Home = () => {
                                                     </div>
                                                     </div></Link>
                                                     <div className="child--contain--action">
-                                                        <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                        <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                         <Link to = {`/cart`} className = "button"><button className='contains--action-addcart'>Giỏ Hàng</button></Link>
                                                     </div>
                                             </div>
@@ -303,25 +342,25 @@ const Home = () => {
                     <Row className='container__item'>
                         <Col lg={12} md={12} sm={12} className='container__item--child'>
                             {
-                                productData.getProductsForRecommendation(6, productBottom).map((item,idx) => {
+                                productData.GetProductsForRecommendation(6, productBottom).map((item,idx) => {
                                             return (
                                                 <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
-                                                <Link to = {item.Slug}>
+                                                <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                        <img src={item.Image} alt="" />
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                     </div>
-                                                    <h3>{item.Name}</h3>
+                                                    <h3>{item.name}</h3>
                                                     <div className="child--contains--price">
                                                         <div>
                                                             <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                            <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                                            <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
                                                         </div>
                                                         <div className="contains--price-pecent">
                                                             <p>1%</p>
                                                         </div>
                                                     </div></Link>
                                                     <div className="child--contain--action">
-                                                        <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                        <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                         <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                                     </div>
                                             </div>
@@ -343,32 +382,32 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getRandomProducts(8).map((item, idx) => {
-                                return (
-                                    <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
-                                        <Link to = {item.Slug}>
-                                        <div className="child--contains--img">
-                                            <img src={item.Image} alt="" />
-                                        </div>
-                                        <div className="contains--title">
-                                        <h3>{item.Name}</h3>
-                                        <div className="child--contains--price">
-                                            <div>
-                                                <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                    productData.GetRandomProducts(8).map((item, idx) => {
+                                        return (
+                                            <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
+                                                <Link to = {item.slug}>
+                                                <div className="child--contains--img">
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
+                                                </div>
+                                                <div className="contains--title">
+                                                <h3>{item.name}</h3>
+                                                <div className="child--contains--price">
+                                                    <div>
+                                                        <span className="contains--price--discount"><del>22.000.000đ</del></span>
+                                                        <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
+                                                    </div>
+                                                    <div className="contains--price-pecent">
+                                                        <p>1%</p>
+                                                    </div>
+                                                </div></div>
+                                                </Link>
+                                                <div className="child--contain--action">
+                                                    <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
+                                                </div>
                                             </div>
-                                            <div className="contains--price-pecent">
-                                                <p>1%</p>
-                                            </div>
-                                        </div></div>
-                                        </Link>
-                                        <div className="child--contain--action">
-                                            <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                            <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
-                                        </div>
-                                    </div>
-                                )
-                            })
+                                        )
+                                    })
                         }
                      </Col>
                 </Row>
@@ -385,18 +424,21 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, phone).map((item, idx) => {
+                            (loadingProduct || loadingProductForType) ? (
+                                <Skeleton active/>
+                            ): (
+                            productData.GetProductsForRecommendation(8, phone).map((item, idx) => {
                                         return (
                                             <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
-                                                <Link to = {item.Slug}><div className="child--contains--img">
-                                                    <img src={item.Image} alt="" />
+                                                <Link to = {item.slug}><div className="child--contains--img">
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                 </div>
                                                 <div className="contains--title">
-                                                <h3>{item.Name}</h3>
+                                                <h3>{item.name}</h3>
                                                 <div className="child--contains--price">
                                                     <div>
                                                         <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                        <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                                        <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
                                                     </div>
                                                     <div className="contains--price-pecent">
                                                         <p>1%</p>
@@ -404,12 +446,13 @@ const Home = () => {
                                                 </div></div>
                                                 </Link>
                                                 <div className="child--contain--action">
-                                                    <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                    <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                     <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                                 </div>
                                             </div>
                                         )
                             })
+                            )
                         }
                      </Col>
                 </Row>
@@ -426,18 +469,21 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, laptop).map((item, idx) => {
+                            (loadingProduct || loadingProductForType) ? (
+                                <Skeleton active/>
+                            ) : (
+                            productData.GetProductsForRecommendation(8, laptop).map((item, idx) => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
-                                            <Link to={item.Slug}><div className="child--contains--img">
-                                                <img src={item.Image} alt="" />
+                                            <Link to={item.slug}><div className="child--contains--img">
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
-                                            <h3>{item.Name}</h3>
+                                            <h3>{item.name}</h3>
                                             <div className="child--contains--price">
                                                 <div>
                                                     <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                    <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                                    <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
                                                 </div>
                                                 <div className="contains--price-pecent">
                                                     <p>1%</p>
@@ -445,12 +491,13 @@ const Home = () => {
                                             </div></div>
                                             </Link>
                                             <div className="child--contain--action">
-                                                <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                 <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )
                             })
+                            )
                         }
                      </Col>
                 </Row>
@@ -467,18 +514,21 @@ const Home = () => {
                      </Col>
                      <Col lg={12} md={12} sm={12} className='container__item--child'>
                         {
-                            productData.getProductsForRecommendation(8, tablet).map((item, idx) => {
+                            (loadingProduct || loadingProductForType) ? (
+                                <Skeleton active />
+                            ) : (
+                            productData.GetProductsForRecommendation(8, tablet).map((item, idx) => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
-                                            <Link to={item.Slug}><div className="child--contains--img">
-                                                <img src={item.Image} alt="" />
+                                            <Link to={item.slug}><div className="child--contains--img">
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
-                                            <h3>{item.Name}</h3>
+                                            <h3>{item.name}</h3>
                                             <div className="child--contains--price">
                                                 <div>
                                                     <span className="contains--price--discount"><del>22.000.000đ</del></span>
-                                                    <h4 className="contains--price-unit">{formatProductPrice(item.UnitPrice)}</h4>
+                                                    <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
                                                 </div>
                                                 <div className="contains--price-pecent">
                                                     <p>1%</p>
@@ -486,7 +536,49 @@ const Home = () => {
                                             </div></div>
                                             </Link>
                                             <div className="child--contain--action">
-                                                <Link to = {`/${item.Slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
+                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            )
+                            )
+                        }
+                     </Col>
+                </Row>
+                <Row style={{padding : '2rem 0'}}>
+                     <Col lg={12} md={12} sm={12}>
+                        <img src={Banner4} alt="" style={{width: '100%'}}/>
+                     </Col>
+                </Row>
+                <Row className='container__item'>
+                     <Col lg={12} md={12} sm={12} style= {{display: 'flex', justifyContent: 'space-between'}} className='container__item--title'>
+                        <h4 style={{color: '#000' }}>PC - LINH KIỆN</h4>
+                        <Link to={'/category/may-tinh-bang'}><p className='item--title-show'>Xem tất cả</p></Link>
+                     </Col>
+                     <Col lg={12} md={12} sm={12} className='container__item--child'>
+                        {
+                            productData.GetProductsForRecommendation(8, PC).map((item, idx) => {
+                                    return (
+                                        <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
+                                            <Link to={item.slug}><div className="child--contains--img">
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
+                                            </div>
+                                            <div className="contains--title">
+                                            <h3>{item.name}</h3>
+                                            <div className="child--contains--price">
+                                                <div>
+                                                    <span className="contains--price--discount"><del>22.000.000đ</del></span>
+                                                    <h4 className="contains--price-unit">{formatProductPrice(item.unitPrice)}</h4>
+                                                </div>
+                                                <div className="contains--price-pecent">
+                                                    <p>1%</p>
+                                                </div>
+                                            </div></div>
+                                            </Link>
+                                            <div className="child--contain--action">
+                                                <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
                                                 <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => dispatch(addToCart(item))}>Giỏ Hàng</button></Link>
                                             </div>
                                         </div>

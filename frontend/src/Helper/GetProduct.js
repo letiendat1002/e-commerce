@@ -1,15 +1,30 @@
-import Products from "../assets/data/product";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { getAllProducts } from "../Redux/slice/productSlice";
 
-const getAllProducts = () => Products
+const Products = () => {
+    const dispatch = useDispatch();
 
-const getRandomProducts = (count) => {
-    const max = Products.length - count
-    const min = 0
-    const start = Math.floor(Math.random() * (max - min) + min)
-    return Products.slice(start, start + count)
+    useEffect(() => {
+        dispatch(getAllProducts());
+    }, []);
+
+    const products = useSelector(state => state.product.data || []);
+
+    return products;
 }
 
-const getProductsForRecommendation = (count, productsOfCategory) => {
+
+const GetRandomProducts = (count) => {
+    const products = useSelector(state => state.product.data || []);
+    const max = products.length - count
+    const min = 0
+    const start = Math.floor(Math.random() * (max - min) + min)
+    return products.slice(start, start + count)
+}
+
+function GetProductsForRecommendation(count, productsOfCategory){
+    // const products = useSelector(state => state.product.data || []);
     const max = productsOfCategory.length - count
     const min = 0
     const start = Math.floor(Math.random() * (max - min) + min)
@@ -17,7 +32,7 @@ const getProductsForRecommendation = (count, productsOfCategory) => {
 }
 
 
-const getProductsOfCategory = (CategoryID) => Products.find(e => e.CategoryID === CategoryID)
+const GetProductsOfCategory = (CategoryID) => Products.find(e => e.CategoryID === CategoryID)
 // const getProductForCategory = (count) => {
 //     const max = product.length - count
 //     const min = 0
@@ -28,10 +43,9 @@ const getProductsOfCategory = (CategoryID) => Products.find(e => e.CategoryID ==
 
 
 const productData = {
-    getAllProducts,
-    getRandomProducts,
-    getProductsOfCategory, 
-    getProductsForRecommendation
+    GetRandomProducts,
+    GetProductsOfCategory, 
+    GetProductsForRecommendation
 }
 
 export default productData

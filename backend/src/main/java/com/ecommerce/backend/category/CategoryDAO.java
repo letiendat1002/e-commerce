@@ -9,8 +9,6 @@ public interface CategoryDAO {
 
     Optional<Category> selectCategoryByID(BigInteger categoryID);
 
-    Optional<Category> selectCategoryBySlug(String slug);
-
     Optional<Category> insertCategory(Category category);
 
     void deleteCategoryByID(BigInteger categoryID);

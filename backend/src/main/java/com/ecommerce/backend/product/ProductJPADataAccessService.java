@@ -29,11 +29,6 @@ public class ProductJPADataAccessService implements ProductDAO {
     }
 
     @Override
-    public Optional<Product> selectProductBySlug(String slug) {
-        return productRepository.findBySlug(slug);
-    }
-
-    @Override
     public Optional<Product> insertProduct(Product product) {
         return Optional.of(productRepository.save(product));
     }

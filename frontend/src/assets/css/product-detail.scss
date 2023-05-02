@@ -190,6 +190,15 @@
 .product-details p {
   margin: 5px 0;
   line-height: 28px;
+  display: -webkit-box;
+  max-width: 100%;
+  height: 110px;
+  line-height: 2;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space:  normal;
+  text-overflow: ellipsis;
 }
 
 .box {
@@ -372,7 +381,7 @@ a.re-link-js--open-modal2:hover{
     display: -webkit-box;
     max-width: 100%;
     margin: 0 auto;
-    height: 30px;
+    height: 25px;
     line-height: 1;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
