@@ -1,49 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import TableProducts from '../TableProducts/TableProducts';
-import apiService from '../../../services/apiServiceProducts';
-import { useDispatch, useSelector } from 'react-redux';
-// import productApi from '../../../services/apiServiceProducts';
+import classnames from 'classnames/bind';
+import styles from './ManageCategory.module.scss';
+import TableCategory from './TableCategory/TableCategory';
+import categoryApi from '../../../services/apiGetCategory';
+import axios from 'axios';
 
-const ManageProducts = (props) => {
-  const [productsList, setProductsList] = useState([]);
-  const [pagination, setPagination] = useState({
-    limit: 9,
-    total: { data: 10 },
-    page: 1,
-  });
+let cx = classnames.bind(styles);
+
+const ManageCategory = (props) => {
   const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
-  const [filters, setFilters] = useState({ _page: 1, _limit: 6 });
-  // const [currentPage, setCurrentPage] = useState(1);
-  const countPage = Math.ceil(pagination.total / pagination.limit);
-  console.log(countPage);
+  const [categoryList, setCategoryList] = useState('');
 
   useEffect(() => {
-    const callApiProdcuts = async () => {
+    const callApiCategory = async () => {
       try {
-        const { pagination, data } = await apiService.getAll(filters);
-
-        console.log(pagination);
-        console.log(data);
-        setProductsList(data);
-        setPagination(pagination);
+        const res = await categoryApi.getAllCategory();
+        // const res2 = await axios.get('http://localhost:8080/api/v1/categories')
+        console.log(res);
+        // setCategoryList(data)
       } catch (err) {
         console.log('Failed to fetch product', err);
       }
     };
-    callApiProdcuts();
-  }, [filters, dispatch]);
+    callApiCategory();
+  }, []);
 
-  const handlePageChange = (page) => {
-    setFilters((prev) => ({
-      ...prev,
-      _page: page,
-    }));
-  };
-  console.log(filters);
-
-  console.log(productsList);
+  console.log(categoryList);
   return (
     <>
       <div className='manage-products-container'>
@@ -62,11 +45,11 @@ const ManageProducts = (props) => {
           </div>
 
           <div className='table-products-container'>
-            <TableProducts
-              listProducts={productsList}
-              countPage={countPage}
+            <TableCategory
+              categoryList={categoryList}
+              //   countPage={countPage}
               // setCurrentPage={setCurrentPage}
-              handlePageChange={handlePageChange}
+              //   handlePageChange={handlePageChange}
             />
             {/* <TableUser
             data={data}
@@ -90,6 +73,6 @@ const ManageProducts = (props) => {
   );
 };
 
-ManageProducts.propTypes = {};
+ManageCategory.propTypes = {};
 
-export default ManageProducts;
+export default ManageCategory;

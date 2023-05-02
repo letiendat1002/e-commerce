@@ -55,20 +55,19 @@ const Login = () => {
     // dispatch(authenticate({username, password}))
 
     //login
-    const { email: identifier, password } = values;
+    const { email, password } = values;
     console.log(values);
-    console.log(identifier);
-    const res = await dispatch(login({ identifier, password }));
+
+    const res = await dispatch(login({ email, password }));
     console.log(res);
 
     const { meta, payload } = res;
 
-    if (meta.requestStatus === 'fulfilled') {
-      toast.success(`Wellcom back ${payload.fullName}`);
-    }
-    console.log(values);
-    form.resetFields();
-    navigate('/');
+    // if (meta.requestStatus === 'fulfilled') {
+    //   toast.success(`Wellcom back ${payload.fullName}`);
+    // }
+    // form.resetFields();
+    // navigate('/');
 
     //resgi
   };
@@ -142,8 +141,8 @@ const Login = () => {
                   message: 'Vui lòng nhập mật khẩu của bạn.',
                 },
                 {
-                  min: 6,
-                  message: 'Mật khẩu phải bao gồm ít nhất 6 ký tự',
+                  min: 5,
+                  message: 'Mật khẩu phải bao gồm ít nhất 5 ký tự',
                 },
               ]}>
               <Input.Password
@@ -283,7 +282,7 @@ const Login = () => {
                   message: 'Vui lòng nhập mật khẩu của bạn.',
                 },
                 {
-                  min: 6,
+                  min: 5,
                   message: 'Mật khẩu phải bao gồm ít nhất 6 ký tự',
                 },
               ]}>
