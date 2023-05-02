@@ -25,7 +25,7 @@ export const login = createAsyncThunk('user/login', async (payload) => {
 
   //save data local storage
   localStorage.setItem(STORAGE_KEYS.TOKEN, res.token);
-  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res.user));
+  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res?.data));
 
   //return user data
   return res;
@@ -34,7 +34,7 @@ export const login = createAsyncThunk('user/login', async (payload) => {
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    current: JSON.parse(localStorage.getItem(STORAGE_KEYS.USER)) || {},
+    current: JSON.parse(localStorage.getItem(STORAGE_KEYS.USER)) || [],
     settings: {},
   },
   reducers: {

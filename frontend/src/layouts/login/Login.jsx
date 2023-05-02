@@ -59,17 +59,14 @@ const Login = () => {
     console.log(values);
 
     const res = await dispatch(login({ email, password }));
+
     console.log(res);
 
-    const { meta, payload } = res;
-
-    // if (meta.requestStatus === 'fulfilled') {
-    //   toast.success(`Wellcom back ${payload.fullName}`);
-    // }
-    // form.resetFields();
-    // navigate('/');
-
-    //resgi
+    if (res.payload.status === 200) {
+      toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
+    }
+    form.resetFields();
+    navigate('/');
   };
 
   const handleLogin = (item) => {
