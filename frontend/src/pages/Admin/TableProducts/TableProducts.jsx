@@ -13,7 +13,7 @@ const TableProducts = (props) => {
     countPage,
     currentPage,
     setCurrentPage,
-    handlePageChange
+    handlePageChange,
   } = props;
   console.log(listProducts);
 
@@ -26,12 +26,12 @@ const TableProducts = (props) => {
   const handlePageClick = (event) => {
     // callApiWithPaginate(+event.selected + 1);
     // setCurrentPage(+event.selected + 1);
-    handlePageChange(+event.selected + 1)
+    handlePageChange(+event.selected + 1);
     console.log(`User requested page number ${event.selected}`);
   };
 
   // const handlePageChange = () => {
-    
+
   // }
 
   return (
@@ -118,28 +118,27 @@ const TableProducts = (props) => {
           </tbody>
         </Table>
 
-      <ReactPaginate
-        nextLabel='Next>'
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={3}
-        marginPagesDisplayed={2}
-        pageCount={countPage}
-        previousLabel='<Pre'
-        pageClassName='page-item'
-        pageLinkClassName='page-link'
-        previousClassName='page-item'
-        previousLinkClassName='page-link'
-        nextClassName='page-item'
-        nextLinkClassName='page-link'
-        breakLabel='...'
-        breakClassName='page-item'
-        breakLinkClassName='page-link'
-        containerClassName='pagination'
-        activeClassName='active'
-        renderOnZeroPageCount={null}
-        // forcePage={currentPage - 1}
+        <ReactPaginate
+          nextLabel='Next>'
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={2}
+          pageCount={countPage}
+          previousLabel='<Pre'
+          pageClassName='page-item'
+          pageLinkClassName='page-link'
+          previousClassName='page-item'
+          previousLinkClassName='page-link'
+          nextClassName='page-item'
+          nextLinkClassName='page-link'
+          breakLabel='...'
+          breakClassName='page-item'
+          breakLinkClassName='page-link'
+          containerClassName='pagination'
+          activeClassName='active'
+          renderOnZeroPageCount={null}
+          // forcePage={currentPage - 1}
         />
-        
       </div>
 
       {/* <PaginatedItems  />, */}

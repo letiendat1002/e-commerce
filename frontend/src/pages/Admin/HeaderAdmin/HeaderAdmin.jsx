@@ -7,46 +7,41 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Language from '../components/Lang/Language';
 import './HeaderAdmin.scss';
-import { logoutAction } from '../../../actions/userAction';
 
 const HeaderAdmin = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isAuthenticated = useSelector((state) => state.userLogin.user.confirmed);
-  const userName = useSelector((state) => state.userLogin.user);
-  const data = useSelector(state => state.userLogin)
-  console.log(data)
+  const { current } = useSelector((state) => state.user);
+  console.log(current);
+  const { username, email, confirmed } = current;
 
-  const dataLocal = JSON.parse(localStorage.getItem('userLogin')) ||[]
-  console.log(dataLocal);
+  // const dataLocal = JSON.parse(localStorage.getItem('userLogin')) || [];
+  // console.log(dataLocal);
 
-  const { user } = dataLocal;
+  // const { user } = dataLocal;
 
-  const { username, fullName } = userName;
   // console.log(username, fullName, isAuthenticated);
   const handleLogin = () => {
     navigate('/admin/login');
   };
-  
+
   const handleLogOut = () => {
-    dispatch(logoutAction())
-    console.log("Logout")
+    // dispatch(logoutAction());
+    console.log('Logout');
     navigate('/admin/login');
     // document.location.href="/admin/login"
-
-  }
-
+  };
 
   return (
     <>
       <Language />
 
-      {user&& user?.confirmed ? (
+      {username && confirmed ? (
         <NavDropdown
-          title={user?.username}
+          title={email}
           id='basic-nav-dropdown'>
-          <NavDropdown.Item>{user?.fullName}</NavDropdown.Item>
+          <NavDropdown.Item>{username}</NavDropdown.Item>
           <NavDropdown.Item onClick={handleLogOut}>LogOut</NavDropdown.Item>
           <NavDropdown.Item
             onClick={handleLogin}
@@ -64,7 +59,7 @@ const HeaderAdmin = (props) => {
           <NavDropdown.Item
             onClick={handleLogin}
             tag={Link}
-            to='/admin/login'>
+            to='/login'>
             Login
           </NavDropdown.Item>
         </NavDropdown>
