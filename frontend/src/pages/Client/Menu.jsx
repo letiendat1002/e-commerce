@@ -25,6 +25,7 @@ import Logo from '../../assets/images/Logo.svg';
 import NotFoundItem from '../../assets/images/noti-search.png';
 import { getAllProducts } from '../../Redux/slice/productSlice';
 import { getAllCategories } from '../../Redux/slice/categorySlice';
+import { Skeleton } from 'antd';
 const slides = [Item1, Item2, Item3, Item4, Item5, Item6, Item7];
 
 const Menu = ({ match, history }) => {
@@ -243,9 +244,6 @@ const Menu = ({ match, history }) => {
     }
   };
 
-  console.log(filter)
-  console.log(product)
-
   // Functiom handle Filter Product in Tablet and mobile Screen
 
   const filterCheck = (children, attribute) => {
@@ -415,10 +413,13 @@ const Menu = ({ match, history }) => {
   // Function handle Update Product depend on filter state
 
   const updateProducts = useCallback(() => {
-    let temp = product;
+    let temp = item;
 
     if (filter.manufactorer.length > 0) {
       temp = temp.filter((e) => filter.manufactorer.includes(e.manufacturer));
+    }
+    else if (filter.manufactorer.length == 0){
+      temp = item
     }
     if (filter.ram.length > 0) {
       temp = temp.filter((e) => filter.ram.includes(e.ram));
@@ -487,7 +488,7 @@ const Menu = ({ match, history }) => {
       });
     }
     setProduct(temp);
-  },[filter, product]);
+  },[filter]);
 
   useEffect(() => {
     updateProducts();
@@ -532,7 +533,7 @@ const Menu = ({ match, history }) => {
   const CountProduct = () => {
     let count = 0;
     for (let i = 0; i < product.length; i++) {
-      if (product[i].categoryID === catagoryID) {
+      if (product[i].categoryID == catagoryID) {
         count = count + 1;
       }
     }
@@ -540,14 +541,11 @@ const Menu = ({ match, history }) => {
   };
 
   // State ProductLength of every type
-  // const [productLength, setProductLength] = useState(0);
-  // useEffect(() => {
-  //   setProductLength(product.filter((item) => item.categoryID === catagoryID).length)
-  // }, [product, catagoryID])
+  const [productLength, setProductLength] = useState(CountProduct());
 
-  // useEffect(() => {
-  //   setProductLength(CountProduct);
-  // }, [CountProduct]);
+  useEffect(() => {
+    setProductLength(CountProduct());
+  }, [CountProduct]);
 
   // Function handle Change Checked when change screen
   useEffect(() => {
@@ -664,613 +662,621 @@ const Menu = ({ match, history }) => {
             );
           }
         })}
-        <div
-          className='slider'
-          style={{ minHeight: '240px' }}>
-          <Slider {...settings}>
-            {slides.map((slide, idx) => {
-              return (
+        {
+            (loadingProduct) ? (
+              <Skeleton active />
+            ) : (
+              <>
                 <div
-                  style={{ borderRadius: '10px', border: '1px solid #d5d5d5' }}
-                  key={idx}>
-                  <img
-                    src={slide}
-                    alt=''
-                    style={{ width: '100%', minHeight: '240px' }}
-                  />
+                  className='slider'
+                  style={{ minHeight: '240px' }}>
+                  <Slider {...settings}>
+                    {slides.map((slide, idx) => {
+                      return (
+                        <div
+                          style={{ borderRadius: '10px', border: '1px solid #d5d5d5' }}
+                          key={idx}>
+                          <img
+                            src={slide}
+                            alt=''
+                            style={{ width: '100%', minHeight: '240px' }}
+                          />
+                        </div>
+                      );
+                    })}
+                  </Slider>
                 </div>
-              );
-            })}
-          </Slider>
-        </div>
-        <div
-          className='tablet'
-          style={{ display: 'flex', padding: '2rem 0' }}>
-          <div
-            className='catagory__container col-lg-3 col-md-4'
-            style={{ paddingTop: '1rem' }}>
-            {Catagory.map((catalog, idx) => {
-              if (catalog.slug === slug) {
-                return catalog.attribute.map((attribute, key) => {
-                  return (
-                    <div
-                      className='catagory__container--item'
-                      key={key}>
-                      <h5>{attribute.name}</h5>
-                      <ul>
-                        {attribute?.childrend.map((children, key) => {
+                <div
+                  className='tablet'
+                  style={{ display: 'flex', padding: '2rem 0' }}>
+                  <div
+                    className='catagory__container col-lg-3 col-md-4'
+                    style={{ paddingTop: '1rem' }}>
+                    {Catagory.map((catalog, idx) => {
+                      if (catalog.slug === slug) {
+                        return catalog.attribute.map((attribute, key) => {
                           return (
-                            <li key={key}>
-                              <input
-                                type='checkbox'
-                                checked={children.check}
-                                name={attribute.title}
-                                value={children.value}
-                                onChange={(e) => filterSelect(attribute.title, e)}
-                              />
-                              <p>{children.name}</p>
-                            </li>
+                            <div
+                              className='catagory__container--item'
+                              key={key}>
+                              <h5>{attribute.name}</h5>
+                              <ul>
+                                {attribute?.childrend.map((children, key) => {
+                                  return (
+                                    <li key={key}>
+                                      <input
+                                        type='checkbox'
+                                        checked={children.check}
+                                        name={attribute.title}
+                                        value={children.value}
+                                        onChange={(e) => filterSelect(attribute.title, e)}
+                                      />
+                                      <p>{children.name}</p>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
                           );
-                        })}
-                      </ul>
-                    </div>
-                  );
-                });
-              }
-            })}
-          </div>
-          <div className='catagory__container--tablet col-sm-12 col-md-12 col-12'>
-            <h3 className='select__item--title'>Hãng sản xuất</h3>
-            <div className='select__item'>
-              {Catagory.map((catalog, key) => {
-                if (catalog.slug === slug) {
-                  return catalog.attribute.map((attribute, key) => {
-                    if (attribute.title === 'Manufacturer') {
-                      return attribute.childrend.map((children, key) => {
-                        return (
-                          <div
-                            className='select__item--child'
-                            onClick={() => filterCheck(children, attribute)}
-                            key={key}>
-                            <img
-                              src={children.image}
-                              alt=''
-                            />
-                          </div>
-                        );
-                      });
-                    }
-                  });
-                }
-              })}
-            </div>
-          </div>
-          <div className='catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3'>
-            <h4 className='select__item--title'>Mức Giá</h4>
-            <div className='select__item'>
-              {Catagory.map((catalog, key) => {
-                if (catalog.slug === slug) {
-                  return catalog.attribute.map((attribute, key) => {
-                    if (attribute.title === 'UnitPrice') {
-                      return attribute.childrend.map((children, key) => {
-                        return (
-                          <div
-                            className='select__item--child'
-                            key={key}>
-                            <span
-                              onClick={() => filterCheck(children, attribute)}
-                              style={{ whiteSpace: 'nowrap' }}>
-                              {children.name}
-                            </span>
-                          </div>
-                        );
-                      });
-                    }
-                  });
-                }
-              })}
-            </div>
-          </div>
-          <div className='catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3'>
-            <div className='container__tablet-sort'>
-              <button className='container__tablet--sort'>
-                <span>Sắp xếp</span>
-                <HiSelector />
-              </button>
-              <button
-                className='container__tablet--feature'
-                onClick={() => handleOpenMenuSelect()}>
-                <span>Tính năng</span>
-                <AiFillFilter />
-              </button>
-            </div>
-          </div>
-          <div className='menuTablet d-none'>
-            <ul className='menuTablet__item'>
-              <li className='menuTablet__item--child'>
-                <img
-                  src={Logo}
-                  alt=''
-                />
-                <i onClick={() => handleOpenMenuSelect()}>
-                  <AiOutlineClose />
-                </i>
-              </li>
-              {Catagory.map((catagory, key) => {
-                if (catagory.slug === slug) {
-                  return catagory.attribute.map((attribute, idx) => {
-                    return (
-                      <div
-                        className='menuTablet__container'
-                        key={idx}>
-                        <li
-                          className='menuTablet__item--child'
-                          key={key}>
-                          <p>{attribute.name}</p>
-                          <span
-                            className={`plusIcon__${attribute.title}`}
-                            onClick={() => handleOpenMenu(attribute)}>
-                            <AiOutlinePlus />
-                          </span>
-                          <span
-                            className={`closeIcon__${attribute.title} d-none`}
-                            onClick={() => handleOpenMenu(attribute)}>
-                            <MdOutlineRemove />
-                          </span>
-                        </li>
-                        <ul
-                          className={`item__child--select d-none item__attribute__${attribute.title}`}>
-                          {attribute?.childrend.map((children, key) => {
-                            return (
-                              <li key={key}>
-                                <input
-                                  type='checkbox'
-                                  checked={children.check}
-                                  name={attribute.title}
-                                  value={children.value}
-                                  onChange={(e) => filterSelect(attribute.title, e)}
-                                />
-                                <p>{children.name}</p>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    );
-                  });
-                }
-              })}
-            </ul>
-            <div className='actions__menu'>
-              <button
-                className='search'
-                onClick={() => handleOpenMenuSelect()}>
-                Áp dụng
-              </button>
-              <button
-                className='resetOption'
-                onClick={() => setFilter(initFilter)}>
-                Thiết Lập Lại
-              </button>
-            </div>
-          </div>
-          <div
-            className='overlay__menuTablet d-none'
-            onClick={() => handleOpenMenuSelect()}></div>
-          <div className='catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3'>
-            <div className='container__item--filter'>
-              {filter.manufactorer.length > 0 ||
-              filter.unitPrice.length > 0 ||
-              filter.memory.length > 0 ||
-              filter.monitor.length > 0 ||
-              filter.cpu.length > 0 ||
-              filter.ram.length > 0 ||
-              filter.vga.length > 0 ||
-              filter.haskdisk.length > 0 ||
-              filter.battery.length > 0 ||
-              filter.demand.length > 0 ? (
-                <div className='item__filter'>
-                  Lọc theo:
-                  {filter.manufactorer.map((item) => {
-                    return Catagory.map((catagory, idx) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
+                        });
+                      }
+                    })}
+                  </div>
+                  <div className='catagory__container--tablet col-sm-12 col-md-12 col-12'>
+                    <h3 className='select__item--title'>Hãng sản xuất</h3>
+                    <div className='select__item'>
+                      {Catagory.map((catalog, key) => {
+                        if (catalog.slug === slug) {
+                          return catalog.attribute.map((attribute, key) => {
                             if (attribute.title === 'Manufacturer') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'Manufactorer')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
-                                }
+                              return attribute.childrend.map((children, key) => {
+                                return (
+                                  <div
+                                    className='select__item--child'
+                                    onClick={() => filterCheck(children, attribute)}
+                                    key={key}>
+                                    <img
+                                      src={children.image}
+                                      alt=''
+                                    />
+                                  </div>
+                                );
                               });
                             }
                           });
                         }
-                      }
-                    });
-                  })}
-                  {filter.unitPrice.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
+                      })}
+                    </div>
+                  </div>
+                  <div className='catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3'>
+                    <h4 className='select__item--title'>Mức Giá</h4>
+                    <div className='select__item'>
+                      {Catagory.map((catalog, key) => {
+                        if (catalog.slug === slug) {
+                          return catalog.attribute.map((attribute, key) => {
                             if (attribute.title === 'UnitPrice') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'UnitPrice')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
-                                }
+                              return attribute.childrend.map((children, key) => {
+                                return (
+                                  <div
+                                    className='select__item--child'
+                                    key={key}>
+                                    <span
+                                      onClick={() => filterCheck(children, attribute)}
+                                      style={{ whiteSpace: 'nowrap' }}>
+                                      {children.name}
+                                    </span>
+                                  </div>
+                                );
                               });
                             }
                           });
                         }
-                      }
-                    });
-                  })}
-                  {filter.memory.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
+                      })}
+                    </div>
+                  </div>
+                  <div className='catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3'>
+                    <div className='container__tablet-sort'>
+                      <button className='container__tablet--sort'>
+                        <span>Sắp xếp</span>
+                        <HiSelector />
+                      </button>
+                      <button
+                        className='container__tablet--feature'
+                        onClick={() => handleOpenMenuSelect()}>
+                        <span>Tính năng</span>
+                        <AiFillFilter />
+                      </button>
+                    </div>
+                  </div>
+                  <div className='menuTablet d-none'>
+                    <ul className='menuTablet__item'>
+                      <li className='menuTablet__item--child'>
+                        <img
+                          src={Logo}
+                          alt=''
+                        />
+                        <i onClick={() => handleOpenMenuSelect()}>
+                          <AiOutlineClose />
+                        </i>
+                      </li>
+                      {Catagory.map((catagory, key) => {
                         if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'Memory') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'Memory')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
-                                }
-                              });
-                            }
+                          return catagory.attribute.map((attribute, idx) => {
+                            return (
+                              <div
+                                className='menuTablet__container'
+                                key={idx}>
+                                <li
+                                  className='menuTablet__item--child'
+                                  key={key}>
+                                  <p>{attribute.name}</p>
+                                  <span
+                                    className={`plusIcon__${attribute.title}`}
+                                    onClick={() => handleOpenMenu(attribute)}>
+                                    <AiOutlinePlus />
+                                  </span>
+                                  <span
+                                    className={`closeIcon__${attribute.title} d-none`}
+                                    onClick={() => handleOpenMenu(attribute)}>
+                                    <MdOutlineRemove />
+                                  </span>
+                                </li>
+                                <ul
+                                  className={`item__child--select d-none item__attribute__${attribute.title}`}>
+                                  {attribute?.childrend.map((children, key) => {
+                                    return (
+                                      <li key={key}>
+                                        <input
+                                          type='checkbox'
+                                          checked={children.check}
+                                          name={attribute.title}
+                                          value={children.value}
+                                          onChange={(e) => filterSelect(attribute.title, e)}
+                                        />
+                                        <p>{children.name}</p>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </div>
+                            );
                           });
                         }
-                      }
-                    });
-                  })}
-                  {filter.monitor.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'Monitor') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'Monitor')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
+                      })}
+                    </ul>
+                    <div className='actions__menu'>
+                      <button
+                        className='search'
+                        onClick={() => handleOpenMenuSelect()}>
+                        Áp dụng
+                      </button>
+                      <button
+                        className='resetOption'
+                        onClick={() => setFilter(initFilter)}>
+                        Thiết Lập Lại
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    className='overlay__menuTablet d-none'
+                    onClick={() => handleOpenMenuSelect()}></div>
+                  <div className='catagory__container--tablet col-sm-12 col-md-12 col-12 pb-3'>
+                    <div className='container__item--filter'>
+                      {filter.manufactorer.length > 0 ||
+                      filter.unitPrice.length > 0 ||
+                      filter.memory.length > 0 ||
+                      filter.monitor.length > 0 ||
+                      filter.cpu.length > 0 ||
+                      filter.ram.length > 0 ||
+                      filter.vga.length > 0 ||
+                      filter.haskdisk.length > 0 ||
+                      filter.battery.length > 0 ||
+                      filter.demand.length > 0 ? (
+                        <div className='item__filter'>
+                          Lọc theo:
+                          {filter.manufactorer.map((item) => {
+                            return Catagory.map((catagory, idx) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'Manufacturer') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'Manufactorer')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
                                 }
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                  })}
-                  {filter.cpu.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'CPU') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'CPU')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
+                              }
+                            });
+                          })}
+                          {filter.unitPrice.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'UnitPrice') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'UnitPrice')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
                                 }
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                  })}
-                  {filter.ram.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
+                              }
+                            });
+                          })}
+                          {filter.memory.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'Memory') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'Memory')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                          {filter.monitor.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'Monitor') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'Monitor')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                          {filter.cpu.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'CPU') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'CPU')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                          {filter.ram.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'RAM') {
+                                      return attribute.childrend.map((children, idx) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div
+                                              className='item__filter--contain'
+                                              key={idx}>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'RAM')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                          {filter.vga.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'VGA') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'VGA')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                          {filter.haskdisk.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'HardDisk') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'HardDisk')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                          {filter.battery.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'Battery') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'Battery')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                          {filter.demand.map((item) => {
+                            return Catagory.map((catagory) => {
+                              {
+                                if (catagory.slug === slug) {
+                                  return catagory.attribute.map((attribute) => {
+                                    if (attribute.title === 'demand') {
+                                      return attribute.childrend.map((children) => {
+                                        if (children.value === item) {
+                                          return (
+                                            <div className='item__filter--contain'>
+                                              <span>{children.name}</span>
+                                              <i onClick={() => removeFilter(item, 'demand')}>
+                                                <AiOutlineClose />
+                                              </i>
+                                            </div>
+                                          );
+                                        }
+                                      });
+                                    }
+                                  });
+                                }
+                              }
+                            });
+                          })}
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </div>
+                  <div className='catagory__item col-lg-9 col-md-12 col-sm-12'>
+                    <div className='catagory__item--title'>
+                      {Catagory.map((catagory, key) => {
                         if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'RAM') {
-                              return attribute.childrend.map((children, idx) => {
-                                if (children.value === item) {
+                          return (
+                            <div key={key}>
+                              <h3>{catagory.nameCatalogory}</h3>
+                              <span>({productLength} sản phẩm)</span>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                    <div className='catagory__item--container col-lg-12 col-md-12 col-sm-12'>
+                      <div className='catagory__item--container--item'>
+                        <span>Sản phẩm dành cho bạn</span>
+                        <select
+                          value={value}
+                          onChange={handleChange}
+                          style={{
+                            position: 'absolute',
+                            right: '0%',
+                            padding: '5px 20px',
+                            border: '1px solid #d5d5d5',
+                            borderRadius: '5px',
+                            margin: '0 15px',
+                          }}>
+                          <option value='DEFAULT'>Tất cả</option>
+                          <option value='1'>Theo tên từ A - Z</option>
+                          <option value='2'>Sắp xếp theo giá giảm dần</option>
+                        </select>
+                      </div>
+                      <div className='catagory__item--container--child'>
+                        <Col
+                          lg={12}
+                          md={12}
+                          sm={12}
+                          className='container__item--child'>
+                          {product.length > 0 ? (
+                            filterItem === 'Tất cả' ? (
+                              product.map((item, key) => {
+                                if (item.categoryID === catagoryId) {
                                   return (
                                     <div
-                                      className='item__filter--contain'
-                                      key={idx}>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'RAM')}>
-                                        <AiOutlineClose />
-                                      </i>
+                                      className='item--child--contains  col-lg-4 col-md-4 col-sm-6 col-6'
+                                      key={key}>
+                                      <Link to={`/${item.slug}`}>
+                                        <div className='child--contains--img'>
+                                          <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
+                                        </div>
+                                        <div className='contains--title'>
+                                          <h3>{item.name}</h3>
+                                          <div className='child--contains--price'>
+                                            <div>
+                                              <span className='contains--price--discount'>
+                                                <del>22.000.000đ</del>
+                                              </span>
+                                              <h4 className='contains--price-unit'>
+                                                {formatProductPrice(item.unitPrice)}
+                                              </h4>
+                                            </div>
+                                            <div className='contains--price-pecent'>
+                                              <p>1%</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                      <div className='child--contains--action'>
+                                        <Link
+                                          to={`/${item.slug}`}
+                                          className='button'>
+                                          <button className='contains--action--buy'>Mua Hàng</button>
+                                        </Link>
+                                        <Link
+                                          to={`/cart`}
+                                          className='button'>
+                                          <button
+                                            className='contains--action-addcart'
+                                            onClick={() => dispatch(addToCart(item))}>
+                                            Giỏ Hàng
+                                          </button>
+                                        </Link>
+                                      </div>
                                     </div>
                                   );
                                 }
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                  })}
-                  {filter.vga.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'VGA') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
+                              })
+                            ) : filterItem === 'Theo tên từ A - Z' ? (
+                              product.map((item, key) => {
+                                if (item.categoryID === catagoryId) {
                                   return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'VGA')}>
-                                        <AiOutlineClose />
-                                      </i>
+                                    <div
+                                      className='item--child--contains col-lg-4 col-md-6 col-sm-6 col-12 '
+                                      key={key}>
+                                      <Link to={`/${item.slug}`}>
+                                        <div className='child--contains--img'>
+                                          <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
+                                        </div>
+                                        <h3>{item.name}</h3>
+                                        <div className='child--contains--price'>
+                                          <div>
+                                            <span className='contains--price--discount'>
+                                              <del>22.000.000đ</del>
+                                            </span>
+                                            <h4 className='contains--price-unit'>
+                                              {formatProductPrice(item.unitPrice)}
+                                            </h4>
+                                          </div>
+                                          <div className='contains--price-pecent'>
+                                            <p>1%</p>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                      <div className='child--contains--action'>
+                                        <Link
+                                          to={`/${item.slug}`}
+                                          className='button'>
+                                          <button className='contains--action--buy'>Mua Hàng</button>
+                                        </Link>
+                                        <Link
+                                          to={`/cart`}
+                                          className='button'>
+                                          <button
+                                            className='contains--action-addcart'
+                                            onClick={() => dispatch(addToCart(item))}>
+                                            Giỏ Hàng
+                                          </button>
+                                        </Link>
+                                      </div>
                                     </div>
                                   );
                                 }
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                  })}
-                  {filter.haskdisk.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'HardDisk') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'HardDisk')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
-                                }
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                  })}
-                  {filter.battery.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'Battery') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'Battery')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
-                                }
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                  })}
-                  {filter.demand.map((item) => {
-                    return Catagory.map((catagory) => {
-                      {
-                        if (catagory.slug === slug) {
-                          return catagory.attribute.map((attribute) => {
-                            if (attribute.title === 'demand') {
-                              return attribute.childrend.map((children) => {
-                                if (children.value === item) {
-                                  return (
-                                    <div className='item__filter--contain'>
-                                      <span>{children.name}</span>
-                                      <i onClick={() => removeFilter(item, 'demand')}>
-                                        <AiOutlineClose />
-                                      </i>
-                                    </div>
-                                  );
-                                }
-                              });
-                            }
-                          });
-                        }
-                      }
-                    });
-                  })}
+                              })
+                            ) : (
+                              <></>
+                            )
+                          ) : (
+                            <div className='not-found-item'>
+                              <img
+                                src={NotFoundItem}
+                                alt=''
+                              />
+                              <p>Rất tiếc chúng tôi không tìm thấy kết quả theo yêu cầu của bạn.</p>
+                              <span>Vui lòng thử lại .</span>
+                              {/* <img className='temp' src={NotFoundItem2} alt="" /> */}
+                            </div>
+                          )}
+                        </Col>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                ''
-              )}
-            </div>
-          </div>
-          <div className='catagory__item col-lg-9 col-md-12 col-sm-12'>
-            <div className='catagory__item--title'>
-              {Catagory.map((catagory, key) => {
-                if (catagory.slug === slug) {
-                  return (
-                    <div key={key}>
-                      <h3>{catagory.nameCatalogory}</h3>
-                      {/* <span>({productLength} sản phẩm)</span> */}
-                    </div>
-                  );
-                }
-              })}
-            </div>
-            <div className='catagory__item--container col-lg-12 col-md-12 col-sm-12'>
-              <div className='catagory__item--container--item'>
-                <span>Sản phẩm dành cho bạn</span>
-                <select
-                  value={value}
-                  onChange={handleChange}
-                  style={{
-                    position: 'absolute',
-                    right: '0%',
-                    padding: '5px 20px',
-                    border: '1px solid #d5d5d5',
-                    borderRadius: '5px',
-                    margin: '0 15px',
-                  }}>
-                  <option value='DEFAULT'>Tất cả</option>
-                  <option value='1'>Theo tên từ A - Z</option>
-                  <option value='2'>Sắp xếp theo giá giảm dần</option>
-                </select>
-              </div>
-              <div className='catagory__item--container--child'>
-                <Col
-                  lg={12}
-                  md={12}
-                  sm={12}
-                  className='container__item--child'>
-                  {product.length > 0 ? (
-                    filterItem === 'Tất cả' ? (
-                      product.map((item, key) => {
-                        if (item.categoryID === catagoryId) {
-                          return (
-                            <div
-                              className='item--child--contains  col-lg-4 col-md-4 col-sm-6 col-6'
-                              key={key}>
-                              <Link to={`/${item.Slug}`}>
-                                <div className='child--contains--img'>
-                                  <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
-                                </div>
-                                <div className='contains--title'>
-                                  <h3>{item.name}</h3>
-                                  <div className='child--contains--price'>
-                                    <div>
-                                      <span className='contains--price--discount'>
-                                        <del>22.000.000đ</del>
-                                      </span>
-                                      <h4 className='contains--price-unit'>
-                                        {formatProductPrice(item.unitPrice)}
-                                      </h4>
-                                    </div>
-                                    <div className='contains--price-pecent'>
-                                      <p>1%</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </Link>
-                              <div className='child--contains--action'>
-                                <Link
-                                  to={`/${item.slug}`}
-                                  className='button'>
-                                  <button className='contains--action--buy'>Mua Hàng</button>
-                                </Link>
-                                <Link
-                                  to={`/cart`}
-                                  className='button'>
-                                  <button
-                                    className='contains--action-addcart'
-                                    onClick={() => dispatch(addToCart(item))}>
-                                    Giỏ Hàng
-                                  </button>
-                                </Link>
-                              </div>
-                            </div>
-                          );
-                        }
-                      })
-                    ) : filterItem === 'Theo tên từ A - Z' ? (
-                      product.map((item, key) => {
-                        if (item.categoryID === catagoryId) {
-                          return (
-                            <div
-                              className='item--child--contains col-lg-4 col-md-6 col-sm-6 col-12 '
-                              key={key}>
-                              <Link to={`/${item.slug}`}>
-                                <div className='child--contains--img'>
-                                  <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
-                                </div>
-                                <h3>{item.name}</h3>
-                                <div className='child--contains--price'>
-                                  <div>
-                                    <span className='contains--price--discount'>
-                                      <del>22.000.000đ</del>
-                                    </span>
-                                    <h4 className='contains--price-unit'>
-                                      {formatProductPrice(item.unitPrice)}
-                                    </h4>
-                                  </div>
-                                  <div className='contains--price-pecent'>
-                                    <p>1%</p>
-                                  </div>
-                                </div>
-                              </Link>
-                              <div className='child--contains--action'>
-                                <Link
-                                  to={`/${item.slug}`}
-                                  className='button'>
-                                  <button className='contains--action--buy'>Mua Hàng</button>
-                                </Link>
-                                <Link
-                                  to={`/cart`}
-                                  className='button'>
-                                  <button
-                                    className='contains--action-addcart'
-                                    onClick={() => dispatch(addToCart(item))}>
-                                    Giỏ Hàng
-                                  </button>
-                                </Link>
-                              </div>
-                            </div>
-                          );
-                        }
-                      })
-                    ) : (
-                      <></>
-                    )
-                  ) : (
-                    <div className='not-found-item'>
-                      <img
-                        src={NotFoundItem}
-                        alt=''
-                      />
-                      <p>Rất tiếc chúng tôi không tìm thấy kết quả theo yêu cầu của bạn.</p>
-                      <span>Vui lòng thử lại .</span>
-                      {/* <img className='temp' src={NotFoundItem2} alt="" /> */}
-                    </div>
-                  )}
-                </Col>
-              </div>
-            </div>
-          </div>
-        </div>
+              </>
+            )
+        }
       </div>
     </div>
   );

@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../Redux/slice/cartSlice.js";
 import { getAllProducts } from "../../Redux/slice/productSlice.js";
 import { getAllCategories } from "../../Redux/slice/categorySlice.js";
-import { Skeleton } from "antd";
 
 const ProductDetail = ({match, history}) => {
   const {slug} = useParams();
@@ -86,12 +85,7 @@ const ProductDetail = ({match, history}) => {
 
   return (
     <div className="product__detail container-fluid"> 
-      {
-        (productLoading === true) ? (
-          <Skeleton active />
-        ) : 
-        (
-          <div className="product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
+      <div className="product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
         <div className="product-header col-lg-12 col-md-12 col-sm-12 col-12">
           <div className="product col-lg-12 col-sm-12 col-md-12 col-12 px-4 py-2">
               {
@@ -570,16 +564,27 @@ const ProductDetail = ({match, history}) => {
                     })
                     )  
                   }
+                else if (product.slug == slug && product.categoryID === 4){
+                  return (
+                    productData.GetProductsForRecommendation(8, PC).map((product,idx) => {
+                      return (
+                          <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
+                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <p className="name">{product.name}</p>
+                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                          </div></Link>
+                      )
+                    })
+                    )  
+                  }
                 
                 })
-                
+    
               }
           </Slider>
         </div>
         </div>
-          </div>
-        )
-      }
+      </div>
     </div>
   );
 };
