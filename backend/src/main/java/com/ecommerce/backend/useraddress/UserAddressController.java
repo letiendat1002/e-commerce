@@ -25,7 +25,7 @@ public class UserAddressController {
     public UserAddressResponse getUserAddresses(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
-        List<UserAddressDTO> userAddressDTOList = null;
+        List<UserAddressDTO> userAddressDTOList;
 
         if (userID == null) {
             userAddressDTOList = userAddressService.fetchAllUserAddresses();
