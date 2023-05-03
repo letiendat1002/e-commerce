@@ -11,9 +11,9 @@ public record OrderAddRequest(
         @NotNull(message = "User ID must not be null")
         BigInteger userID,
 
-        @NotNull(message = "Total must not be null")
-        @Min(value = 0, message = "Total must be greater than or equal to 0")
-        BigInteger total,
+        @NotNull(message = "Additional price must not be null")
+        @Min(value = 0, message = "Additional price must be greater than or equal to 0")
+        BigInteger additionalPrice,
 
         @NotNull(message = "Payment type must not be null")
         OrderPaymentType paymentType,

@@ -4,7 +4,6 @@ package com.ecommerce.backend.order;
 import com.ecommerce.backend.order.enums.OrderPaymentType;
 import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.orderdetail.OrderDetail;
-import com.ecommerce.backend.product.Product;
 import com.ecommerce.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -43,8 +42,8 @@ public class Order {
     @ToString.Exclude
     private User user;
 
-    @Column(name = "Total")
-    private BigInteger total;
+    @Column(name = "AdditionalPrice")
+    private BigInteger additionalPrice;
 
     @Column(name = "PaymentType")
     @Enumerated(EnumType.STRING)
@@ -73,7 +72,7 @@ public class Order {
                  LocalDate dateOrder,
                  String address) {
         this.user = user;
-        this.total = total;
+        this.additionalPrice = total;
         this.paymentType = paymentType;
         this.dateOrder = dateOrder;
         this.address = address;
