@@ -16,6 +16,7 @@ import ProductDetail from '../pages/Client/ProductDetail'
 import Profile from '../pages/Client/Profile'
 // import Login from '../pages/Admin/components/Login/Login';
 import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts'
+import ManageCategory from '../pages/Admin/ManageCategory/ManageCategory'
 
 
 const router = createBrowserRouter([
@@ -96,8 +97,8 @@ const router = createBrowserRouter([
           element: <Login />,
         },
         {
-          path: 'products',
-          element: <ManageUser />,
+          path: 'manage-categories',
+          element: <ManageCategory />,
         },
         {
           path: 'products-filters',

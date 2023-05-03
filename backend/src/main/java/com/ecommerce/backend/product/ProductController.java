@@ -20,7 +20,6 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('product:read')")
     public ProductResponse getProducts(
             @RequestParam(value = "categoryID", required = false) BigInteger categoryID
     ) {
@@ -66,7 +65,7 @@ public class ProductController {
         var productDTOList = List.of(productService.addProduct(request));
 
         return new ProductResponse(
-                HttpStatus.CREATED.value(),
+                HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 productDTOList
         );

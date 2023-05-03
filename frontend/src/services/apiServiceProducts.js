@@ -50,8 +50,14 @@ const productApi = {
   async getAllProduct() {
     const productListFilter = await axiosClientProducts.get(`/${SCHEMA}`);
     // console.log(productListFilter)
-    return productListFilter
-  }
+    return productListFilter;
+  },
+
+  async getAllCategory() {
+    const categoryListFilter = await axios.get(`http://localhost:8080/api/v1/categories`);
+    // console.log(productListFilter)
+    return categoryListFilter;
+  },
 };
 
 export default productApi;

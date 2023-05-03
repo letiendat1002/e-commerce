@@ -25,7 +25,7 @@ public class UserAddressController {
     public UserAddressResponse getUserAddresses(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
-        List<UserAddressDTO> userAddressDTOList = null;
+        List<UserAddressDTO> userAddressDTOList;
 
         if (userID == null) {
             userAddressDTOList = userAddressService.fetchAllUserAddresses();
@@ -41,7 +41,7 @@ public class UserAddressController {
     }
 
     @GetMapping("{userAddressID}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('user_address:read')")
     public UserAddressResponse getUserAddressByID(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
