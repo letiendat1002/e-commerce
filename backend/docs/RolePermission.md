@@ -1,4 +1,4 @@
-# Role Permissions Documentation
+# Role & Permission Documentation
 
 ### Notes
 
