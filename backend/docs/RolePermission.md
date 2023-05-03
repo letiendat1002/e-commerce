@@ -26,6 +26,9 @@
     - Order:
         - `order:read`
         - `order:write`
+    - Order Detail:
+        - `order_detail:read`
+        - `order_detail:write`
 
 - **Customer**
     - User:
@@ -41,3 +44,6 @@
     - Order:
         - `order:read`
         - `order:write`
+    - Order Detail:
+        - `order_detail:read`
+        - `post:postOrderDetail`

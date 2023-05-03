@@ -5,6 +5,7 @@ import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class OrderDetailController {
     private final OrderDetailService orderDetailService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('order_detail:read')")
     public OrderDetailResponse getOrderDetails(
             @RequestParam(value = "orderID", required = false) BigInteger orderID,
             @RequestParam(value = "productID", required = false) BigInteger productID
@@ -52,6 +54,7 @@ public class OrderDetailController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('order_detail:write')")
     public OrderDetailResponse postOrderDetail(
             @Validated @RequestBody OrderDetailRequest request,
             BindingResult errors
@@ -72,6 +75,7 @@ public class OrderDetailController {
     }
 
     @DeleteMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
     public BaseResponse deleteOrderDetailByOrderID(
             @RequestParam("orderID") BigInteger orderID,
             @RequestParam("productID") BigInteger productID
@@ -85,6 +89,7 @@ public class OrderDetailController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
     public OrderDetailResponse updateOrderDetailByOrderID(
             @Validated @RequestBody OrderDetailRequest request,
             BindingResult errors
