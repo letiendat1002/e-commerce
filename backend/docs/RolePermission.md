@@ -28,7 +28,7 @@
         - `order:write`
     - Order Detail:
         - `order_detail:read`
-        - `order_detail:write`
+        - `post:postOrderDetail`
 
 - **Customer**
     - User:

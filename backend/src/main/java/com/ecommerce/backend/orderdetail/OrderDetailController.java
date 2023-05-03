@@ -75,7 +75,7 @@ public class OrderDetailController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BaseResponse deleteOrderDetailByOrderID(
             @RequestParam("orderID") BigInteger orderID,
             @RequestParam("productID") BigInteger productID
@@ -89,7 +89,7 @@ public class OrderDetailController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public OrderDetailResponse updateOrderDetailByOrderID(
             @Validated @RequestBody OrderDetailRequest request,
             BindingResult errors
