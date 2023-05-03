@@ -1,5 +1,6 @@
 package com.ecommerce.backend.orderdetail;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigInteger;
@@ -12,9 +13,11 @@ public record OrderDetailRequest(
         BigInteger productID,
 
         @NotNull(message = "Purchase price must not be null")
+        @Min(value = 0, message = "Purchase price must be greater than or equal to 0")
         BigInteger purchasePrice,
 
         @NotNull(message = "Quantity must not be null")
+        @Min(value = 0, message = "Quantity must be greater than or equal to 0")
         Integer quantity
 ) {
 }

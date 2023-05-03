@@ -2,6 +2,7 @@ package com.ecommerce.backend.order;
 
 import com.ecommerce.backend.order.enums.OrderPaymentType;
 import com.ecommerce.backend.order.enums.OrderStatus;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record OrderUpdateRequest(
@@ -11,7 +12,7 @@ public record OrderUpdateRequest(
         @NotNull(message = "Status must not be null")
         OrderStatus status,
 
-        @NotNull(message = "Address must not be null")
+        @NotBlank(message = "Address must not be blank")
         String address
 ) {
 }

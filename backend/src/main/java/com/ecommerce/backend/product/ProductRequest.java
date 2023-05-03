@@ -1,5 +1,7 @@
 package com.ecommerce.backend.product;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigInteger;
@@ -8,10 +10,10 @@ public record ProductRequest(
         @NotNull(message = "Category ID must not be null")
         BigInteger categoryID,
 
-        @NotNull(message = "Name must not be null")
+        @NotBlank(message = "Name must not be blank")
         String name,
 
-        @NotNull(message = "Slug must not be null")
+        @NotBlank(message = "Slug must not be blank")
         String slug,
 
         @NotNull(message = "Image must not be null")
@@ -27,9 +29,11 @@ public record ProductRequest(
         String imageReview3,
 
         @NotNull(message = "Unit price must not be null")
+        @Min(value = 0, message = "Unit price must be greater than or equal to 0")
         BigInteger unitPrice,
 
         @NotNull(message = "Quantity must not be null")
+        @Min(value = 0, message = "Quantity must be greater than or equal to 0")
         Long quantity,
 
         @NotNull(message = "Description must not be null")
