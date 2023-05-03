@@ -32,7 +32,7 @@ const Header = () => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user.current)
+  const user = useSelector(state => state.user?.current)
   console.log(user)
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;
@@ -71,6 +71,12 @@ const Header = () => {
       menuTabletItem.style.transitionDuration = '0.5s';
     }
   };
+
+  const handleLogut = () => {
+    console.log("Logout")
+     dispatch(logout())
+  }
+
   return (
     <div
       className='container-fluid p-0 m-0 col-lg-12 col-sm-12 col-md-12'
@@ -237,12 +243,12 @@ const Header = () => {
           </InputGroup.Text>
         </InputGroup>
         <div className='nav-item account'>
-          {user ? (
+          {user?.length>0 ? (
             <Link to={'/account/profile'}>
               <span>
                 <FaRegUserCircle />
               </span>
-              {user[0].fullName}
+              {user[0]?.email}
               <ul className="account--profile">
                 <Link to={"/account/profile"}>
                   <li>
@@ -256,7 +262,7 @@ const Header = () => {
                     <span>Đơn hàng của tôi</span>
                   </li>
                 </Link>
-                <Link to={""}>
+                <Link to={""} onClick={handleLogut}>
                   <li>
                     <AiOutlineLogout />
                     <span>Đăng Xuất</span>

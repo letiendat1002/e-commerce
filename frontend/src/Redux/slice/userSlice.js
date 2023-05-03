@@ -4,14 +4,9 @@ import STORAGE_KEYS from '../../constant/storage-keys';
 
 export const register = createAsyncThunk('user/register', async (payload) => {
   //call API to register
-  const { data } = await authApi.register(payload);
-
-  //save data local storage
-  localStorage.setItem(STORAGE_KEYS.TOKEN, data.jwt);
-  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
-
-  //return user data
-  return data.user;
+  console.log(payload)
+  const res = await authApi.register(payload);
+  return res;
 });
 
 export const login = createAsyncThunk('user/login', async (payload) => {
@@ -24,8 +19,10 @@ export const login = createAsyncThunk('user/login', async (payload) => {
   console.log(res);
 
   //save data local storage
-  localStorage.setItem(STORAGE_KEYS.TOKEN, res.token);
-  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res?.data));
+  if (res) {
+    localStorage.setItem(STORAGE_KEYS.TOKEN, res?.token);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res?.data));
+  }
 
   //return user data
   return res;
