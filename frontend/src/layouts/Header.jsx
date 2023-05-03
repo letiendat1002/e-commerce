@@ -11,10 +11,11 @@ import {
   AiOutlineQuestionCircle,
   AiOutlineApple,
   AiOutlineHome,
+  AiOutlineLogout,
 } from 'react-icons/ai';
 import { IoIosTabletLandscape } from 'react-icons/io';
 import { FaRegUserCircle } from 'react-icons/fa';
-import { RiComputerLine } from 'react-icons/ri';
+import { RiAccountCircleLine, RiComputerLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { BiHeadphone } from 'react-icons/bi';
 import { BsSim } from 'react-icons/bs';
@@ -25,16 +26,16 @@ import { BsCartFill } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import '../../src/assets/images/Logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../Redux/slice/userSlice';
 const Header = () => {
   const [active, setActive] = useState(false);
 
   const dispatch = useDispatch();
 
+  const user = useSelector(state => state.user.current)
+  console.log(user)
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;
-
-  const { current } = useSelector((state) => state.user);
-  console.log(current);
 
   const totalItem = cartItems.reduce((a, i) => a + i.cartQuantity, 0);
   const handleShowMenu = () => {
@@ -235,13 +236,33 @@ const Header = () => {
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
           </InputGroup.Text>
         </InputGroup>
-        <div className='nav-item'>
-          {current.confirmed === true ? (
+        <div className='nav-item account'>
+          {user ? (
             <Link to={'/account/profile'}>
               <span>
                 <FaRegUserCircle />
               </span>
-              {current.fullName}
+              {user[0].fullName}
+              <ul className="account--profile">
+                <Link to={"/account/profile"}>
+                  <li>
+                    <RiAccountCircleLine />
+                    <span>Tài khoản của tôi</span>
+                  </li>
+                </Link>
+                <Link to={"/account/order"}>
+                  <li>
+                    <TfiMenuAlt/>
+                    <span>Đơn hàng của tôi</span>
+                  </li>
+                </Link>
+                <Link to={""}>
+                  <li>
+                    <AiOutlineLogout />
+                    <span>Đăng Xuất</span>
+                  </li>
+                </Link>
+              </ul>
             </Link>
           ) : (
             <Link to={'/login'}>

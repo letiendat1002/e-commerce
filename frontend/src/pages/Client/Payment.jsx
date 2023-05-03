@@ -8,6 +8,7 @@ import cod from '../../assets/images/cod.svg'
 import AutoSlice from '../../components/AutoSlide/AutoSlice'
 import formatProductPrice from '../../Helper/index.js'
 import ImageNoPayment from '../../assets/images/img-no-result.png'
+import { Image } from 'antd'
 const Payment = () => {
     const menuCard = [ 
         require('../../assets/images/card2.jpeg'),
@@ -118,7 +119,8 @@ const Payment = () => {
                                                                     cartItems.map((item) => {
                                                                         return (
                                                                             <div className="contain--container--item--bill--child" style={{padding: "5px 0", textAlign: "center", display : "flex", alignItems : "center"}}>
-                                                                                <img src={item.Image} />
+                                                                                {/* <img src={item.Image}  */}
+                                                                                <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />
                                                                                 <span style={{textAlign:"center"}}>{item.cartQuantity}</span>
                                                                                 <p>{formatProductPrice(item.cartQuantity * item.unitPrice)}</p>
                                                                             </div>

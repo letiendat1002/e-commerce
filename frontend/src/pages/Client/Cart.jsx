@@ -18,6 +18,7 @@ const Cart = () => {
   // const  cartItems  = cart.cart;
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;
+  const user = useSelector(state => state.user.current[0])
   const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.unitPrice, 0);
   const setting = {
     infinite: true,
@@ -30,8 +31,10 @@ const Cart = () => {
   };
 
   const handleSubmit = () => {
-      localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
-      localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
+      if (user){
+        localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
+        localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
+      }
   }
 
   const handleRemoveFromCart = (product) => {
