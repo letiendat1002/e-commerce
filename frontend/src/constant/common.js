@@ -6,6 +6,4 @@ export const THUMBNAIL_PLACEHOLDER = 'https://via.placeholder.com/444'; //api ha
 
 export const STATIC_HOST_2 = 'http://localhost:8081/api/v1'; //api user
 
-
 export const STATIC_HOST_4 = 'http://localhost:8080/api/v1'; //api user
- 

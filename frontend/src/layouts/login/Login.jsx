@@ -69,7 +69,7 @@ const Login = () => {
       toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
     }
     form.resetFields();
-    document.location.href = '/';
+    // document.location.href = '/';
     // navigate('/');
   };
 

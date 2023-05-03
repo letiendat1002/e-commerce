@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import axiosClient4 from "../../API/axiosCustom";
 
 const initialState = {
     productLoading: true, 
@@ -9,8 +10,8 @@ const initialState = {
 
 export const getAllProducts = createAsyncThunk('getAllProducts', async() => {
     try {
-        const response = await axios.get('/api/v1/products')
-        return response.data
+        const response = await axiosClient4.get('products')
+        return response?.data
       } catch (error) {
         console.log('error: ', error)
         throw error
@@ -19,7 +20,7 @@ export const getAllProducts = createAsyncThunk('getAllProducts', async() => {
 
 export const getAllProductForType = createAsyncThunk('getAllProductForType', async(body) => {
     try {
-        const response = await axios.get('/api/v1/products', body)
+        const response = await axiosClient4.get('products', body)
         return response.data
       } catch (error) {
         console.log('error: ', error)

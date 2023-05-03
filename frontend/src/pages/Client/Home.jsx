@@ -9,6 +9,7 @@ import productData from '../../Helper/GetProduct'
 import { addToCart } from "../../Redux/slice/cartSlice.js"
 import { getAllCategories } from '../../Redux/slice/categorySlice'
 import { getAllProducts } from '../../Redux/slice/productSlice'
+import { getAllProduct } from '../../Redux/slice/productsSlice'
 import '../../assets/css/home.scss'
 import slider1 from '../../assets/images/banner.jpg'
 import slider6 from '../../assets/images/banner1.jpg'
@@ -22,6 +23,7 @@ import slider5 from '../../assets/images/slideshow_12.jpeg'
 import slider2 from '../../assets/images/slideshow_8.jpeg'
 import AutoSlice from '../../components/AutoSlide/AutoSlice'
 import Carousel from '../../components/Carousel/CarouselItem'
+import axiosClient4 from '../../API/axiosCustom'
 // import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 const slides = [
     slider1,
@@ -222,6 +224,18 @@ const Home = () => {
         setCategoryTabletTop(productTop)
         setCategoryTabletBottom(productBottom)
     }, [category])
+
+
+    
+
+    const handleCallProduct = async() => {
+        const data =  await axiosClient4.get('/products')
+        console.warn("Done")
+        console.log(data)
+    }
+
+    // handleCallProduct()
+
     return (
     <div className="container-fluid home col-lg-12 col-sm-12 col-md-12" style={{padding: '2rem 0'}}>
         <Carousel />
