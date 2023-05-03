@@ -1,6 +1,7 @@
 package com.ecommerce.backend.product;
 
 import com.ecommerce.backend.category.Category;
+import com.ecommerce.backend.orderdetail.OrderDetail;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -99,6 +101,10 @@ public class Product {
 
     @Column(name = "Status")
     private Boolean status;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<OrderDetail> orderDetails;
 
     public Product(Category category,
                    String name,
