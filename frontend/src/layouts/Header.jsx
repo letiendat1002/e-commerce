@@ -32,7 +32,7 @@ const Header = () => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user?.current)
+  const {current:user} = useSelector(state => state.user)
   console.log(user)
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;

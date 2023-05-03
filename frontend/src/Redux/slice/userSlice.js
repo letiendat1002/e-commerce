@@ -48,7 +48,7 @@ const userSlice = createSlice({
       state.current = action.payload;
     },
     [login.fulfilled]: (state, action) => {
-      state.current = action.payload;
+      state.current = action.payload.data;
     },
   },
 });

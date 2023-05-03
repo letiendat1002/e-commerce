@@ -229,12 +229,14 @@ const Home = () => {
     
 
     const handleCallProduct = async() => {
-        const data =  await axiosClient4.get('/products')
+        // const data =  await dispatch(getAllProduct())
         console.warn("Done")
-        console.log(data)
+        // console.log(data)
     }
 
-    // handleCallProduct()
+    useEffect(() => {
+        handleCallProduct()
+    }, []);
 
     return (
     <div className="container-fluid home col-lg-12 col-sm-12 col-md-12" style={{padding: '2rem 0'}}>
