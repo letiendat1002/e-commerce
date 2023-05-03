@@ -41,7 +41,7 @@ public class UserAddressController {
     }
 
     @GetMapping("{userAddressID}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('user_address:read')")
     public UserAddressResponse getUserAddressByID(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
