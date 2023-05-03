@@ -66,7 +66,7 @@ public class ProductController {
         var productDTOList = List.of(productService.addProduct(request));
 
         return new ProductResponse(
-                HttpStatus.CREATED.value(),
+                HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 productDTOList
         );

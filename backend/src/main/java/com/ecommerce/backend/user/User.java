@@ -1,5 +1,6 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.order.Order;
 import com.ecommerce.backend.user.enums.EmailValidationStatus;
 import com.ecommerce.backend.user.enums.Gender;
 import com.ecommerce.backend.user.enums.UserRole;
@@ -66,6 +67,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<UserAddress> userAddresses;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Order> orders;
 
     public User(String email,
                 String password,

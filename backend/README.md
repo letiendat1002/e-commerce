@@ -26,3 +26,4 @@
 
 1. [Connect to database](docs/ConnectDatabase.md)
 2. [APIs](docs/APIs.md)
+3. [Role & Permission](docs/RolePermission.md)

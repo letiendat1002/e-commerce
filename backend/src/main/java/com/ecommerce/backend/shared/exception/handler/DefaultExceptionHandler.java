@@ -3,6 +3,7 @@ package com.ecommerce.backend.shared.exception.handler;
 import com.ecommerce.backend.shared.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -74,6 +75,19 @@ public class DefaultExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse handleException(
             DataIntegrityViolationException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getCause().getCause().getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(InvalidDataAccessResourceUsageException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleException(
+            InvalidDataAccessResourceUsageException exception,
             HttpServletRequest request) {
         return new ApiResponse(
                 request.getRequestURI(),

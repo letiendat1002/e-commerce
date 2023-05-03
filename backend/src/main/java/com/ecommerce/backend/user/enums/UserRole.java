@@ -10,18 +10,18 @@ import static com.ecommerce.backend.user.enums.UserPermission.*;
 
 public enum UserRole {
     CUSTOMER(Sets.newHashSet(
-            USER_ADDRESS_WRITE,
+            USER_ADDRESS_READ, USER_ADDRESS_WRITE,
             PRODUCT_READ,
-            CATEGORY_READ
-//            ORDER_READ, ORDER_WRITE,
+            CATEGORY_READ,
+            ORDER_READ, ORDER_WRITE
 //            ORDER_DETAIL_READ,
 //            RATING_READ, RATING_WRITE
     )),
     EMPLOYEE(Sets.newHashSet(
-            USER_ADDRESS_WRITE,
+            USER_ADDRESS_READ, USER_ADDRESS_WRITE,
             PRODUCT_READ, PRODUCT_WRITE,
-            CATEGORY_READ, CATEGORY_WRITE
-//            ORDER_READ, ORDER_WRITE,
+            CATEGORY_READ, CATEGORY_WRITE,
+            ORDER_READ, ORDER_WRITE
 //            ORDER_DETAIL_READ,
 //            RATING_READ, RATING_WRITE
     )),

@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`UserAddress` (
   `UserAddressID` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   `UserID` BIGINT UNSIGNED NOT NULL,
   `Address` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`UserAddressID`, `UserID`),
+  PRIMARY KEY (`UserAddressID`),
   INDEX `fk_UserAddress_User1_idx` (`UserID` ASC) VISIBLE,
   CONSTRAINT `fk_UserAddress_User1`
     FOREIGN KEY (`UserID`)
@@ -58,7 +58,8 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Order` (
   `PaymentType` VARCHAR(255) NOT NULL,
   `Status` VARCHAR(255) NOT NULL,
   `DateOrder` DATE NOT NULL,
-  PRIMARY KEY (`OrderID`, `UserID`),
+  `Address` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`OrderID`),
   INDEX `fk_Order_User1_idx` (`UserID` ASC) VISIBLE,
   CONSTRAINT `fk_Order_User1`
     FOREIGN KEY (`UserID`)
