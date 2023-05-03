@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout"
 import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin'
-import Login from '../layouts/Login/Login'
+import Login from '../layouts/login/Login'
 import Dashboard from '../pages/Admin/Dasboard/Dashboard'
 import ManageUser from '../pages/Admin/ManageUser/MangeUser'
 import AccountAddress from '../pages/Client/AccountAddress'

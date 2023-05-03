@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Logo from '../assets/images/Logo.svg';
+import Products from "../assets/data/product";
 import '../assets/css/Header.scss';
 import '../assets/css/config.scss';
+import { Link } from 'react-router-dom';
 import { Form, InputGroup, NavItem } from 'react-bootstrap';
 import { GiSmartphone } from 'react-icons/gi';
 import {
@@ -15,7 +17,7 @@ import {
 import { IoIosTabletLandscape } from 'react-icons/io';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { RiComputerLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+
 import { BiHeadphone } from 'react-icons/bi';
 import { BsSim } from 'react-icons/bs';
 import { MdOutlineRefresh } from 'react-icons/md';
@@ -26,6 +28,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import '../../src/assets/images/Logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
 const Header = () => {
+  const product = Products;
   const [active, setActive] = useState(false);
 
   const dispatch = useDispatch();
@@ -34,7 +37,7 @@ const Header = () => {
   const cartItems = cart.cart;
 
   const { current } = useSelector((state) => state.user);
-  console.log(current);
+
 
   const totalItem = cartItems.reduce((a, i) => a + i.cartQuantity, 0);
   const handleShowMenu = () => {
@@ -69,7 +72,21 @@ const Header = () => {
       menuTabletItem.style.transform = 'translateX(-100%)';
       menuTabletItem.style.transitionDuration = '0.5s';
     }
+   
+
   };
+   //Search Bar
+   const [value, setValue] = useState('');
+
+    const handleSearch = (e) => {
+      setValue(e.target.value);
+    };
+
+    const onSearch = (searchTerm) => {
+      setValue(searchTerm);
+      // our api to fetch the search result
+      console.log( searchTerm);
+    };
   return (
     <div
       className='container-fluid p-0 m-0 col-lg-12 col-sm-12 col-md-12'
@@ -225,16 +242,64 @@ const Header = () => {
           src={Logo}
           alt=''
         />
+        
         <InputGroup className='input__form__search'>
           <Form.Control
             as='input'
             aria-label='Nhập tên thiết bị cần tìm'
             placeholder='Nhập tên thiết bị cần tìm'
+            value = {value}
+            onChange = {handleSearch}
+
           />
-          <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
+          {/* <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
-          </InputGroup.Text>
+          </InputGroup.Text> */}
+          <div className="dropdown">
+          {product
+            .filter((item) => {
+              const searchTerm = value.toLowerCase();
+              const fullName = item.Slug.toLowerCase();
+
+              return (
+                searchTerm &&
+                fullName.startsWith(searchTerm) &&
+                fullName !== searchTerm
+              );
+            })
+            .slice(0, 5)
+            .map((item) => (
+              <div
+                onClick={() => onSearch(item.Slug)}
+                className="dropdown-row"
+                key={item.Slug}
+              >
+              
+                <Link to={item.Slug}>
+                <div className="search-box">
+               <div className="search-box__img">
+                    <img src={item.Image} alt="" />
+                    </div>
+                    
+                    <div className="search-box__info">
+                      <p>{item.Slug}</p>
+                     
+                      </div>
+                      <div className="search-box__price">
+                      <p>{item.UnitPrice}đ</p>
+                      </div>
+                      
+                </div>
+                </Link>
+                
+              
+              </div>
+            ))}
+        </div>
+        
         </InputGroup>
+        
+       
         <div className='nav-item'>
           {current.confirmed === true ? (
             <Link to={'/account/profile'}>
