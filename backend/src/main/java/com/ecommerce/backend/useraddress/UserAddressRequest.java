@@ -8,7 +8,8 @@ import java.math.BigInteger;
 public record UserAddressRequest(
         @NotNull(message = "User ID must not be null")
         BigInteger userID,
-        @NotNull(message = "Address must not be null")
+
+        @NotBlank(message = "Address must not be blank")
         String address
 ) {
 }

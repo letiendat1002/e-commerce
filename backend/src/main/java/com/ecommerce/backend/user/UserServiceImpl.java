@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO addUser(UserRegistrationRequest request) {
         checkIfUserNotExistsByEmailOrThrow(request.email());
-        checkIfUserExistsByPhoneOrThrow(request.phone());
+        checkIfUserNotExistsByPhoneOrThrow(request.phone());
 
         var user = new User(
                 request.email(),
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void checkIfUserExistsByPhoneOrThrow(String phone) {
+    private void checkIfUserNotExistsByPhoneOrThrow(String phone) {
         var isExisted = userDAO.existsUserByPhone(phone);
         if (isExisted) {
             throw new DuplicateResourceException(

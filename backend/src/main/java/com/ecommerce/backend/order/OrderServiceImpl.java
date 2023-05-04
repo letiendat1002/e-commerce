@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
         var user = selectUserByIdOrThrow(request.userID());
         var order = new Order(
                 user,
-                request.total(),
+                request.additionalPrice(),
                 request.paymentType(),
                 LocalDate.now(),
                 request.address()
