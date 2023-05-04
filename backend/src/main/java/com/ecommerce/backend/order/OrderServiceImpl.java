@@ -1,10 +1,14 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
+import com.ecommerce.backend.orderdetail.OrderDetailService;
+import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import com.ecommerce.backend.user.User;
 import com.ecommerce.backend.user.UserDAO;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderDAO orderDAO;
     private final OrderDTOMapper orderDTOMapper;
     private final UserDAO userDAO;
+    private final OrderDetailService orderDetailService;
+    private final ProductDAO productDAO;
 
     @Override
     public List<OrderDTO> fetchAllOrders() {
@@ -90,8 +96,35 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO updateOrder(BigInteger orderID, OrderUpdateRequest request) {
         var order = selectOrderByIdOrThrow(orderID);
+        var beforeChangeStatus = order.getStatus();
 
         checkAndUpdateChangesOrThrow(request, order);
+
+        var afterChangeStatus = order.getStatus();
+
+        if (beforeChangeStatus != OrderStatus.CANCELLED
+                && afterChangeStatus == OrderStatus.CANCELLED
+        ) {
+            orderDetailService
+                    .fetchAllOrderDetailsByOrderID(orderID)
+                    .forEach(
+                            orderDetail -> {
+                                var product = productDAO.selectProductByID(
+                                        orderDetail.productID()
+                                ).orElseThrow(
+                                        () -> new ResourceNotFoundException(
+                                                "Product not found by productID {%d}".formatted(
+                                                        orderDetail.productID()
+                                                )
+                                        )
+                                );
+                                product.setQuantity(
+                                        product.getQuantity() + orderDetail.quantity()
+                                );
+                                productDAO.updateProduct(product);
+                            }
+                    );
+        }
 
         return orderDAO
                 .updateOrder(order)
@@ -129,17 +162,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(BigInteger orderID) {
-        checkIfOrderExistsByIdOrThrow(orderID);
-        orderDAO.deleteOrderByID(orderID);
-    }
+        var order = selectOrderByIdOrThrow(orderID);
 
-    private void checkIfOrderExistsByIdOrThrow(BigInteger orderID) {
-        var isExists = orderDAO.existsOrderByID(orderID);
-        if (!isExists) {
-            throw new ResourceNotFoundException(
-                    "Order not found by orderID {%d}".formatted(orderID)
-            );
+        var orderStatus = order.getStatus();
+
+        if (orderStatus == OrderStatus.PENDING
+                || orderStatus == OrderStatus.CONFIRMED
+        ) {
+            orderDetailService
+                    .fetchAllOrderDetailsByOrderID(orderID)
+                    .forEach(
+                            orderDetail -> orderDetailService.deleteOrderDetail(
+                                    orderDetail.orderID(),
+                                    orderDetail.productID()
+                            )
+                    );
         }
+
+        orderDAO.deleteOrderByID(orderID);
     }
 }
