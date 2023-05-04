@@ -78,10 +78,17 @@ public class DefaultExceptionHandler {
     public ApiResponse handleException(
             DataIntegrityViolationException exception,
             HttpServletRequest request) {
+
+        var message = exception.getCause() != null
+                ? (exception.getCause().getCause() != null
+                ? exception.getCause().getCause().getMessage()
+                : exception.getCause().getMessage())
+                : exception.getMessage();
+
         return new ApiResponse(
                 request.getRequestURI(),
                 HttpStatus.BAD_REQUEST.value(),
-                exception.getCause().getCause().getMessage(),
+                message,
                 LocalDateTime.now()
         );
     }

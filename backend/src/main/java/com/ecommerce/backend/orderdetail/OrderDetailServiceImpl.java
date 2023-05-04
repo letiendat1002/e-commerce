@@ -5,7 +5,9 @@ import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -85,11 +87,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
+    @Transactional
     public OrderDetailDTO addOrderDetail(OrderDetailRequest request) {
         checkIfOrderDetailNotExistsByIdOrThrow(
                 request.orderID(),
                 request.productID()
         );
+
+        updateProductQuantity(request.productID(), request.quantity());
 
         var orderDetail = new OrderDetail(
                 request.orderID(),
@@ -108,6 +113,31 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 );
     }
 
+    private void updateProductQuantity(BigInteger productID, Integer quantity) {
+        var product = productDAO
+                .selectProductByID(productID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Product not found by productID {%d}"
+                                        .formatted(productID)
+                        )
+                );
+
+        if (product.getQuantity() < quantity) {
+            throw new DataIntegrityViolationException(
+                    "Product quantity is {%d} but requested quantity is {%d}"
+                            .formatted(product.getQuantity(), quantity)
+            );
+        }
+
+        product.setQuantity(product.getQuantity() - quantity);
+        productDAO.updateProduct(product).orElseThrow(
+                () -> new FailedOperationException(
+                        "Failed to update product quantity"
+                )
+        );
+    }
+
     private void checkIfOrderDetailNotExistsByIdOrThrow(BigInteger orderID,
                                                         BigInteger productID) {
         checkIfOrderExistsByIdOrThrow(orderID);
@@ -124,8 +154,20 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
+    @Transactional
     public OrderDetailDTO updateOrderDetail(OrderDetailRequest request) {
-        var orderDetail = selectOrderDetailOrThrow(request.orderID(), request.productID());
+        var orderDetail = selectOrderDetailOrThrow(
+                request.orderID(),
+                request.productID()
+        );
+
+        var updateQuantity = -(orderDetail.getQuantity() - request.quantity());
+
+        if (updateQuantity > 0) {
+            updateProductQuantity(request.productID(), updateQuantity);
+        } else if (updateQuantity < 0) {
+            updateProductQuantity(request.productID(), updateQuantity);
+        }
 
         checkAndUpdateChangesOrThrow(request, orderDetail);
 
@@ -174,23 +216,17 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
+    @Transactional
     public void deleteOrderDetail(BigInteger orderID, BigInteger productID) {
-        checkIfOrderDetailExistsByIdOrThrow(orderID, productID);
+        var orderDetail = selectOrderDetailOrThrow(
+                orderID,
+                productID
+        );
+
+        updateProductQuantity(productID, -orderDetail.getQuantity());
 
         orderDetailDAO.deleteOrderDetailByID(
                 new OrderDetailID(orderID, productID)
         );
-    }
-
-    private void checkIfOrderDetailExistsByIdOrThrow(BigInteger orderID, BigInteger productID) {
-        var isExists = orderDetailDAO.existsOrderDetailByID(
-                new OrderDetailID(orderID, productID)
-        );
-        if (!isExists) {
-            throw new ResourceNotFoundException(
-                    "Order detail not found by orderID {%d} and productID {%d}"
-                            .formatted(orderID, productID)
-            );
-        }
     }
 }

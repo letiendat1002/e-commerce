@@ -17,7 +17,7 @@ public record OrderDetailRequest(
         BigInteger purchasePrice,
 
         @NotNull(message = "Quantity must not be null")
-        @Min(value = 0, message = "Quantity must be greater than or equal to 0")
+        @Min(value = 1, message = "Quantity must be greater than or equal to 1")
         Integer quantity
 ) {
 }
