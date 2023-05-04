@@ -11,14 +11,19 @@ public record UserRegistrationRequest(
                 regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
         )
         String email,
+
         @NotBlank(message = "Password must not be blank")
         String password,
-        @NotNull(message = "Full name must not be null")
+
+        @NotBlank(message = "Full name must not be blank")
         String fullName,
+
         @NotNull(message = "Gender must not be null")
         Gender gender,
-        @NotNull(message = "Phone number must not be null")
+
+        @NotBlank(message = "Phone number must not be blank")
         String phone,
+
         @NotNull(message = "Image must not be null")
         String image
 ) {

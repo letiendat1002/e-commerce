@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public record OrderDTO(
         BigInteger orderID,
         BigInteger userID,
-        BigInteger total,
+        BigInteger additionalPrice,
         OrderPaymentType paymentType,
         OrderStatus status,
         LocalDate dateOrder,

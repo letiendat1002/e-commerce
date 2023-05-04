@@ -20,7 +20,6 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('product:read')")
     public ProductResponse getProducts(
             @RequestParam(value = "categoryID", required = false) BigInteger categoryID
     ) {
@@ -40,7 +39,6 @@ public class ProductController {
     }
 
     @GetMapping("{productID}")
-    @PreAuthorize("hasAuthority('product:read')")
     public ProductResponse getProductByProductID(
             @PathVariable("productID") BigInteger productID
     ) {

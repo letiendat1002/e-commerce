@@ -42,8 +42,16 @@ public class SecurityConfig {
                 )
                 .permitAll()
                 .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/v*/products",
+                        "/api/v*/categories",
+                        "/api/v*/products/**",
+                        "/api/v*/categories/**"
+                )
+                .permitAll()
+                .requestMatchers(
                         HttpMethod.POST,
-                        "/api/v1/auth/**")
+                        "/api/v*/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

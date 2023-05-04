@@ -20,7 +20,6 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('category:read')")
     public CategoryResponse getCategories() {
         var categoryDTOList = categoryService.fetchAllCategories();
 
@@ -32,7 +31,6 @@ public class CategoryController {
     }
 
     @GetMapping("{categoryID}")
-    @PreAuthorize("hasAuthority('category:read')")
     public CategoryResponse getCategoryByID(
             @PathVariable("categoryID") BigInteger categoryID
     ) {
