@@ -1,12 +1,13 @@
 package com.ecommerce.backend.category;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CategoryRequest(
-        @NotNull(message = "Name must not be null")
+        @NotBlank(message = "Name must not be blank")
         String name,
 
-        @NotNull(message = "Slug must not be null")
+        @NotBlank(message = "Slug must not be blank")
         String slug,
 
         @NotNull(message = "Image must not be null")

@@ -2,9 +2,12 @@ package com.ecommerce.backend.shared.exception.handler;
 
 import com.ecommerce.backend.shared.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -76,10 +79,17 @@ public class DefaultExceptionHandler {
     public ApiResponse handleException(
             DataIntegrityViolationException exception,
             HttpServletRequest request) {
+
+        var message = exception.getCause() != null
+                ? (exception.getCause().getCause() != null
+                ? exception.getCause().getCause().getMessage()
+                : exception.getCause().getMessage())
+                : exception.getMessage();
+
         return new ApiResponse(
                 request.getRequestURI(),
                 HttpStatus.BAD_REQUEST.value(),
-                exception.getCause().getCause().getMessage(),
+                message,
                 LocalDateTime.now()
         );
     }
@@ -101,6 +111,32 @@ public class DefaultExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse handleException(
             DuplicateResourceException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleException(
+            HttpMessageNotReadableException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(UnexpectedTypeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleException(
+            UnexpectedTypeException exception,
             HttpServletRequest request) {
         return new ApiResponse(
                 request.getRequestURI(),
@@ -192,6 +228,19 @@ public class DefaultExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse handleException(
             IOException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotWritableException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiResponse handleException(
+            HttpMessageNotWritableException exception,
             HttpServletRequest request) {
         return new ApiResponse(
                 request.getRequestURI(),

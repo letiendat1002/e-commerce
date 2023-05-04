@@ -11,7 +11,7 @@ public class OrderDTOMapper implements Function<Order, OrderDTO> {
         return new OrderDTO(
                 order.getOrderID(),
                 order.getUser().getUserID(),
-                order.getTotal(),
+                order.getAdditionalPrice(),
                 order.getPaymentType(),
                 order.getStatus(),
                 order.getDateOrder(),
