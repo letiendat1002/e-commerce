@@ -121,7 +121,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingDTO fetchRatingByProductIdAndOrderId(BigInteger productID, BigInteger orderID) {
+    public RatingDTO fetchRatingByOrderIdAndProductId(BigInteger productID, BigInteger orderID) {
         checkIfProductExistsByIdOrThrow(productID);
         checkIfOrderExistsByIdOrThrow(orderID);
 

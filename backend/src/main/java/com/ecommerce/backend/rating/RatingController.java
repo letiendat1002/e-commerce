@@ -28,25 +28,33 @@ public class RatingController {
     ) {
         List<RatingDTO> ratingDTOList;
 
-        if (userID == null && orderID == null && productID == null) {
+        var allIdNull = userID == null && orderID == null && productID == null;
+        var onlyUserIdNotNull = userID != null && orderID == null && productID == null;
+        var onlyOrderIdNotNull = userID == null && orderID != null && productID == null;
+        var onlyProductIdNotNull = userID == null && orderID == null && productID != null;
+        var onlyUserIdAndOrderIdNotNull = userID != null && orderID != null && productID == null;
+        var onlyUserIdAndProductIdNotNull = userID != null && orderID == null && productID != null;
+        var onlyOrderIdAndProductIdNotNull = userID == null && orderID != null && productID != null;
+
+        if (allIdNull) {
             ratingDTOList = ratingService.fetchAllRatings();
-        } else if (userID != null && orderID == null && productID == null) {
+        } else if (onlyUserIdNotNull) {
             ratingDTOList = ratingService.fetchRatingsByUserID(userID);
-        } else if (userID == null && orderID != null && productID == null) {
+        } else if (onlyOrderIdNotNull) {
             ratingDTOList = Collections.singletonList(
                     ratingService.fetchRatingByOrderID(orderID)
             );
-        } else if (userID == null && orderID == null) {
+        } else if (onlyProductIdNotNull) {
             ratingDTOList = ratingService.fetchRatingsByProductID(productID);
-        } else if (userID != null && orderID != null && productID == null) {
+        } else if (onlyUserIdAndOrderIdNotNull) {
             ratingDTOList = Collections.singletonList(
                     ratingService.fetchRatingByUserIdAndOrderId(userID, orderID)
             );
-        } else if (userID != null && orderID == null) {
+        } else if (onlyUserIdAndProductIdNotNull) {
             ratingDTOList = ratingService.fetchRatingsByUserIDAndProductID(userID, productID);
-        } else if (userID == null) {
+        } else if (onlyOrderIdAndProductIdNotNull) {
             ratingDTOList = Collections.singletonList(
-                    ratingService.fetchRatingByProductIdAndOrderId(productID, orderID)
+                    ratingService.fetchRatingByOrderIdAndProductId(productID, orderID)
             );
         } else {
             ratingDTOList = Collections.singletonList(

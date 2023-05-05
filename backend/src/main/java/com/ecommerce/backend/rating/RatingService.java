@@ -16,7 +16,7 @@ public interface RatingService {
 
     RatingDTO fetchRatingByUserIdAndOrderId(BigInteger userID, BigInteger orderID);
 
-    RatingDTO fetchRatingByProductIdAndOrderId(BigInteger productID, BigInteger orderID);
+    RatingDTO fetchRatingByOrderIdAndProductId(BigInteger productID, BigInteger orderID);
 
     RatingDTO fetchRatingByID(RatingID ratingID);
 
