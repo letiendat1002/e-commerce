@@ -1,6 +1,7 @@
 package com.ecommerce.backend.orderdetail;
 
 import com.ecommerce.backend.order.OrderDAO;
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
@@ -94,6 +95,21 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 request.productID()
         );
 
+        var orderStatus = orderDAO.selectOrderByID(request.orderID())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Order not found by orderID {%d}"
+                                        .formatted(request.orderID())
+                        )
+                );
+
+        if (orderStatus.getStatus() != OrderStatus.PENDING) {
+            throw new FailedOperationException(
+                    "Failed to add order detail, order status is not at PENDING stage, but it was {%s}"
+                            .formatted(orderStatus.getStatus())
+            );
+        }
+
         updateProductQuantity(request.productID(), request.quantity());
 
         var orderDetail = new OrderDetail(
@@ -125,7 +141,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         if (product.getQuantity() < quantity) {
             throw new DataIntegrityViolationException(
-                    "Product quantity is {%d} but requested quantity is {%d}"
+                    "Product quantity is {%d} but quantity needed more to succeed is {%d}"
                             .formatted(product.getQuantity(), quantity)
             );
         }
@@ -160,6 +176,21 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 request.orderID(),
                 request.productID()
         );
+
+        var order = orderDAO.selectOrderByID(request.orderID())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Order not found by orderID {%d}"
+                                        .formatted(request.orderID())
+                        )
+                );
+
+        if (order.getStatus() != OrderStatus.PENDING) {
+            throw new FailedOperationException(
+                    "Failed to update order detail, order status is not at PENDING stage, but it was {%s}"
+                            .formatted(order.getStatus())
+            );
+        }
 
         var updateQuantity = -(orderDetail.getQuantity() - request.quantity());
 
@@ -223,7 +254,21 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 productID
         );
 
-        updateProductQuantity(productID, -orderDetail.getQuantity());
+        var order = orderDAO.selectOrderByID(orderID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Order not found by orderID {%d}"
+                                        .formatted(orderID)
+                        )
+                );
+
+        var orderStatus = order.getStatus();
+
+        if (orderStatus == OrderStatus.PENDING
+                || orderStatus == OrderStatus.CONFIRMED
+        ) {
+            updateProductQuantity(productID, -orderDetail.getQuantity());
+        }
 
         orderDetailDAO.deleteOrderDetailByID(
                 new OrderDetailID(orderID, productID)
