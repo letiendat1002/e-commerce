@@ -5,6 +5,7 @@
 - [Get started](#get-started)
 - [Authentication](#authentication)
 - [Json template](#json-template)
+- [Read next](#read-next)
 
 ### Get started
 
@@ -32,3 +33,7 @@ Use the above credential to make a POST request to `/api/v1/auth/authenticate` t
 All the json body template is included in SwaggerUI.
 
 ![json_body_template.png](../assets/images/api/json_body_template.png)
+
+## Read next
+
+Check out the [Role & Permission Documentation](./RolePermission.md) to see the list of public APIs, roles and permissions.

@@ -5,6 +5,7 @@ import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,7 @@ public class RatingController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('rating:write')")
     public RatingResponse postRating(
             @Validated @RequestBody RatingRequest request,
             BindingResult errors
@@ -82,6 +84,7 @@ public class RatingController {
     }
 
     @DeleteMapping
+    @PreAuthorize("hasAuthority('rating:write')")
     public BaseResponse deleteRating(
             @RequestParam(value = "userID") BigInteger userID,
             @RequestParam("orderID") BigInteger orderID,
@@ -96,6 +99,7 @@ public class RatingController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('rating:write')")
     public RatingResponse putRating(
             @Validated @RequestBody RatingRequest request,
             BindingResult errors
