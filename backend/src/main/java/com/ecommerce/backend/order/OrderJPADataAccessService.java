@@ -47,4 +47,9 @@ public class OrderJPADataAccessService implements OrderDAO {
     public boolean existsOrderByID(BigInteger orderID) {
         return orderRepository.existsById(orderID);
     }
+
+    @Override
+    public boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user) {
+        return orderRepository.existsByOrderIDAndUser(orderID, user);
+    }
 }

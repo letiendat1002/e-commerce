@@ -20,4 +20,6 @@ public interface OrderDAO {
     Optional<Order> updateOrder(Order update);
 
     boolean existsOrderByID(BigInteger orderID);
+
+    boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user);
 }
