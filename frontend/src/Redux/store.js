@@ -7,6 +7,7 @@ import categoriesReducer from './slice/categorySlice'
 import addressReducer from './slice/userAddressSlice'
 import orderReducer from './slice/paymentSlice'
 import orderDetailReducer from './slice/orderDetailSlice';
+import UserAPIReducer from './slice/usersSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,7 +17,8 @@ const store = configureStore({
     categories: categoriesReducer,
     userAddress: addressReducer,
     order: orderReducer,
-    orderDetail: orderDetailReducer
+    orderDetail: orderDetailReducer, 
+    userAPI: UserAPIReducer
   },
   // authSlice: authSignInSlice,
 });

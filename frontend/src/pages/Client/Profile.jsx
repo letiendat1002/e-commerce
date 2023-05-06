@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAccount } from '../../Redux/slice/userSlice';
 import axiosClient4 from '../../API/axiosCustom';
+import { useEffect } from 'react';
+import { getUserForID } from '../../Redux/slice/usersSlice';
 
 const Profile = () => {
   const [active, setActive] = useState(false);
@@ -47,21 +49,55 @@ const Profile = () => {
   };
 
   const {current:user} = useSelector(state => state.user)
-    const fullname = user[0].fullName.split(' ')
-    const name = (fullname[fullname.length - 2] + " " + fullname[fullname.length - 1])
+  const userID = user[0].userID
 
-    const [phone, setPhone] = useState(user[0].phone)
-    const [image, setImage] = useState(user[0].image)
-    const [fullName, setfullName] = useState(user[0].fullName)
-    const roles = user[0].roles
-    const gender = user[0].gender
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getUserForID(userID))
+  }, [userID])
+
+  const accountInfo = useSelector(state => state.userAPI.data)
+  const fullname = accountInfo[0]?.fullName 
+  // const name = fullname
+  const imageUser = accountInfo[0]?.image
+  const userPhone = accountInfo[0]?.phone
+    const [phone, setPhone] = useState('')
+    const [image, setImage] = useState('')
+    const [fullName, setfullName] = useState('')
+    const gender = accountInfo[0]?.gender
+    const roles = ["CUSTOMER"]
+
+    const handleChangeName = (e) => {
+      if (!e || !e.target || !e.target.value) {
+        setfullName(fullname)
+      }
+      else {
+        setfullName(e.target.value)
+      }
+    }
+
+    const handleChangePhone = (e) => {
+      if (!e){
+        setPhone(userPhone)
+      }
+      else {
+        setPhone(e.target.value)
+      }
+    }
+
+    console.log(fullName)
+    console.log(phone)
     const handleUpdateAccount = (e) => {
       e.preventDefault()
       const data = {
-
+        roles, 
+        fullName, 
+        gender, 
+        phone, 
+        image
       }
-      const url = `users/${user[0].id}`
-      axiosClient4.put()
+      const url = `users/${userID}`
+      axiosClient4.put(url, data)
     }
   return (
     <div className='profile container-fluid'>
@@ -90,8 +126,8 @@ const Profile = () => {
                 alt=''
               />
               <div className='item__left--avatar--child'>
-                <h5>{name}</h5>
-                <p>{user[0].phone}</p>
+                <h5>{fullname}</h5>
+                <p>{userPhone}</p>
               </div>
             </div>
             <Link to={'/account/profile'}>
@@ -165,8 +201,8 @@ const Profile = () => {
                     type='text'
                     name='fullname'
                     placeholder='Vui lòng nhập họ và tên'
-                    defaultValue={fullName}
-                    onChange={e => setfullName(e.target.value)}
+                    defaultValue={fullname}
+                    onChange={e => handleChangeName(e)}
                   />
                 </div>
                 <div className='container--profile--item'>
@@ -175,8 +211,8 @@ const Profile = () => {
                     type='text'
                     name='phone'
                     placeholder='Vui lòng nhập số điện thoại'
-                    defaultValue={phone}
-                    onChange={e => setPhone(e.target.value)}
+                    defaultValue={userPhone}
+                    onChange={e => handleChangePhone(e)}
                   />
                 </div>
                 <div className='container--profile--item'>
