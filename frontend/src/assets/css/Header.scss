@@ -663,39 +663,22 @@ ul.catagory li.catagory-item:hover {
 
 .dropdown-row {
   cursor: pointer;
-  text-align: start;
+  text-align: left;
   margin: 2px 0;
 }
 .search-box {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
 }
-.search-box__img {
-  border: 0px solid #ddd;
-  border-radius: 4px;
-}
-.search-box__img img {
-  width: 50%;
-  height: 50%;
-  object-fit: cover;
-  border-radius: 4px;
-}
+
 .search-box__info p {
   font-size: 18px;
   font-weight: 400;
   color: #000000;
-  padding-left: 10px;
-  padding-top: 5px;
-  margin-left: -150px;
-}
-
-.search-box__price {
-  font-size: 18px;
-  font-weight: 400;
-  color: #dc0e0e;
-  padding-left: 10px;
-  padding-top: 5px;
+  padding: 0;
   margin: 0;
+  padding-left: 10px;
+  word-wrap: break-word;
+}
+.search-box__info:hover p {
+  color: #e02f2f;
 }
