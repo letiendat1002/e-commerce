@@ -1,12 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const ProductsFilters = props => {
-  return (
-    <div>ProductsFilters</div>
-  )
-}
+const ProductsFilters = (props) => {
+  return <div>ProductsFilters</div>;
+};
 
-ProductsFilters.propTypes = {}
+ProductsFilters.propTypes = {};
 
-export default ProductsFilters
+export default ProductsFilters;

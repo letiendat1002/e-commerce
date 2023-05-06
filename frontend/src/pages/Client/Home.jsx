@@ -272,7 +272,7 @@ const Home = () => {
                                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={item.productID} >
                                                         <Link to = {item.slug}>
                                                         <div className="child--contains--img">
-                                                            {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                            <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                             </div>
                                                             <div className="contains--title">
                                                             <h3>{item.name}</h3>
@@ -317,7 +317,7 @@ const Home = () => {
                                                 <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                        {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                        <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                     </div>
                                                     <div className="contains--title">
                                                     <h3>{item.name}</h3>
@@ -363,7 +363,7 @@ const Home = () => {
                                                 <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                    {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                     </div>
                                                     <h3>{item.name}</h3>
                                                     <div className="child--contains--price">
@@ -403,7 +403,7 @@ const Home = () => {
                                             <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                    {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                 </div>
                                                 <div className="contains--title">
                                                 <h3>{item.name}</h3>
@@ -447,7 +447,7 @@ const Home = () => {
                                         return (
                                             <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}><div className="child--contains--img">
-                                                    {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                 </div>
                                                 <div className="contains--title">
                                                 <h3>{item.name}</h3>
@@ -492,7 +492,7 @@ const Home = () => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.slug}><div className="child--contains--img">
-                                                {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
                                             <h3>{item.name}</h3>
@@ -537,7 +537,7 @@ const Home = () => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.slug}><div className="child--contains--img">
-                                                {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
                                             <h3>{item.name}</h3>
@@ -579,7 +579,7 @@ const Home = () => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.slug}><div className="child--contains--img">
-                                                {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
                                             <h3>{item.name}</h3>

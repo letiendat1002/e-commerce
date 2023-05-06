@@ -18,7 +18,11 @@ const TableUser = (props) => {
   return (
     <>
       <div className='table-responsive'>
-        <Table striped bordered hover className='table_users '>
+        <Table
+          striped
+          bordered
+          hover
+          className='table_users '>
           <thead>
             <tr>
               <th scope='col'>No</th>
@@ -45,10 +49,10 @@ const TableUser = (props) => {
             ) : (
               data &&
               data.length > 0 &&
-              data.map((x, idx) => {
+                data.map((x, idx) => {
                 return (
                   <tr key={idx}>
-                    <th scope='row'>{idx + 1}</th>
+                    <th scope='row'>{idx+1}</th>
                     <td className='row_img'>
                       <img
                         style={{ width: '40px', height: '40px' }}
@@ -57,8 +61,8 @@ const TableUser = (props) => {
                       />
                     </td>
                     <td>{x.email}</td>
-                    <td>{x.username}</td>
-                    <td>{x.role}</td>
+                    <td>{x.fullName}</td>
+                    <td>{x.roles[0]}</td>
                     <td>
                       <button
                         className='btn btn-primary'
@@ -67,7 +71,7 @@ const TableUser = (props) => {
                       </button>
                       <button
                         className='btn btn-success mx-3'
-                        onClick={() => setShowModal(x)}>
+                        onClick={() => setShowModal(x,x.userID)}>
                         Update
                       </button>
                       <button

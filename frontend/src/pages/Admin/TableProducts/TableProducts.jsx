@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
+import classname from 'classnames/bind';
 
-import './TableProducts.scss';
+import styles from './TableProducts.module.scss';
 
+let cx = classname.bind(styles);
 const TableProducts = (props) => {
   const {
     listProducts,
@@ -23,16 +25,12 @@ const TableProducts = (props) => {
   const [image, setImage] = useState('');
   //   console.log(data);
 
-  const handlePageClick = (event) => {
-    // callApiWithPaginate(+event.selected + 1);
-    // setCurrentPage(+event.selected + 1);
-    handlePageChange(+event.selected + 1);
-    console.log(`User requested page number ${event.selected}`);
-  };
-
-  // const handlePageChange = () => {
-
-  // }
+  // const handlePageClick = (event) => {
+  //   // callApiWithPaginate(+event.selected + 1);
+  //   // setCurrentPage(+event.selected + 1);
+  //   handlePageChange(+event.selected + 1);
+  //   console.log(`User requested page number ${event.selected}`);
+  // };
 
   return (
     <>
@@ -51,8 +49,8 @@ const TableProducts = (props) => {
                 Name
               </th>
               <th scope='col'>Price</th>
-              <th scope='col'>Sale Price</th>
-              <th scope='col'>Description</th>
+              <th scope='col'>Amount</th>
+              <th scope='col'>Year release</th>
               <th scope='col'>Action</th>
               {/* <th scope='col'>Sale Price</th> */}
             </tr>
@@ -81,9 +79,15 @@ const TableProducts = (props) => {
                       />
                     </td> */}
                     <td>{x.name}</td>
-                    <td>{x.originalPrice}</td>
-                    <td>{x.salePrice}</td>
-                    <td>{x.shortDescription}</td>
+                    <td>{x.unitPrice}</td>
+                    <td>{x.quantity}</td>
+                    <td className={cx('th-des')}>
+                      {/* <img
+                        style={{ width: '50px', height: '50px' }}
+                        src={require(`../../../assets/images/${x.productID}/${x.image}`)}
+                        alt=''
+                      /> */}
+                    </td>
                     <td>
                       <button
                         className='btn btn-primary'
@@ -118,7 +122,7 @@ const TableProducts = (props) => {
           </tbody>
         </Table>
 
-        <ReactPaginate
+        {/* <ReactPaginate
           nextLabel='Next>'
           onPageChange={handlePageClick}
           pageRangeDisplayed={3}
@@ -138,7 +142,7 @@ const TableProducts = (props) => {
           activeClassName='active'
           renderOnZeroPageCount={null}
           // forcePage={currentPage - 1}
-        />
+        /> */}
       </div>
 
       {/* <PaginatedItems  />, */}

@@ -445,7 +445,8 @@ const Login = () => {
             style={{ padding: '20px 0' }}>
             <span>Bạn đã có tài khoản?</span>
             <Link
-              onClick={() => handleLogin('signin')}
+              onClick={() => handleLogin('signin')
+              }
               className='signin'>
               <span>Đăng Nhập</span>
             </Link>

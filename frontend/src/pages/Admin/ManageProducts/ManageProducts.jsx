@@ -17,33 +17,35 @@ const ManageProducts = (props) => {
   const [filters, setFilters] = useState({ _page: 1, _limit: 6 });
   // const [currentPage, setCurrentPage] = useState(1);
   const countPage = Math.ceil(pagination.total / pagination.limit);
-  console.log(countPage);
+
+
+  const callApiProdcuts = async () => {
+    try {
+      setLoading(true)
+      const {status,message,data} = await apiService.getAllProducts();
+      setLoading(false)
+      setProductsList(data)
+    } catch (err) {
+      console.log('Failed to fetch product', err);
+    }
+  };
+
+
+  console.log(productsList)
 
   useEffect(() => {
-    const callApiProdcuts = async () => {
-      try {
-        const { pagination, data } = await apiService.getAll(filters);
-
-        console.log(pagination);
-        console.log(data);
-        setProductsList(data);
-        setPagination(pagination);
-      } catch (err) {
-        console.log('Failed to fetch product', err);
-      }
-    };
     callApiProdcuts();
-  }, [filters, dispatch]);
+  }, []);
 
-  const handlePageChange = (page) => {
-    setFilters((prev) => ({
-      ...prev,
-      _page: page,
-    }));
-  };
-  console.log(filters);
 
-  console.log(productsList);
+  // const handlePageChange = (page) => {
+  //   setFilters((prev) => ({
+  //     ...prev,
+  //     _page: page,
+  //   }));
+  // };
+
+
   return (
     <>
       <div className='manage-products-container'>
@@ -66,7 +68,7 @@ const ManageProducts = (props) => {
               listProducts={productsList}
               countPage={countPage}
               // setCurrentPage={setCurrentPage}
-              handlePageChange={handlePageChange}
+              // handlePageChange={handlePageChange}
             />
             {/* <TableUser
             data={data}
