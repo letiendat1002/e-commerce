@@ -9,7 +9,6 @@ import productData from '../../Helper/GetProduct'
 import { addToCart } from "../../Redux/slice/cartSlice.js"
 import { getAllCategories } from '../../Redux/slice/categorySlice'
 import { getAllProducts } from '../../Redux/slice/productSlice'
-import { getAllProduct } from '../../Redux/slice/productsSlice'
 import '../../assets/css/home.scss'
 import slider1 from '../../assets/images/banner.jpg'
 import slider6 from '../../assets/images/banner1.jpg'
@@ -23,7 +22,6 @@ import slider5 from '../../assets/images/slideshow_12.jpeg'
 import slider2 from '../../assets/images/slideshow_8.jpeg'
 import AutoSlice from '../../components/AutoSlide/AutoSlice'
 import Carousel from '../../components/Carousel/CarouselItem'
-import axiosClient4 from '../../API/axiosCustom'
 // import {addToCart, increaseToCart} from '../../Redux/Actions/cartAction'
 const slides = [
     slider1,
@@ -224,20 +222,6 @@ const Home = () => {
         setCategoryTabletTop(productTop)
         setCategoryTabletBottom(productBottom)
     }, [category])
-
-
-    
-
-    const handleCallProduct = async() => {
-        // const data =  await dispatch(getAllProduct())
-        console.warn("Done")
-        // console.log(data)
-    }
-
-    useEffect(() => {
-        handleCallProduct()
-    }, []);
-
     return (
     <div className="container-fluid home col-lg-12 col-sm-12 col-md-12" style={{padding: '2rem 0'}}>
         <Carousel />
@@ -272,7 +256,7 @@ const Home = () => {
                                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={item.productID} >
                                                         <Link to = {item.slug}>
                                                         <div className="child--contains--img">
-                                                            {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                            <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                             </div>
                                                             <div className="contains--title">
                                                             <h3>{item.name}</h3>
@@ -317,7 +301,7 @@ const Home = () => {
                                                 <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                        {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                        <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                     </div>
                                                     <div className="contains--title">
                                                     <h3>{item.name}</h3>
@@ -363,7 +347,7 @@ const Home = () => {
                                                 <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                    {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                     </div>
                                                     <h3>{item.name}</h3>
                                                     <div className="child--contains--price">
@@ -403,7 +387,7 @@ const Home = () => {
                                             <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}>
                                                 <div className="child--contains--img">
-                                                    {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                 </div>
                                                 <div className="contains--title">
                                                 <h3>{item.name}</h3>
@@ -447,7 +431,7 @@ const Home = () => {
                                         return (
                                             <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                                 <Link to = {item.slug}><div className="child--contains--img">
-                                                    {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                    <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                                 </div>
                                                 <div className="contains--title">
                                                 <h3>{item.name}</h3>
@@ -492,7 +476,7 @@ const Home = () => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.slug}><div className="child--contains--img">
-                                                {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
                                             <h3>{item.name}</h3>
@@ -537,7 +521,7 @@ const Home = () => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.slug}><div className="child--contains--img">
-                                                {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
                                             <h3>{item.name}</h3>
@@ -579,7 +563,7 @@ const Home = () => {
                                     return (
                                         <div className="item--child--contains home col-lg-3 col-md-4 col-sm-6 col-6" key={idx}>
                                             <Link to={item.slug}><div className="child--contains--img">
-                                                {/* <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" /> */}
+                                                <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
                                             </div>
                                             <div className="contains--title">
                                             <h3>{item.name}</h3>

@@ -59,22 +59,17 @@ const Login = () => {
 
     //login
     const { email, password } = values;
-    console.log(values);
 
     const res = await dispatch(login({ email, password }));
 
-    console.log(res);
-
     if (res.payload.status === 200) {
-      toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
+      toast.success(`Wellcom back ${res?.payload?.data[0].email} `)
+      navigate('/')
     }
     form.resetFields();
-    // document.location.href = '/';
-    // navigate('/');
   };
 
   const handleLogin = (item) => {
-    console.log('Login')
     if (item === 'login') {
       formItem.classList.add('d-none');
       signinItem.classList.remove('d-none');
@@ -85,11 +80,7 @@ const Login = () => {
   };
 
   const handleRegister = async (values) => {
-    console.log(values);
 
-    //login
-    // const { email, password } = values;
-    // console.log(values);
     const { fullName, gender, password, email } = values;
     const data = {
       image: '',
@@ -99,11 +90,8 @@ const Login = () => {
       password,
       email,
     };
-    console.log(data);
 
     const res = await dispatch(register(data));
-
-    console.log(res);
 
     if (res.payload.status === 200) {
       toast.success(`Register sucessfull ${res?.payload?.message} `);
