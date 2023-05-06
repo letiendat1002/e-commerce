@@ -1,8 +1,10 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserDAO userDAO;
     private final UserDTOMapper userDTOMapper;
     private final PasswordEncoder passwordEncoder;
+    private final OrderService orderService;
 
     @Override
     public List<UserDTO> fetchAllUsers() {
@@ -165,8 +168,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(BigInteger userID) {
         checkIfUserExistsByIdOrThrow(userID);
+
+        orderService
+                .fetchAllOrdersByUserID(userID)
+                .forEach(
+                        order -> orderService.deleteOrder(order.orderID())
+                );
+
         userDAO.deleteUserByID(userID);
     }
 
