@@ -17,6 +17,9 @@ import Profile from '../pages/Client/Profile'
 // import Login from '../pages/Admin/components/Login/Login';
 import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts'
 import ManageCategory from '../pages/Admin/ManageCategory/ManageCategory'
+import ManageOrders from '../pages/Admin/components/ManageOrders/ManageOrders'
+import ProductDetails from '../pages/Admin/ProductDetails/ProductDetails'
+import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct'
 
 
 const router = createBrowserRouter([
@@ -91,14 +94,17 @@ const router = createBrowserRouter([
         {
           path: 'manage-products',
           element: <ManageProducts />,
+          children: [
+            
+          ]
         },
         {
-          path: 'manage-products/:id',
-          element: <ManageProducts />,
+          path: 'manage-products/:idProduct',
+          element: <ProductDetails />,
         },
         {
-          path: 'login',
-          element: <Login />,
+          path: 'manage-products/Update/:idProduct',
+          element: <UpdateProduct />,
         },
         {
           path: 'manage-categories',
@@ -107,6 +113,10 @@ const router = createBrowserRouter([
         {
           path: 'products-filters',
           element: <ManageUser />,
+        },
+        {
+          path: 'manage-orders',
+          element: <ManageOrders />,
         },
       ]
       }

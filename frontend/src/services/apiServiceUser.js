@@ -2,38 +2,49 @@ import axios from 'axios';
 import { STATIC_HOST_2, STATIC_HOST } from '../constant/common';
 import axiosClient from '../API/axiosClient';
 import axiosClientProducts from '../API/axiosClientProducts';
+import axiosClient4 from '../API/axiosCustom';
 
-const createNewUser = (email, password, username, role, image) => {
-  const data = new FormData();
-  data.append('email', email);
-  data.append('password', password);
-  data.append('username', username);
-  data.append('role', role);
-  data.append('userImage', image);
-  console.log(data);
+const createNewUser = (email, password, fullName, gender, phone) => {
+  // const data = new FormData();
+  // data.append('email', email);
+  // data.append('password', password);
+  // data.append('username', username);
+  // data.append('role', role);
+  // data.append('userImage', image);
+  // console.log(data);
 
-  const url = `${STATIC_HOST_2}/participant`;
+  const data = {
+    email,
+    password,
+    fullName,
+    gender,
+    phone,
+    image:""
+  }
 
-  return axiosClient.post(url, data);
+  const url = `users`;
+
+  return axiosClient4.post(url, data);
 };
 
-const putUpdateUser = (id, username, role, image) => {
-  const data = new FormData();
-  data.append('id', id);
-  data.append('username', username);
-  data.append('role', role);
-  data.append('userImage', image);
-  console.log(data);
+//PUT user BE java
+const putUpdateUser = (userID, fullName, gender, phone, image) => {
+  const data = {
+    roles: ['CUSTOMER'],
+    fullName,
+    gender,
+    phone,
+    image: '',
+  };
+  const url = `users/${userID}`;
 
-  const url = `${STATIC_HOST_2}/participant`;
-
-  return axiosClient.put(url, data);
+  return axiosClient4.put(url, data);
 };
 
-const deleteUpdateUser = (idUser) => {
-  const url = `${STATIC_HOST_2}/participant`;
+const deleteUpdateUser = (id) => {
+  const url = `users/${id}`;
 
-  return axiosClient.delete(url, { data: { id: idUser } });
+  return axiosClient4.delete(url);
 };
 
 const getUserWithPaginate = (page, limit) => {
@@ -42,24 +53,19 @@ const getUserWithPaginate = (page, limit) => {
   return axiosClient.get(url);
 };
 
+//get user BE java
+const getUsers = async () => {
+  const url = `users`;
+
+  // const res = await axiosClient4.get(url)
+
+  return axiosClient4.get(url);
+};
+
 const postUserLogin = (email, password) => {
   const url = `${STATIC_HOST_2}/login`;
 
   return axiosClient.post(url, { email, password });
-};
-
-const register = (data) => {
-  const url = `/${STATIC_HOST}/local/register`;
-  return axiosClient.post(url, data);
-};
-
-const login = ({ identifier, password },config) => {
-  //user:adminHuy@gmail.com
-  //pw:123456
-  //user:admin@gmail.com
-  //pw:123123
-  const url = `/auth/local`;
-  return axiosClientProducts.post(url, { identifier, password });
 };
 
 export {
@@ -68,6 +74,5 @@ export {
   deleteUpdateUser,
   getUserWithPaginate,
   postUserLogin,
-  register,
-  login,
+  getUsers,
 };

@@ -3,6 +3,7 @@ import { STATIC_HOST_2 } from '../constant/common';
 import { STATIC_HOST } from '../constant/common';
 import axiosClient from '../API/axiosClient';
 import axiosClientProducts from '../API/axiosClientProducts';
+import axiosClient4 from '../API/axiosCustom';
 
 const SCHEMA = 'products';
 
@@ -58,6 +59,34 @@ const productApi = {
     // console.log(productListFilter)
     return categoryListFilter;
   },
+
+  async getAllProducts() {
+    const listProducts = await axiosClient4.get(`products`);
+    return listProducts;
+  },
+
+  async getDetailProduct(id) {
+    const detailProduct = await axiosClient4.get(`products/${id}`);
+    return detailProduct;
+  },
+
+  async putProduct(id, payload) {
+    const data = {
+      image: '',
+      imageReview1: '',
+      imageReview2: '',
+      imageReview3: '',
+      ...payload,
+    };
+    const putProduct = await axiosClient4.put(`products/${id}`, data);
+    console.log(putProduct)
+    return putProduct;
+  },
+
+  async deleteProduct(id) {
+    const deleteProduct = await axiosClient4.delete(`products/${id}`);
+    return deleteProduct;
+  }
 };
 
 export default productApi;

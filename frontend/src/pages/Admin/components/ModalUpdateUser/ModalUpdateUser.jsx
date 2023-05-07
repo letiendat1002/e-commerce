@@ -9,17 +9,27 @@ import { putUpdateUser } from '../../../../services/apiServiceUser';
 import './ModalUpdateUser.scss';
 
 const ModalUpdateUser = (props) => {
-  const { setShowModal, callApi, showUpdate, data1 ,resetUpdateData,setCurrentPage,callApiWithPaginate,currentPage} = props;
+  const {
+    setShowModal,
+    callApi,
+    showUpdate,
+    data1,
+    resetUpdateData,
+    setCurrentPage,
+    callApiWithPaginate,
+    currentPage,
+    getAllUsers,
+  } = props;
 
   const handleClose = () => {
     setShowModal(false);
     setEmail('');
-    setRole('USER');
+    setRole('CUSTOMER');
     setUsername('');
     setImage('');
     setPassword('');
     setPreviewImage('');
-    resetUpdateData()
+    resetUpdateData();
   };
 
   const [email, setEmail] = useState('');
@@ -28,12 +38,16 @@ const ModalUpdateUser = (props) => {
   const [role, setRole] = useState('');
   const [image, setImage] = useState('');
   const [previewImage, setPreviewImage] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
 
   useEffect(() => {
     if (!_.isEmpty(data1)) {
       setEmail(data1.email);
-      setUsername(data1.username);
-      setRole(data1.role);
+      setUsername(data1.fullName);
+      setRole(data1.roles[0]);
+      setPhone(data1.phone);
+      setGender(data1.gender);
       setImage('');
       if (data1.image) {
         setPreviewImage(`data:image/jpeg;base64,${data1.image}`);
@@ -59,7 +73,7 @@ const ModalUpdateUser = (props) => {
       );
   };
 
-  const {id} =data1
+  const { userID } = data1;
 
   const handleCreateUser = async () => {
     // const isValidate = validateEmail(email);
@@ -74,17 +88,16 @@ const ModalUpdateUser = (props) => {
     //   return;
     // }
 
-    let data = await putUpdateUser(id,username, role, image);
-    if (data && data.EC === 0) {
-      toast.success(data.EM);
+    let data = await putUpdateUser(userID, username, gender, phone, image);
+    console.log(data);
+    if (data && data.status === 200) {
+      toast.success(data.message);
+      getAllUsers();
       handleClose();
-      // await callApi();
-      setCurrentPage(currentPage)
-      await callApiWithPaginate(currentPage);
     }
 
-    if (data && data.EC !== 0) {
-      toast.error(data.EM);
+    if (data && data.status !== 200) {
+      toast.error(data.message);
     }
   };
 
@@ -92,7 +105,6 @@ const ModalUpdateUser = (props) => {
     <div>
       <Modal
         show={showUpdate}
-        // onHide={handleCloseModal}
         onHide={handleClose}
         size={'xl'}
         backdrop='static'
@@ -148,7 +160,22 @@ const ModalUpdateUser = (props) => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div className='col-md-4'>
+
+            <div className='col-md-6'>
+              <label
+                htmlFor='inputUsername'
+                className='form-label'>
+                Phone number
+              </label>
+              <input
+                type='text'
+                className='form-control'
+                id='inputUsername'
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div className='col-md-6'>
               <label
                 htmlFor='inputRole'
                 className='form-label'>
@@ -157,10 +184,28 @@ const ModalUpdateUser = (props) => {
               <select
                 id='inputRole'
                 className='form-select'
+                disabled
                 value={role}
                 onChange={(e) => setRole(e.target.value)}>
-                <option value='USER'>USER</option>
+                <option value='CUSTOMER'>CUSTOMER</option>
                 <option value='ADMIN'>ADMIN</option>
+              </select>
+            </div>
+
+            <div className='col-md-6'>
+              <label
+                htmlFor='inputGender'
+                className='form-label'>
+                Gender
+              </label>
+              <select
+                id='inputRole'
+                className='form-select'
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}>
+                <option value='MALE'>MALE</option>
+                <option value='FEMALE'>FEMALE</option>
+                <option value='OTHER'>OTHER</option>
               </select>
             </div>
 
@@ -175,6 +220,7 @@ const ModalUpdateUser = (props) => {
                 type='file'
                 id='img'
                 hidden
+                disabled
                 onChange={(e) => handleUploadImage(e)}
               />
             </div>

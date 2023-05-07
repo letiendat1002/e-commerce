@@ -9,14 +9,19 @@ const Pagination = ({
   pageCount,
   setCurrentPage,
   currentPage,
+  userPerPage,
+  totalUsers,
+  changePage,
 }) => {
   // Invoke when user click to request another page.
 
   const handlePageClick = (event) => {
-    callApiWithPaginate(+event.selected + 1);
-    setCurrentPage(+event.selected + 1);
+    // callApiWithPaginate(+event.selected + 1);
+    changePage(+event.selected + 1);
     console.log(`User requested page number ${event.selected}`);
   };
+
+  const pageCount2 = Math.ceil(totalUsers / userPerPage);
 
   return (
     <>
@@ -25,7 +30,7 @@ const Pagination = ({
         onPageChange={handlePageClick}
         pageRangeDisplayed={3}
         marginPagesDisplayed={2}
-        pageCount={pageCount}
+        pageCount={pageCount2}
         previousLabel='<Pre'
         pageClassName='page-item'
         pageLinkClassName='page-link'
@@ -39,7 +44,7 @@ const Pagination = ({
         containerClassName='pagination'
         activeClassName='active'
         renderOnZeroPageCount={null}
-        forcePage={currentPage - 1}
+        // forcePage={currentPage - 1}
       />
     </>
   );

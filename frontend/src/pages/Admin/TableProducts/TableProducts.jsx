@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
+import classname from 'classnames/bind';
+import { Link } from 'react-router-dom';
 
-import './TableProducts.scss';
+import styles from './TableProducts.module.scss';
 
+
+let cx = classname.bind(styles);
 const TableProducts = (props) => {
   const {
     listProducts,
@@ -14,8 +18,13 @@ const TableProducts = (props) => {
     currentPage,
     setCurrentPage,
     handlePageChange,
+    setSetShowDeleteModal,
+    setDataDelete,
+    newData,
+    currentProduct
   } = props;
-  console.log(listProducts);
+  // console.log(listProducts);
+
 
   // const {data:listData} =listProducts
 
@@ -23,17 +32,20 @@ const TableProducts = (props) => {
   const [image, setImage] = useState('');
   //   console.log(data);
 
-  const handlePageClick = (event) => {
-    // callApiWithPaginate(+event.selected + 1);
-    // setCurrentPage(+event.selected + 1);
-    handlePageChange(+event.selected + 1);
-    console.log(`User requested page number ${event.selected}`);
-  };
+  // const handlePageClick = (event) => {
+  //   // callApiWithPaginate(+event.selected + 1);
+  //   // setCurrentPage(+event.selected + 1);
+  //   handlePageChange(+event.selected + 1);
+  //   console.log(`User requested page number ${event.selected}`);
+  // };
 
-  // const handlePageChange = () => {
+  console.log(newData)
 
-  // }
-
+  const handleDelete = (x) => {
+    console.log(x);
+    setSetShowDeleteModal(true)
+    setDataDelete(x)
+  }
   return (
     <>
       <div className='table-responsive my-3 '>
@@ -51,25 +63,25 @@ const TableProducts = (props) => {
                 Name
               </th>
               <th scope='col'>Price</th>
-              <th scope='col'>Sale Price</th>
-              <th scope='col'>Description</th>
+              <th scope='col'>Amount</th>
+              <th scope='col'>Year release</th>
               <th scope='col'>Action</th>
               {/* <th scope='col'>Sale Price</th> */}
             </tr>
           </thead>
           <tbody>
-            {listProducts && listProducts.length === 0 ? (
+            {currentProduct && currentProduct.length === 0 ? (
               <tr>
                 <th
                   colSpan={'5'}
                   className='text-center'>
-                  Data not found
+                  No product here
                 </th>
               </tr>
             ) : (
-              listProducts &&
-              listProducts.length > 0 &&
-              listProducts.map((x, idx) => {
+              currentProduct &&
+              currentProduct.length > 0 &&
+              currentProduct.map((x, idx) => {
                 return (
                   <tr key={idx}>
                     <th scope='row'>{idx + 1}</th>
@@ -81,23 +93,29 @@ const TableProducts = (props) => {
                       />
                     </td> */}
                     <td>{x.name}</td>
-                    <td>{x.originalPrice}</td>
-                    <td>{x.salePrice}</td>
-                    <td>{x.shortDescription}</td>
+                    <td>{x.unitPrice}</td>
+                    <td>{x.quantity}</td>
+                    <td className={cx('th-des')}>
+                      {/* <img
+                        style={{ width: '50px', height: '50px' }}
+                        src={require(`../../../assets/images/${x.productID}/${x.image}`)}
+                        alt=''
+                      /> */}
+                    </td>
                     <td>
                       <button
                         className='btn btn-primary'
                         onClick={() => x}>
-                        View
+                        <Link to={`${x.productID}`}>View</Link>
                       </button>
                       <button
                         className='btn btn-success mx-3'
                         onClick={() => x}>
-                        Update
+                        <Link to={`Update/${x.productID}`}>Update</Link>
                       </button>
                       <button
                         className='btn btn-danger'
-                        onClick={() => x}>
+                        onClick={() => handleDelete(x)}>
                         Delete
                       </button>
                     </td>
@@ -118,7 +136,7 @@ const TableProducts = (props) => {
           </tbody>
         </Table>
 
-        <ReactPaginate
+        {/* <ReactPaginate
           nextLabel='Next>'
           onPageChange={handlePageClick}
           pageRangeDisplayed={3}
@@ -138,10 +156,11 @@ const TableProducts = (props) => {
           activeClassName='active'
           renderOnZeroPageCount={null}
           // forcePage={currentPage - 1}
-        />
+        /> */}
       </div>
 
       {/* <PaginatedItems  />, */}
+      
     </>
   );
 };
