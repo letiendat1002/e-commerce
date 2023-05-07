@@ -21,7 +21,7 @@ const Pagination = ({
     console.log(`User requested page number ${event.selected}`);
   };
 
-  const pageCount2 = Math.ceil(totalUsers/userPerPage)
+  const pageCount2 = Math.ceil(totalUsers / userPerPage);
 
   return (
     <>

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
 import classname from 'classnames/bind';
+import { Link } from 'react-router-dom';
 
 import styles from './TableProducts.module.scss';
+
 
 let cx = classname.bind(styles);
 const TableProducts = (props) => {
@@ -16,8 +18,13 @@ const TableProducts = (props) => {
     currentPage,
     setCurrentPage,
     handlePageChange,
+    setSetShowDeleteModal,
+    setDataDelete,
+    newData,
+    currentProduct
   } = props;
-  console.log(listProducts);
+  // console.log(listProducts);
+
 
   // const {data:listData} =listProducts
 
@@ -32,6 +39,13 @@ const TableProducts = (props) => {
   //   console.log(`User requested page number ${event.selected}`);
   // };
 
+  console.log(newData)
+
+  const handleDelete = (x) => {
+    console.log(x);
+    setSetShowDeleteModal(true)
+    setDataDelete(x)
+  }
   return (
     <>
       <div className='table-responsive my-3 '>
@@ -56,18 +70,18 @@ const TableProducts = (props) => {
             </tr>
           </thead>
           <tbody>
-            {listProducts && listProducts.length === 0 ? (
+            {currentProduct && currentProduct.length === 0 ? (
               <tr>
                 <th
                   colSpan={'5'}
                   className='text-center'>
-                  Data not found
+                  No product here
                 </th>
               </tr>
             ) : (
-              listProducts &&
-              listProducts.length > 0 &&
-              listProducts.map((x, idx) => {
+              currentProduct &&
+              currentProduct.length > 0 &&
+              currentProduct.map((x, idx) => {
                 return (
                   <tr key={idx}>
                     <th scope='row'>{idx + 1}</th>
@@ -92,16 +106,16 @@ const TableProducts = (props) => {
                       <button
                         className='btn btn-primary'
                         onClick={() => x}>
-                        View
+                        <Link to={`${x.productID}`}>View</Link>
                       </button>
                       <button
                         className='btn btn-success mx-3'
                         onClick={() => x}>
-                        Update
+                        <Link to={`Update/${x.productID}`}>Update</Link>
                       </button>
                       <button
                         className='btn btn-danger'
-                        onClick={() => x}>
+                        onClick={() => handleDelete(x)}>
                         Delete
                       </button>
                     </td>
@@ -146,6 +160,7 @@ const TableProducts = (props) => {
       </div>
 
       {/* <PaginatedItems  />, */}
+      
     </>
   );
 };

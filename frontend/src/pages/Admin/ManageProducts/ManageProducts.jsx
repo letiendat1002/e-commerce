@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TableProducts from '../TableProducts/TableProducts';
 import apiService from '../../../services/apiServiceProducts';
 import { useDispatch, useSelector } from 'react-redux';
+import ModalDeleteProduct from '../components/ModalDeleteProduct/ModalDeleteProduct';
+import Pagination from '../components/Pagination/Pagination';
 // import productApi from '../../../services/apiServiceProducts';
 
 const ManageProducts = (props) => {
@@ -13,30 +15,46 @@ const ManageProducts = (props) => {
     page: 1,
   });
   const [loading, setLoading] = useState(true);
+  const [setShowDeleteModal, setSetShowDeleteModal] = useState(false);
+  const [dataDelete, setDataDelete] = useState("");
   const dispatch = useDispatch();
   const [filters, setFilters] = useState({ _page: 1, _limit: 6 });
   // const [currentPage, setCurrentPage] = useState(1);
-  const countPage = Math.ceil(pagination.total / pagination.limit);
+  const [idLastProduct, setIdLastProduct] = useState(1);
+  const [productPerPage, setProductPerPage] = useState(5);
 
+  const idxLastProduct = idLastProduct * productPerPage;
+  const idxFirstProduct = idxLastProduct - productPerPage;
+  const currentProduct = productsList.slice(idxFirstProduct, idxLastProduct);
+
+  console.log(currentProduct)
+  const countPage = Math.ceil(pagination.total / pagination.limit);
 
   const callApiProdcuts = async () => {
     try {
-      setLoading(true)
-      const {status,message,data} = await apiService.getAllProducts();
-      setLoading(false)
-      setProductsList(data)
+      setLoading(true);
+      const { status, message, data } = await apiService.getAllProducts();
+      setLoading(false);
+      setProductsList(data);
+      console.log(data);
     } catch (err) {
       console.log('Failed to fetch product', err);
     }
   };
 
+  console.log(productsList);
+  const lengtProduct = productsList.length
 
-  console.log(productsList)
+  const newData = productsList.filter(product => product.status === true)
+  console.log(newData);
+
+  const changePage = (number) => {
+    setIdLastProduct(number)
+  }
 
   useEffect(() => {
     callApiProdcuts();
   }, []);
-
 
   // const handlePageChange = (page) => {
   //   setFilters((prev) => ({
@@ -44,7 +62,6 @@ const ManageProducts = (props) => {
   //     _page: page,
   //   }));
   // };
-
 
   return (
     <>
@@ -67,6 +84,10 @@ const ManageProducts = (props) => {
             <TableProducts
               listProducts={productsList}
               countPage={countPage}
+              setSetShowDeleteModal={setSetShowDeleteModal}
+              setDataDelete={setDataDelete}
+              newData={newData}
+              currentProduct={currentProduct}
               // setCurrentPage={setCurrentPage}
               // handlePageChange={handlePageChange}
             />
@@ -85,9 +106,16 @@ const ManageProducts = (props) => {
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
           /> */}
+            
+            <Pagination
+              totalUsers={lengtProduct}
+              userPerPage={productPerPage}
+            changePage={changePage}
+          />
           </div>
         </div>
       </div>
+      <ModalDeleteProduct setShowDeleteModal={setShowDeleteModal} setSetShowDeleteModal={setSetShowDeleteModal} dataDelete={dataDelete} callApiProdcuts={callApiProdcuts} />
     </>
   );
 };
