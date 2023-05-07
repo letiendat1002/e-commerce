@@ -1,6 +1,7 @@
 package com.ecommerce.backend.user;
 
 import com.ecommerce.backend.order.Order;
+import com.ecommerce.backend.rating.Rating;
 import com.ecommerce.backend.user.enums.EmailValidationStatus;
 import com.ecommerce.backend.user.enums.Gender;
 import com.ecommerce.backend.user.enums.UserRole;
@@ -20,7 +21,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
-@Table(name = "User")
+@Table(name = "`User`")
 public class User implements UserDetails {
     @Id
     @SequenceGenerator(
@@ -71,6 +72,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Rating> ratings;
 
     public User(String email,
                 String password,

@@ -5,51 +5,61 @@ import ModalCreateUser from '../ModalCreateUser/ModalCreateUser';
 import './ManageUser.scss';
 import TableUser from '../components/TableUser/TableUser';
 import { getAllUser } from '../../../services/apiGetAllUser';
-import { getUserWithPaginate } from '../../../services/apiServiceUser';
+import { getUsers, getUserWithPaginate } from '../../../services/apiServiceUser';
 import ModalUpdateUser from '../components/ModalUpdateUser/ModalUpdateUser';
 import ModalDeleteUser from '../components/ModalDeleteUser/ModalDeleteUser';
 import Pagination from '../components/Pagination/Pagination';
+// import Pagination from '../../../components/Pagination/Pagination';
 import ModalViewUser from '../components/ModalViewUser/ModalViewUser';
 
 const MangeUser = (props) => {
   const LIMIT = 6;
   const [show, setShow] = useState(false);
+  const [showModelUser, setShowModelUser] = useState({
+    
+  });
   const [showModalUpdateUser, setShowModalUpdateUser] = useState(false);
   const [showModalDeleteUser, setShowModalDeleteUser] = useState(false);
   const [showModalViewUser, setShowModalViewUser] = useState(false);
   const [data, setData] = useState([]);
   const [data1, setData1] = useState({});
   const [dataDelete, setDataDelete] = useState({});
-  const [pageCount, setPageCount] = useState(0);
+  const [userPerPage, setUserPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const idOfLastPost = currentPage * userPerPage;
+  const idOfFirstPost = idOfLastPost - userPerPage;
+  const currentUsers = data.slice(idOfFirstPost, idOfLastPost);
+  const totalUsers = data.length;
+
+  const changePage = (number) => {
+    setCurrentPage(number);
+  };
+
   useEffect(() => {
-    // callApi();
-    callApiWithPaginate(1);
+    getAllUsers();
   }, []);
 
   const callApi = async () => {
     const res = await getAllUser();
     if (res.EC === 0) {
-      setData(res.DT);
     }
   };
 
-  const callApiWithPaginate = async (page) => {
-    const res = await getUserWithPaginate(page, LIMIT);
-    if (res.EC === 0) {
-      // console.log('Res:', res.DT.users);
-      setData(res.DT.users);
-      setPageCount(res.DT.totalPages);
-    }
+  const getAllUsers = async () => {
+    const res = await getUsers();
+    setData(res?.data);
   };
 
-  const handleClickBtnUpdate = (x) => {
+  const handleClickBtnUpdate = (x, id) => {
     setData1(x);
+    console.log(x, id);
+    getAllUsers();
     setShowModalUpdateUser(!false);
   };
 
   const handleClickBtnView = (x) => {
+    console.log(x);
     setData1(x);
     setShowModalViewUser(true);
   };
@@ -69,7 +79,6 @@ const MangeUser = (props) => {
 
       <div className='user-content'>
         <div className='btn-add-new'>
-          {/* <button className='btn btn-primary' onClick={handleOpen}><AiFillPlusCircle/>Manage User</button> */}
           <button
             className='btn btn-primary'
             onClick={(e) => setShow(true)}>
@@ -80,29 +89,33 @@ const MangeUser = (props) => {
 
         <div className='table-users-container'>
           <TableUser
-            data={data}
+            data={currentUsers}
             setShowModal={handleClickBtnUpdate}
             handleClickBtnDelete={handleClickBtnDelete}
             handleClickBtnView={handleClickBtnView}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
+
+          {/* <Pagination
+            userPerPage={userPerPage}
+            totalUsers={totalUsers}
+            changePage={changePage}
+          /> */}
+
           <Pagination
-            callApiWithPaginate={callApiWithPaginate}
-            pageCount={pageCount}
-            setPageCount={setPageCount}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
+            userPerPage={userPerPage}
+            totalUsers={totalUsers}
+            changePage={changePage}
           />
         </div>
-        {/* <ModalCreateUser show={show} handleClose={handleClose} /> */}
         <ModalCreateUser
           show={show}
           setShow={setShow}
           callApi={callApi}
-          callApiWithPaginate={callApiWithPaginate}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          getAllUsers={getAllUsers}
         />
 
         <ModalUpdateUser
@@ -111,17 +124,17 @@ const MangeUser = (props) => {
           data1={data1}
           callApi={callApi}
           resetUpdateData={resetUpdateData}
-          callApiWithPaginate={callApiWithPaginate}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
+          getAllUsers={getAllUsers}
         />
 
         <ModalDeleteUser
           showDelete={showModalDeleteUser}
           setShowModalDeleteUser={setShowModalDeleteUser}
           dataDelete={dataDelete}
+          getAllUsers={getAllUsers}
           callApi={callApi}
-          callApiWithPaginate={callApiWithPaginate}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />

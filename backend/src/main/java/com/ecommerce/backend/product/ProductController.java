@@ -39,7 +39,6 @@ public class ProductController {
     }
 
     @GetMapping("{productID}")
-    @PreAuthorize("hasAuthority('product:read')")
     public ProductResponse getProductByProductID(
             @PathVariable("productID") BigInteger productID
     ) {

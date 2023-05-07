@@ -31,7 +31,6 @@ public class CategoryController {
     }
 
     @GetMapping("{categoryID}")
-    @PreAuthorize("hasAuthority('category:read')")
     public CategoryResponse getCategoryByID(
             @PathVariable("categoryID") BigInteger categoryID
     ) {

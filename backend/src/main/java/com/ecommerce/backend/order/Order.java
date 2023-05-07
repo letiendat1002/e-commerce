@@ -3,6 +3,7 @@ package com.ecommerce.backend.order;
 
 import com.ecommerce.backend.order.enums.OrderPaymentType;
 import com.ecommerce.backend.order.enums.OrderStatus;
+import com.ecommerce.backend.orderdetail.OrderDetail;
 import com.ecommerce.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import lombok.ToString;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -39,8 +42,8 @@ public class Order {
     @ToString.Exclude
     private User user;
 
-    @Column(name = "Total")
-    private BigInteger total;
+    @Column(name = "AdditionalPrice")
+    private BigInteger additionalPrice;
 
     @Column(name = "PaymentType")
     @Enumerated(EnumType.STRING)
@@ -56,13 +59,20 @@ public class Order {
     @Column(name = "Address")
     private String address;
 
+    @Transient
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<OrderDetail> orderDetails;
+
     public Order(User user,
                  BigInteger total,
                  OrderPaymentType paymentType,
                  LocalDate dateOrder,
                  String address) {
         this.user = user;
-        this.total = total;
+        this.additionalPrice = total;
         this.paymentType = paymentType;
         this.dateOrder = dateOrder;
         this.address = address;
@@ -73,11 +83,11 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(getTotal(), order.getTotal()) && Objects.equals(getPaymentType(), order.getPaymentType()) && Objects.equals(getStatus(), order.getStatus()) && Objects.equals(getDateOrder(), order.getDateOrder());
+        return Objects.equals(getCreatedAt(), order.getCreatedAt());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTotal(), getPaymentType(), getStatus(), getDateOrder());
+        return Objects.hash(getCreatedAt());
     }
 }

@@ -6,8 +6,16 @@ import { deleteUpdateUser } from '../../../../services/apiServiceUser';
 import { toast } from 'react-toastify';
 
 const ModalDeleteUser = (props) => {
-  const { showDelete, setShowModalDeleteUser, dataDelete, callApi, callApiWithPaginate,setCurrentPage } = props;
-  const { id } = dataDelete;
+  const {
+    showDelete,
+    setShowModalDeleteUser,
+    dataDelete,
+    callApi,
+    callApiWithPaginate,
+    setCurrentPage,
+    getAllUsers,
+  } = props;
+  const { userID } = dataDelete;
   // console.log(id);
 
   const handleClose = () => {
@@ -15,17 +23,18 @@ const ModalDeleteUser = (props) => {
   };
 
   const handleSubmitDelete = async () => {
-    let data = await deleteUpdateUser(id);
-    if (data && data.EC === 0) {
-      toast.success(data.EM);
+    let data = await deleteUpdateUser(userID);
+    if (data && data.status === 200) {
+      toast.success(data.message);
+      getAllUsers();
       handleClose();
 
-      setCurrentPage(1)
-      await callApiWithPaginate(1);
+      // setCurrentPage(1);
+      // await callApiWithPaginate(1);
     }
 
-    if (data && data.EC !== 0) {
-      toast.error(data.EM);
+    if (data && data.status !== 200) {
+      toast.error(data.message);
     }
   };
   return (

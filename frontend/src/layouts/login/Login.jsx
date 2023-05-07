@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, Select } from 'antd';
 import React, { useState } from 'react';
 import { AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { BsFacebook } from 'react-icons/bs';
@@ -11,7 +11,7 @@ import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
 import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import { authenticate } from './AuthSignInSlice';
 import './style.scss';
-import { login } from '../../Redux/slice/userSlice';
+import { login, register } from '../../Redux/slice/userSlice';
 import { toast } from 'react-toastify';
 const Login = () => {
   const dispatch = useDispatch();
@@ -19,6 +19,9 @@ const Login = () => {
   const [remember, setRemember] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const formItem = document.querySelector('.login__container--form');
+  const signinItem = document.querySelector('.register__container--form');
   const ItemStyle = {
     fontStyle: 'normal',
     fontWeight: '600',
@@ -56,23 +59,17 @@ const Login = () => {
 
     //login
     const { email, password } = values;
-    console.log(values);
 
     const res = await dispatch(login({ email, password }));
 
-    console.log(res);
-
     if (res.payload.status === 200) {
-      toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
+      toast.success(`Wellcom back ${res?.payload?.data[0].email} `)
+      navigate('/')
     }
     form.resetFields();
-    navigate('/');
   };
 
   const handleLogin = (item) => {
-    const formItem = document.querySelector('.login__container--form');
-    const signinItem = document.querySelector('.register__container--form');
-
     if (item === 'login') {
       formItem.classList.add('d-none');
       signinItem.classList.remove('d-none');
@@ -80,6 +77,33 @@ const Login = () => {
       formItem.classList.remove('d-none');
       signinItem.classList.add('d-none');
     }
+  };
+
+  const handleRegister = async (values) => {
+
+    const { fullName, gender, password, email } = values;
+    const data = {
+      image: '',
+      phone,
+      fullName,
+      gender,
+      password,
+      email,
+    };
+
+    const res = await dispatch(register(data));
+
+    if (res.payload.status === 200) {
+      toast.success(`Register sucessfull ${res?.payload?.message} `);
+      handleLogin('signin')
+    }
+
+    if (res.payload.status === 400) {
+      toast.success(`Something wrong ${res?.payload?.message} `);
+
+    }
+    // form.resetFields();
+    // document.location.href = '/';
   };
 
   return (
@@ -213,10 +237,10 @@ const Login = () => {
             validateMessages={validateMessages}
             method='POST'
             autoComplete={remember ? 'on' : 'off'}
-            onFinish={onFinish}>
+            onFinish={handleRegister}>
             <h3>Đăng Ký</h3>
             <Form.Item
-              name='Email'
+              name='email'
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span style={ItemStyle}>Email</span>
@@ -239,7 +263,7 @@ const Login = () => {
               />
             </Form.Item>
             <Form.Item
-              name='username'
+              name='fullName'
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <span style={ItemStyle}>Họ và Tên</span>
@@ -265,6 +289,34 @@ const Login = () => {
                 style={inputText}
               />
             </Form.Item>
+
+            <Form.Item
+              name='text'
+              label={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <span style={ItemStyle}>Số điện thoại</span>
+                  <RequiredIcon style={{ marginLeft: '5px' }} />
+                </div>
+              }
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập số điện thoại của bạn.',
+                },
+                {
+                  min: 10,
+                  message: 'Mật khẩu phải bao gồm ít nhất 10 số',
+                },
+              ]}>
+              <Input
+                prefix={<LockIcon className='site-form-item-icon' />}
+                placeholder='Số điện thoại của bạn'
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                style={inputText}
+              />
+            </Form.Item>
+
             <Form.Item
               name='password'
               label={
@@ -327,6 +379,36 @@ const Login = () => {
                 style={inputText}
               />
             </Form.Item>
+            <Form.Item
+              name='gender'
+              label='Gender'
+              rules={[
+                {
+                  required: true,
+                },
+              ]}>
+              <Select
+                placeholder='Select a gender above'
+                style={{
+                  width: '100%',
+                  margin: '5px 0',
+                }}
+                options={[
+                  {
+                    value: 'MALE',
+                    label: 'MALE',
+                  },
+                  {
+                    value: 'FEMALE',
+                    label: 'FEMALE',
+                  },
+                  {
+                    value: 'OTHER',
+                    label: 'OTHER',
+                  },
+                ]}
+              />
+            </Form.Item>
             <div className='login__left--contains'>
               <div className='login__left--contains--child'>
                 <input
@@ -342,7 +424,7 @@ const Login = () => {
                 </span>
               </div>
             </div>
-            <Button htmlType='submit'>
+            <Button htmlType='submit' onClick={()=>handleLogin('signin')}>
               <span>Đăng ký</span>
             </Button>
           </Form>
@@ -351,7 +433,8 @@ const Login = () => {
             style={{ padding: '20px 0' }}>
             <span>Bạn đã có tài khoản?</span>
             <Link
-              onClick={() => handleLogin('signin')}
+              onClick={() => handleLogin('signin')
+              }
               className='signin'>
               <span>Đăng Nhập</span>
             </Link>

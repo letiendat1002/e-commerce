@@ -8,7 +8,7 @@ import { createNewUser } from '../../../services/apiServiceUser';
 import './ModalCreateUser.scss';
 
 const ModalCreateUser = (props) => {
-  const { show, setShow, callApi, callApiWithPaginate, setCurrentPage } = props;
+  const { show, setShow, callApi, callApiWithPaginate, setCurrentPage, getAllUsers } = props;
 
   const handleClose = () => {
     setShow(false);
@@ -18,13 +18,16 @@ const ModalCreateUser = (props) => {
     setImage('');
     setPassword('');
     setPreviewImage('');
+    setPhone('');
   };
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [role, setRole] = useState('USER');
+  const [role, setRole] = useState('CUSTOMER');
   const [image, setImage] = useState('');
+  const [gender, setGender] = useState('');
+  const [phone, setPhone] = useState('');
   const [previewImage, setPreviewImage] = useState('');
 
   const handleUploadImage = (e) => {
@@ -60,19 +63,27 @@ const ModalCreateUser = (props) => {
       return;
     }
 
-    let data = await createNewUser(email, password, username, role, image);
-    if (data && data.EC === 0) {
-      toast.success(data.EM);
+    let data = await createNewUser(email, password, username, gender, phone);
+    if (data && data.status === 200) {
+      toast.success(data.message);
+      getAllUsers();
       handleClose();
       // await callApi();
-      setCurrentPage(1);
-      await callApiWithPaginate(1);
+      // setCurrentPage(1);
+      // await callApiWithPaginate(1);
     }
-    console.log(data)
+    console.log(data);
 
-    if (data && data.EC !== 0) {
-      toast.error(data.EM);
+    if (data && data.status !== 200) {
+      toast.error(data.message);
     }
+    console.log({
+      email,
+      password,
+      username,
+      gender,
+      phone,
+    });
   };
   return (
     <div>
@@ -87,7 +98,7 @@ const ModalCreateUser = (props) => {
           <Modal.Title>Add new user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className='row gx-5'>
+          <form className='row '>
             <div className='col-md-6'>
               <label
                 htmlFor='inputEmail4'
@@ -132,23 +143,55 @@ const ModalCreateUser = (props) => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div className='col-md-4'>
+            <div className='col-md-6'>
+              <label
+                htmlFor='inputPhone'
+                className='form-label'>
+                Phone Number
+              </label>
+              <input
+                type='text'
+                className='form-control'
+                id='inputPhone'
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div className='col-md-6'>
               <label
                 htmlFor='inputRole'
                 className='form-label'>
                 Role
               </label>
               <select
+                disabled
                 id='inputRole'
                 className='form-select'
                 value={role}
                 onChange={(e) => setRole(e.target.value)}>
                 <option
-                  value='USER'
+                  value='CUSTOMER'
                   checked>
-                  USER
+                  CUSTOMER
                 </option>
                 <option value='ADMIN'>ADMIN</option>
+              </select>
+            </div>
+
+            <div className='col-md-6'>
+              <label
+                htmlFor='inputGender'
+                className='form-label'>
+                Gender
+              </label>
+              <select
+                id='inputRole'
+                className='form-select'
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}>
+                <option value='MALE'>MALE</option>
+                <option value='FEMALE'>FEMALE</option>
+                <option value='OTHER'>OTHER</option>
               </select>
             </div>
 

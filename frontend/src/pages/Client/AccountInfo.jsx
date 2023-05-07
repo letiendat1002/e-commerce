@@ -12,9 +12,11 @@ import {MdMonochromePhotos} from 'react-icons/md'
 import Info from '../../assets/data/info'
 import InfoImage from '../../assets/images/img-noti.png'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const AccountInfor = () => {
     const [active, setActive] = useState(false);
+    const dispatch = useDispatch()
     const handleActiveProfile = () => {
         const containerRightItem = document.querySelector('.profile__container--item--tablet .profile__container--item--right');
         const itemLeft = document.querySelectorAll('.item__left--item')
@@ -35,6 +37,13 @@ const AccountInfor = () => {
             setActive(false)
         }
     }
+
+    const {current:user} = useSelector(state => state.user)
+
+    const fullname = user[0].fullName.split(' ')
+    const name = (fullname[fullname.length - 2] + " " + fullname[fullname.length - 1])
+
+    const userID = user[0].userID
   return (
     <div className="profile container-fluid">
         <div className="top" style={{height: "3rem", backgroundColor: "#f1f2f1"}}></div>
@@ -44,15 +53,15 @@ const AccountInfor = () => {
                     <Link to={"/"}>Trang Chủ /</Link>
                     <span className="active" onClick={() => handleShowMenuProfile()}>Tài khoản</span> 
                 </div>  
-                <p style={{fontSize: "18px"}}>Xin chào <b style={{color: "#DB4437"}}>Trần Đăng Nguyễn Bảo</b></p>
+                <p style={{fontSize: "18px"}}>Xin chào <b style={{color: "#DB4437"}}>{user[0].fullName}</b></p>
             </div>
             <div className="profile__container--item col-lg-12 col-md-12 col-sm-12 col-12">
                 <div className="profile__container--item--left col-lg-3 col-md-12 col-sm-12 col-12 pe-3">
                     <div className="item__left--avatar">
                         <img src={Avatar} alt="" />
                         <div className="item__left--avatar--child">
-                            <h5>Nguyễn Bảo</h5>
-                            <p>0978585758</p>
+                            <h5>{name}</h5>
+                            <p>{user[0].phone}</p>
                         </div>
                     </div>
                     <Link to={'/account/profile'}><div className="item__left--item">

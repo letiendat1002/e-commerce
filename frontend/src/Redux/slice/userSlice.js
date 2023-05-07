@@ -1,17 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import authApi from '../api/auth';
 import STORAGE_KEYS from '../../constant/storage-keys';
+import axiosClient4 from '../api/axiosCustom';
 
 export const register = createAsyncThunk('user/register', async (payload) => {
   //call API to register
-  const { data } = await authApi.register(payload);
-
-  //save data local storage
-  localStorage.setItem(STORAGE_KEYS.TOKEN, data.jwt);
-  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
-
-  //return user data
-  return data.user;
+  const res = await authApi.register(payload);
+  return res;
 });
 
 export const login = createAsyncThunk('user/login', async (payload) => {
@@ -20,16 +15,27 @@ export const login = createAsyncThunk('user/login', async (payload) => {
   console.log(payload);
   const { email, password } = payload;
   const res = await authApi.login(email, password);
-
-  console.log(res);
-
   //save data local storage
-  localStorage.setItem(STORAGE_KEYS.TOKEN, res.token);
-  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res?.data));
+  if (res) {
+    localStorage.setItem(STORAGE_KEYS.TOKEN, res?.token);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res?.data));
+
+  }
 
   //return user data
   return res;
 });
+
+export const getUserID = createAsyncThunk('user/getuserID', async (data) => {
+  try {
+        const response = await axiosClient4.get(`users/${data}`)
+        return response.data
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
 
 const userSlice = createSlice({
   name: 'user',
@@ -51,8 +57,11 @@ const userSlice = createSlice({
       state.current = action.payload;
     },
     [login.fulfilled]: (state, action) => {
-      state.current = action.payload;
+      state.current = action.payload.data;
     },
+    [getUserID.fulfilled]: (state, action) => {
+      state.current = action.payload;
+    }
   },
 });
 

@@ -1,5 +1,23 @@
 # Role & Permission Documentation
 
+## Table of contents
+
+- [Public APIs](#public-apis)
+- [Roles](#roles)
+- [Permissions](#permissions)
+- [Role Permissions](#role-permissions)
+
+### Public APIs
+
+| **No.** | **HTTP** |           **API**           |  **Description**   |
+|:-------:|:--------:|:---------------------------:|:------------------:|
+|  **1**  |  `POST`  | `/api/v1/auth/authenticate` |       Login        |
+|  **2**  |  `POST`  |   `/api/v1/auth/register`   |      Register      |
+|  **3**  |  `GET`   |    `/api/v1/categories`     | Get all categories |
+|  **4**  |  `GET`   |  `/api/v1/categories/{id}`  | Get category by id |
+|  **5**  |  `GET`   |     `/api/v1/products`      |  Get all products  |
+|  **6**  |  `GET`   |   `/api/v1/products/{id}`   | Get product by id  |
+
 ### Notes
 
 - `xxx:read` -> `GET`
@@ -10,34 +28,47 @@
 - **Admin**
     - All permissions
 
+
 - **Employee**
-    - User:
+    - **User:**
         - `get:getUserByUserID`
         - `put:putUser`
-    - User Address:
+    - **User Address:**
         - `user_address:read`
         - `user_address:write`
-    - Product:
+    - **Product:**
         - `product:read`
         - `product:write`
-    - Category:
+    - **Category:**
         - `category:read`
         - `category:write`
-    - Order:
+    - **Order:**
         - `order:read`
         - `order:write`
+    - **Order Detail:**
+        - `order_detail:read`
+        - `post:postOrderDetail`
+    - **Rating:**
+        - `rating:read`
+        - `rating:write`
 
 - **Customer**
-    - User:
+    - **User:**
         - `get:getUserByUserID`
         - `put:putUser`
-    - User Address:
+    - **User Address:**
         - `user_address:read`
         - `user_address_write`
-    - Product:
+    - **Product:**
         - `product:read`
-    - Category:
+    - **Category:**
         - `category:read`
-    - Order:
+    - **Order:**
         - `order:read`
         - `order:write`
+    - **Order Detail:**
+        - `order_detail:read`
+        - `post:postOrderDetail`
+    - **Rating:**
+        - `rating:read`
+        - `rating:write`
