@@ -147,7 +147,7 @@ const Payment = () => {
                                                 {
                                                     (addresses.length > 0) ? (
                                                         <select name="" id="" onChange={(e) => setAddress(e.target.value)} style={{width: "100%", padding: "0.5rem 5px", border: "2px solid #ffffff", borderRadius: "4px", fontSize: "18px", marginTop: "5px"}}>
-                                                            <option value='Vui lòng chọn địa chỉ'>Vui lòng chọn địa chỉ</option>
+                                                            <option defaultValue=''>Vui lòng chọn địa chỉ</option>
                                                             {
                                                                 addresses.map((item, key) =>{
                                                                     return (

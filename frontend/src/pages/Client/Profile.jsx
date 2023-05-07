@@ -85,7 +85,6 @@ const Profile = () => {
       dispatch(updateUser({userID, data}))
       .then((res) => {
         const message = res.payload.message
-        console.log(message)
         if (res.payload.status === 200){
           dispatch(getUserID(userID))
           toast.success('Cập nhật tài khoản thành công!')

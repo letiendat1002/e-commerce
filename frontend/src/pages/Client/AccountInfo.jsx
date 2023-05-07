@@ -40,7 +40,6 @@ const AccountInfor = () => {
 
     const {current:user} = useSelector(state => state.user)
 
-    console.log(user)
     const fullname = user[0].fullName.split(' ')
     const name = (fullname[fullname.length - 2] + " " + fullname[fullname.length - 1])
 
