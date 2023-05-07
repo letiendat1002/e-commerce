@@ -16,8 +16,9 @@ import {AiFillCloseCircle, AiFillDelete} from 'react-icons/ai'
 import {BiEdit} from 'react-icons/bi'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addAddress, getUserAddressForIDUser } from '../../Redux/slice/userAddressSlice'
+import { addAddress, deleteAddress, getUserAddressForIDUser, updateAddress } from '../../Redux/slice/userAddressSlice'
 import { toast } from 'react-toastify'
+import axiosClient4 from '../../Redux/api/axiosCustom'
 
 const AccountAddress = () => {
     const handleOpen = () => {
@@ -56,6 +57,15 @@ const AccountAddress = () => {
         }
     }
 
+    const handleClose = () => {
+        const overlay = document.querySelector('.overlay')
+        const formOverlay = document.querySelector('.form--overlay')
+        const formOverlays = document.querySelector('.form--overlay.update')
+        overlay.classList.add('d-none')
+        formOverlay.classList.add('d-none')
+        formOverlays.classList.add('d-none')
+    }
+
     const dispatch = useDispatch()
     const userID = JSON.parse(localStorage.getItem('user'))[0].userID
     const user = useSelector(state => state.user.current)
@@ -87,10 +97,84 @@ const AccountAddress = () => {
                     toast.error('Vui lòng nhập địa chỉ của bạn!')
                 }
                 else{
-                    toast.error('thêm địa chỉ thất bại!')
+                    toast.error('Thêm địa chỉ thất bại!')
                 }
             }
             dispatch(getUserAddressForIDUser(userID))
+        })
+        .catch((error) => {
+            if (error.response && error.response.status === 400) {
+              toast.error("Thêm địa chỉ thất bại!")
+          }
+        })
+    }
+
+    const handleDeleteAddress = (userAddressID) => {
+        dispatch(deleteAddress(userAddressID))
+        .then((res) => {
+            if (res.payload.status === 200){
+                toast.success("Xóa địa chỉ thành công!")
+            }
+            else{
+                toast.error("Xóa địa chỉ thất bại!")
+            }
+            dispatch(getUserAddressForIDUser(userID))
+        })
+        .catch((error) => {
+            if (error.response && error.response.status === 400) {
+                toast.error("Xóa địa chỉ thất bại!")
+          }
+        })
+    }
+
+    const [userAddressID, setUserAddressID] = useState(0)
+
+    const handleOpenUpdate = (userAddressID) => {
+        const overlay = document.querySelector('.overlay')
+        const formOverlay = document.querySelector('.form--overlay.update')
+
+        const item = addresses.filter(item => item.userAddressID === userAddressID);
+        const addressUpdate = item[0].address
+        // setAddress(addressUpdate)
+        setUserAddressID(userAddressID)
+        if ((overlay.classList.contains('d-none')) && (formOverlay.classList.contains('d-none'))){
+            overlay.classList.remove('d-none')
+            formOverlay.classList.remove('d-none')
+            setAddress(addressUpdate)
+        }
+        else {
+            overlay.classList.add('d-none')
+            formOverlay.classList.add('d-none')
+            setAddress(address)
+        }
+    }
+    const handleUpdateAddress = (e) => {
+        e.preventDefault()
+        const data = {
+            address, 
+            userID
+        }
+
+        dispatch(updateAddress({userAddressID, data}))
+        .then((res) => {
+            if (res.payload.status === 200){
+                toast.success("Cập nhật địa chỉ thành công!")
+                handleClose()
+            }
+            else if(res.payload.status === 400){
+                if (res.payload.message === 'No data changes detected'){
+                    toast.error('Dữ liệu đầu vào không đổi!')
+                }
+                else{
+                    toast.error('Thêm địa chỉ thất bại!')
+                }
+            }
+            dispatch(getUserAddressForIDUser(userID))
+        })
+        .catch((error) => {
+            if (error.response && error.response.status === 400) {
+              toast.error("Thêm địa chỉ thất bại!")
+          }
         })
     }
   return (
@@ -155,8 +239,8 @@ const AccountAddress = () => {
                                                     <p>{item.address}</p>
                                                 </div>
                                                 <div className="right--container-action">
-                                                    <button><BiEdit /><span>Chỉnh sửa</span></button>
-                                                    <i><AiFillDelete /></i>
+                                                    <button onClick={() => handleOpenUpdate(item.userAddressID)}><BiEdit /><span>Chỉnh sửa</span></button>
+                                                    <i onClick = {() => handleDeleteAddress(item.userAddressID)}><AiFillDelete /></i>
                                                 </div>
                                             </div>
                                             )
@@ -183,8 +267,8 @@ const AccountAddress = () => {
                         <div className="item__left--avatar">
                             <img src={Avatar} alt="" />
                             <div className="item__left--avatar--child">
-                                <h5>Nguyễn Bảo</h5>
-                                <p>0978585758</p>
+                            <h5>{user[0].fullName}</h5>
+                            <p>{user[0].phone}</p>
                             </div>
                         </div>
                         <Link to={'/account/profile'}><div className='item__left--item'>
@@ -214,28 +298,52 @@ const AccountAddress = () => {
                     </div></Link>
                     </div>
                     <div className="profile__container--item--right col-lg-9 col-md-12 col-sm-12 col-12 px-3 hidden">
-                        <h3>Địa Chỉ Nhận Hàng Của Tôi</h3>
-                        <div className="item--right--container">
-                            {
-                                Info.length > 0 ? (
-                                    <div>
-                                        
-                                    </div>
-                                ) : (
+                    {
+                            addresses.length > 0 ? (
+                                <>
+                                <div className="address-action">
+                                    <h3>Địa Chỉ Nhận Hàng Của Tôi</h3>
+                                    <button onClick={handleOpen}>THÊM ĐỊA CHỈ MỚI</button>
+                                </div>
+                                    {
+                                        addresses.map((item) => {
+                                            return (
+                                                <div className="item--right--containers">
+                                                <div className="right--container-content">
+                                                    <div className="container-content--title">
+                                                        <h5>{user[0].fullName}</h5>
+                                                        <h5>{user[0].phone}</h5>
+                                                    </div>
+                                                    <p>{item.address}</p>
+                                                </div>
+                                                <div className="right--container-action">
+                                                    <button onClick={() => handleOpenUpdate(item.userAddressID)}><BiEdit /><span>Chỉnh sửa</span></button>
+                                                    <i onClick = {() => handleDeleteAddress(item.userAddressID)}><AiFillDelete /></i>
+                                                </div>
+                                            </div>
+                                            )
+                                        })
+                                    }
+                                </>
+                            ) : (
+                                <>
+                                <h3>Địa Chỉ Nhận Hàng Của Tôi</h3>
+                                <div className="item--right--container">
                                     <div className='right--container--notInfo'>
                                         <img src= {AddressImage} alt="" />
                                         <p>Quý khách chưa có địa chỉ nhận hàng nào</p>
                                         <button onClick={handleOpen}>THÊM ĐỊA CHỈ MỚI</button>
                                     </div>
-                                )
-                            }
-                        </div>
+                                </div>
+                                </>
+                            )
+                        }
                     </div>
                 </div>
             </div>
             <div className="bottom"  style={{height: "3rem", backgroundColor: "#f1f2f1"}}></div>
         </div>
-        <div className="overlay container-fluid d-none" onClick={handleOpen}> 
+        <div className="overlay container-fluid d-none" onClick={handleClose}> 
         </div>
         <div className="form--overlay d-none">
                 <div className = "navbars"><h3>Thêm Địa Chỉ Mới</h3>
@@ -265,6 +373,39 @@ const AccountAddress = () => {
                     <span>Chọn làm địa chỉ mặc định</span>
                     <br/>
                     <button onClick={(e) => handleAddAddress(e)}>HOÀN TẤT</button>
+                </form>
+            </div>
+
+            <div className="overlay container-fluid d-none" onClick={handleOpenUpdate}> 
+        </div>
+        <div className="form--overlay update d-none">
+                <div className = "navbars"><h3>Cập nhật địa chỉ</h3>
+                <i onClick={handleClose}><AiFillCloseCircle style={{color: "000000"}} /></i></div>
+                <form id='myForm'>
+                    <input type="text" name='fullname' value={name} disabled placeholder='Nhập tên' /><br/>
+                    <input type="text" name='phone' value={phone} disabled placeholder='Nhập số điện thoại' /><br />
+                    <div className="address">
+                        <select name="city" disabled id="">
+                            <option value="Chọn tỉnh/thành">Chọn tỉnh/thành</option>
+                            <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
+                            <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
+                        </select>
+                        <select name="province" disabled  id="">
+                            <option value="Chọn quận/huyện">Chọn quận/huyện</option>
+                            <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
+                            <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
+                        </select>
+                    </div>
+                    <select name="stress" disabled id="">
+                            <option value="Chọn Đường">Chọn Đường</option>
+                            <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
+                            <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
+                    </select>
+                    <input type="text" name='address' defaultValue={address} onChange={(e) => setAddress(e.target.value)} placeholder='Nhập địa chỉ' />< br/>
+                    <input type="checkbox" name="defaultAddress" id="" />
+                    <span>Chọn làm địa chỉ mặc định</span>
+                    <br/>
+                    <button onClick={(e) => handleUpdateAddress(e)}>HOÀN TẤT</button>
                 </form>
             </div>
     </>

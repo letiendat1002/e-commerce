@@ -20,6 +20,18 @@ export const orderPayment = createAsyncThunk('orderPayment', async(data) => {
     }
 })
 
+export const updateOrders = createAsyncThunk('updateOrders', async({orderID, data}) => {
+    try {
+        const response = await axiosClient4.put(`orders/${orderID}`, data)
+        return response
+
+    }
+    catch(error){
+        console.log("error: ", error)
+        throw error
+    }
+})
+
 export const getOrder = createAsyncThunk('getOrder', async(body) => {
     try {
         const response = await axiosClient4.get(`orders?userID=${body}`)
@@ -58,6 +70,17 @@ export const orderSlice = createSlice({
             state.status = 200
         })
         builder.addCase(getOrder.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(updateOrders.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(updateOrders.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+            state.status = 200
+        })
+        builder.addCase(updateOrders.rejected, (state, action) => {
             state.loading = true
         })
     }

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient4 from "../api/axiosCustom";
+import { toast } from "react-toastify";
 
 const initialState = {
     loading: true,
@@ -28,6 +29,29 @@ export const addAddress = createAsyncThunk('addAddress', async(data) => {
     }
 })
 
+export const deleteAddress = createAsyncThunk('deleteAddress', async(userAddressID) => {
+    try {
+        const response = await axiosClient4.delete(`useraddresses/${userAddressID}`)
+        return response
+    }
+    catch(error){
+        console.log("error: ", error)
+        throw error
+    }
+})
+
+export const updateAddress = createAsyncThunk('updateAddress', async({userAddressID, data}) => {
+    try {
+        const response = await axiosClient4.put(`useraddresses/${userAddressID}`, data)
+        return response
+    }
+    catch(error){
+        console.log("error: ", error)
+        throw error
+    }
+})
+
+
 export const addressSlice = createSlice({
     name: "userAddress", 
     initialState,
@@ -51,6 +75,26 @@ export const addressSlice = createSlice({
             state.data = action.payload
         })
         builder.addCase(addAddress.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(deleteAddress.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(deleteAddress.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        })
+        builder.addCase(deleteAddress.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(updateAddress.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(updateAddress.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        })
+        builder.addCase(updateAddress.rejected, (state, action) => {
             state.loading = true
         })
     }

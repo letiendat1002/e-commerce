@@ -522,6 +522,36 @@
     display: none;
 }
 
+.orderDetail-view{
+    max-height: 60%;
+    height: auto;
+    width: auto;
+    left: 30%;
+    margin: 0 auto;
+    top: 20%;
+    max-width: 100%;
+    position: fixed;
+    z-index: 100;
+    overflow: hidden;
+    tr{
+        border: 2px solid #cb1e23!important;
+        border-radius: 4px;
+        
+      }
+      tr th{
+        padding: 1rem;
+        border: 2px solid #d5d5d5;
+        background-color: #cb1c22!important;
+        color: #ffffff;
+        text-align: center;
+      }
+      tr td{
+        border: 2px solid #d5d5d5;
+        background-color: #fff;
+        text-align: center;
+      }
+}
+
 
 // RESPONSIVE IN DESKTOP
 @media screen and (min-width: 1200px) and (max-width:1400px){
