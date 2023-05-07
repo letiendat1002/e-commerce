@@ -75,6 +75,17 @@ const Header = () => {
      dispatch(logout())
   }
 
+  //Search Bar
+  const [value, setValue] = useState("");
+
+  const handleSearch = (e) => {
+    setValue(e.target.value);
+  };
+
+  const onSearch = (searchTerm) => {
+    setValue(searchTerm);
+  };
+
   return (
     <div
       className='container-fluid p-0 m-0 col-lg-12 col-sm-12 col-md-12'
