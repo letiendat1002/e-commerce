@@ -1,5 +1,4 @@
 server:
-  port: 8080
   error:
     include-message: always
     include-binding-errors: always
@@ -33,13 +32,13 @@ spring:
     properties:
       mail:
         smtp:
-          #          auth: true
+          auth: true
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
           starttls:
             enable: true
-  #            required: true
+            required: true
   profiles:
     active: dev
 

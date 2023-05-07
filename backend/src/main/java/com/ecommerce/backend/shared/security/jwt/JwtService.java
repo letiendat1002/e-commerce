@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,10 @@ import java.util.function.Function;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+@RequiredArgsConstructor
 @Service
 public class JwtService {
-
-    private static final String ISSUER = VariableConstants.HOST;
+    private final VariableConstants variableConstants;
     private static final String SECRET_KEY =
             "645267556B58703273357638792F413F4428472B4B6250655368566D59713374";
 
@@ -68,7 +69,7 @@ public class JwtService {
                 .builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuer(ISSUER)
+                .setIssuer(variableConstants.getUrl())
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(
                         Date.from(

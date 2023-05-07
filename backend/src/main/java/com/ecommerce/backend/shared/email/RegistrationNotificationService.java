@@ -12,14 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegistrationNotificationService {
     private final JavaMailSender mailSender;
+    private final VariableConstants variableConstants;
 
     public void sendEmail(UserDTO user) throws MailException {
         var recipientAddress = user.email();
         var subject = "Registration Confirmation";
-        var confirmationUrl = VariableConstants.HOST + "/activate?code="; // + user.getConfirmationToken();
-        var signature = "\nKind regards,\nLinkking Team";
+        var confirmationUrl = variableConstants.getUrl() + "/activate?code="; // + user.getConfirmationToken();
+        var signature = "--\nKind regards,\nLinkking Team";
         var message = "Hello %s,\n\nThank you for registering for an account at %s. Before we can\nactivate your account, one last step must be taken to complete your\nregistration.\n\nTo confirm your registration, please visit this URL:\n\n%s\n\n%s"
-                .formatted(user.email(), "Linkking", confirmationUrl, signature);
+                .formatted(user.fullName(), "Linkking", confirmationUrl, signature);
         var mail = new SimpleMailMessage();
 
         mail.setTo(recipientAddress);
