@@ -3,7 +3,8 @@ import axiosClient4 from "../api/axiosCustom";
 
 const initialState = {
     data: [], 
-    loading: true
+    loading: true, 
+    message: ""
 }
 
 export const getUserForID = createAsyncThunk('user/getuserID', async (data) => {
@@ -16,6 +17,17 @@ export const getUserForID = createAsyncThunk('user/getuserID', async (data) => {
           throw error
       }
   })
+
+export const updateUser = createAsyncThunk('user/updateUSer', async({userID, data}) => {
+    try {
+        const response = await axiosClient4.put(`users/${userID}`, data)
+        return response
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
 
 
 export const UserAPISlice = createSlice({
@@ -32,6 +44,10 @@ export const UserAPISlice = createSlice({
         })
         builder.addCase(getUserForID.rejected, (state, action) => {
             state.loading = true
+        })
+        builder.addCase(updateUser.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
         })
     }
 })

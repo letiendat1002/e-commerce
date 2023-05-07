@@ -26,6 +26,16 @@ export const login = createAsyncThunk('user/login', async (payload) => {
   return res;
 });
 
+export const getUserID = createAsyncThunk('user/getuserID', async (data) => {
+  try {
+        const response = await axiosClient4.get(`users/${data}`)
+        return response.data
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
 
 const userSlice = createSlice({
   name: 'user',
@@ -48,6 +58,9 @@ const userSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.current = action.payload.data;
+    },
+    [getUserID.fulfilled]: (state, action) => {
+      state.current = action.payload;
     }
   },
 });
