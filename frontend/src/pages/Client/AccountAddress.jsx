@@ -12,10 +12,12 @@ import {MdMonochromePhotos} from 'react-icons/md'
 import Info from '../../assets/data/info'
 import InfoImage from '../../assets/images/img-noti.png'
 import AddressImage from '../../assets/images/img-location.png'
-import {AiFillCloseCircle} from 'react-icons/ai'
+import {AiFillCloseCircle, AiFillDelete} from 'react-icons/ai'
+import {BiEdit} from 'react-icons/bi'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserAddressForIDUser } from '../../Redux/slice/userAddressSlice'
+import { addAddress, getUserAddressForIDUser } from '../../Redux/slice/userAddressSlice'
+import { toast } from 'react-toastify'
 
 const AccountAddress = () => {
     const handleOpen = () => {
@@ -61,7 +63,36 @@ const AccountAddress = () => {
         dispatch(getUserAddressForIDUser(userID))
     }, [])
 
-    const address = useSelector(state => state.userAddress.data)
+    const name = user[0].fullName
+    const phone = user[0].phone
+
+    const addresses = useSelector(state => state.userAddress.data)
+
+    const [address, setAddress] = useState('')
+    const handleAddAddress = (e) => {
+        e.preventDefault()
+        const data = {
+            address, 
+            userID
+        }
+
+        dispatch(addAddress(data))
+        .then((res) => {
+            if (res.payload.status === 200){
+                toast.success("Thêm địa chỉ thành công!")
+                handleOpen()
+            }
+            else if(res.payload.status === 400){
+                if (res.payload.message === '[Address must not be blank, but it was {}]'){
+                    toast.error('Vui lòng nhập địa chỉ của bạn!')
+                }
+                else{
+                    toast.error('thêm địa chỉ thất bại!')
+                }
+            }
+            dispatch(getUserAddressForIDUser(userID))
+        })
+    }
   return (
     <>
         <div className="profile container-fluid">
@@ -106,15 +137,31 @@ const AccountAddress = () => {
                     </div>
                     <div className="profile__container--item--right col-lg-9 col-md-9 colsm-12 col-12 px-3">
                     {
-                            address.length > 0 ? (
+                            addresses.length > 0 ? (
                                 <>
                                 <div className="address-action">
                                     <h3>Địa Chỉ Nhận Hàng Của Tôi</h3>
                                     <button onClick={handleOpen}>THÊM ĐỊA CHỈ MỚI</button>
                                 </div>
-                                <div className="item--right--container">
-                                    
-                                </div>
+                                    {
+                                        addresses.map((item) => {
+                                            return (
+                                                <div className="item--right--containers">
+                                                <div className="right--container-content">
+                                                    <div className="container-content--title">
+                                                        <h5>{user[0].fullName}</h5>
+                                                        <h5>{user[0].phone}</h5>
+                                                    </div>
+                                                    <p>{item.address}</p>
+                                                </div>
+                                                <div className="right--container-action">
+                                                    <button><BiEdit /><span>Chỉnh sửa</span></button>
+                                                    <i><AiFillDelete /></i>
+                                                </div>
+                                            </div>
+                                            )
+                                        })
+                                    }
                                 </>
                             ) : (
                                 <>
@@ -193,31 +240,31 @@ const AccountAddress = () => {
         <div className="form--overlay d-none">
                 <div className = "navbars"><h3>Thêm Địa Chỉ Mới</h3>
                 <i onClick={handleOpen}><AiFillCloseCircle style={{color: "000000"}} /></i></div>
-                <form action="">
-                    <input type="text" name='fullname' placeholder='Nhập tên' /><br/>
-                    <input type="text" name='phone' placeholder='Nhập số điện thoại' /><br />
+                <form id='myForm'>
+                    <input type="text" name='fullname' value={name} disabled placeholder='Nhập tên' /><br/>
+                    <input type="text" name='phone' value={phone} disabled placeholder='Nhập số điện thoại' /><br />
                     <div className="address">
-                        <select name="city" id="">
+                        <select name="city" disabled id="">
                             <option value="Chọn tỉnh/thành">Chọn tỉnh/thành</option>
                             <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
                             <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
                         </select>
-                        <select name="province" id="">
+                        <select name="province" disabled  id="">
                             <option value="Chọn quận/huyện">Chọn quận/huyện</option>
                             <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
                             <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
                         </select>
                     </div>
-                    <select name="stress" id="">
+                    <select name="stress" disabled id="">
                             <option value="Chọn Đường">Chọn Đường</option>
                             <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
                             <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
                     </select>
-                    <input type="text" name='address' placeholder='Nhập địa chỉ' />< br/>
+                    <input type="text" name='address' defaultValue={address} onChange={(e) => setAddress(e.target.value)} placeholder='Nhập địa chỉ' />< br/>
                     <input type="checkbox" name="defaultAddress" id="" />
                     <span>Chọn làm địa chỉ mặc định</span>
                     <br/>
-                    <button type='submit'>HOÀN TẤT</button>
+                    <button onClick={(e) => handleAddAddress(e)}>HOÀN TẤT</button>
                 </form>
             </div>
     </>
