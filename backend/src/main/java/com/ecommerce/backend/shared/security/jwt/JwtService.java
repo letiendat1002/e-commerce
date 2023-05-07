@@ -1,5 +1,6 @@
 package com.ecommerce.backend.shared.security.jwt;
 
+import com.ecommerce.backend.shared.constants.VariableConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,7 +21,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Service
 public class JwtService {
 
-    private static final String ISSUER = "http://localhost:8080";
+    private static final String ISSUER = VariableConstants.HOST;
     private static final String SECRET_KEY =
             "645267556B58703273357638792F413F4428472B4B6250655368566D59713374";
 

@@ -2,6 +2,7 @@ package com.ecommerce.backend.shared.openapi;
 
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -11,10 +12,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @io.swagger.v3.oas.annotations.info.Info(
+        info = @Info(
                 title = "Ecommerce Application API",
-                version = "1.0",
-                description = "OpenAPI 3.0"
+                version = "1.0"
         )
 )
 public class OpenApiConfig {
@@ -22,10 +22,14 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .addSecurityItem(
+                        new SecurityRequirement()
+                                .addList(securitySchemeName)
+                )
                 .components(
                         new Components()
-                                .addSecuritySchemes(securitySchemeName,
+                                .addSecuritySchemes(
+                                        securitySchemeName,
                                         new SecurityScheme()
                                                 .name(securitySchemeName)
                                                 .type(SecurityScheme.Type.HTTP)
