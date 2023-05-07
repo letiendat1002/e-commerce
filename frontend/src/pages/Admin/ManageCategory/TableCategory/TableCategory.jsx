@@ -1,86 +1,83 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
+import { Link } from 'react-router-dom';
 
+const TableCategory = (props) => {
+  const { categoryList } = props;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [categotyPerPage, setCategotyPerPage] = useState(5);
 
-const TableCategory = props => {
-    const { categoryList } = props
-    
-    console.log(categoryList)
+  const lastIdx = currentPage * categotyPerPage;
+  const firstIdx = lastIdx - categotyPerPage;
+  const newData = categoryList.slice(firstIdx, lastIdx);
+  const totalPage = Math.ceil(categoryList.length / categotyPerPage);
+
+  const handlePageClick = (e) => {
+    setCurrentPage(+e.selected + 1);
+  };
+
   return (
     <>
-    <div className='table-responsive my-3 '>
-      <Table
-        striped
-        bordered
-        hover
-        className='table_users '>
-        <thead>
-          <tr>
-            <th scope='col'>No</th>
-            <th
-              scope='col'
-              className='text-center'>
-              Name
-            </th>
-            <th scope='col'>Price</th>
-            <th scope='col'>Sale Price</th>
-            <th scope='col'>Description</th>
-            <th scope='col'>Action</th>
-            {/* <th scope='col'>Sale Price</th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {categoryList && categoryList.length === 0 ? (
+      <div className='table-responsive my-3 '>
+        <Table
+          striped
+          bordered
+          hover
+          className='table_users '>
+          <thead>
             <tr>
+              <th scope='col'>No</th>
               <th
-                colSpan={'5'}
+                scope='col'
                 className='text-center'>
-                Data not found
+                Name
               </th>
+              <th scope='col'>Slug</th>
             </tr>
-          ) : (
-            categoryList &&
-            categoryList.length > 0 &&
-            categoryList.map((x, idx) => {
-              return (
-                <tr key={idx}>
-                  <th scope='row'>{idx + 1}</th>
-                  {/* <td className='row_img'>
-                    <img
-                      style={{ width: '40px', height: '40px' }}
-                      src={`data:image/jpeg;base64,${x.image}`}
-                      alt=''
-                    />
-                  </td> */}
-                  <td>{x.name}</td>
-                  <td>{x.originalPrice}</td>
-                  <td>{x.salePrice}</td>
-                  <td>{x.shortDescription}</td>
-                  <td>
-                    <button
-                      className='btn btn-primary'
-                      onClick={() => x}>
-                      View
-                    </button>
-                    <button
-                      className='btn btn-success mx-3'
-                      onClick={() => x}>
-                      Update
-                    </button>
-                    <button
-                      className='btn btn-danger'
-                      onClick={() => x}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
-          )}
+          </thead>
+          <tbody>
+            {newData && newData.length === 0 ? (
+              <tr>
+                <th
+                  colSpan={'5'}
+                  className='text-center'>
+                  Data not found
+                </th>
+              </tr>
+            ) : (
+              newData &&
+              newData.length > 0 &&
+              newData.map((x, idx) => {
+                return (
+                  <tr key={idx}>
+                    <th scope='row'>{idx + 1}</th>
+                    <td>{x.name}</td>
+                    <td>{x.slug}</td>
+                    <td>
+                      <button
+                        className='btn btn-primary'
+                        onClick={() => x}>
+                        <Link to={`${x.categoryID}`}>View Product</Link>
+                      </button>
+                      <button
+                        className='btn btn-success mx-3'
+                        onClick={() => x}>
+                        Update
+                      </button>
+                      <button
+                        className='btn btn-danger'
+                        onClick={() => x}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
 
-          {/* {data && data.length === 0 && (
+            {/* {data && data.length === 0 && (
             <tr>
               <th
                 colSpan={'5'}
@@ -89,37 +86,37 @@ const TableCategory = props => {
               </th>
             </tr>
           )} */}
-        </tbody>
-      </Table>
+          </tbody>
+        </Table>
 
-      <ReactPaginate
-        nextLabel='Next>'
-        // onPageChange={handlePageClick}
-        pageRangeDisplayed={3}
-        marginPagesDisplayed={2}
-        pageCount={2}
-        previousLabel='<Pre'
-        pageClassName='page-item'
-        pageLinkClassName='page-link'
-        previousClassName='page-item'
-        previousLinkClassName='page-link'
-        nextClassName='page-item'
-        nextLinkClassName='page-link'
-        breakLabel='...'
-        breakClassName='page-item'
-        breakLinkClassName='page-link'
-        containerClassName='pagination'
-        activeClassName='active'
-        renderOnZeroPageCount={null}
-        // forcePage={currentPage - 1}
-      />
-    </div>
+        <ReactPaginate
+          nextLabel='Next>'
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          previousLabel='<Pre'
+          pageClassName='page-item'
+          pageLinkClassName='page-link'
+          previousClassName='page-item'
+          previousLinkClassName='page-link'
+          nextClassName='page-item'
+          nextLinkClassName='page-link'
+          breakLabel='...'
+          breakClassName='page-item'
+          breakLinkClassName='page-link'
+          containerClassName='pagination'
+          activeClassName='active'
+          renderOnZeroPageCount={null}
+          // forcePage={currentPage - 1}
+        />
+      </div>
 
-    {/* <PaginatedItems  />, */}
-  </>
-  )
-}
+      {/* <PaginatedItems  />, */}
+    </>
+  );
+};
 
-TableCategory.propTypes = {}
+TableCategory.propTypes = {};
 
-export default TableCategory
+export default TableCategory;

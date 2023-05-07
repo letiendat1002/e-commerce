@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Language from '../components/Lang/Language';
 import './HeaderAdmin.scss';
+import { logout } from '../../../Redux/slice/userSlice';
 
 const HeaderAdmin = (props) => {
   const navigate = useNavigate();
@@ -29,7 +30,8 @@ const HeaderAdmin = (props) => {
   const handleLogOut = () => {
     // dispatch(logoutAction());
     console.log('Logout');
-    navigate('/admin/login');
+    dispatch(logout());
+    navigate('/login');
     // document.location.href="/admin/login"
   };
 
@@ -55,7 +57,7 @@ const HeaderAdmin = (props) => {
           title='Account'
           id='basic-nav-dropdown'>
           <NavDropdown.Item>Profile</NavDropdown.Item>
-          <NavDropdown.Item>LogOut</NavDropdown.Item>
+          <NavDropdown.Item onClick={handleLogOut}>LogOut</NavDropdown.Item>
           <NavDropdown.Item
             onClick={handleLogin}
             tag={Link}

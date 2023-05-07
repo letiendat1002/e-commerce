@@ -16,7 +16,7 @@ const ManageProducts = (props) => {
   });
   const [loading, setLoading] = useState(true);
   const [setShowDeleteModal, setSetShowDeleteModal] = useState(false);
-  const [dataDelete, setDataDelete] = useState("");
+  const [dataDelete, setDataDelete] = useState('');
   const dispatch = useDispatch();
   const [filters, setFilters] = useState({ _page: 1, _limit: 6 });
   // const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +27,7 @@ const ManageProducts = (props) => {
   const idxFirstProduct = idxLastProduct - productPerPage;
   const currentProduct = productsList.slice(idxFirstProduct, idxLastProduct);
 
-  console.log(currentProduct)
+  console.log(currentProduct);
   const countPage = Math.ceil(pagination.total / pagination.limit);
 
   const callApiProdcuts = async () => {
@@ -42,15 +42,14 @@ const ManageProducts = (props) => {
     }
   };
 
-  console.log(productsList);
-  const lengtProduct = productsList.length
+  const lengtProduct = productsList.length;
 
-  const newData = productsList.filter(product => product.status === true)
+  const newData = productsList.filter((product) => product.status === true);
   console.log(newData);
 
   const changePage = (number) => {
-    setIdLastProduct(number)
-  }
+    setIdLastProduct(number);
+  };
 
   useEffect(() => {
     callApiProdcuts();
@@ -106,16 +105,21 @@ const ManageProducts = (props) => {
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
           /> */}
-            
+
             <Pagination
               totalUsers={lengtProduct}
               userPerPage={productPerPage}
-            changePage={changePage}
-          />
+              changePage={changePage}
+            />
           </div>
         </div>
       </div>
-      <ModalDeleteProduct setShowDeleteModal={setShowDeleteModal} setSetShowDeleteModal={setSetShowDeleteModal} dataDelete={dataDelete} callApiProdcuts={callApiProdcuts} />
+      <ModalDeleteProduct
+        setShowDeleteModal={setShowDeleteModal}
+        setSetShowDeleteModal={setSetShowDeleteModal}
+        dataDelete={dataDelete}
+        callApiProdcuts={callApiProdcuts}
+      />
     </>
   );
 };
