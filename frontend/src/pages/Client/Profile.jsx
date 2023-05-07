@@ -1,22 +1,19 @@
-import React from 'react';
-import '../../assets/css/profile.scss';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineRight } from 'react-icons/ai';
+import { BiCommentDetail, BiMap } from 'react-icons/bi';
+import { MdMonochromePhotos, MdNotificationsActive } from 'react-icons/md';
 import { RiAccountCircleLine } from 'react-icons/ri';
-import { MdNotificationsActive } from 'react-icons/md';
-import { BiMap } from 'react-icons/bi';
-import { AiFillEye, AiOutlineRight } from 'react-icons/ai';
-import { BiCommentDetail } from 'react-icons/bi';
 import { TfiMenuAlt } from 'react-icons/tfi';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { getUserForID, updateUser } from '../../Redux/slice/usersSlice';
+import '../../assets/css/profile.scss';
 import Avatar from '../../assets/images/img-user.png';
-import { MdMonochromePhotos } from 'react-icons/md';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import {getUserID} from '../../Redux/slice/userSlice'
+import { toast } from 'react-toastify';
 
 const Profile = () => {
   const [active, setActive] = useState(false);
-
-  const { current } = useSelector((state) => state.user);
-  console.log(current);
 
   const handleActiveProfile = () => {
     const containerRightItem = document.querySelector(
@@ -47,6 +44,69 @@ const Profile = () => {
     }
   };
 
+  const userID = JSON.parse(localStorage.getItem('user'))[0].userID
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getUserForID(userID))
+    dispatch(getUserID(userID))
+  }, [])
+
+  const user = useSelector(state => state.user.current)
+
+  const accountInfo = useSelector(state => state.userAPI.data)
+  const fullname = accountInfo[0]?.fullName 
+  const phones = accountInfo[0]?.phone
+  // const name = fullname
+  const userPhone = accountInfo[0]?.phone
+    const [phone, setPhone] = useState('')
+    const [image, setImage] = useState((user[0]?.image == "") ?  ("string") : user[0]?.image)
+    const [fullName, setfullName] = useState('')
+    const gender = accountInfo[0]?.gender
+    const roles = ["CUSTOMER"]
+    const handleChangeName = (e) => {
+      setfullName(e.target.value)
+    }
+
+    const handleChangePhone = (e) => {
+      setPhone(e.target.value)
+    }
+
+    const handleUpdateAccount = (e) => {
+      e.preventDefault()
+      const updatedFullName = (fullName !== fullname && fullName !== "") ? fullName : fullname;
+      const updatedPhone = (phone !== phones && phone !== "") ? phone : phones;
+      const data = {
+        roles, 
+        fullName: updatedFullName, 
+        gender, 
+        phone: updatedPhone,
+        image
+      }
+      dispatch(updateUser({userID, data}))
+      .then((res) => {
+        const message = res.payload.message
+        console.log(message)
+        if (res.payload.status === 200){
+          dispatch(getUserID(userID))
+          toast.success('Cập nhật tài khoản thành công!')
+        }
+        else if (res.payload.status === 400){
+          if (message === "No data changes detected"){
+            toast.error("Thông tin tài khoản không có thay đổi!")
+          }
+          else {
+            toast.error(`Số điện thoại bạn cung cấp đã tồn tại!`)
+          }
+          dispatch(getUserForID(userID))
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 400) {
+          toast.error("Vui lòng nhập địa chỉ")
+      }
+      }
+      )
+    }
   return (
     <div className='profile container-fluid'>
       <div
@@ -63,7 +123,7 @@ const Profile = () => {
             </span>
           </div>
           <p style={{ fontSize: '18px' }}>
-            Xin chào <b style={{ color: '#DB4437' }}>{current.fullName}</b>
+            Xin chào <b style={{ color: '#DB4437' }}>{fullname}</b>
           </p>
         </div>
         <div className='profile__container--item col-lg-12 col-md-12 col-sm-12 col-12'>
@@ -74,8 +134,8 @@ const Profile = () => {
                 alt=''
               />
               <div className='item__left--avatar--child'>
-                <h5>{current.fullName}</h5>
-                <p>0978585758</p>
+                <h5>{fullname}</h5>
+                <p>{userPhone}</p>
               </div>
             </div>
             <Link to={'/account/profile'}>
@@ -142,7 +202,6 @@ const Profile = () => {
                 />
               </div>
               <form
-                action=''
                 className='right--container--profile'>
                 <div className='container--profile--item'>
                   <span>Họ và Tên</span>
@@ -150,7 +209,8 @@ const Profile = () => {
                     type='text'
                     name='fullname'
                     placeholder='Vui lòng nhập họ và tên'
-                    value={current.fullName}
+                    defaultValue={fullname}
+                    onChange={e => handleChangeName(e)}
                   />
                 </div>
                 <div className='container--profile--item'>
@@ -159,24 +219,18 @@ const Profile = () => {
                     type='text'
                     name='phone'
                     placeholder='Vui lòng nhập số điện thoại'
-                    value='0978567685'
-                  />
-                </div>
-                <div className='container--profile--item'>
-                  <span>Ngày sinh</span>
-                  <input
-                    type='date'
-                    name='birthday'
-                    // value={current.created_at}
+                    defaultValue={phones}
+                    onChange={e => handleChangePhone(e)}
                   />
                 </div>
                 <div className='container--profile--item'>
                   <span>Email</span>
                   <input
+                  disabled
                     type='email'
                     name='email'
                     placeholder='Vui lòng nhập email của bạn'
-                    value={current.email}
+                    value={user[0].email}
                   />
                 </div>
                 <div className='container--profile--item'>
@@ -189,7 +243,7 @@ const Profile = () => {
                     value='123456789'
                   />
                 </div>
-                <button type='submit'>Lưu Thay Đổi</button>
+                <button onClick={handleUpdateAccount}>Lưu Thay Đổi</button>
               </form>
             </div>
           </div>
@@ -202,8 +256,8 @@ const Profile = () => {
                 alt=''
               />
               <div className='item__left--avatar--child'>
-                <h5>Nguyễn Bảo</h5>
-                <p>0978585758</p>
+              <h5>{fullname}</h5>
+                <p>{userPhone}</p>
               </div>
             </div>
             <Link
@@ -297,7 +351,6 @@ const Profile = () => {
                 />
               </div>
               <form
-                action=''
                 className='right--container--profile'>
                 <div className='container--profile--item'>
                   <span>Họ và Tên</span>
@@ -305,7 +358,8 @@ const Profile = () => {
                     type='text'
                     name='fullname'
                     placeholder='Vui lòng nhập họ và tên'
-                    value='Trần Đăng Nguyễn Bảo'
+                    defaultValue={fullname}
+                    onChange={e => handleChangeName(e)}
                   />
                 </div>
                 <div className='container--profile--item'>
@@ -314,14 +368,8 @@ const Profile = () => {
                     type='text'
                     name='phone'
                     placeholder='Vui lòng nhập số điện thoại'
-                    value='0978567685'
-                  />
-                </div>
-                <div className='container--profile--item'>
-                  <span>Ngày sinh</span>
-                  <input
-                    type='date'
-                    name='birthday'
+                    defaultValue={phones}
+                    onChange={e => handleChangePhone(e)}
                   />
                 </div>
                 <div className='container--profile--item'>
@@ -330,7 +378,7 @@ const Profile = () => {
                     type='email'
                     name='email'
                     placeholder='Vui lòng nhập email của bạn'
-                    value='trandangnguyenbao2810@gmail.com'
+                    value={user[0].email}
                   />
                 </div>
                 <div className='container--profile--item'>
@@ -342,7 +390,7 @@ const Profile = () => {
                     value='123456789'
                   />
                 </div>
-                <button type='submit'>Lưu Thay Đổi</button>
+                <button onClick={handleUpdateAccount}>Lưu Thay Đổi</button>
               </form>
             </div>
           </div>

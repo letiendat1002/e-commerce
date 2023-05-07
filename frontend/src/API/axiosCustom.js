@@ -13,7 +13,12 @@ const axiosClient4 = axios.create({
 axiosClient4.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-    // console.log(config)
+    console.log(config)
+    const access_token = localStorage.getItem('access_token')
+    console.log(access_token)
+    if (access_token) {
+      config.headers.Authorization=`Bearer ${access_token}`
+    }
     return config;
   },
   function (error) {

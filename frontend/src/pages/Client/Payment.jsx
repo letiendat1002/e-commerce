@@ -1,14 +1,21 @@
-import React, { useState } from 'react'
-import {AiOutlineHome} from 'react-icons/ai'
-import {GrFormNext} from 'react-icons/gr'
+import { Image } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { AiOutlineHome } from 'react-icons/ai'
+import { GrFormNext } from 'react-icons/gr'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import formatProductPrice from '../../Helper/index.js'
+import { orderPayment } from '../../Redux/slice/paymentSlice'
+import { getUserAddressForIDUser } from '../../Redux/slice/userAddressSlice'
 import '../../assets/css/payment.scss'
 import cod from '../../assets/images/cod.svg'
-import AutoSlice from '../../components/AutoSlide/AutoSlice'
-import formatProductPrice from '../../Helper/index.js'
 import ImageNoPayment from '../../assets/images/img-no-result.png'
+import AutoSlice from '../../components/AutoSlide/AutoSlice'
+import { toast } from 'react-toastify'
+import { orderDetail } from '../../Redux/slice/orderDetailSlice.js'
+import { removeFromToCart } from '../../Redux/slice/cartSlice.js'
 const Payment = () => {
+    const navigate = useNavigate()
     const menuCard = [ 
         require('../../assets/images/card2.jpeg'),
         require('../../assets/images/card3.png'),
@@ -25,11 +32,6 @@ const Payment = () => {
         const {name, value} = e.target;
         setFormValue({...formValue, [name]: value});
     } 
-
-    const handleSubmit = (e) => {
-        setFormErros(validate(formValue));
-        setIsSubmit(true);
-    }
 
     const validate = (values) => {
         const error = {}
@@ -52,7 +54,68 @@ const Payment = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.allCart);
     const cartItems = cart.cart;
-    const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.UnitPrice, 0);
+    const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.unitPrice, 0);
+    const user = useSelector(state => state.user.current[0])    
+    const userID = user.userID
+    
+    useEffect(() => {
+        dispatch(getUserAddressForIDUser(user.userID))
+    }, [])
+
+    const addresses = useSelector(state => state.userAddress.data);
+    const [address, setAddress] = useState('')
+
+    const handleAddress = (e) => {
+        setAddress(e.target.value)
+    }
+    const additionalPrice = 0;
+
+    const productOrder = useSelector(state => state.allCart.cart)
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const data = {
+            userID, 
+            additionalPrice, 
+            address, 
+            paymentType: "COD"}
+
+        dispatch(orderPayment(data))
+        
+        .then((response) => {
+            const orderID = response.payload.data[0].orderID
+            if (response.payload.status === 200){
+                {
+                    productOrder.map((item) => {
+                        const productID = item.productID
+                        const purchasePrice = item.unitPrice
+                        const quantity = item.cartQuantity
+                        dispatch(orderDetail({orderID, productID, purchasePrice, quantity}))
+                        .then((res) => {
+                          if (res.payload.status == 200){
+                            localStorage.removeItem('cartItem')
+                            dispatch(removeFromToCart(item))
+                            navigate('/account/order')
+                          }
+                          else{
+                            toast.error("Đặt hàng thất bại")
+                          }
+                        })
+                    })
+                }
+                toast.success('Bạn đã đặt hàng thành công!') 
+            }
+            else{
+                toast.error("Vui lòng nhập địa chỉ nhận hàng")
+            }
+        })
+        .catch((error) => {
+            // Handle error response
+            if (error.response && error.response.status === 400) {
+                toast.error("Vui lòng nhập địa chỉ")
+            }
+        });
+    }
   return (
     <div className="container-fluid payment">
         <div className="payment__container col-lg-12 col-md-12 col-sm-12 col-12">
@@ -68,25 +131,35 @@ const Payment = () => {
                     <div className="payment__container--contain col-lg-12 col-md-12 col-sm-12 col-12 mt-4">
                                     <div className="payment__container--form col-lg-6 col-md-12 col-sm-12 col-12 ps-4">
                                         <h1>Thanh Toán Đơn Hàng</h1>
-                                        <form onSubmit={handleSubmit} >
+                                        <form>
                                             <div className="form__container--item">
                                                 <span>Tên khách hàng</span><br />
-                                                <input type="text" name='name' placeholder='Nhập tên khách hàng' onChange = {handleOnChange}/>
+                                                <input type="text" value={user.fullName} name='name' placeholder='Nhập tên khách hàng'/>
                                                 <p className='errorMessage'>{formErrors.name}</p>
                                             </div>
                                             <div className="form__container--item">
                                                 <span>Số điện thoại</span><br />
-                                                <input type="text" name='phone' placeholder='Nhập số điện thoại' onChange = {handleOnChange} />
+                                                <input type="text" value={user.phone} name='phone' placeholder='Nhập số điện thoại' />
                                                 <p className='errorMessage'>{formErrors.phone}</p>
                                             </div>
                                             <div className="form__container--item">
-                                                <span>Email</span><br />
-                                                <input type="email" name='email' placeholder='Nhập email của bạn' onChange = {handleOnChange} />
-                                                <p className='errorMessage'>{formErrors.email}</p>
-                                            </div>
-                                            <div className="form__container--item">
                                                 <span>Địa chỉ</span><br />
-                                                <input type="text" name='address' placeholder='Nhập địa chỉ nhận hàng' onChange = {handleOnChange} />
+                                                {
+                                                    (addresses.length > 0) ? (
+                                                        <select name="" id="" onChange={(e) => setAddress(e.target.value)} style={{width: "100%", padding: "0.5rem 5px", border: "2px solid #ffffff", borderRadius: "4px", fontSize: "18px", marginTop: "5px"}}>
+                                                            <option value='Vui lòng chọn địa chỉ'>Vui lòng chọn địa chỉ</option>
+                                                            {
+                                                                addresses.map((item, key) =>{
+                                                                    return (
+                                                                        <option value={item.address} key = {key} onChange={(e) => setAddress(e.target.value)}>{item.address}</option>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </select>
+                                                    ) : (
+                                                        <input type="text" name='address' placeholder='Nhập địa chỉ nhận hàng' onChange = {e => handleAddress(e)} />
+                                                    )
+                                                }
                                                 <p className='errorMessage'>{formErrors.phone}</p>
                                             </div>
                                             <div className="form__container--payment">
@@ -99,7 +172,7 @@ const Payment = () => {
                                                     <p>Là phương thức khách hàng nhận hàng mới trả tiền. Áp dụng với tất cả các đơn hàng trên toàn quốc</p>
                                                 </div>
                                             </div>
-                                            <button type='submit'>Xác nhận đặt hàng</button>
+                                            <button onClick={handleSubmit}>Xác nhận đặt hàng</button>
                                         </form>
                                     </div>
                                     <div className="payment__container--right col-lg-6 col-md-12 col-sm-12 col-12 ps-5">
@@ -118,7 +191,8 @@ const Payment = () => {
                                                                     cartItems.map((item) => {
                                                                         return (
                                                                             <div className="contain--container--item--bill--child" style={{padding: "5px 0", textAlign: "center", display : "flex", alignItems : "center"}}>
-                                                                                <img src={item.Image} />
+                                                                                {/* <img src={item.Image}  */}
+                                                                                <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />
                                                                                 <span style={{textAlign:"center"}}>{item.cartQuantity}</span>
                                                                                 <p>{formatProductPrice(item.cartQuantity * item.unitPrice)}</p>
                                                                             </div>

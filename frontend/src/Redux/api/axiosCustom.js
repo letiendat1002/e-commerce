@@ -1,18 +1,20 @@
 import axios from 'axios';
-import { API_SERVER, API_HOST } from '../../constant/path';
-import Cookies from 'js-cookie';
-import authApi from './auth';
+import {STATIC_HOST_4} from '../../constant/common'
 
-export const axiosCustom = axios.create({
-  baseURL: API_SERVER,
-  headers: {
-    'Content-type': 'application/json',
-  },
+const axiosClient4 = axios.create({
+  baseURL: `${STATIC_HOST_4}`,
+  withCredentials: false,
+  accesscontrolalloworigin: '*',
+  accesscontrolallowMethods: 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
 });
 
 // Add a request interceptor
-axiosCustom.interceptors.request.use(
+axiosClient4.interceptors.request.use(
   function (config) {
+    const access_token = localStorage.getItem('access_token')
+    if (access_token) {
+      config.headers.Authorization=`Bearer ${access_token}`
+    }
     return config;
   },
   function (error) {
@@ -21,60 +23,13 @@ axiosCustom.interceptors.request.use(
 );
 
 // Add a response interceptor
-axiosCustom.interceptors.response.use(
-  function (response) {
-    return response.data;
+axiosClient4.interceptors.response.use(
+  function (res) {
+    return res.data;
   },
   function (error) {
-    const token = Cookies.get('token');
-    const refreshToken = Cookies.get('refreshToken');
-    if (refreshToken && (
-      !token ||
-      JSON.parse(atob(token.split('.')[1])).exp * 1000 < new Date().getTime())
-    ) {
-      authApi.postAuthRefreshToken(refreshToken).then(response => {
-        Cookies.set('token', response.token);
-        Cookies.set('refreshToken', response.refreshToken);
-      });
-    }
-    return Promise.reject(error);
+    return error.response && error.response ? error.response.data : Promise.reject(error);
   }
 );
 
-export const axiosCamera = axios.create({
-  baseURL: API_HOST,
-  headers: {
-    'Content-type': 'application/json',
-  },
-});
-
-// Add a request interceptor
-axiosCamera.interceptors.request.use(
-  function (config) {
-    return config;
-  },
-  function (error) {
-    return Promise.reject(error);
-  }
-);
-
-// Add a response interceptor
-axiosCamera.interceptors.response.use(
-  function (response) {
-    return response.data;
-  },
-  function (error) {
-    const token = Cookies.get('token');
-    const refreshToken = Cookies.get('refreshToken');
-    if (refreshToken && (
-      !token ||
-      JSON.parse(atob(token.split('.')[1])).exp * 1000 < new Date().getTime())
-    ) {
-      authApi.postAuthRefreshToken(refreshToken).then(response => {
-        Cookies.set('token', response.token);
-        Cookies.set('refreshToken', response.refreshToken);
-      });
-    }
-    return Promise.reject(error);
-  }
-);
+export default axiosClient4;

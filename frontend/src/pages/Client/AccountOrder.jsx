@@ -11,8 +11,13 @@ import Avatar from '../../assets/images/img-user.png'
 import {MdMonochromePhotos} from 'react-icons/md'
 import order from '../../assets/data/order'
 import EmptyCart from '../../assets/images/empty-cart.png' 
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getOrder } from '../../Redux/slice/paymentSlice'
+import { getOrderDetail } from '../../Redux/slice/orderDetailSlice'
 const AccountOrder = () => {
     const [active, setActive] = useState(false);
+    const dispatch = useDispatch()
     const handleActiveProfile = () => {
         const containerRightItem = document.querySelector('.profile__container--item--tablet .profile__container--item--right');
         const itemLeft = document.querySelectorAll('.item__left--item')
@@ -33,7 +38,21 @@ const AccountOrder = () => {
             setActive(false)
         }
     }
-  return (
+
+    const {current:user} = useSelector(state => state.user)
+    const fullname = user[0].fullName.split(' ')
+    const name = (fullname[fullname.length - 2] + " " + fullname[fullname.length - 1])
+
+    const userID = user[0].userID
+    useEffect(() => {
+        dispatch(getOrder(userID))
+        dispatch(getOrderDetail())
+    }, [])
+
+    const order = useSelector((state) => state.order.data) || []
+    const orderDetail = useSelector((state) => state.orderDetail.data.data) || []
+
+    return (
     <>
         <div className="profile container-fluid">
             <div className="top" style={{height: "3rem", backgroundColor: "#f1f2f1"}}></div>
@@ -43,15 +62,15 @@ const AccountOrder = () => {
                         <Link to={"/"}>Trang Chủ /</Link>
                         <span className="active" onClick={() => handleShowMenuProfile()}>Tài khoản</span> 
                     </div>  
-                    <p style={{fontSize: "18px"}}>Xin chào <b style={{color: "#DB4437"}}>Trần Đăng Nguyễn Bảo</b></p>
+                    <p style={{fontSize: "18px"}}>Xin chào <b style={{color: "#DB4437"}}>{user[0].fullName}</b></p>
                 </div>
                 <div className="profile__container--item col-lg-12 col-md-12 col-sm-12 col-12">
                     <div className="profile__container--item--left col-lg-3 col-md-3 col-sm-12 col-12 pe-3">
                         <div className="item__left--avatar">
                             <img src={Avatar} alt="" />
                             <div className="item__left--avatar--child">
-                                <h5>Nguyễn Bảo</h5>
-                                <p>0978585758</p>
+                                <h5>{name}</h5>
+                                <p>{user[0].phone}</p>
                             </div>
                         </div>
                         <Link to={'/account/profile'}><div className="item__left--item">
@@ -84,20 +103,27 @@ const AccountOrder = () => {
                                         <tr>
                                             <th>Mã Đơn Hàng</th>
                                             <th>Ngày Mua</th>
-                                            <th>Sản Phẩm</th>
+                                            <th>Địa Chỉ</th>
                                             <th>Tổng Tiền</th>
                                             <th>Trạng Thái</th>
                                         </tr>
                                             {
                                                 order.map((item) => {
                                                     return (
-                                                        <tr>
-                                                            <td><span>{item.id}</span></td>
-                                                            <td><span>{item.date}</span></td>
-                                                            <td><p>{item.product}</p></td>
-                                                            <td><span>{item.UnitPrice}</span></td>
-                                                            <td><span>{item.state}</span></td>
-                                                        </tr>
+                                                        orderDetail.map((items) => {
+                                                                if (items.orderID === item.orderID && items.orderID === items.orderID){
+                                                                    return (
+                                                                        <tr>
+                                                                            <td><span>{item.orderID}</span></td>
+                                                                            <td><span>{item.dateOrder}</span></td>
+                                                                            <td><p>{item.address}</p></td>
+                                                                            <td><p>{(items.quantity * items.purchasePrice)}</p></td>
+                                                                            {/* <td><p>{orderDetail.}</p></td> */}
+                                                                            <td><span>{item.status}</span></td>
+                                                                        </tr>
+                                                                    )
+                                                                }
+                                                        })
                                                     )
                                                 })
                                             }

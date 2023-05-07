@@ -1,7 +1,7 @@
 import React ,{ useEffect, useState}  from "react";
 import Products from "../../assets/data/product.js";
 import "../../assets/css/cart.scss";
-import { useFetcher, useParams, Link } from "react-router-dom";
+import { useFetcher, useParams, Link, useNavigate } from "react-router-dom";
 import formatProductPrice from "../../Helper/index.js";
 import {AiOutlineHome, AiOutlineDelete, AiOutlineCloseCircle} from 'react-icons/ai'
 import {GrFormNext} from 'react-icons/gr'
@@ -13,11 +13,11 @@ import TableComponent from "../../components/Table/index.jsx";
 
 const Cart = () => {
   const { slug } = useParams();
+  const navigate = useNavigate()
   const dispatch = useDispatch();
-  // const cart = useSelector((state) => state.allCart);
-  // const  cartItems  = cart.cart;
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;
+  const user = useSelector(state => state.user.current[0])
   const total = cartItems.reduce((a, i) => a + i.cartQuantity * i.unitPrice, 0);
   const setting = {
     infinite: true,
@@ -30,8 +30,10 @@ const Cart = () => {
   };
 
   const handleSubmit = () => {
-      localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
-      localStorage.setItem('cartPayment', JSON.stringify(cartItems, total))
+      if (user){
+        localStorage.setItem('cartPayment', JSON.stringify(cartItems))
+        // window.location.href = '/payment';
+      }
   }
 
   const handleRemoveFromCart = (product) => {
@@ -240,7 +242,7 @@ const Cart = () => {
                                       <span>Thành Tiền:</span>
                                       <h4>{formatProductPrice(total)}</h4>
                                   </div>
-                                  <Link to = {'/payment'}><button type="submit" className="payment" onClick={handleSubmit}>THANH TOÁN</button></Link>
+                                  <Link to = {'/payment'} onClick={handleSubmit}><button type="submit" className="payment">THANH TOÁN</button></Link>
                               </form>
                           </div>
                       </div>
