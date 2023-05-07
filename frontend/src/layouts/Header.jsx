@@ -33,7 +33,6 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const {current:user} = useSelector(state => state.user)
-  console.log(user)
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;
 
@@ -73,7 +72,6 @@ const Header = () => {
   };
 
   const handleLogut = () => {
-    console.log("Logout")
      dispatch(logout())
   }
 
@@ -248,7 +246,7 @@ const Header = () => {
               <span>
                 <FaRegUserCircle />
               </span>
-              {user[0]?.email}
+              {user[0].fullName.split(' ')[user[0].fullName.split(' ').length - 1]}
               <ul className="account--profile">
                 <Link to={"/account/profile"}>
                   <li>

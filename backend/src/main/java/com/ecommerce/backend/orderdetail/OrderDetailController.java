@@ -33,7 +33,7 @@ public class OrderDetailController {
         } else if (orderID != null && productID == null) {
             orderDetailDTOList = orderDetailService
                     .fetchAllOrderDetailsByOrderID(orderID);
-        } else if (orderID == null && productID != null) {
+        } else if (orderID == null) {
             orderDetailDTOList = orderDetailService
                     .fetchAllOrderDetailsByProductID(productID);
         } else {

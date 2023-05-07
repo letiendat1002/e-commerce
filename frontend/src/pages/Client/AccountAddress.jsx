@@ -13,6 +13,9 @@ import Info from '../../assets/data/info'
 import InfoImage from '../../assets/images/img-noti.png'
 import AddressImage from '../../assets/images/img-location.png'
 import {AiFillCloseCircle} from 'react-icons/ai'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserAddressForIDUser } from '../../Redux/slice/userAddressSlice'
 
 const AccountAddress = () => {
     const handleOpen = () => {
@@ -50,6 +53,15 @@ const AccountAddress = () => {
             setActive(false)
         }
     }
+
+    const dispatch = useDispatch()
+    const userID = JSON.parse(localStorage.getItem('user'))[0].userID
+    const user = useSelector(state => state.user.current)
+    useEffect(() => {
+        dispatch(getUserAddressForIDUser(userID))
+    }, [])
+
+    const address = useSelector(state => state.userAddress.data)
   return (
     <>
         <div className="profile container-fluid">
@@ -60,15 +72,15 @@ const AccountAddress = () => {
                         <Link to={"/"}>Trang Chủ /</Link>
                         <span className="active" onClick={() => handleShowMenuProfile()}>Tài khoản</span> 
                     </div>  
-                    <p style={{fontSize: "18px"}}>Xin chào <b style={{color: "#DB4437"}}>Trần Đăng Nguyễn Bảo</b></p>
+                    <p style={{fontSize: "18px"}}>Xin chào <b style={{color: "#DB4437"}}>{user[0].fullName}</b></p>
                 </div>
                 <div className="profile__container--item col-lg-12 col-md-12 col-sm-12 col-12">
                     <div className="profile__container--item--left col-lg-3 col-md-3 col-sm-12 col-12 pe-3">
                         <div className="item__left--avatar">
                             <img src={Avatar} alt="" />
                             <div className="item__left--avatar--child">
-                                <h5>Nguyễn Bảo</h5>
-                                <p>0978585758</p>
+                                <h5>{user[0].fullName}</h5>
+                                <p>{user[0].phone}</p>
                             </div>
                         </div>
                         <Link to={'/account/profile'}><div className="item__left--item">
@@ -93,22 +105,30 @@ const AccountAddress = () => {
                         </div></Link>
                     </div>
                     <div className="profile__container--item--right col-lg-9 col-md-9 colsm-12 col-12 px-3">
-                        <h3>Địa Chỉ Nhận Hàng Của Tôi</h3>
-                        <div className="item--right--container">
-                            {
-                                Info.length > 0 ? (
-                                    <div>
-                                        
-                                    </div>
-                                ) : (
+                    {
+                            address.length > 0 ? (
+                                <>
+                                <div className="address-action">
+                                    <h3>Địa Chỉ Nhận Hàng Của Tôi</h3>
+                                    <button onClick={handleOpen}>THÊM ĐỊA CHỈ MỚI</button>
+                                </div>
+                                <div className="item--right--container">
+                                    
+                                </div>
+                                </>
+                            ) : (
+                                <>
+                                <h3>Địa Chỉ Nhận Hàng Của Tôi</h3>
+                                <div className="item--right--container">
                                     <div className='right--container--notInfo'>
                                         <img src= {AddressImage} alt="" />
                                         <p>Quý khách chưa có địa chỉ nhận hàng nào</p>
                                         <button onClick={handleOpen}>THÊM ĐỊA CHỈ MỚI</button>
                                     </div>
-                                )
-                            }
-                        </div>
+                                </div>
+                                </>
+                            )
+                        }
                     </div>
                 </div>
                 <div className="profile__container--item--tablet col-lg-12 col-md-12 col-sm-12 col-12">

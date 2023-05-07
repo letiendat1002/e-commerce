@@ -73,7 +73,28 @@
         &--right{
             h3{
                 color: #e02f2f;
-                padding-bottom: 1rem;
+                // padding-bottom: 1rem;
+            }
+            .address-action{
+                display: flex;
+                justify-content: space-between;
+                padding-bottom: 2rem;
+                button{
+                    height: auto;
+                    width: auto;
+                    border-radius: 8px;
+                    font-size: 17px;
+                    font-weight: 500;
+                    color: #ffffff;
+                    position: relative;
+                    background-color: #e02f2f;
+                    padding: 5px 5px;
+                    i{
+                        font-size: 18px;
+                        margin-top: 10px;
+                        padding: 0 5px;
+                    }
+                }
             }
             .item--right--container{
                 background-color: #f1f1f1;
