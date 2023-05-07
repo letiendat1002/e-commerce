@@ -26,47 +26,62 @@ public class RatingController {
             @RequestParam(value = "orderID", required = false) BigInteger orderID,
             @RequestParam(value = "productID", required = false) BigInteger productID
     ) {
-        List<RatingDTO> ratingDTOList;
-
-        var allIdNull = userID == null && orderID == null && productID == null;
-        var onlyUserIdNotNull = userID != null && orderID == null && productID == null;
-        var onlyOrderIdNotNull = userID == null && orderID != null && productID == null;
-        var onlyProductIdNotNull = userID == null && orderID == null && productID != null;
-        var onlyUserIdAndOrderIdNotNull = userID != null && orderID != null && productID == null;
-        var onlyUserIdAndProductIdNotNull = userID != null && orderID == null && productID != null;
-        var onlyOrderIdAndProductIdNotNull = userID == null && orderID != null && productID != null;
-
-        if (allIdNull) {
-            ratingDTOList = ratingService.fetchAllRatings();
-        } else if (onlyUserIdNotNull) {
-            ratingDTOList = ratingService.fetchRatingsByUserID(userID);
-        } else if (onlyOrderIdNotNull) {
-            ratingDTOList = Collections.singletonList(
-                    ratingService.fetchRatingByOrderID(orderID)
-            );
-        } else if (onlyProductIdNotNull) {
-            ratingDTOList = ratingService.fetchRatingsByProductID(productID);
-        } else if (onlyUserIdAndOrderIdNotNull) {
-            ratingDTOList = Collections.singletonList(
-                    ratingService.fetchRatingByUserIdAndOrderId(userID, orderID)
-            );
-        } else if (onlyUserIdAndProductIdNotNull) {
-            ratingDTOList = ratingService.fetchRatingsByUserIDAndProductID(userID, productID);
-        } else if (onlyOrderIdAndProductIdNotNull) {
-            ratingDTOList = Collections.singletonList(
-                    ratingService.fetchRatingByOrderIdAndProductId(productID, orderID)
-            );
-        } else {
-            ratingDTOList = Collections.singletonList(
-                    ratingService.fetchRatingByID(
-                            new RatingID(userID, orderID, productID)
-                    ));
-        }
+        var ratingDTOList = getRatingDTOList(userID, orderID, productID);
 
         return new RatingResponse(
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 ratingDTOList
+        );
+    }
+
+    private List<RatingDTO> getRatingDTOList(BigInteger userID, BigInteger orderID, BigInteger productID) {
+        var allIdNull = userID == null && orderID == null && productID == null;
+        var allIdNotNull = userID != null && orderID != null && productID != null;
+        var onlyUserIdNotNull = userID != null && orderID == null && productID == null;
+        var onlyOrderIdNotNull = userID == null && orderID != null && productID == null;
+        var onlyProductIdNotNull = userID == null && orderID == null && productID != null;
+        var onlyUserIdAndOrderIdNotNull = userID != null && orderID != null && productID == null;
+        var onlyUserIdAndProductIdNotNull = userID != null && orderID == null && productID != null;
+
+        if (allIdNull) {
+            return ratingService.fetchAllRatings();
+        }
+
+        if (allIdNotNull) {
+            return Collections.singletonList(
+                    ratingService.fetchRatingByID(
+                            new RatingID(userID, orderID, productID)
+                    )
+            );
+        }
+
+        if (onlyUserIdNotNull) {
+            return ratingService.fetchRatingsByUserID(userID);
+        }
+
+        if (onlyOrderIdNotNull) {
+            return Collections.singletonList(
+                    ratingService.fetchRatingByOrderID(orderID)
+            );
+        }
+
+        if (onlyProductIdNotNull) {
+            return ratingService.fetchRatingsByProductID(productID);
+        }
+
+        if (onlyUserIdAndOrderIdNotNull) {
+            return Collections.singletonList(
+                    ratingService.fetchRatingByUserIdAndOrderId(userID, orderID)
+            );
+        }
+
+        if (onlyUserIdAndProductIdNotNull) {
+            return ratingService.fetchRatingsByUserIDAndProductID(userID, productID);
+        }
+
+        return Collections.singletonList(
+                ratingService.fetchRatingByOrderIdAndProductId(productID, orderID)
         );
     }
 
