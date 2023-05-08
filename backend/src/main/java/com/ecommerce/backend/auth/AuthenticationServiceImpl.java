@@ -36,7 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public String register(UserRegistrationRequest request) {
+    public void register(UserRegistrationRequest request) {
         var userDTO = userService.addUser(request);
 
         var token = jwtService.generateToken(
@@ -67,8 +67,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     "Failed to send email to user"
             );
         }
-
-        return token;
     }
 
     @Override

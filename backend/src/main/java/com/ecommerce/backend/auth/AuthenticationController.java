@@ -2,6 +2,7 @@ package com.ecommerce.backend.auth;
 
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
+import com.ecommerce.backend.shared.response.BaseResponse;
 import com.ecommerce.backend.user.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public AuthenticationRegisterResponse register(
+    public BaseResponse register(
             @Validated @RequestBody UserRegistrationRequest request,
             BindingResult errors
     ) {
@@ -25,12 +26,11 @@ public class AuthenticationController {
             throw new RequestValidationException(errors);
         }
 
-        var token = authenticationService.register(request);
+        authenticationService.register(request);
 
-        return new AuthenticationRegisterResponse(
+        return new BaseResponse(
                 HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                token
+                MessageStatus.SUCCESSFUL
         );
     }
 
@@ -52,4 +52,6 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(authenticationService.activate(token));
     }
+
+
 }
