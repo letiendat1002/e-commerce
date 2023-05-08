@@ -4,10 +4,10 @@ import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;

@@ -17,14 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
 @RequiredArgsConstructor
 @Service
 public class JwtService {
-    private final VariableConstants variableConstants;
     private static final String SECRET_KEY =
             "645267556B58703273357638792F413F4428472B4B6250655368566D59713374";
+    private final VariableConstants variableConstants;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -49,20 +47,21 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String subject) {
-        return generateToken(subject, Map.of());
+    public String generateToken(String subject, Date expiration) {
+        return generateToken(subject, expiration, Map.of());
     }
 
-    public String generateToken(String subject, String... scopes) {
-        return generateToken(subject, Map.of("scopes", scopes));
+    public String generateToken(String subject, Date expiration, String... scopes) {
+        return generateToken(subject, expiration, Map.of("scopes", scopes));
     }
 
-    public String generateToken(String subject, List<String> scopes) {
-        return generateToken(subject, Map.of("scopes", scopes));
+    public String generateToken(String subject, Date expiration, List<String> scopes) {
+        return generateToken(subject, expiration, Map.of("scopes", scopes));
     }
 
     public String generateToken(
             String subject,
+            Date expiration,
             Map<String, Object> claims
     ) {
         return Jwts
@@ -71,11 +70,7 @@ public class JwtService {
                 .setSubject(subject)
                 .setIssuer(variableConstants.getUrl())
                 .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(
-                        Date.from(
-                                Instant.now().plus(14, DAYS)
-                        )
-                )
+                .setExpiration(expiration)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

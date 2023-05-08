@@ -30,7 +30,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public AuthenticationResponse authenticate(
+    public AuthenticationAuthenticateResponse authenticate(
             @Validated @RequestBody AuthenticationRequest request,
             BindingResult errors
     ) {
@@ -40,4 +40,6 @@ public class AuthenticationController {
 
         return authenticationService.authenticate(request);
     }
+
+
 }

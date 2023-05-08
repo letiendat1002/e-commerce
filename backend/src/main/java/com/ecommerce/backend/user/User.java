@@ -2,7 +2,6 @@ package com.ecommerce.backend.user;
 
 import com.ecommerce.backend.order.Order;
 import com.ecommerce.backend.rating.Rating;
-import com.ecommerce.backend.user.enums.EmailValidationStatus;
 import com.ecommerce.backend.user.enums.Gender;
 import com.ecommerce.backend.user.enums.UserRole;
 import com.ecommerce.backend.useraddress.UserAddress;
@@ -61,9 +60,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.CUSTOMER;
 
-    @Column(name = "EmailValidationStatus")
-    @Enumerated(EnumType.STRING)
-    private EmailValidationStatus emailValidationStatus = EmailValidationStatus.NOT_VALIDATED;
+    @Column(name = "Locked")
+    private boolean locked = false;
+
+    @Column(name = "Enabled")
+    private boolean enabled = false;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
@@ -97,7 +98,8 @@ public class User implements UserDetails {
                 Gender gender,
                 String phone,
                 String image,
-                UserRole role) {
+                UserRole role,
+                boolean enabled) {
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -105,6 +107,7 @@ public class User implements UserDetails {
         this.phone = phone;
         this.image = image;
         this.role = role;
+        this.enabled = enabled;
     }
 
     @Override
@@ -129,7 +132,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override
@@ -139,7 +142,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     @Override

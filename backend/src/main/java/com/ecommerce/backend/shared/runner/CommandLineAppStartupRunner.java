@@ -27,7 +27,8 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                     Gender.MALE,
                     "",
                     "",
-                    UserRole.ADMIN
+                    UserRole.ADMIN,
+                    true
             );
             userRepository.save(admin);
         }

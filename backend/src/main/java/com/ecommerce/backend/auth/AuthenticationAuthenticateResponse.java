@@ -15,14 +15,14 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class AuthenticationResponse extends BaseResponse {
+public class AuthenticationAuthenticateResponse extends BaseResponse {
     private String token;
     private List<UserDTO> data;
 
-    public AuthenticationResponse(Integer status,
-                                  MessageStatus message,
-                                  String token,
-                                  List<UserDTO> data) {
+    public AuthenticationAuthenticateResponse(Integer status,
+                                              MessageStatus message,
+                                              String token,
+                                              List<UserDTO> data) {
         super(status, message);
         this.token = token;
         this.data = data;

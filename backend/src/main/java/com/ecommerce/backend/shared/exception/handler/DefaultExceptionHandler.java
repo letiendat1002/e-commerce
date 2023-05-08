@@ -185,6 +185,19 @@ public class DefaultExceptionHandler {
         );
     }
 
+    @ExceptionHandler(JwtAuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse handleException(
+            JwtAuthenticationException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.UNAUTHORIZED.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
     @ExceptionHandler(FailedOperationException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse handleException(
