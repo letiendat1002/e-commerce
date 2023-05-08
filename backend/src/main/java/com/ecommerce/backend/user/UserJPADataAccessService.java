@@ -67,4 +67,9 @@ public class UserJPADataAccessService implements UserDAO {
     public void enableUser(String email) {
         userRepository.enableUser(email);
     }
+
+    @Override
+    public void updateUserPassword(String email, String randomPassword) {
+        userRepository.updateUserPassword(email, randomPassword);
+    }
 }

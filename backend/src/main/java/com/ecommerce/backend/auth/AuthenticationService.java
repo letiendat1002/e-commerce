@@ -8,4 +8,8 @@ public interface AuthenticationService {
     AuthenticationAuthenticateResponse authenticate(AuthenticationRequest request);
 
     String activate(String token);
+
+    void resetPassword(String email);
+
+    void changePassword(AuthenticationChangePasswordRequest request);
 }

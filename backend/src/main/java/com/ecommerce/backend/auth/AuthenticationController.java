@@ -7,6 +7,7 @@ import com.ecommerce.backend.user.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,5 +54,33 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.activate(token));
     }
 
+    @PostMapping("/resetPassword")
+    public BaseResponse resetPassword(
+            @RequestParam("email") String email
+    ) {
+        authenticationService.resetPassword(email);
 
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
+        );
+    }
+
+    @PutMapping("/changePassword")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    public BaseResponse changePassword(
+            @Validated @RequestBody AuthenticationChangePasswordRequest request,
+            BindingResult errors
+    ) {
+        if (errors.hasErrors()) {
+            throw new RequestValidationException(errors);
+        }
+
+        authenticationService.changePassword(request);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
+        );
+    }
 }

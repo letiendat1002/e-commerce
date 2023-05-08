@@ -9,15 +9,16 @@
 
 ### Public APIs
 
-| **No.** | **HTTP** |           **API**           |    **Description**    |
-|:-------:|:--------:|:---------------------------:|:---------------------:|
-|  **1**  |  `POST`  | `/api/v1/auth/authenticate` |         Login         |
-|  **2**  |  `POST`  |   `/api/v1/auth/register`   |       Register        |
-|  **3**  |  `GET`   |    `/api/v1/categories`     |  Get all categories   |
-|  **4**  |  `GET`   |  `/api/v1/categories/{id}`  |  Get category by id   |
-|  **5**  |  `GET`   |     `/api/v1/products`      |   Get all products    |
-|  **6**  |  `GET`   |   `/api/v1/products/{id}`   |   Get product by id   |
-|  **7**  |  `GET`   |   `/api/v1/auth/activate`   | Activate user account |
+| **No.** | **HTTP** |           **API**            |    **Description**    |
+|:-------:|:--------:|:----------------------------:|:---------------------:|
+|  **1**  |  `POST`  | `/api/v1/auth/authenticate`  |         Login         |
+|  **2**  |  `POST`  |   `/api/v1/auth/register`    |       Register        |
+|  **3**  |  `GET`   |     `/api/v1/categories`     |  Get all categories   |
+|  **4**  |  `GET`   |  `/api/v1/categories/{id}`   |  Get category by id   |
+|  **5**  |  `GET`   |      `/api/v1/products`      |   Get all products    |
+|  **6**  |  `GET`   |   `/api/v1/products/{id}`    |   Get product by id   |
+|  **7**  |  `GET`   |   `/api/v1/auth/activate`    | Activate user account |
+|  **8**  |  `GET`   | `/api/v1/auth/resetPassword` |    Forgot password    |
 
 ### Notes
 
@@ -52,6 +53,8 @@
     - **Rating:**
         - `rating:read`
         - `rating:write`
+    - **Change Password:**
+        - `put:changePassword`
 
 - **Customer**
     - **User:**
@@ -73,3 +76,5 @@
     - **Rating:**
         - `rating:read`
         - `rating:write`
+    - **Change Password:**
+        - `put:changePassword`
