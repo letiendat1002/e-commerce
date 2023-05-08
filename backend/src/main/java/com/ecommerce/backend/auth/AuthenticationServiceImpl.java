@@ -101,8 +101,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String activate(String token) {
         var username = jwtService.extractUsername(token);
-        userService.enableUser(username);
-
-        return "User activated successfully. You can close this tab";
+        var user = userService.fetchUserByEmail(username);
+        if (!user.enabled()) {
+            userService.enableUser(username);
+            return "User activated successfully. You can close this tab";
+        }
+        return "User already activated. You can close this tab";
     }
 }
