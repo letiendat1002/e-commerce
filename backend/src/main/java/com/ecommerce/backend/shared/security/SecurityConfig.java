@@ -48,7 +48,8 @@ public class SecurityConfig {
                         "/api/v*/products/**",
                         "/api/v*/categories/**",
                         "/api/v*/ratings",
-                        "/api/v*/auth/activate"
+                        "/api/v*/auth/activate",
+                        "/api/v*/auth/resetPassword"
                 )
                 .permitAll()
                 .requestMatchers(

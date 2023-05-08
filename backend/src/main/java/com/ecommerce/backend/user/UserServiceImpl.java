@@ -194,4 +194,25 @@ public class UserServiceImpl implements UserService {
     public void enableUser(String username) {
         userDAO.enableUser(username);
     }
+
+    @Override
+    public UserDTO updateUserPassword(String email, String newPassword) {
+        checkIfUserExistsByEmailOrThrow(email);
+
+        userDAO.updateUserPassword(
+                email,
+                passwordEncoder.encode(newPassword)
+        );
+
+        return userDTOMapper.apply(selectUserByEmailOrThrow(email));
+    }
+
+    private void checkIfUserExistsByEmailOrThrow(String email) {
+        var isExisted = userDAO.existsUserByEmail(email);
+        if (!isExisted) {
+            throw new ResourceNotFoundException(
+                    "User not found by email {%s}".formatted(email)
+            );
+        }
+    }
 }

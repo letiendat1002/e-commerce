@@ -163,6 +163,19 @@ public class DefaultExceptionHandler {
         );
     }
 
+    @ExceptionHandler(PasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleException(
+            PasswordException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiResponse handleException(

@@ -2,6 +2,7 @@ package com.ecommerce.backend.shared.email;
 
 public class EmailTemplate {
     public static final String REGISTRATION_SUBJECT = "Registration Confirmation";
+    public static final String RESET_PASSWORD_SUBJECT = "Password Reset Request";
     public static final String SIGNATURE = "--\nKind regards,\nLinkking Team";
 
     public static String getRegistrationMessage(String name, String registrationUrl) {
@@ -9,6 +10,17 @@ public class EmailTemplate {
                 .formatted(name,
                         "Linkking",
                         registrationUrl,
+                        SIGNATURE
+                );
+    }
+
+    public static String getResetPasswordMessage(String name, String password) {
+        var warning = "For security, you should change your password after logging in.";
+        return "Hello %s,\n\nWe received a request to reset the password for your %s account.\n\nPlease use the password below to login:\n\n%s\n\n%s\n\n%s"
+                .formatted(name,
+                        "Linkking",
+                        password,
+                        warning,
                         SIGNATURE
                 );
     }

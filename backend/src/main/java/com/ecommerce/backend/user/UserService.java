@@ -17,4 +17,6 @@ public interface UserService {
     void deleteUser(BigInteger userID);
 
     void enableUser(String username);
+
+    UserDTO updateUserPassword(String email, String newPassword);
 }
