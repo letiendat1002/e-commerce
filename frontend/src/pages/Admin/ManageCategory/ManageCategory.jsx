@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import classnames from 'classnames/bind';
 import styles from './ManageCategory.module.scss';
 import TableCategory from './TableCategory/TableCategory';
 import categoryApi from '../../../services/apiGetCategory';
-import axios from 'axios';
-
+import apiService from '../../../services/apiServiceProducts';
 let cx = classnames.bind(styles);
 
 const ManageCategory = (props) => {
   const [loading, setLoading] = useState(true);
   const [categoryList, setCategoryList] = useState('');
+  const [product, setProduct] = useState([]);
+
+  const callAllProducts = async () => {
+    try {
+      const { status, message, data } = await apiService.getAllProducts();
+      setProduct(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const callApiCategory = async () => {
+    try {
+      const { data } = await categoryApi.getAllCategory();
+      setCategoryList(data);
+    } catch (err) {
+      console.log('Failed to fetch product', err);
+    }
+  };
 
   useEffect(() => {
-    const callApiCategory = async () => {
-      try {
-        const res = await categoryApi.getAllCategory();
-        // const res2 = await axios.get('http://localhost:8080/api/v1/categories')
-        console.log(res);
-        // setCategoryList(data)
-      } catch (err) {
-        console.log('Failed to fetch product', err);
-      }
-    };
     callApiCategory();
+    callAllProducts();
   }, []);
 
-  console.log(categoryList);
   return (
     <>
       <div className='manage-products-container'>

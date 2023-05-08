@@ -21,6 +21,7 @@ import ManageOrders from '../pages/Admin/components/ManageOrders/ManageOrders';
 import ProductDetails from '../pages/Admin/ProductDetails/ProductDetails';
 import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
 import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
+import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
 
 const router = createBrowserRouter([
   {
@@ -110,6 +111,10 @@ const router = createBrowserRouter([
       {
         path: 'manage-categories',
         element: <ManageCategory />,
+      },
+      {
+        path: 'manage-categories/:idCategory',
+        element: <ProductFromCategory />,
       },
       {
         path: 'products-filters',

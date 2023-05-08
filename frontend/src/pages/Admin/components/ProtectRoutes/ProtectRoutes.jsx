@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import NotAuthorized from '../NotAuthorized/NotAuthorized';
 
 
@@ -10,7 +10,9 @@ const RolesBase = (props) => {
     const checkPath = window.location.pathname.startsWith('/admin');
     const { roles } = current[0]
     const checkAdmin = roles.includes('ROLE_ADMIN')
-    if (checkPath && checkAdmin === true) {
+    const navigate = useNavigate();
+  if (checkPath && checkAdmin === true) {
+    // navigate('/admin')
       return <>{props.children}</>;
     } else {
       return <NotAuthorized />;
@@ -18,7 +20,7 @@ const RolesBase = (props) => {
   };
 const ProtectRoutes = props => {
     const isAuthenticated = localStorage.getItem("user")
-    console.log(isAuthenticated)
+
   return (
       <>
            {isAuthenticated&& isAuthenticated.length >0 ? (

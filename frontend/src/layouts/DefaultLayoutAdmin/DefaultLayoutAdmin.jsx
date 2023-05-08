@@ -18,19 +18,19 @@ const DefaultLayoutAdmin = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const callProductsFilter = async () => {
-      try {
-        const dataProduct = await apiService.getAllProduct();
-        // console.log(dataProduct);
-        dispatch({
-          type: 'PRODUCT_SUCCESS',
-          payload: dataProduct,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    callProductsFilter();
+    // const callProductsFilter = async () => {
+    //   try {
+    //     const dataProduct = await apiService.getAllProduct();
+    //     // console.log(dataProduct);
+    //     dispatch({
+    //       type: 'PRODUCT_SUCCESS',
+    //       payload: dataProduct,
+    //     });
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
+    // callProductsFilter();
   }, [collapsed,dispatch]);
 
   return (

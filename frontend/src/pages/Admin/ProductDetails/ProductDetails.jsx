@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -15,7 +15,7 @@ let cx = classNames.bind(styles);
 
 const ProductDetails = (props) => {
   const [product, setProduct] = useState({});
-
+  const navigate = useNavigate();
   let { idProduct } = useParams();
   console.log(idProduct);
 
@@ -311,8 +311,11 @@ const ProductDetails = (props) => {
 
               <Button
                 variant='primary'
-                type='submit'>
-                Update
+                type='submit'
+                onClick={() => {
+                  navigate(``);
+                }}>
+                Back
               </Button>
             </Form>
           </Row>
