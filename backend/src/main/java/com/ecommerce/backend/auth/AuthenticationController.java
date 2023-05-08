@@ -1,15 +1,14 @@
 package com.ecommerce.backend.auth;
 
+import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
-import com.ecommerce.backend.shared.response.BaseResponse;
 import com.ecommerce.backend.user.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,7 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public BaseResponse register(
+    public AuthenticationRegisterResponse register(
             @Validated @RequestBody UserRegistrationRequest request,
             BindingResult errors
     ) {
@@ -26,11 +25,17 @@ public class AuthenticationController {
             throw new RequestValidationException(errors);
         }
 
-        return authenticationService.register(request);
+        var token = authenticationService.register(request);
+
+        return new AuthenticationRegisterResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                token
+        );
     }
 
     @PostMapping("/authenticate")
-    public AuthenticationResponse authenticate(
+    public AuthenticationAuthenticateResponse authenticate(
             @Validated @RequestBody AuthenticationRequest request,
             BindingResult errors
     ) {
@@ -39,5 +44,12 @@ public class AuthenticationController {
         }
 
         return authenticationService.authenticate(request);
+    }
+
+    @GetMapping("/activate")
+    public ResponseEntity<String> activate(
+            @RequestParam("token") String token
+    ) {
+        return ResponseEntity.ok(authenticationService.activate(token));
     }
 }

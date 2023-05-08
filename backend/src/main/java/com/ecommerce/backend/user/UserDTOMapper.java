@@ -20,7 +20,9 @@ public class UserDTOMapper implements Function<User, UserDTO> {
                 user.getFullName(),
                 user.getGender(),
                 user.getPhone(),
-                user.getImage()
+                user.getImage(),
+                user.isLocked(),
+                user.isEnabled()
         );
     }
 }

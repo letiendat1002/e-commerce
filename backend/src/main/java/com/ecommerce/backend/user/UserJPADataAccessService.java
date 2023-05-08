@@ -62,4 +62,9 @@ public class UserJPADataAccessService implements UserDAO {
     public Optional<User> updateUser(User update) {
         return Optional.of(userRepository.save(update));
     }
+
+    @Override
+    public void enableUser(String email) {
+        userRepository.enableUser(email);
+    }
 }
