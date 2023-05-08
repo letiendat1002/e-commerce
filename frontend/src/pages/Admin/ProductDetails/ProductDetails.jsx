@@ -11,19 +11,25 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import apiService from '../../../services/apiServiceProducts';
 import styles from './ProductDetails.module.scss';
+import Loading from '../../../components/Loading/Loading';
 let cx = classNames.bind(styles);
 
 const ProductDetails = (props) => {
-  const [product, setProduct] = useState({});
   const navigate = useNavigate();
   let { idProduct } = useParams();
-  console.log(idProduct);
+  const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const handleProductDeltails = async (id) => {
-    const response = await apiService.getDetailProduct(id);
-    setProduct(response?.data[0]);
+    try {
+      setLoading(true);
+      const response = await apiService.getDetailProduct(id);
+      setProduct(response?.data[0]);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
-  console.log(product);
 
   useEffect(() => {
     handleProductDeltails(idProduct);
@@ -56,7 +62,9 @@ const ProductDetails = (props) => {
 
   return (
     <>
-      {product ? (
+      {loading ? (
+        <Loading />
+      ) : product ? (
         <Container>
           <Row>
             <Form>
@@ -73,7 +81,6 @@ const ProductDetails = (props) => {
                       value={name || ''}
                       readOnly
                       defaultValue={undefined}
-                      //   onChange={(e) => handleOnChange({ name: e.target.value })}
                     />
                   </Form.Group>
                 </Col>
@@ -274,7 +281,8 @@ const ProductDetails = (props) => {
                     <Form.Control
                       type='text'
                       placeholder='Enter name camera'
-                      value={camera || ''}
+                        value={camera || ''}
+                        disabled={!camera}
                       readOnly
                     />
                   </Form.Group>
@@ -313,7 +321,7 @@ const ProductDetails = (props) => {
                 variant='primary'
                 type='submit'
                 onClick={() => {
-                  navigate(``);
+                  navigate('/admin/manage-products');
                 }}>
                 Back
               </Button>
