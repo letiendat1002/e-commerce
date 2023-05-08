@@ -2,7 +2,7 @@ package com.ecommerce.backend.auth;
 
 import com.ecommerce.backend.shared.constants.VariableConstants;
 import com.ecommerce.backend.shared.email.CustomEmail;
-import com.ecommerce.backend.shared.email.EmailSenderServiceImpl;
+import com.ecommerce.backend.shared.email.EmailSenderService;
 import com.ecommerce.backend.shared.email.EmailTemplate;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
@@ -31,7 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserService userService;
-    private final EmailSenderServiceImpl notificationService;
+    private final EmailSenderService notificationService;
     private final VariableConstants variableConstants;
 
     @Override
