@@ -11,13 +11,15 @@ import ModalDeleteUser from '../components/ModalDeleteUser/ModalDeleteUser';
 import Pagination from '../components/Pagination/Pagination';
 // import Pagination from '../../../components/Pagination/Pagination';
 import ModalViewUser from '../components/ModalViewUser/ModalViewUser';
+import Loading from '../../../components/Loading/Loading';
+import { GrAddCircle, GrHome } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
 
 const MangeUser = (props) => {
+  const navigate = useNavigate();
   const LIMIT = 6;
   const [show, setShow] = useState(false);
-  const [showModelUser, setShowModelUser] = useState({
-    
-  });
+  const [showModelUser, setShowModelUser] = useState({});
   const [showModalUpdateUser, setShowModalUpdateUser] = useState(false);
   const [showModalDeleteUser, setShowModalDeleteUser] = useState(false);
   const [showModalViewUser, setShowModalViewUser] = useState(false);
@@ -26,18 +28,23 @@ const MangeUser = (props) => {
   const [dataDelete, setDataDelete] = useState({});
   const [userPerPage, setUserPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const idOfLastPost = currentPage * userPerPage;
   const idOfFirstPost = idOfLastPost - userPerPage;
-  const currentUsers = data.slice(idOfFirstPost, idOfLastPost);
-  const totalUsers = data.length;
+  const currentUsers = data?.slice(idOfFirstPost, idOfLastPost);
+  const totalUsers = data?.length;
 
   const changePage = (number) => {
     setCurrentPage(number);
   };
 
   useEffect(() => {
-    getAllUsers();
+    try {
+      getAllUsers();
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   const callApi = async () => {
@@ -47,8 +54,10 @@ const MangeUser = (props) => {
   };
 
   const getAllUsers = async () => {
+    setLoading(true);
     const res = await getUsers();
     setData(res?.data);
+    setLoading(false);
   };
 
   const handleClickBtnUpdate = (x, id) => {
@@ -59,7 +68,6 @@ const MangeUser = (props) => {
   };
 
   const handleClickBtnView = (x) => {
-    console.log(x);
     setData1(x);
     setShowModalViewUser(true);
   };
@@ -79,36 +87,51 @@ const MangeUser = (props) => {
 
       <div className='user-content'>
         <div className='btn-add-new'>
+        <button
+              className='btn btn-primary'
+              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              onClick={() => {
+                navigate('/admin');
+              }}>
+              <GrHome/>
+              Back Home
+            </button>
           <button
             className='btn btn-primary'
             onClick={(e) => setShow(true)}>
-            <AiFillPlusCircle />
+            <GrAddCircle/>
             Add New User
           </button>
         </div>
+        {loading === true ? (
+          <Loading />
+        ) : (
+          <div className='table-users-container'>
+            <TableUser
+              data={currentUsers}
+              setShowModal={handleClickBtnUpdate}
+              handleClickBtnDelete={handleClickBtnDelete}
+              handleClickBtnView={handleClickBtnView}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
 
-        <div className='table-users-container'>
-          <TableUser
-            data={currentUsers}
-            setShowModal={handleClickBtnUpdate}
-            handleClickBtnDelete={handleClickBtnDelete}
-            handleClickBtnView={handleClickBtnView}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-
-          {/* <Pagination
+            {/* <Pagination
             userPerPage={userPerPage}
             totalUsers={totalUsers}
             changePage={changePage}
           /> */}
 
-          <Pagination
-            userPerPage={userPerPage}
-            totalUsers={totalUsers}
-            changePage={changePage}
-          />
-        </div>
+              <div className='pagination-center'>
+              <Pagination
+              userPerPage={userPerPage}
+              totalUsers={totalUsers}
+              changePage={changePage}
+            />
+           </div>
+          </div>
+        )}
+
         <ModalCreateUser
           show={show}
           setShow={setShow}

@@ -30,21 +30,21 @@ const Sidebar = (props) => {
     setSizeWidth(window.innerWidth);
 
   };
-  useEffect(() => {
-    window.addEventListener('resize', getSize);
+  // useEffect(() => {
+  //   window.addEventListener('resize', getSize);
 
-    if (sizeWidth <= 1000){
-      setCollapsed(true)
-      setDisplay("")
-      setBreakPoint(true)
-    }
+  //   if (sizeWidth <= 1000){
+  //     setCollapsed(true)
+  //     setDisplay("")
+  //     setBreakPoint(true)
+  //   }
     
-    if (sizeWidth >= 1000) {
-      setCollapsed(false)
-      setDisplay("display")
-      setBreakPoint(false)
-    }
-  }, [setCollapsed, sizeWidth]);
+  //   if (sizeWidth >= 1000) {
+  //     setCollapsed(false)
+  //     setDisplay("display")
+  //     setBreakPoint(false)
+  //   }
+  // }, [setCollapsed, sizeWidth]);
 
 
   return (
@@ -66,11 +66,13 @@ const Sidebar = (props) => {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
+                display: 'flex',
+                justifyContent:'center'
               }}>
-              <DiReact
+              {/* <DiReact
                 size={'3em'}
                 color={'00bfff'}
-              />
+              /> */}
               {t('sidebar.title')}
             </div>
           </SidebarHeader>

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { GrFormView } from 'react-icons/gr';
 
 const TableCategory = (props) => {
   const { categoryList } = props;
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [categotyPerPage, setCategotyPerPage] = useState(5);
 
@@ -34,7 +36,16 @@ const TableCategory = (props) => {
                 className='text-center'>
                 Name
               </th>
-              <th scope='col'>Slug</th>
+              <th
+                scope='col'
+                className='text-center'>
+                Slug
+              </th>
+              <th
+                scope='col'
+                className='text-center'>
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -53,15 +64,18 @@ const TableCategory = (props) => {
                 return (
                   <tr key={idx}>
                     <th scope='row'>{idx + 1}</th>
-                    <td>{x.name}</td>
+                    <td>{x.name.charAt(0).toUpperCase() + x.name.slice(1)}</td>
                     <td>{x.slug}</td>
                     <td>
                       <button
-                        className='btn btn-primary'
-                        onClick={() => x}>
-                        <Link to={`${x.categoryID}`}>View Product</Link>
+                        className='btn btn-info'
+                        onClick={() => {
+                          navigate(`/admin/manage-categories/${x.categoryID}`);
+                        }}>
+                        <GrFormView /> Products
+                        {/* <Link to={`${x.categoryID}`}>View Product</Link> */}
                       </button>
-                      <button
+                      {/* <button
                         className='btn btn-success mx-3'
                         onClick={() => x}>
                         Update
@@ -70,7 +84,7 @@ const TableCategory = (props) => {
                         className='btn btn-danger'
                         onClick={() => x}>
                         Delete
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 );
@@ -88,28 +102,29 @@ const TableCategory = (props) => {
           )} */}
           </tbody>
         </Table>
-
-        <ReactPaginate
-          nextLabel='Next>'
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={3}
-          marginPagesDisplayed={2}
-          pageCount={totalPage}
-          previousLabel='<Pre'
-          pageClassName='page-item'
-          pageLinkClassName='page-link'
-          previousClassName='page-item'
-          previousLinkClassName='page-link'
-          nextClassName='page-item'
-          nextLinkClassName='page-link'
-          breakLabel='...'
-          breakClassName='page-item'
-          breakLinkClassName='page-link'
-          containerClassName='pagination'
-          activeClassName='active'
-          renderOnZeroPageCount={null}
-          // forcePage={currentPage - 1}
-        />
+        <div style={{display:'flex',justifyContent:'center'}}>
+          <ReactPaginate
+            nextLabel='Next>'
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={2}
+            pageCount={totalPage}
+            previousLabel='<Pre'
+            pageClassName='page-item'
+            pageLinkClassName='page-link'
+            previousClassName='page-item'
+            previousLinkClassName='page-link'
+            nextClassName='page-item'
+            nextLinkClassName='page-link'
+            breakLabel='...'
+            breakClassName='page-item'
+            breakLinkClassName='page-link'
+            containerClassName='pagination'
+            activeClassName='active'
+            renderOnZeroPageCount={null}
+            // forcePage={currentPage - 1}
+          />
+        </div>
       </div>
 
       {/* <PaginatedItems  />, */}

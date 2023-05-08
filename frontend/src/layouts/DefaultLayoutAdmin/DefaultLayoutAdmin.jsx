@@ -13,7 +13,7 @@ import './DefaultLayoutAdmin.scss';
 import SearchBox from '../../pages/Admin/components/SearchBox/SearchBox';
 
 const DefaultLayoutAdmin = (props) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [display, setdisplay] = useState('');
   const dispatch = useDispatch();
 

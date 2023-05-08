@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import classnames from 'classnames/bind';
-import styles from './ManageCategory.module.scss';
 import TableCategory from './TableCategory/TableCategory';
 import categoryApi from '../../../services/apiGetCategory';
 import apiService from '../../../services/apiServiceProducts';
+import { GrAddCircle, GrHome } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
+import styles from './ManageCategory.module.scss'
 let cx = classnames.bind(styles);
 
 const ManageCategory = (props) => {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const [categoryList, setCategoryList] = useState('');
   const [product, setProduct] = useState([]);
@@ -38,18 +41,27 @@ const ManageCategory = (props) => {
 
   return (
     <>
-      <div className='manage-products-container'>
-        <div className='title'>Manage Products</div>
+      <div className={cx('manage-category-container')}>
+        <div className='title'>Manage Category</div>
 
         <div className='products-content'>
-          <div className='btn-add-new'>
-            {/* <button className='btn btn-primary' onClick={handleOpen}><AiFillPlusCircle/>Manage User</button> */}
+          <div className={cx('btn-add-new')}>
+            
+          <button
+              className='btn btn-primary'
+              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              onClick={() => {
+                navigate('/admin');
+              }}>
+              <GrHome/>
+              Back Home
+            </button>
             <button
               className='btn btn-primary'
               //   onClick={(e) => setShow(true)}
             >
               {/* <AiFillPlusCircle /> */}
-              Add New Products
+              <GrAddCircle/> Add New Category
             </button>
           </div>
 
