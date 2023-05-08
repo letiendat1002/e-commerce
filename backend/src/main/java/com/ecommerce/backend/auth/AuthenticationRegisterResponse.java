@@ -13,13 +13,13 @@ import lombok.ToString;
 @Setter
 @ToString
 public class AuthenticationRegisterResponse extends BaseResponse {
-    private String url;
+    private String token;
 
     public AuthenticationRegisterResponse(Integer status,
                                           MessageStatus message,
-                                          String url
+                                          String token
     ) {
         super(status, message);
-        this.url = url;
+        this.token = token;
     }
 }

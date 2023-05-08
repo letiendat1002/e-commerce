@@ -1,6 +1,10 @@
 package com.ecommerce.backend.shared.exception.handler;
 
 import com.ecommerce.backend.shared.exception.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.UnexpectedTypeException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -194,6 +198,58 @@ public class DefaultExceptionHandler {
                 request.getRequestURI(),
                 HttpStatus.UNAUTHORIZED.value(),
                 exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse handleException(
+            ExpiredJwtException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "JWT token is expired",
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse handleException(
+            MalformedJwtException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "JWT token is invalid",
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(UnsupportedJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse handleException(
+            UnsupportedJwtException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "JWT token is unsupported",
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse handleException(
+            SignatureException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "JWT token signature is invalid",
                 LocalDateTime.now()
         );
     }

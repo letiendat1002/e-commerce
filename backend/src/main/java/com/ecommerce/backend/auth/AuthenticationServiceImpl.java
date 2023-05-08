@@ -6,7 +6,6 @@ import com.ecommerce.backend.shared.email.EmailSenderService;
 import com.ecommerce.backend.shared.email.EmailTemplate;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
-import com.ecommerce.backend.shared.response.BaseResponse;
 import com.ecommerce.backend.shared.security.jwt.JwtService;
 import com.ecommerce.backend.user.UserRegistrationRequest;
 import com.ecommerce.backend.user.UserService;
@@ -16,6 +15,7 @@ import org.springframework.mail.MailException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -35,7 +35,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final VariableConstants variableConstants;
 
     @Override
-    public BaseResponse register(UserRegistrationRequest request) {
+    @Transactional
+    public String register(UserRegistrationRequest request) {
         var userDTO = userService.addUser(request);
 
         var token = jwtService.generateToken(
@@ -67,15 +68,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             );
         }
 
-        return new AuthenticationRegisterResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                registrationUrl
-        );
+        return token;
     }
 
     @Override
-    public AuthenticationAuthenticateResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationAuthenticateResponse authenticate(
+            AuthenticationRequest request
+    ) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
@@ -97,5 +96,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 token,
                 Collections.singletonList(userDTO)
         );
+    }
+
+    @Override
+    public String activate(String token) {
+        var username = jwtService.extractUsername(token);
+        userService.enableUser(username);
+
+        return "User activated successfully. You can close this tab";
     }
 }

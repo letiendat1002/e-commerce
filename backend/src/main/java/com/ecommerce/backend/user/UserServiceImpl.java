@@ -189,4 +189,9 @@ public class UserServiceImpl implements UserService {
             );
         }
     }
+
+    @Override
+    public void enableUser(String username) {
+        userDAO.enableUser(username);
+    }
 }
