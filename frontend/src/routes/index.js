@@ -21,6 +21,8 @@ import ManageOrders from '../pages/Admin/components/ManageOrders/ManageOrders';
 import ProductDetails from '../pages/Admin/ProductDetails/ProductDetails';
 import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
 import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
+import ModelViewOrder from '../pages/Admin/components/ModalViewOrder/ModelViewOrder';
+import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
 import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
 
 const router = createBrowserRouter([
@@ -74,7 +76,7 @@ const router = createBrowserRouter([
         element: <AccountAddress />,
       },
       {
-        path: 'not-found',
+        path: '/*',
         element: <NotFound />,
       },
     ],
@@ -123,6 +125,14 @@ const router = createBrowserRouter([
       {
         path: 'manage-orders',
         element: <ManageOrders />,
+      },
+      {
+        path: 'manage-orders',
+        element: <ManageOrders />,
+      },
+      {
+        path: 'manage-orders/:orderID',
+        element: <ModelViewOrder />,
       },
     ],
   },

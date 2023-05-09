@@ -43,6 +43,28 @@ export const getOrder = createAsyncThunk('getOrder', async(body) => {
     }
 })
 
+export const getAllOrder = createAsyncThunk('getAllOrder', async(body) => {
+    try {
+        const response = await axiosClient4.get('orders')
+        return response.data
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
+
+export const deleteOrderForID = createAsyncThunk('deleteOrderForID', async(orderID) => {
+    try {
+        const response = await axiosClient4.delete(`orders/${orderID}`)
+        return response
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
+
 export const orderSlice = createSlice({
     name: 'order', 
     initialState, 
@@ -81,6 +103,27 @@ export const orderSlice = createSlice({
             state.status = 200
         })
         builder.addCase(updateOrders.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllOrder.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllOrder.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+            state.status = 200
+        })
+        builder.addCase(getAllOrder.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(deleteOrderForID.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        })
+        builder.addCase(deleteOrderForID.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(deleteOrderForID.pending, (state, action) => {
             state.loading = true
         })
     }

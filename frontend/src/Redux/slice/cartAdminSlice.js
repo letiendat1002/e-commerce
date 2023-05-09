@@ -1,18 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
-let dataCart= JSON.parse(localStorage.getItem('cartItem'))
+let dataCart= JSON.parse(localStorage.getItem('cartAdmin'))
 const initialState = {
   cart: dataCart || [],
   totalQuantity: 0,
   totalPrice: 0
 };
 
-export const cartSlice = createSlice({
-  name: 'cart',
+export const cartAdminSlice = createSlice({
+  name: 'cartAdmin',
   initialState,
   reducers: {
-    addToCart: (state, action) => {
+    addToCartAdmin: (state, action) => {
       const itemIndex = state.cart.findIndex((item) => item.productID === action.payload.productID);
       if (itemIndex >= 0) {
         state.cart[itemIndex].cartQuantity += 1;
@@ -22,18 +22,18 @@ export const cartSlice = createSlice({
         state.cart.push(tempProduct);
         toast.success(`${action.payload.name.slice(0, 20)} đã được thêm vào giỏ hàng`);
       }
-          localStorage.setItem('cartItem', JSON.stringify(state.cart));
+          localStorage.setItem('cartAdmin', JSON.stringify(state.cart));
           
     },
-    removeFromToCart: (state, action) => {
+    removeFromToCartAdmin: (state, action) => {
       const nextCartItems = state.cart.filter(
         (cartItem) => cartItem.productID !== action.payload.productID
       );
       state.cart = nextCartItems;
       toast.warning(`${action.payload.name.slice(0, 20)} đã xóa hết trong giỏ hàng`);
-      localStorage.setItem('cartItem', JSON.stringify(state.cart));
+      localStorage.setItem('cartAdmin', JSON.stringify(state.cart));
     },
-    decreamentFromCart: (state, action) => {
+    decreamentFromCartAdmin: (state, action) => {
       const itemIndex = state.cart.findIndex((item) => item.productID === action.payload.productID);
 
       if (state.cart[itemIndex].cartQuantity > 1) {
@@ -46,9 +46,9 @@ export const cartSlice = createSlice({
         state.cart = nextCartItems;
         toast.warning(`${action.payload.name.slice(0, 20)} đã xóa hết trong giỏ hàng`);
       }
-      localStorage.setItem('cartItem', JSON.stringify(state.cart));
+      localStorage.setItem('cartAdmin', JSON.stringify(state.cart));
     },
-    increamentFromCart: (state, action) => {
+    increamentFromCartAdmin: (state, action) => {
       const itemIndex = state.cart.findIndex((item) => item.productID === action.payload.productID);
 
       if (state.cart[itemIndex].cartQuantity >= 1) {
@@ -59,12 +59,12 @@ export const cartSlice = createSlice({
         state.cart.push(tempProduct);
         toast.success(`${action.payload.name.slice(0, 20)} đã được thêm vào giỏ hàng`);
       }
-      localStorage.setItem('cartItem', JSON.stringify(state.cart));
+      localStorage.setItem('cartAdmin', JSON.stringify(state.cart));
     },
   },
 });
 
-export const { addToCart, removeFromToCart, decreamentFromCart, increamentFromCart } =
-  cartSlice.actions;
+export const { addToCartAdmin, removeFromToCartAdmin, decreamentFromCartAdmin, increamentFromCartAdmin } =
+  cartAdminSlice.actions;
 
-export default cartSlice.reducer;
+export default cartAdminSlice.reducer;
