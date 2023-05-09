@@ -609,6 +609,73 @@
     }
 }
 
+.rating-container{
+    max-height: 80%;
+    height: auto;
+    width: 80%;
+    left: 10%;
+    margin: 0 auto;
+    top: 10%;
+    max-width: 100%;
+    position: fixed;
+    z-index: 100;
+    overflow: hidden;
+    form{
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 2rem 1rem;
+        h3{
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .product-info{
+            box-shadow: 0px 0px 0px 2px #d5d5d5;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: left;  
+            display: flex;
+            width: 45%;
+            margin: auto 0;
+            img{
+                max-height: 200px;
+                max-width: 250px;
+            }
+            p{
+                font-size: 17px;
+                font-weight: 600;
+                color: #989898;
+                display: -webkit-box;
+                max-width: 100%;
+                height: 34px;
+                margin: 0 auto;
+                line-height: 1;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                white-space:  normal;
+                text-overflow: ellipsis;
+                margin-bottom: 1rem;
+            }
+        }
+        .product-rating{
+            width: 45%;
+            display: block;
+            h3{
+                color: #cb1e23;
+                font-size: 600;
+            }
+            textarea{
+                width: 100%;
+                min-height: 100px;
+                padding: 5px 10px;
+                border-radius: 5px;
+                border: 2px solid #d5d5d5;
+            }
+        }
+    }
+}
+
+
 // RESPONSIVE IN DESKTOP
 @media screen and (min-width: 1200px) and (max-width:1400px){
     

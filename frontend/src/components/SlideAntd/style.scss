@@ -1,0 +1,13 @@
+.sider{
+    max-width: 200px;
+    max-height: 40px;
+    color: #9c9c9c;
+    width: 300px;
+}
+
+.ant-slider.ant-slider-disabled .ant-slider-track{
+    background-color: #fe8c23!important;
+}
+.ant-slider-handle{
+    display: none;
+}
