@@ -6,15 +6,19 @@ import formatProductPrice from "../../Helper/index.js";
 import Catagory from "../../assets/data/catagory.js";
 import {FaMobileAlt} from 'react-icons/fa'
 import {MdOutlineCamera} from 'react-icons/md'
-import {AiOutlineCamera} from 'react-icons/ai'
+import {AiOutlineCamera, AiFillStar} from 'react-icons/ai'
 import {CiMicrochip} from 'react-icons/ci'
 import {BiMemoryCard} from 'react-icons/bi'
+import {Pagination, Rate} from 'antd'
 import Slider from "react-slick";
 import productData from "../../Helper/GetProduct.js";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../Redux/slice/cartSlice.js";
 import { getAllProducts } from "../../Redux/slice/productSlice.js";
 import { getAllCategories } from "../../Redux/slice/categorySlice.js";
+import { getRatingForProduct } from "../../Redux/slice/ratingSlice.js";
+import { getAllUser } from "../../Redux/slice/usersSlice.js";
+import SlideAntd from '../../components/SlideAntd'
 
 const ProductDetail = ({match, history}) => {
   const {slug} = useParams();
@@ -83,6 +87,36 @@ const ProductDetail = ({match, history}) => {
     dispatch(addToCart(products))
   };
 
+  const productID = Products.filter((item) => item.slug === slug)[0]?.productID
+
+  useEffect(() => {
+    dispatch(getRatingForProduct(productID))
+  }, [Products])
+
+  const rating = useSelector(state => state.rating.data) || []
+  let totalRating = 0;
+
+  for(let i = 0 ; i < rating.length; i++){
+    totalRating = rating[i].rateAmount + totalRating
+  }
+
+  const oneRater = Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)
+  const twoRater = Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)
+  const threeRater = Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)
+  const fourRater =  Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)
+  const fiveRater =  Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)
+
+  const average = totalRating / rating.length;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const itemsPerPage = 3;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage - 1;
   return (
     <div className="product__detail container-fluid"> 
       <div className="product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
@@ -337,6 +371,74 @@ const ProductDetail = ({match, history}) => {
               </div>
           </div>
         </div>
+        
+        {
+          (rating.length > 0 ) ? (
+            <div className="rating__product">
+            <div className="rating__product--container">
+              <div style={{display: "flex", justifyContent: "space-around"}}>
+                <h5 style={{paddingRight: "10px", fontSize: "20px", fontWeight: '600'}}>Đánh giá sản phẩm</h5>
+                <h3 style={{maxWidth: "40%"}}>{product.name}</h3>
+              </div>
+              <div className="container--slider">
+                <div className="rating--title">
+                  <h5>{average}</h5>
+                  <Rate disabled style={{marginTop: "-5px", paddingRight: "10px"}} value={average}/>
+                  <span style={{fontSize: "18px", marginRight: "1rem"}}>{rating.length} đánh giá</span>
+                </div>
+                <div style={{border: "1px solid #d5d5d5", width: "350px", borderRadius: '5px', padding: "10px"}}>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>5<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {fiveRater}/>
+                    <p>{`${fiveRater}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>4<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {fourRater}/>
+                    <p>{`${fourRater}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>3<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {threeRater}/>
+                    <p>{`${threeRater}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>2<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {twoRater}/>
+                    <p>{`${twoRater}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>1<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {oneRater}/>
+                    <p>{`${oneRater}%`}</p>
+                  </div>
+                </div>
+              </div>
+              {
+                rating.slice(startIndex, endIndex + 1).map((item) => {
+                  return (
+                    <div className="rating--item-contains">
+                        <h5 style={{fontWeight: "600"}}>{item.userFullName}</h5>
+                        <Rate disabled value={item.rateAmount}/>
+                        <p>{item.comment}</p>
+                        <span style={{fontSize :" 16px", color: "#9c9c9c"}}>{item.dateRating}</span>
+                    </div>
+                  )
+                })
+              }
+            </div>
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={rating.length}
+              onChange={handlePageChange}
+            />
+        </div>
+          ) : (
+            <div></div>
+          )
+        }
+
         <div className="product__descript py-4">
             <div className="product__descript--contain col-lg-12 col-md-12 col-sm-12 col-12">
                 <div className="descript--contain--left col-lg-7 col-md-12 col-sm-12 col-12" >

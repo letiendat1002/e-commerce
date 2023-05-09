@@ -1,24 +1,17 @@
-import React, { useState } from 'react'
-import '../../assets/css/profile.scss'
-import { Link } from 'react-router-dom'
-import {RiAccountCircleLine} from 'react-icons/ri'
-import {MdNotificationsActive} from 'react-icons/md'
-import {BiMap} from 'react-icons/bi'
-import {AiFillEye, AiOutlineRight} from 'react-icons/ai'
-import {BiCommentDetail} from 'react-icons/bi'
-import {TfiMenuAlt} from 'react-icons/tfi'
-import Avatar from '../../assets/images/img-user.png'
-import {MdMonochromePhotos} from 'react-icons/md'
-import Info from '../../assets/data/info'
-import InfoImage from '../../assets/images/img-noti.png'
-import AddressImage from '../../assets/images/img-location.png'
-import {AiFillCloseCircle, AiFillDelete} from 'react-icons/ai'
-import {BiEdit} from 'react-icons/bi'
-import { useEffect } from 'react'
+import { Pagination } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { AiFillCloseCircle, AiFillDelete, AiOutlineRight } from 'react-icons/ai'
+import { BiCommentDetail, BiEdit, BiMap } from 'react-icons/bi'
+import { MdNotificationsActive } from 'react-icons/md'
+import { RiAccountCircleLine } from 'react-icons/ri'
+import { TfiMenuAlt } from 'react-icons/tfi'
 import { useDispatch, useSelector } from 'react-redux'
-import { addAddress, deleteAddress, getUserAddressForIDUser, updateAddress } from '../../Redux/slice/userAddressSlice'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import axiosClient4 from '../../Redux/api/axiosCustom'
+import { addAddress, deleteAddress, getUserAddressForIDUser, updateAddress } from '../../Redux/slice/userAddressSlice'
+import '../../assets/css/profile.scss'
+import AddressImage from '../../assets/images/img-location.png'
+import Avatar from '../../assets/images/img-user.png'
 
 const AccountAddress = () => {
     const handleOpen = () => {
@@ -177,6 +170,16 @@ const AccountAddress = () => {
           }
         })
     }
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const itemsPerPage = 4;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = currentPage * itemsPerPage - 1;
   return (
     <>
         <div className="profile container-fluid">
@@ -228,7 +231,7 @@ const AccountAddress = () => {
                                     <button onClick={handleOpen}>THÊM ĐỊA CHỈ MỚI</button>
                                 </div>
                                     {
-                                        addresses.map((item) => {
+                                        addresses.slice(startIndex, endIndex + 1).map((item) => {
                                             return (
                                                 <div className="item--right--containers">
                                                 <div className="right--container-content">
@@ -241,11 +244,17 @@ const AccountAddress = () => {
                                                 <div className="right--container-action">
                                                     <button onClick={() => handleOpenUpdate(item.userAddressID)}><BiEdit /><span>Chỉnh sửa</span></button>
                                                     <i onClick = {() => handleDeleteAddress(item.userAddressID)}><AiFillDelete /></i>
-                                                </div>
+                                                </div>      
                                             </div>
                                             )
                                         })
                                     }
+                                <Pagination style={{padding: "1rem 0"}}
+                                        current={currentPage}
+                                        pageSize={itemsPerPage}
+                                        total={addresses.length}
+                                        onChange={handlePageChange}
+                                        />
                                 </>
                             ) : (
                                 <>

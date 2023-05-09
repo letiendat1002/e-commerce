@@ -9,7 +9,7 @@ import orderReducer from './slice/paymentSlice'
 import orderDetailReducer from './slice/orderDetailSlice';
 import UserAPIReducer from './slice/usersSlice';
 import cartAdminReducer from './slice/cartAdminSlice';
-
+import ratingReducer from './slice/ratingSlice'
 const store = configureStore({
   reducer: {
     allCart: cartReducer,
@@ -20,7 +20,8 @@ const store = configureStore({
     userAddress: addressReducer,
     order: orderReducer,
     orderDetail: orderDetailReducer, 
-    userAPI: UserAPIReducer
+    userAPI: UserAPIReducer, 
+    rating: ratingReducer,
   },
   // authSlice: authSignInSlice,
 });
