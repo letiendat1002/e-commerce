@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`User` (
   `Phone` VARCHAR(255) NOT NULL,
   `Image` VARCHAR(255) NOT NULL,
   `Role` VARCHAR(255) NOT NULL,
-  `EmailValidationStatus` VARCHAR(255) NOT NULL,
+  `Locked` BIT(1) NOT NULL,
+  `Enabled` BIT(1) NOT NULL,
   PRIMARY KEY (`UserID`),
   UNIQUE INDEX `email_UNIQUE` (`Email` ASC) VISIBLE,
   UNIQUE INDEX `phone_UNIQUE` (`Phone` ASC) VISIBLE)

@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import _ from 'lodash';
 import { putUpdateUser } from '../../../../services/apiServiceUser';
 import './ModalUpdateUser.scss';
+import { GrCheckmark } from 'react-icons/gr';
 
 const ModalUpdateUser = (props) => {
   const {
@@ -110,7 +111,7 @@ const ModalUpdateUser = (props) => {
         backdrop='static'
         className='modal-add-user'>
         <Modal.Header closeButton>
-          <Modal.Title>Add new user</Modal.Title>
+          <Modal.Title>Update User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form className='row gx-5'>
@@ -129,7 +130,7 @@ const ModalUpdateUser = (props) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-
+{/* 
             <div className='col-md-6'>
               <label
                 className='form-label'
@@ -144,7 +145,7 @@ const ModalUpdateUser = (props) => {
                 disabled
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <div className='col-md-6'>
               <label
@@ -205,11 +206,10 @@ const ModalUpdateUser = (props) => {
                 onChange={(e) => setGender(e.target.value)}>
                 <option value='MALE'>MALE</option>
                 <option value='FEMALE'>FEMALE</option>
-                <option value='OTHER'>OTHER</option>
               </select>
             </div>
 
-            <div className='col-12'>
+            {/* <div className='col-12'>
               <label
                 htmlFor='img'
                 className='form-label label-upload'>
@@ -234,7 +234,7 @@ const ModalUpdateUser = (props) => {
               ) : (
                 <span>Upload File Image</span>
               )}
-            </div>
+            </div> */}
           </form>
         </Modal.Body>
         <Modal.Footer>
@@ -249,8 +249,9 @@ const ModalUpdateUser = (props) => {
             // onClick={handleCloseModal}
             onClick={handleCreateUser}
             // onClick={handleClose}
+            style={{display:"flex",justifyContent:'space-between',alignItems:'center',gap:'5px'}}
           >
-            Save Changes
+             Update <GrCheckmark/>
           </Button>
         </Modal.Footer>
       </Modal>

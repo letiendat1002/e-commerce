@@ -29,6 +29,16 @@ const ModalViewUser = (props) => {
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('');
 
+  let checkAdmin;
+  if (data1.roles) {
+    checkAdmin = data1?.roles.includes('ROLE_ADMIN');
+  }
+
+  // console.log(checkAdmin);
+  // if (checkAdmin === true) {
+  //   console.log(data1?.roles[14]);
+  //   setRole(data1?.roles[14]);
+  // }
   useEffect(() => {
     if (!_.isEmpty(data1)) {
       setEmail(data1.email);
@@ -43,7 +53,6 @@ const ModalViewUser = (props) => {
     }
   }, [data1]);
 
-
   return (
     <div>
       <Modal
@@ -54,7 +63,7 @@ const ModalViewUser = (props) => {
         backdrop='static'
         className='modal-add-user'>
         <Modal.Header closeButton>
-          <Modal.Title>Add new user</Modal.Title>
+          <Modal.Title>Infomation User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form className='row '>
@@ -75,21 +84,6 @@ const ModalViewUser = (props) => {
 
             <div className='col-md-6'>
               <label
-                className='form-label my-2 '
-                htmlFor='inputPassword'>
-                Password
-              </label>
-              <input
-                type='password'
-                className='form-control'
-                id='inputPassword'
-                value={password}
-                disabled
-              />
-            </div>
-
-            <div className='col-md-6'>
-              <label
                 htmlFor='inputUsername'
                 className='form-label my-2'>
                 Username
@@ -98,11 +92,12 @@ const ModalViewUser = (props) => {
                 type='text'
                 className='form-control'
                 id='inputUsername'
-                value={username}
+                style={{ color: username.length === 0 ? 'red' : 'black' }}
+                value={username.length === 0 ? 'No data' : username}
                 disabled
               />
             </div>
-            <div className='col-md-4'>
+            <div className='col-md-6'>
               <label
                 htmlFor='inputRole'
                 className='form-label my-2'>
@@ -113,7 +108,9 @@ const ModalViewUser = (props) => {
                 className='form-select'
                 value={role}
                 disabled>
-                <option value={role}>{role}</option>
+                <option value={checkAdmin ? 'ADMIN' : role}>
+                  {checkAdmin ? 'ADMIN' : role.substr(5)}
+                </option>
                 {/* <option value='ADMIN'>ROLE_ADMIN</option> */}
               </select>
             </div>
@@ -143,21 +140,22 @@ const ModalViewUser = (props) => {
                 type='text'
                 className='form-control'
                 id='inputUsername'
-                value={phone}
+                style={{ color: phone.length === 0 ? 'red' : 'black' }}
+                value={phone.length === 0 ? 'No data' : phone}
                 disabled
               />
             </div>
 
-            <div className='col-12'>
+            {/* <div className='col-12'>
               <label
                 htmlFor='img'
                 className='form-label my-2 label-upload'>
                 <AiFillPlusCircle style={{ color: 'green' }} />
                 Upload File Image
               </label>
-            </div>
+            </div> */}
 
-            <div className='col-12 img-preview text-center'>
+            {/* <div className='col-12 img-preview text-center'>
               {previewImage ? (
                 <img
                   src={previewImage}
@@ -166,7 +164,7 @@ const ModalViewUser = (props) => {
               ) : (
                 <span>Upload File Image</span>
               )}
-            </div>
+            </div> */}
           </form>
         </Modal.Body>
         <Modal.Footer>
@@ -175,11 +173,11 @@ const ModalViewUser = (props) => {
             onClick={handleClose}>
             Close
           </Button>
-          <Button
+          {/* <Button
             variant='primary'
             onClick={handleClose}>
             Save Changes
-          </Button>
+          </Button> */}
         </Modal.Footer>
       </Modal>
     </div>

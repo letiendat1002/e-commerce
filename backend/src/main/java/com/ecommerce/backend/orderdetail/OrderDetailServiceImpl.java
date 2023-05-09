@@ -6,10 +6,10 @@ import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -88,7 +88,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public OrderDetailDTO addOrderDetail(OrderDetailRequest request) {
         checkIfOrderDetailNotExistsByIdOrThrow(
                 request.orderID(),

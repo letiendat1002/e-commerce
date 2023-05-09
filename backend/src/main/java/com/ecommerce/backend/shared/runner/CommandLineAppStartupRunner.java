@@ -23,11 +23,12 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
             var admin = new User(
                     email,
                     passwordEncoder.encode(password),
-                    "",
+                    "Admin",
                     Gender.MALE,
                     "",
                     "",
-                    UserRole.ADMIN
+                    UserRole.ADMIN,
+                    true
             );
             userRepository.save(admin);
         }

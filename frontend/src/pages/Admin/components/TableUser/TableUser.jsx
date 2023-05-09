@@ -6,6 +6,7 @@ import Pagination from '../Pagination/Pagination';
 import Loading from '../../../../components/Loading/Loading';
 
 import './TableUser.scss';
+import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
 
 const TableUser = (props) => {
   const { data, setShowModal, handleClickBtnDelete, callApiWithPaginate, handleClickBtnView } =
@@ -13,7 +14,6 @@ const TableUser = (props) => {
 
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState('');
-  console.log(data);
 
   return (
     <>
@@ -22,19 +22,43 @@ const TableUser = (props) => {
           striped
           bordered
           hover
-          className='table_users '>
+          className='table_users '
+          style={{
+            borderRadius: '6px',
+            overflow: 'hidden',
+          }}>
           <thead>
             <tr>
-              <th scope='col'>No</th>
               <th
                 scope='col'
                 className='text-center'>
-                Avatar
+                No
               </th>
-              <th scope='col'>Email</th>
-              <th scope='col'>Username</th>
-              <th scope='col'>Role</th>
-              <th scope='col'>Action</th>
+              {/* <th
+                scope='col'
+                className='text-center'>
+                Avatar
+              </th> */}
+              <th
+                scope='col'
+                className='text-center'>
+                Email
+              </th>
+              <th
+                scope='col'
+                className='text-center'>
+                Fullname
+              </th>
+              <th
+                scope='col'
+                className='text-center'>
+                Role
+              </th>
+              <th
+                scope='col'
+                className='text-center'>
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -49,35 +73,43 @@ const TableUser = (props) => {
             ) : (
               data &&
               data.length > 0 &&
-                data.map((x, idx) => {
+              data.map((x, idx) => {
+                const checkAdmin = x.roles.includes('ROLE_ADMIN');
                 return (
                   <tr key={idx}>
-                    <th scope='row'>{idx+1}</th>
-                    <td className='row_img'>
+                    <th
+                      scope='row'
+                      className='text-center'>
+                      {idx + 1}
+                    </th>
+                    {/* <td className='row_img'>
                       <img
                         style={{ width: '40px', height: '40px' }}
                         src={`data:image/jpeg;base64,${x.image}`}
                         alt=''
                       />
-                    </td>
+                    </td> */}
                     <td>{x.email}</td>
-                    <td>{x.fullName}</td>
-                    <td>{x.roles[0]}</td>
+                    <td style={{ color: x.fullName.length === 0 ? 'red' : 'black' }}>
+                      {x.fullName.length === 0 ? 'No data' : x.fullName}
+                    </td>
+                    <td>{checkAdmin ? x.roles[14].substr(5) : x.roles[0].substr(5)}</td>
                     <td>
                       <button
-                        className='btn btn-primary'
+                        className='btn btn-info'
                         onClick={() => handleClickBtnView(x)}>
-                        View
+                        <GrFormView />
                       </button>
                       <button
                         className='btn btn-success mx-3'
-                        onClick={() => setShowModal(x,x.userID)}>
-                        Update
+                        disabled={checkAdmin}
+                        onClick={() => setShowModal(x, x.userID)}>
+                        <GrEdit />
                       </button>
                       <button
                         className='btn btn-danger'
                         onClick={() => handleClickBtnDelete(x)}>
-                        Delete
+                        <GrFormTrash />
                       </button>
                     </td>
                   </tr>

@@ -61,12 +61,18 @@ const Login = () => {
     const { email, password } = values;
 
     const res = await dispatch(login({ email, password }));
-
-    if (res.payload.status === 200) {
-      toast.success(`Wellcom back ${res?.payload?.data[0].email} `)
-      navigate('/')
+    if (res) {
+      if (res.payload.status === 200) {
+        toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
+        const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
+        if (checkedAdmin) {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      }
+      form.resetFields();
     }
-    form.resetFields();
   };
 
   const handleLogin = (item) => {
@@ -80,7 +86,6 @@ const Login = () => {
   };
 
   const handleRegister = async (values) => {
-
     const { fullName, gender, password, email } = values;
     const data = {
       image: '',
@@ -93,14 +98,13 @@ const Login = () => {
 
     const res = await dispatch(register(data));
 
-    if (res.payload.status === 200) {
+    if (res?.payload.status === 200) {
       toast.success(`Register sucessfull ${res?.payload?.message} `);
-      handleLogin('signin')
+      handleLogin('signin');
     }
 
     if (res.payload.status === 400) {
       toast.success(`Something wrong ${res?.payload?.message} `);
-
     }
     // form.resetFields();
     // document.location.href = '/';
@@ -424,7 +428,9 @@ const Login = () => {
                 </span>
               </div>
             </div>
-            <Button htmlType='submit' onClick={()=>handleLogin('signin')}>
+            <Button
+              htmlType='submit'
+              onClick={() => handleLogin('signin')}>
               <span>Đăng ký</span>
             </Button>
           </Form>
@@ -433,8 +439,7 @@ const Login = () => {
             style={{ padding: '20px 0' }}>
             <span>Bạn đã có tài khoản?</span>
             <Link
-              onClick={() => handleLogin('signin')
-              }
+              onClick={() => handleLogin('signin')}
               className='signin'>
               <span>Đăng Nhập</span>
             </Link>

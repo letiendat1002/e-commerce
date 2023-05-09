@@ -23,6 +23,7 @@ import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
 import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
 import ModelViewOrder from '../pages/Admin/components/ModalViewOrder/ModelViewOrder';
 import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
+import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
 
 const router = createBrowserRouter([
   {
@@ -112,6 +113,10 @@ const router = createBrowserRouter([
       {
         path: 'manage-categories',
         element: <ManageCategory />,
+      },
+      {
+        path: 'manage-categories/:idCategory',
+        element: <ProductFromCategory />,
       },
       {
         path: 'products-filters',

@@ -4,10 +4,10 @@ import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -186,6 +186,32 @@ public class UserServiceImpl implements UserService {
         if (!isExisted) {
             throw new ResourceNotFoundException(
                     "User not found by userID {%d}".formatted(userID)
+            );
+        }
+    }
+
+    @Override
+    public void enableUser(String username) {
+        userDAO.enableUser(username);
+    }
+
+    @Override
+    public UserDTO updateUserPassword(String email, String newPassword) {
+        checkIfUserExistsByEmailOrThrow(email);
+
+        userDAO.updateUserPassword(
+                email,
+                passwordEncoder.encode(newPassword)
+        );
+
+        return userDTOMapper.apply(selectUserByEmailOrThrow(email));
+    }
+
+    private void checkIfUserExistsByEmailOrThrow(String email) {
+        var isExisted = userDAO.existsUserByEmail(email);
+        if (!isExisted) {
+            throw new ResourceNotFoundException(
+                    "User not found by email {%s}".formatted(email)
             );
         }
     }

@@ -7,14 +7,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Language from '../components/Lang/Language';
 import './HeaderAdmin.scss';
+import { logout } from '../../../Redux/slice/userSlice';
 
 const HeaderAdmin = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { current } = useSelector((state) => state.user);
-  console.log(current);
-  const { username, email, confirmed } = current;
+  const { username, email } = current[0];
 
   // const dataLocal = JSON.parse(localStorage.getItem('userLogin')) || [];
   // console.log(dataLocal);
@@ -29,7 +29,8 @@ const HeaderAdmin = (props) => {
   const handleLogOut = () => {
     // dispatch(logoutAction());
     console.log('Logout');
-    navigate('/admin/login');
+    dispatch(logout());
+    navigate('/login');
     // document.location.href="/admin/login"
   };
 
@@ -37,31 +38,19 @@ const HeaderAdmin = (props) => {
     <>
       <Language />
 
-      {username && confirmed ? (
+      {email  ? (
         <NavDropdown
           title={email}
           id='basic-nav-dropdown'>
-          <NavDropdown.Item>{username}</NavDropdown.Item>
+          <NavDropdown.Item>Profile</NavDropdown.Item>
           <NavDropdown.Item onClick={handleLogOut}>LogOut</NavDropdown.Item>
-          <NavDropdown.Item
-            onClick={handleLogin}
-            tag={Link}
-            to='/admin/login'>
-            Login
-          </NavDropdown.Item>
         </NavDropdown>
       ) : (
         <NavDropdown
           title='Account'
           id='basic-nav-dropdown'>
           <NavDropdown.Item>Profile</NavDropdown.Item>
-          <NavDropdown.Item>LogOut</NavDropdown.Item>
-          <NavDropdown.Item
-            onClick={handleLogin}
-            tag={Link}
-            to='/login'>
-            Login
-          </NavDropdown.Item>
+          <NavDropdown.Item onClick={handleLogOut}>LogOut</NavDropdown.Item>
         </NavDropdown>
       )}
     </>

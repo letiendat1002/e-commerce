@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -11,19 +11,25 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import apiService from '../../../services/apiServiceProducts';
 import styles from './ProductDetails.module.scss';
+import Loading from '../../../components/Loading/Loading';
 let cx = classNames.bind(styles);
 
 const ProductDetails = (props) => {
-  const [product, setProduct] = useState({});
-
+  const navigate = useNavigate();
   let { idProduct } = useParams();
-  console.log(idProduct);
+  const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const handleProductDeltails = async (id) => {
-    const response = await apiService.getDetailProduct(id);
-    setProduct(response?.data[0]);
+    try {
+      setLoading(true);
+      const response = await apiService.getDetailProduct(id);
+      setProduct(response?.data[0]);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
-  console.log(product);
 
   useEffect(() => {
     handleProductDeltails(idProduct);
@@ -56,7 +62,9 @@ const ProductDetails = (props) => {
 
   return (
     <>
-      {product ? (
+      {loading ? (
+        <Loading />
+      ) : product ? (
         <Container>
           <Row>
             <Form>
@@ -73,7 +81,6 @@ const ProductDetails = (props) => {
                       value={name || ''}
                       readOnly
                       defaultValue={undefined}
-                      //   onChange={(e) => handleOnChange({ name: e.target.value })}
                     />
                   </Form.Group>
                 </Col>
@@ -274,7 +281,8 @@ const ProductDetails = (props) => {
                     <Form.Control
                       type='text'
                       placeholder='Enter name camera'
-                      value={camera || ''}
+                        value={camera || ''}
+                        disabled={!camera}
                       readOnly
                     />
                   </Form.Group>
@@ -311,8 +319,11 @@ const ProductDetails = (props) => {
 
               <Button
                 variant='primary'
-                type='submit'>
-                Update
+                type='submit'
+                onClick={() => {
+                  navigate('/admin/manage-products');
+                }}>
+                Back
               </Button>
             </Form>
           </Row>
