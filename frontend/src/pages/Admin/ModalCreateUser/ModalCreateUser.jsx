@@ -195,7 +195,7 @@ const ModalCreateUser = (props) => {
               </select>
             </div>
 
-            <div className='col-12'>
+            {/* <div className='col-12'>
               <label
                 htmlFor='img'
                 className='form-label label-upload'>
@@ -219,7 +219,7 @@ const ModalCreateUser = (props) => {
               ) : (
                 <span>Upload File Image</span>
               )}
-            </div>
+            </div> */}
           </form>
         </Modal.Body>
         <Modal.Footer>
