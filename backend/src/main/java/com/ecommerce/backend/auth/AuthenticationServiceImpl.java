@@ -5,6 +5,7 @@ import com.ecommerce.backend.shared.email.CustomEmail;
 import com.ecommerce.backend.shared.email.EmailSenderService;
 import com.ecommerce.backend.shared.email.EmailTemplate;
 import com.ecommerce.backend.shared.enums.MessageStatus;
+import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.JwtAuthenticationException;
 import com.ecommerce.backend.shared.security.jwt.JwtService;
@@ -177,8 +178,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        if (!request.oldPassword().equals(request.newPassword())) {
-            userService.updateUserPassword(request.email(), request.newPassword());
+        if (request.oldPassword().equals(request.newPassword())) {
+            throw new DuplicateResourceException(
+                    "New password cannot be same as old password"
+            );
         }
+
+        userService.updateUserPassword(request.email(), request.newPassword());
     }
 }
