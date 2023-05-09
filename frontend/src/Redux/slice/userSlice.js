@@ -16,11 +16,11 @@ export const login = createAsyncThunk('user/login', async (payload) => {
   const { email, password } = payload;
   const res = await authApi.login(email, password);
   //save data local storage
-  if (res) {
-    localStorage.setItem(STORAGE_KEYS.TOKEN, res?.token);
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res?.data));
+  // if (res) {
+  //   localStorage.setItem(STORAGE_KEYS.TOKEN, res?.token);
+  //   localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res?.data));
 
-  }
+  // }
 
   //return user data
   return res;

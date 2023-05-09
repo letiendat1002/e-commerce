@@ -62,7 +62,11 @@ const Login = () => {
 
     const res = await dispatch(login({ email, password }));
     if (res) {
+      console.log(res)
       if (res.payload.status === 200) {
+        localStorage.setItem('access_token', res.payload.token)
+        localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`)
+        console.log(res.payload.data[0])
         toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
         const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
         if (checkedAdmin) {
@@ -70,6 +74,11 @@ const Login = () => {
         } else {
           navigate('/');
         }
+      }
+      else if (res.payload.status === 401){
+        toast.error('Email hoặc mật khẩu không hợp lệ!')
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('user')
       }
       form.resetFields();
     }
@@ -99,12 +108,12 @@ const Login = () => {
     const res = await dispatch(register(data));
 
     if (res?.payload.status === 200) {
-      toast.success(`Register sucessfull ${res?.payload?.message} `);
+      toast.success(`Đăng ký tài khoản thành công`);
       handleLogin('signin');
     }
 
     if (res.payload.status === 400) {
-      toast.success(`Something wrong ${res?.payload?.message} `);
+      toast.error(`Tài khoản của bạn đã tồn tại`);
     }
     // form.resetFields();
     // document.location.href = '/';
