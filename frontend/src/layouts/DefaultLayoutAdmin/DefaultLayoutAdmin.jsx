@@ -49,7 +49,6 @@ const DefaultLayoutAdmin = (props) => {
               <FaBars className='leftside' />
             </span>
 
-            {/* <FormFilterProducts /> */}
             <SearchBox/>
 
             <div className='header__admin--dropdown rightside'>

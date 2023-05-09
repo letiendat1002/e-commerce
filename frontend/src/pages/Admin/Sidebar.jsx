@@ -11,15 +11,24 @@ import {
   SidebarContent,
 } from 'react-pro-sidebar';
 import { useTranslation, Trans } from 'react-i18next';
-import { FaTachometerAlt, FaGem, FaList, FaGithub, FaRegLaughWink, FaHeart } from 'react-icons/fa';
+import {
+  FaTachometerAlt,
+  FaGem,
+  FaList,
+  FaGithub,
+  FaRegLaughWink,
+  FaHeart,
+  FaChartBar,
+} from 'react-icons/fa';
 import { FaBars } from 'react-icons/fa';
-import { DiReact } from 'react-icons/di';
+import { DiDatabase, DiReact } from 'react-icons/di';
 import { RiDashboardLine } from 'react-icons/ri';
 import { Outlet, Link, NavLink } from 'react-router-dom';
 import './Sidebar.scss';
+import { GrUserManager } from 'react-icons/gr';
 
 const Sidebar = (props) => {
-  const { collapsed, toggled, handleToggleSidebar,setCollapsed } = props;
+  const { collapsed, toggled, handleToggleSidebar, setCollapsed } = props;
   const { t } = useTranslation();
 
   const [sizeWidth, setSizeWidth] = useState();
@@ -28,7 +37,6 @@ const Sidebar = (props) => {
 
   const getSize = () => {
     setSizeWidth(window.innerWidth);
-
   };
   // useEffect(() => {
   //   window.addEventListener('resize', getSize);
@@ -38,7 +46,7 @@ const Sidebar = (props) => {
   //     setDisplay("")
   //     setBreakPoint(true)
   //   }
-    
+
   //   if (sizeWidth >= 1000) {
   //     setCollapsed(false)
   //     setDisplay("display")
@@ -46,13 +54,12 @@ const Sidebar = (props) => {
   //   }
   // }, [setCollapsed, sizeWidth]);
 
-
   return (
     <div>
       <ProSidebar
         collapsed={collapsed}
         toggled={toggled}
-        breakPoint={breakPoint ?"md":""}
+        breakPoint={breakPoint ? 'md' : ''}
         onToggle={handleToggleSidebar}>
         <Link to='/admin'>
           <SidebarHeader>
@@ -61,17 +68,26 @@ const Sidebar = (props) => {
                 padding: '24px',
                 textTransform: 'uppercase',
                 fontWeight: 'bold',
-                fontSize: 14,
+                fontSize: '16px',
                 letterSpacing: '1px',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
                 display: 'flex',
-                justifyContent:'center'
+                justifyContent: 'center',
+                color: '#ffff',
+                alignItems: 'center',
+                gap: '5px',
               }}>
-              {/* <DiReact
+              <DiDatabase
                 size={'3em'}
                 color={'00bfff'}
+              />
+              {/* <GrUserManager
+                style={{
+                  fontSize: '16px',
+                  color:'white !important'
+               }}
               /> */}
               {t('sidebar.title')}
             </div>
@@ -81,18 +97,15 @@ const Sidebar = (props) => {
         <SidebarContent>
           <Menu iconShape='circle'>
             <MenuItem
-              icon={<RiDashboardLine />}
+              icon={<FaChartBar />}
               suffix={<span className='badge red'>{t('sidebar.title3')}</span>}>
               <Link to='/admin' />
               {t('sidebar.title2')}
             </MenuItem>
-            <MenuItem icon={<FaGem />}>
-              {t('sidebar.title4')} <Link to='products-filters' />
-            </MenuItem>
           </Menu>
           <Menu iconShape='circle'>
             <SubMenu
-              suffix={<span className='badge yellow'>3</span>}
+              suffix={<span className='badge yellow'>Manager</span>}
               icon={<FaRegLaughWink />}>
               <MenuItem>
                 {t('sidebar.title5')}

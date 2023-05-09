@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Language from '../components/Lang/Language';
 import './HeaderAdmin.scss';
 import { logout } from '../../../Redux/slice/userSlice';
+import { GrLogout, GrUser } from 'react-icons/gr';
 
 const HeaderAdmin = (props) => {
   const navigate = useNavigate();
@@ -38,21 +39,17 @@ const HeaderAdmin = (props) => {
     <>
       <Language />
 
-      {email  ? (
+      <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+        <GrUser />
         <NavDropdown
           title={email}
           id='basic-nav-dropdown'>
-          <NavDropdown.Item>Profile</NavDropdown.Item>
-          <NavDropdown.Item onClick={handleLogOut}>LogOut</NavDropdown.Item>
+          <NavDropdown.Item onClick={() => {
+            navigate('/account/profile')
+          }}>Profile</NavDropdown.Item>
+          <NavDropdown.Item onClick={handleLogOut} style={{display:'flex',alignItems:'center',gap:'5px'}}>Logout <GrLogout/></NavDropdown.Item>
         </NavDropdown>
-      ) : (
-        <NavDropdown
-          title='Account'
-          id='basic-nav-dropdown'>
-          <NavDropdown.Item>Profile</NavDropdown.Item>
-          <NavDropdown.Item onClick={handleLogOut}>LogOut</NavDropdown.Item>
-        </NavDropdown>
-      )}
+      </div>
     </>
   );
 };
