@@ -18,6 +18,17 @@ export const getUserForID = createAsyncThunk('user/getuserID', async (data) => {
       }
   })
 
+export const changePassword = createAsyncThunk('user/changePassword', async(data) => {
+    try {
+        const response = await axiosClient4.put(`auth/changePassword`, data)
+        return response
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
+  
 export const getAllUser = createAsyncThunk('getAllUser', async (data) => {
     try {
           const response = await axiosClient4.get('users')
@@ -40,6 +51,16 @@ export const updateUser = createAsyncThunk('user/updateUSer', async({userID, dat
     }
 })
 
+export const resetPassword = createAsyncThunk('user/reserPassword', async(email) => {
+    try {
+        const response = await axiosClient4.post(`auth/resetPassword?email=${email}%40gmail.com`)
+        return response
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
 
 export const UserAPISlice = createSlice({
     name: "userAPI", 
@@ -66,6 +87,26 @@ export const UserAPISlice = createSlice({
         builder.addCase(getAllUser.fulfilled, (state, action) => {
             state.loading = false
             state.data = action.payload
+        })
+        builder.addCase(changePassword.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        })
+        builder.addCase(changePassword.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(changePassword.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(resetPassword.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        })
+        builder.addCase(resetPassword.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(resetPassword.rejected, (state, action) => {
+            state.loading = true
         })
     }
 })
