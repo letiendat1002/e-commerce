@@ -1,0 +1,31 @@
+package com.ecommerce.backend.user;
+
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Optional;
+
+public interface UserDAO {
+    List<User> selectAllUsers();
+
+    Optional<User> selectUserByID(BigInteger userID);
+
+    Optional<User> selectUserByEmail(String email);
+
+    boolean existsUserByEmail(String email);
+
+    boolean existsUserByID(BigInteger userID);
+
+    boolean existsUserByPhone(String phone);
+
+    boolean existsOtherUserByPhone(String phone, BigInteger userID);
+
+    Optional<User> insertUser(User user);
+
+    void deleteUserByID(BigInteger userID);
+
+    Optional<User> updateUser(User update);
+
+    void enableUser(String email);
+
+    void updateUserPassword(String email, String randomPassword);
+}
