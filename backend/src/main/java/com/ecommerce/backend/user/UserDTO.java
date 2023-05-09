@@ -12,6 +12,8 @@ public record UserDTO(
         String fullName,
         Gender gender,
         String phone,
-        String image
+        String image,
+        Boolean locked,
+        Boolean enabled
 ) {
 }

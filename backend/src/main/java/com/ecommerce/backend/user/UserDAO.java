@@ -24,4 +24,8 @@ public interface UserDAO {
     void deleteUserByID(BigInteger userID);
 
     Optional<User> updateUser(User update);
+
+    void enableUser(String email);
+
+    void updateUserPassword(String email, String randomPassword);
 }

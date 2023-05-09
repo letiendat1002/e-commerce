@@ -8,10 +8,12 @@ import addressReducer from './slice/userAddressSlice'
 import orderReducer from './slice/paymentSlice'
 import orderDetailReducer from './slice/orderDetailSlice';
 import UserAPIReducer from './slice/usersSlice';
+import cartAdminReducer from './slice/cartAdminSlice';
 
 const store = configureStore({
   reducer: {
     allCart: cartReducer,
+    allAdminCart: cartAdminReducer,
     user: userReducer,
     product: productReducer,
     categories: categoriesReducer,
