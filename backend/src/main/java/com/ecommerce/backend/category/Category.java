@@ -41,6 +41,16 @@ public class Category {
     @ToString.Exclude
     private List<Product> products;
 
+    public Category(BigInteger categoryID,
+                    String name,
+                    String slug,
+                    String image) {
+        this.categoryID = categoryID;
+        this.name = name;
+        this.slug = slug;
+        this.image = image;
+    }
+
     public Category(String name, String slug, String image) {
         this.name = name;
         this.slug = slug;
