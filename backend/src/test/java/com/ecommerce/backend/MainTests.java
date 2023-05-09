@@ -10,4 +10,8 @@ class MainTests {
 	void contextLoads() {
 	}
 
+	@Test
+	public void testRunMain() {
+		Main.main(new String[] {});
+	}
 }
