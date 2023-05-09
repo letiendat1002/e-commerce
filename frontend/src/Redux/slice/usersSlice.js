@@ -18,6 +18,17 @@ export const getUserForID = createAsyncThunk('user/getuserID', async (data) => {
       }
   })
 
+export const getAllUser = createAsyncThunk('getAllUser', async (data) => {
+    try {
+          const response = await axiosClient4.get('users')
+          return response.data
+      }
+      catch(error) {
+          console.log("error: ", error);
+          throw error
+      }
+  }) 
+
 export const updateUser = createAsyncThunk('user/updateUSer', async({userID, data}) => {
     try {
         const response = await axiosClient4.put(`users/${userID}`, data)
@@ -46,6 +57,13 @@ export const UserAPISlice = createSlice({
             state.loading = true
         })
         builder.addCase(updateUser.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        })
+        builder.addCase(getAllUser.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllUser.fulfilled, (state, action) => {
             state.loading = false
             state.data = action.payload
         })

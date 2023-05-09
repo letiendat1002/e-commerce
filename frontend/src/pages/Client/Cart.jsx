@@ -32,7 +32,11 @@ const Cart = () => {
   const handleSubmit = () => {
       if (user){
         localStorage.setItem('cartPayment', JSON.stringify(cartItems))
-        // window.location.href = '/payment';
+        window.location.href = '/payment';
+        navigate('/payment')
+      }
+      else {
+        window.location.href = '/login';
       }
   }
 
@@ -242,7 +246,7 @@ const Cart = () => {
                                       <span>Thành Tiền:</span>
                                       <h4>{formatProductPrice(total)}</h4>
                                   </div>
-                                  <Link to = {'/payment'} onClick={handleSubmit}><button type="submit" className="payment">THANH TOÁN</button></Link>
+                                  <Link  onClick={handleSubmit}><button type="submit" className="payment">THANH TOÁN</button></Link>
                               </form>
                           </div>
                       </div>
