@@ -552,6 +552,62 @@
       }
 }
 
+.change-password{
+    position: fixed;
+    top: 15%;
+    left: 35%;
+    z-index: 100;
+    opacity: 1;
+    display: flex;
+}
+
+.changepasword-container{
+    margin: 0 auto;
+    background-color: #ffffff;
+    opacity: 1;
+    position: absolute;
+    max-height: 500px;
+    min-width: 400px;
+    z-index: 100;
+    padding: 2rem;
+    opacity: 1;
+    border-radius: 8px;
+    box-shadow: 0 0 0 3px #d5d5d5;
+    h3{
+        text-align: center;
+        font-weight: 600;
+        color: #cb1c22;
+        padding-bottom: 1rem;
+    }
+    form{
+        .changepassword-container-item{
+            padding: 5px 0;
+        }
+        span{
+            font-size: 18px;
+            font-weight: 500;
+            padding-bottom: 5px;
+        }
+        input{
+            width: 100%;
+            padding: 5px 10px;
+            border: 2px solid #d5d5d5;
+            border-radius: 5px;
+        }
+        button{
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: #cb1c22;
+            color: #ffffff;
+            font-size: 18px;
+            display: flex;
+            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+        }
+    }
+}
 
 // RESPONSIVE IN DESKTOP
 @media screen and (min-width: 1200px) and (max-width:1400px){

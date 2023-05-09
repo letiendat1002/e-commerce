@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { AiOutlineRight } from 'react-icons/ai';
+import { AiFillCloseCircle, AiOutlineRight } from 'react-icons/ai';
 import { BiCommentDetail, BiMap } from 'react-icons/bi';
 import { MdMonochromePhotos, MdNotificationsActive } from 'react-icons/md';
 import { RiAccountCircleLine } from 'react-icons/ri';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getUserForID, updateUser } from '../../Redux/slice/usersSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getUserID, logout } from '../../Redux/slice/userSlice';
+import { changePassword, getUserForID, updateUser } from '../../Redux/slice/usersSlice';
 import '../../assets/css/profile.scss';
 import Avatar from '../../assets/images/img-user.png';
-import {getUserID} from '../../Redux/slice/userSlice'
-import { toast } from 'react-toastify';
 
 const Profile = () => {
   const [active, setActive] = useState(false);
@@ -106,6 +106,52 @@ const Profile = () => {
       }
       )
     }
+
+    const navigate = useNavigate()
+
+    const [oldPasswords, setOldPasswords] = useState("")
+    const [newPasswords, setNewPasswords] = useState("")
+    const handleChangePassword = (e) => {
+      e.preventDefault()
+      const userAPI = user[0]
+      const email = userAPI.email
+      const token = localStorage.getItem('access_token')
+      const oldPassword = oldPasswords
+      const newPassword = newPasswords
+
+      const data = {
+        email, 
+        token,
+        oldPassword,
+        newPassword
+      }
+      dispatch(changePassword(data))
+      .then((res) => {
+        if (res.payload.status === 400){
+          toast.error("Mật khẩu mới trùng với mật khẩu cũ")
+        }
+        else if (res.payload.status === 200){
+          toast.error("Thay đổi mật khẩu thành công!")
+          navigate('/login')
+          dispatch(logout())
+        }
+      })
+      dispatch(getUserForID(userID))
+      dispatch(getUserID(userID))
+    }
+
+    const handleOpenUpdateModel = () => {
+      const overlay = document.querySelector('.change-passwordoverlay')
+      const formUpdate = document.querySelector('.change-password')
+      if (overlay.classList.contains('d-none') && formUpdate.classList.contains('d-none')){
+        overlay.classList.remove('d-none')
+        formUpdate.classList.remove('d-none')
+      }
+      else {
+        overlay.classList.add('d-none')
+        formUpdate.classList.add('d-none')
+      }
+    } 
   return (
     <div className='profile container-fluid'>
       <div
@@ -179,7 +225,10 @@ const Profile = () => {
             </Link>
           </div>
           <div className='profile__container--item--right col-lg-9 col-md-12 col-sm-12 col-12 px-3'>
-            <h3>Chỉnh Sửa Thông Tin</h3>
+            <div style={{display: "flex", justifyContent: "space-between", padding: "0 2rem"}}>
+              <h3>Chỉnh Sửa Thông Tin</h3>
+              <button style={{padding: "5px 20px", borderRadius: "5px", backgroundColor: "#e02f2f", color: "#ffffff", fontSize :"18px"}} onClick={() => handleOpenUpdateModel()}>Đổi Mật Khẩu</button>
+            </div>
             <div className='item--right--container'>
               <img
                 src={Avatar}
@@ -392,6 +441,26 @@ const Profile = () => {
                 <button onClick={handleUpdateAccount}>Lưu Thay Đổi</button>
               </form>
             </div>
+          </div>
+        </div>
+        <div className="overlay change-passwordoverlay d-none" onClick={() => handleOpenUpdateModel()}></div>
+        <div className="change-password d-none">
+          <div className="changepasword-container">
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+              <h3>Thay Đổi Mật Khẩu</h3>
+              <AiFillCloseCircle onClick={() => handleOpenUpdateModel()} style={{fontSize :"25px", color: "#000000"}}/>
+            </div>
+            <form>
+              <div className="changepassword-container-item">
+                <span>Mật khẩu cũ</span><br />
+                <input type="password" onChange={(e) => setOldPasswords(e.target.value)} placeholder='Vui lòng nhập mật khẩu hiện tại'/>
+              </div>
+              <div className="changepassword-container-item">
+                <span>Mật khẩu mới</span><br />
+                <input type="password" onChange={(e) => setNewPasswords(e.target.value)} placeholder='Vui lòng nhập mật khẩu thay đổi'/>
+              </div>
+              <button onClick={(e) => handleChangePassword(e)}>Đổi mật khẩu</button>
+            </form>
           </div>
         </div>
       </div>

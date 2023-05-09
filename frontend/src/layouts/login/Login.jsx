@@ -1,18 +1,18 @@
 import { Button, Checkbox, Form, Input, Select } from 'antd';
 import React, { useState } from 'react';
-import { AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
+import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { BsFacebook } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { login, register } from '../../Redux/slice/userSlice';
+import { resetPassword } from '../../Redux/slice/usersSlice';
 import Logo from '../../assets/images/Logo.svg';
 import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
 import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
 import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
 import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
-import { authenticate } from './AuthSignInSlice';
 import './style.scss';
-import { login, register } from '../../Redux/slice/userSlice';
-import { toast } from 'react-toastify';
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -62,11 +62,9 @@ const Login = () => {
 
     const res = await dispatch(login({ email, password }));
     if (res) {
-      console.log(res)
       if (res.payload.status === 200) {
         localStorage.setItem('access_token', res.payload.token)
         localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`)
-        console.log(res.payload.data[0])
         toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
         const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
         if (checkedAdmin) {
@@ -113,11 +111,50 @@ const Login = () => {
     }
 
     if (res.payload.status === 400) {
-      toast.error(`Tài khoản của bạn đã tồn tại`);
+      if (res.payload.message == `Phone {${res.meta.arg.phone}} is already taken`){
+        toast.error(`Số điện thoại đăng ký đã tồn tại!`);
+      }
+      else if (res.payload.message == `Email {${res.meta.arg.email}} is already taken`){
+        toast.error(`Tài khoản đăng ký đã tồn tại!`);
+      }
     }
     // form.resetFields();
     // document.location.href = '/';
   };
+
+  const [emailReset, setEmailReset] = useState('')
+
+  const handleCloseResetForm = () => {
+    const overlay = document.querySelector('.overlay')
+    const forgetForm = document.querySelector('.forgetpassword')
+    if (overlay.classList.contains('d-none') && forgetForm.classList.contains('d-none')){
+      overlay.classList.remove('d-none')
+      forgetForm.classList.remove('d-none')
+      setEmailReset('')
+    }
+    else{
+      overlay.classList.add('d-none')
+      forgetForm.classList.add('d-none')
+      setEmailReset('')
+    }
+  }
+
+  const handleResetPassword = (e) => {
+      e.preventDefault()
+      const email = emailReset
+      dispatch(resetPassword(email))
+      .then((res) => {
+        if (res.payload.status == 200){
+          toast.success("Yêu cầu reset mật khẩu thành công!")
+          handleCloseResetForm()
+        }
+        else if (res.payload.status == 404){
+          if (res.payload.message == `User not found by email {${email}@gmail.com}`){
+            toast.error("Email không tồn tại với tài khoản nào!")
+          }
+        }
+      })
+  }
 
   return (
     <div id='login'>
@@ -208,7 +245,7 @@ const Login = () => {
                 </Checkbox>
               </Form.Item>
               <div className='login__left--contains--child'>
-                <Link>
+                <Link onClick={() => handleCloseResetForm()}>
                   <span>Quên mật khẩu?</span>
                 </Link>
               </div>
@@ -455,6 +492,25 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <div onClick={() => handleCloseResetForm()} className="overlay d-none"></div>
+      <div className="forgetpassword d-none">
+            <div className="forgetPassword">
+              <div style={{display: "flex", justifyContent: "space-between", padding: "0 1rem"}}>
+                <h3>Lấy mật khẩu</h3>
+                <AiFillCloseCircle style={{fontSize: "20px"}} onClick={() => handleCloseResetForm()}/>
+              </div>
+              <p>Vui lòng nhập email nếu bạn muốn lấy password mới!</p>
+              <form>
+                <span>Email</span><br />
+                <input onChange={(e) => setEmailReset(e.target.value)} type="text" placeholder='Vui lòng nhập email' /><br />
+                <span defaultValue={emailReset} style={{fontSize: "14px", color: "#e02f2f", textAlign: "center"}}
+                >Lưu ý địa chỉ Email không nhập @gmail hoặc @...</span>
+                <button onClick={(e) => handleResetPassword(e)}>
+                  Reset Password
+                </button>
+              </form>
+            </div>
+          </div>
     </div>
   );
 };
