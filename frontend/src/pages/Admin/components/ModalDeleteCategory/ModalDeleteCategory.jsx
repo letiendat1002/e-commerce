@@ -4,35 +4,37 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import apiService from '../../../../services/apiServiceProducts';
-const ModalDeleteProduct = (props) => {
-  const { setShowDeleteModal, setSetShowDeleteModal, dataDelete,callApiProdcuts } = props;
+const ModalDeleteCategory = (props) => {
+  const { setShowModalDelete, showModalDelete, dataDelete, callApiCategory } = props;
+  const { categoryID } = dataDelete;
 
   const handleClose = () => {
-    setSetShowDeleteModal(false);
+    setShowModalDelete(false);
   };
 
   const handleSubmitDelete = async () => {
-    let data = await apiService.deleteProduct(dataDelete.productID);
-    if (data && data.status === 200) {
-      callApiProdcuts()
-      toast.success(data.message);
+    let { status, message } = await apiService.deleteCategories(categoryID);
+    if (status === 200) {
+      toast.success(message);
       handleClose();
-      }
-
-    if (data && data.status !== 200) {
-      toast.error(data.message);
+      callApiCategory();
     }
+
+    if (status !== 200) {
+      toast.error(message);
+    }
+    callApiCategory();
   };
   return (
     <>
       <Modal
-        show={setShowDeleteModal}
+        show={showModalDelete}
         onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Do you to delete this email ???</Modal.Title>
+          <Modal.Title>Do you to delete this category ???</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Do you want delete: {dataDelete.name && dataDelete.name ? dataDelete.name : ''}
+          Do you want delete category: {dataDelete.name && dataDelete.name ? dataDelete.name : ''}
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -51,6 +53,6 @@ const ModalDeleteProduct = (props) => {
   );
 };
 
-ModalDeleteProduct.propTypes = {};
+ModalDeleteCategory.propTypes = {};
 
-export default ModalDeleteProduct;
+export default ModalDeleteCategory;

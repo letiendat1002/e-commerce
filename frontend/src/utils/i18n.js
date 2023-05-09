@@ -23,7 +23,7 @@ i18n
           sidebar: {
             title: 'Admin',
             title2: 'Dashboard',
-            title3: 'Manage',
+            title3: 'Overview',
             title4: 'Product',
             title5: 'Manage Users',
             title6: 'Manage Category',
@@ -46,7 +46,7 @@ i18n
           sidebar: {
             title: 'Trang Quản Trị',
             title2: 'Bảng Điều Khiển',
-            title3: 'Quản Lý',
+            title3: 'Tổng thể',
             title4: 'Sản Phẩm',
             title5: 'Quản Lý Người Dùng',
             title6: 'Quản Lý Danh Mục',
