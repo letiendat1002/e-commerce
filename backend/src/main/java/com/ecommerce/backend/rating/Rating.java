@@ -76,12 +76,14 @@ public class Rating {
     public Rating(BigInteger userID,
                   BigInteger orderID,
                   BigInteger productID,
+                  User user,
                   Integer rateAmount,
                   String comment,
                   LocalDate dateRating) {
         this.userID = userID;
         this.orderID = orderID;
         this.productID = productID;
+        this.user = user;
         this.rateAmount = rateAmount;
         this.comment = comment;
         this.dateRating = dateRating;
