@@ -192,7 +192,7 @@ const Payment = () => {
                                                                         return (
                                                                             <div className="contain--container--item--bill--child" style={{padding: "5px 0", textAlign: "center", display : "flex", alignItems : "center"}}>
                                                                                 {/* <img src={item.Image}  */}
-                                                                                <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />
+                                                                                <Image src={require(`../../assets/images/${item.image}`)} preview = {true} />
                                                                                 <span style={{textAlign:"center"}}>{item.cartQuantity}</span>
                                                                                 <p>{formatProductPrice(item.cartQuantity * item.unitPrice)}</p>
                                                                             </div>

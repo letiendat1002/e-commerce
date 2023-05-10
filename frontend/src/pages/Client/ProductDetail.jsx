@@ -157,12 +157,12 @@ const ProductDetail = ({match, history}) => {
                       Products.map((product) => {
                         if (product.slug === slug && previewImg === ''){
                           return (
-                            <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" id="product-main-image" />
+                            <img src={require(`../../assets/images/${product.image}`)} alt="" id="product-main-image" />
                           )
                         }
                         else if (product.slug === slug && previewImg != []){
                           return (
-                            <img src={require(`../../assets/images/${product.productID}/${previewImg}`)} alt="" id="product-main-image" />
+                            <img src={require(`../../assets/images/${previewImg}`)} alt="" id="product-main-image" />
                           )
                         }
                       })
@@ -174,25 +174,25 @@ const ProductDetail = ({match, history}) => {
                           return (
                             <div className="product-image-slider col-lg-12 col-md-12 col-sm-12 col-12 pe-4">
                               <img
-                                  src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)}
+                                  src={require(`../../assets/images/${product.imageReview1}`)}
                                   alt=""
                                   className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                   onClick={() => setPreviewImg(product.imageReview1)}
                                   />
                               <img
-                                src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)}
+                                src={require(`../../assets/images/${product.imageReview2}`)}
                                 alt=""
                                 className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                 onClick={() => setPreviewImg(product.imageReview2)}
                               />
                               <img
-                                src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)}
+                                src={require(`../../assets/images/${product.imageReview3}`)}
                                 alt=""
                                 className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                 onClick={() => setPreviewImg(product.imageReview3)}
                               />
                               <img
-                                src={require(`../../assets/images/${product.productID}/${product.image}`)}
+                                src={require(`../../assets/images/${product.image}`)}
                                 alt=""
                                 className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                 onClick={() => setPreviewImg(product.image)}
@@ -451,16 +451,16 @@ const ProductDetail = ({match, history}) => {
                             <div className="product__descript-slider">
                                 <Slider {...settings} >
                                     <div className="descript-slider--item">
-                                        <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                                        <img src={require(`../../assets/images/${product.image}`)} alt="" />
                                     </div>
                                    <div className="descript-slider--item">
-                                    <img src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)} alt="" />
+                                    <img src={require(`../../assets/images/${product.imageReview1}`)} alt="" />
                                     </div>
                                     <div className="descript-slider--item">
-                                      <img src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)} alt="" />
+                                      <img src={require(`../../assets/images/${product.imageReview2}`)} alt="" />
                                     </div>
                                     <div className="descript-slider--item">
-                                      <img src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)} alt="" />
+                                      <img src={require(`../../assets/images/${product.imageReview3}`)} alt="" />
                                     </div>
                                 </Slider>
                             </div>
@@ -471,7 +471,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.imageReview2}`)} alt="" />
                             </div>
                             <div className="product__descript--content-child">
                               <p className="danhgia">Tương lai công nghệ hiển thị</p>
@@ -480,7 +480,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.imageReview3}`)} alt="" />
                             </div>
                             <div className="product__descript--content-child">
                               <p className="danhgia">Vẻ đẹp từ sắc màu thiên nhiên tinh tế</p>
@@ -489,7 +489,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.imageReview1}`)} alt="" />
                             </div>
                           </div>
                         )
@@ -632,7 +632,7 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, laptop).map((product,idx) => {
                       return (
                         <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
                               <p className="price">{formatProductPrice(product.unitPrice)}</p>
                         </div></Link>
@@ -645,7 +645,7 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, phone).map((product,idx) => {
                       return (
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
                               <p className="price">{formatProductPrice(product.unitPrice)}</p>
                           </div></Link>
@@ -658,7 +658,7 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, tablet).map((product,idx) => {
                       return (
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
                               <p className="price">{formatProductPrice(product.unitPrice)}</p>
                           </div></Link>
@@ -671,7 +671,7 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, PC).map((product,idx) => {
                       return (
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
                               <p className="price">{formatProductPrice(product.unitPrice)}</p>
                           </div></Link>

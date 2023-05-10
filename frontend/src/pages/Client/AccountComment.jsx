@@ -197,7 +197,7 @@ const AccountComment = () => {
                                                     return (
                                                         <tr>
                                                             <td>{item.orderID}</td>
-                                                            <td><img style={{maxHeight: "100px", maxWidth :"100px"}} src={require(`../../assets/images/${productMatches.productID}/${productMatches.image}`)} alt="" srcset="" /></td>
+                                                            <td><img style={{maxHeight: "100px", maxWidth :"100px"}} src={require(`../../assets/images/${productMatches.image}`)} alt="" srcset="" /></td>
                                                             <td>{<Rate disabled value={item.rateAmount}/>}</td>
                                                             <td>{item.comment}</td>
                                                             <td>{item.dateRating}</td>
@@ -256,7 +256,7 @@ const AccountComment = () => {
                                 </div>
                                 <div style={{display: "flex", justifyContent: "space-around"}}>
                                     <div className="product-info">
-                                        <img src={require(`../../assets/images/${ratingItem[0].productID}/${ratingItem[0].image}`)} alt="" />
+                                        <img src={require(`../../assets/images/${ratingItem[0].image}`)} alt="" />
                                         <div style={{paddingTop: "3rem"}}>
                                             <p>{ratingItem[0].name}</p>
                                             <p>{ratingItem[0].unitPrice}</p>

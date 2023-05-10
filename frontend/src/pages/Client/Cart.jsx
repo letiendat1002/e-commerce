@@ -117,7 +117,7 @@ const Cart = () => {
     return ({
         STT: <span>{index + 1}</span>, 
         name: <p>{item.name}</p>,
-        image: <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />,
+        image: <Image src={require(`../../assets/images/${item.image}`)} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>
@@ -146,7 +146,7 @@ const Cart = () => {
     return ({
         STT: <span>{index + 1}</span>, 
         name: <p>{item.name}</p>,
-        image: <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />,
+        image: <Image src={require(`../../assets/images/${item.image}`)} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>

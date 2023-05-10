@@ -267,7 +267,7 @@ const ManageOrders = (props) => {
                     return (
                       <tr>
                         <td><span>{item.name}</span></td>
-                        <td><Image src={require(`../../../../assets/images/${item.productID}/${item.image}`)} preview = {true}/></td>
+                        <td><Image src={require(`../../../../assets/images/${item.image}`)} preview = {true}/></td>
                         <td><span>{formatProductPrice(item.unitPrice)}</span></td>
                         <td>
                           <button onClick={() => handleAddItemTocart(item)}>
@@ -302,7 +302,7 @@ const ManageOrders = (props) => {
                               cartAdmin.slice(startIndexCartAdmin, endIndexCartAdmin + 1).map((item) => {
                                 return (
                                   <tr>
-                                    <td><Image src={require(`../../../../assets/images/${item.productID}/${item.image}`)} preview = {true}/></td>
+                                    <td><Image src={require(`../../../../assets/images/${item.image}`)} preview = {true}/></td>
                                     <td><div style={{display: "flex", justifyContent: "space-evenly", padding: "0 1.5rem"}}>
                                         <i onClick={() => dispatch(decreamentFromCartAdmin(item))} style={{color: "#f00c00"}}><GrFormSubtract /></i>
                                         <span>{item.cartQuantity}</span>
