@@ -13,7 +13,6 @@ import lombok.ToString;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,20 +58,47 @@ public class Order {
     @Column(name = "Address")
     private String address;
 
-    @Transient
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<OrderDetail> orderDetails;
 
+    public Order(BigInteger orderID,
+                 User user,
+                 BigInteger additionalPrice,
+                 OrderPaymentType paymentType,
+                 LocalDate dateOrder,
+                 String address) {
+        this.orderID = orderID;
+        this.user = user;
+        this.additionalPrice = additionalPrice;
+        this.paymentType = paymentType;
+        this.dateOrder = dateOrder;
+        this.address = address;
+    }
+
+    public Order(BigInteger orderID,
+                 User user,
+                 BigInteger additionalPrice,
+                 OrderPaymentType paymentType,
+                 OrderStatus status,
+                 LocalDate dateOrder,
+                 String address) {
+        this.orderID = orderID;
+        this.user = user;
+        this.additionalPrice = additionalPrice;
+        this.paymentType = paymentType;
+        this.status = status;
+        this.dateOrder = dateOrder;
+        this.address = address;
+    }
+
     public Order(User user,
-                 BigInteger total,
+                 BigInteger additionalPrice,
                  OrderPaymentType paymentType,
                  LocalDate dateOrder,
                  String address) {
         this.user = user;
-        this.additionalPrice = total;
+        this.additionalPrice = additionalPrice;
         this.paymentType = paymentType;
         this.dateOrder = dateOrder;
         this.address = address;
@@ -83,11 +109,11 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(getCreatedAt(), order.getCreatedAt());
+        return Objects.equals(getAdditionalPrice(), order.getAdditionalPrice()) && getPaymentType() == order.getPaymentType() && Objects.equals(getDateOrder(), order.getDateOrder()) && Objects.equals(getAddress(), order.getAddress());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreatedAt());
+        return Objects.hash(getAdditionalPrice(), getPaymentType(), getDateOrder(), getAddress());
     }
 }

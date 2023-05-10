@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import { Image, Pagination } from 'antd';
+=======
 import { Image, Pagination, Popconfirm } from 'antd';
+>>>>>>> dev
 import React, { useEffect, useState } from 'react';
 import { AiFillCloseCircle, AiFillDelete } from 'react-icons/ai';
 import { GrFormSubtract } from 'react-icons/gr';
@@ -224,6 +228,9 @@ const ManageOrders = (props) => {
                               CANCELLED
                             </li>
                           </ul>
+<<<<<<< HEAD
+                        <button onClick={() => handleDeleteOrder(item.orderID)} style={{padding: "4px 22px", backgroundColor: "#a93411",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xóa</button>
+=======
                         <Popconfirm 
                           title="Xóa đơn hàng"
                           description="Bạn có chắc muốn xóa đơn hàng?"
@@ -233,6 +240,7 @@ const ManageOrders = (props) => {
                         >
                           <button style={{padding: "4px 22px", backgroundColor: "#a93411",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xóa</button>
                         </Popconfirm>
+>>>>>>> dev
                       </div>
                       </td>
                   </tr>
@@ -309,6 +317,9 @@ const ManageOrders = (props) => {
                                         <i onClick={() => dispatch(increamentFromCartAdmin(item))} style={{color: "#f00c00"}}><MdAdd /></i>
                                     </div></td>
                                     <td><span>{formatProductPrice(item.cartQuantity * item.unitPrice)}</span></td>
+<<<<<<< HEAD
+                                    <td><i onClick={() => dispatch(removeFromToCartAdmin(item))} style={{color: "#f00c00"}}><AiFillDelete /></i></td>
+=======
                                     <td>
                                       <Popconfirm 
                                         title="Xóa sản phẩm khỏi giỏ hàng!"
@@ -320,6 +331,7 @@ const ManageOrders = (props) => {
                                         <i style={{color: "#f00c00"}}><AiFillDelete /></i>
                                       </Popconfirm>
                                     </td>
+>>>>>>> dev
                                   </tr>
                                 )
                               })

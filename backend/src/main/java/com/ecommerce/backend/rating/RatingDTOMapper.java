@@ -12,6 +12,7 @@ public class RatingDTOMapper implements Function<Rating, RatingDTO> {
                 rating.getUserID(),
                 rating.getOrderID(),
                 rating.getProductID(),
+                rating.getUser().getFullName(),
                 rating.getRateAmount(),
                 rating.getComment(),
                 rating.getDateRating()

@@ -1,31 +1,84 @@
+<<<<<<< HEAD
+import React, { useEffect, useRef, useState } from 'react';
+=======
 import React, { useEffect, useRef, useState,createContext  } from 'react';
+>>>>>>> dev
 import PropTypes from 'prop-types';
 import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+<<<<<<< HEAD
+=======
 import axios from 'axios';
 import { toast } from 'react-toastify';
+>>>>>>> dev
 
 import AccountItem from '../ProductItemSearch/ProductItemSearch';
 import Popper from '../Popper/Popper';
 import styles from './SearchBox.module.scss';
 import useDebouce from '../../hooks/useDebounce';
 import apiFilterProducts from '../../../../services/apiFilterProducts';
+<<<<<<< HEAD
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+=======
 import apiService from '../../../../services/apiServiceProducts';
 
 export const ShowContext = createContext();
+>>>>>>> dev
 const cx = classNames.bind(styles);
 const SearchBox = (props) => {
   const [searchResult, setSearchResult] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
+=======
   const [products, setProducts] = useState([]);
+>>>>>>> dev
 
   const debouce = useDebouce(searchValue, 300);
   const inputValue = useRef();
 
+<<<<<<< HEAD
+  useEffect(() => {
+    if (debouce.trim() === '') {
+      setSearchResult([]);
+      return;
+    }
+    setLoading(true);
+
+    const callApi = async () => {
+      try {
+        const res = await apiFilterProducts
+          .getProducts(`users/search`, {
+            params: {
+              q: debouce,
+              type: 'more',
+            },
+          })
+          .then((res) => res);
+
+        setSearchResult(res);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        throw new Error('Wrong API');
+      }
+    };
+    callApi();
+  }, [debouce]);
+
+  const handleClear = () => {
+    setSearchValue('');
+    setSearchResult([]);
+    setShowResult(false);
+    inputValue.current.focus();
+  };
+
+=======
   const getProducts = async () => {
     const { data } = await apiService.getAllProducts();
     setProducts(data);
@@ -45,6 +98,7 @@ const SearchBox = (props) => {
 
   // console.log(showResult);
 
+>>>>>>> dev
   const handleHideResults = () => {
     setShowResult(false);
   };
@@ -53,6 +107,13 @@ const SearchBox = (props) => {
     setSearchValue(e.target.value);
   };
 
+<<<<<<< HEAD
+  return (
+    <div>
+      <Tippy
+        interactive
+        visible={showResult && searchResult && searchResult?.length > 0}
+=======
   useEffect(() => {
     if (debouce.trim() === '') {
       // setSearchResult([]);
@@ -83,12 +144,24 @@ const SearchBox = (props) => {
       <Tippy
         interactive
         visible={showResult && rsSearch && rsSearch?.length > 0}
+>>>>>>> dev
         render={(attrs) => {
           return (
             <div
               className={cx('search-results')}
               tabIndex='-1'
               {...attrs}>
+<<<<<<< HEAD
+              <Popper>
+                <h4 className={cx('search-title')}>Products</h4>
+                {searchResult &&
+                  searchResult?.map((x) => (
+                    <AccountItem
+                      x={x}
+                      key={x.id}
+                    />
+                  ))}
+=======
               <Popper setShowResult={setShowResult}>
                 <h4 className={cx('search-title')}>Products</h4>
                 {rsSearch &&
@@ -101,6 +174,7 @@ const SearchBox = (props) => {
                       />
                     );
                   })}
+>>>>>>> dev
               </Popper>
             </div>
           );
@@ -137,9 +211,13 @@ const SearchBox = (props) => {
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </div>
+<<<<<<< HEAD
+      </Tippy>
+=======
         </Tippy>
               
       </ShowContext.Provider>
+>>>>>>> dev
     </div>
   );
 };

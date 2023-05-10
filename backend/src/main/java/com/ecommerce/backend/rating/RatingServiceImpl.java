@@ -180,10 +180,18 @@ public class RatingServiceImpl implements RatingService {
                 )
         );
 
+        var user = userDAO.selectUserByID(request.userID())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "User not found by userID {%d}".formatted(request.userID())
+                        )
+                );
+
         var rating = new Rating(
                 request.userID(),
                 request.orderID(),
                 request.productID(),
+                user,
                 request.rateAmount(),
                 request.comment(),
                 LocalDate.now()

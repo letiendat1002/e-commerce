@@ -45,9 +45,6 @@ public class OrderDetail {
     @ToString.Exclude
     private Product product;
 
-    @Transient
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     public OrderDetail(BigInteger orderID,
                        BigInteger productID,
                        BigInteger purchasePrice,
@@ -63,11 +60,11 @@ public class OrderDetail {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDetail that = (OrderDetail) o;
-        return Objects.equals(getCreatedAt(), that.getCreatedAt());
+        return Objects.equals(getPurchasePrice(), that.getPurchasePrice()) && Objects.equals(getQuantity(), that.getQuantity());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreatedAt());
+        return Objects.hash(getPurchasePrice(), getQuantity());
     }
 }
