@@ -1,4 +1,4 @@
-import { Pagination } from 'antd'
+import { Pagination, Popconfirm } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { AiFillCloseCircle, AiFillDelete, AiOutlineRight } from 'react-icons/ai'
 import { BiCommentDetail, BiEdit, BiMap } from 'react-icons/bi'
@@ -243,7 +243,15 @@ const AccountAddress = () => {
                                                 </div>
                                                 <div className="right--container-action">
                                                     <button onClick={() => handleOpenUpdate(item.userAddressID)}><BiEdit /><span>Chỉnh sửa</span></button>
-                                                    <i onClick = {() => handleDeleteAddress(item.userAddressID)}><AiFillDelete /></i>
+                                                    <Popconfirm 
+                                                        title="Xóa địa chỉ nhận hàng"
+                                                        description="Bạn có chắc xóa địa chỉ nhận hàng?"
+                                                        onConfirm={() => handleDeleteAddress(item.userAddressID)}
+                                                        okText="Yes"
+                                                        placement="topLeft"
+                                                        cancelText="No" >
+                                                        <i><AiFillDelete /></i>
+                                                    </Popconfirm>
                                                 </div>      
                                             </div>
                                             )
