@@ -434,7 +434,79 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void whenUpdateProduct__butHasNoChanges_thenThrowException() {
+    void whenUpdateFailed_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var category = new Category(
+                BigInteger.valueOf(1),
+                "string",
+                "string",
+                "string"
+        );
+
+        var request = new ProductRequest(
+                category.getCategoryID(),
+                "test-update-product-name",
+                "test-update-product-slug",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                100L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        var product = new Product(
+                id,
+                category,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                50L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
+        when(categoryDAO.existsCategoryByID(request.categoryID())).thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id)).thenReturn(false);
+
+        // Then
+        assertThatThrownBy(() -> productService.updateProduct(id, request))
+                .isInstanceOf(FailedOperationException.class);
+    }
+
+    @Test
+    void whenUpdate__butHasNoChanges_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
         var category = new Category(

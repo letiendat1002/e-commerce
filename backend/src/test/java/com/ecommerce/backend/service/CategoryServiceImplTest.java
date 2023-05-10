@@ -196,9 +196,36 @@ class CategoryServiceImplTest {
         assertThat(capturedCategory.getImage()).isEqualTo(request.image());
     }
 
+    @Test
+    void whenUpdateFailed_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new CategoryRequest(
+                "test-update-category",
+                "test-update-category",
+                "test-image-update"
+        );
+
+        // When
+        var category = new Category(
+                id,
+                "string",
+                "string",
+                "string"
+        );
+
+        when(categoryDAO.selectCategoryByID(id))
+                .thenReturn(Optional.of(category));
+        when(categoryDAO.existsOtherCategoryBySlug(request.slug(), id))
+                .thenReturn(false);
+
+        // Then
+        assertThatThrownBy(() -> categoryService.updateCategory(id, request))
+                .isInstanceOf(FailedOperationException.class);
+    }
 
     @Test
-    void whenUpdateCategory_butHasNoChanges_thenThrowException() {
+    void whenUpdate_butHasNoChanges_thenThrowException() {
         var id = BigInteger.valueOf(1);
         var request = new CategoryRequest(
                 "string",

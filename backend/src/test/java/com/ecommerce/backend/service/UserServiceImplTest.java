@@ -287,7 +287,40 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenUpdateUser_butHasNoChanges_thenThrowException() {
+    void whenUpdateFailed_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new UserUpdateRequest(
+                Collections.singletonList(UserRole.ADMIN),
+                "admin-update",
+                Gender.MALE,
+                "",
+                ""
+        );
+
+        // When
+        var user = new User(
+                id,
+                null,
+                null,
+                "Admin",
+                Gender.MALE,
+                "",
+                "",
+                UserRole.ADMIN,
+                true
+        );
+
+        when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
+        when(userDAO.existsOtherUserByPhone(request.phone(), id)).thenReturn(false);
+
+        // Then
+        assertThatThrownBy(() -> userService.updateUser(id, request))
+                .isInstanceOf(FailedOperationException.class);
+    }
+
+    @Test
+    void whenUpdate_butHasNoChanges_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new UserUpdateRequest(
