@@ -4,6 +4,7 @@ import com.ecommerce.backend.category.Category;
 import com.ecommerce.backend.category.CategoryDAO;
 import com.ecommerce.backend.product.*;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
+import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -139,8 +140,9 @@ class ProductServiceImplTest {
     @Test
     void addProduct() {
         // Given
+        var id = BigInteger.valueOf(1);
         var request = new ProductRequest(
-                BigInteger.valueOf(1),
+                id,
                 "string",
                 "test-add-product",
                 "",
@@ -165,7 +167,7 @@ class ProductServiceImplTest {
         );
 
         var category = new Category(
-                BigInteger.valueOf(1),
+                id,
                 "string",
                 "string",
                 "string"
@@ -210,7 +212,52 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void givenSlug_whenAlreadyExists_thenThrowException() {
+    void whenAddFailed_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new ProductRequest(
+                id,
+                "string",
+                "test-add-product",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                50L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        var category = new Category(
+                id,
+                "string",
+                "string",
+                "string"
+        );
+
+        // When
+        when(categoryDAO.selectCategoryByID(request.categoryID())).thenReturn(Optional.of(category));
+        when(productDAO.existsAnyProductBySlug(request.slug())).thenReturn(false);
+
+        // Then
+        assertThatThrownBy(() -> productService.addProduct(request))
+                .isInstanceOf(FailedOperationException.class);
+    }
+
+    @Test
+    void givenSlug_whenAddProduct_butExistsProductBySlug_thenThrowException() {
         // Given
         var slug = "string";
 

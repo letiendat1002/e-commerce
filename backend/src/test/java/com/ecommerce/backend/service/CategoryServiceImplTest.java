@@ -2,6 +2,7 @@ package com.ecommerce.backend.service;
 
 import com.ecommerce.backend.category.*;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
+import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,7 +121,26 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void givenSlug_whenAlreadyExists_thenThrowException() {
+    void whenAddFailed_thenThrowException() {
+        // Given
+        var request = new CategoryRequest(
+                "test-add-category",
+                "test-add-category",
+                "test-image-add"
+        );
+
+        // When
+        when(categoryDAO.existsCategoryBySlug(request.slug()))
+                .thenReturn(false);
+
+        // Then
+        assertThatThrownBy(
+                () -> categoryService.addCategory(request)
+        ).isInstanceOf(FailedOperationException.class);
+    }
+
+    @Test
+    void givenSlug_whenAddCategory_butExistsCategoryBySlug_thenThrowException() {
         // Given
         var slug = "string";
 
