@@ -60,6 +60,7 @@ public class ProductServiceImpl implements ProductService {
                 request.imageReview2(),
                 request.imageReview3(),
                 request.unitPrice(),
+                request.discount(),
                 request.quantity(),
                 request.description(),
                 request.yearRelease(),
@@ -201,6 +202,12 @@ public class ProductServiceImpl implements ProductService {
         if (!request.unitPrice().equals(product.getUnitPrice())
         ) {
             product.setUnitPrice(request.unitPrice());
+            isChanged = true;
+        }
+
+        if (!request.discount().equals(product.getDiscount())
+        ) {
+            product.setDiscount(request.discount());
             isChanged = true;
         }
 
