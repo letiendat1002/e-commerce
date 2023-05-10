@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import TableProducts from '../TableProducts/TableProducts';
-import apiService from '../../../services/apiServiceProducts';
 import { useDispatch, useSelector } from 'react-redux';
-import ModalDeleteProduct from '../components/ModalDeleteProduct/ModalDeleteProduct';
-import Pagination from '../components/Pagination/Pagination';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { MdHomeFilled } from 'react-icons/md';
 import classnames from 'classnames/bind';
-import styles from './ManageProduct.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { GrAddCircle, GrHome } from 'react-icons/gr';
 
+import TableProducts from '../TableProducts/TableProducts';
+import apiService from '../../../services/apiServiceProducts';
+import ModalDeleteProduct from '../components/ModalDeleteProduct/ModalDeleteProduct';
+import Pagination from '../components/Pagination/Pagination';
+import styles from './ManageProduct.module.scss';
+
 let cx = classnames.bind(styles);
+
 const ManageProducts = (props) => {
   const navigate = useNavigate();
   const [productsList, setProductsList] = useState([]);
@@ -50,7 +52,6 @@ const ManageProducts = (props) => {
   const lengtProduct = productsList.length;
 
   const newData = productsList.filter((product) => product.status === true);
-  console.log(newData);
 
   const changePage = (number) => {
     setIdLastProduct(number);

@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { STATIC_HOST_2, STATIC_HOST } from '../constant/common';
-import axiosClient from '../API/axiosClient';
-import axiosClientProducts from '../API/axiosClientProducts';
+import { STATIC_HOST_2 } from '../constant/common';
+
 import axiosClient4 from '../API/axiosCustom';
 
 const createNewUser = (email, password, fullName, gender, phone) => {
@@ -19,8 +18,8 @@ const createNewUser = (email, password, fullName, gender, phone) => {
     fullName,
     gender,
     phone,
-    image:""
-  }
+    image: '',
+  };
 
   const url = `users`;
 
@@ -47,12 +46,6 @@ const deleteUpdateUser = (id) => {
   return axiosClient4.delete(url);
 };
 
-const getUserWithPaginate = (page, limit) => {
-  const url = `${STATIC_HOST_2}/participant?page=${page}&limit=${limit}`;
-
-  return axiosClient.get(url);
-};
-
 //get user BE java
 const getUsers = async () => {
   const url = `users`;
@@ -62,17 +55,4 @@ const getUsers = async () => {
   return axiosClient4.get(url);
 };
 
-const postUserLogin = (email, password) => {
-  const url = `${STATIC_HOST_2}/login`;
-
-  return axiosClient.post(url, { email, password });
-};
-
-export {
-  createNewUser,
-  putUpdateUser,
-  deleteUpdateUser,
-  getUserWithPaginate,
-  postUserLogin,
-  getUsers,
-};
+export { createNewUser, putUpdateUser, deleteUpdateUser, getUsers };

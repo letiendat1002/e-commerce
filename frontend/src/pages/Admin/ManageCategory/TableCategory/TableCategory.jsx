@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
-import { GrFormView } from 'react-icons/gr';
+import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
 
 const TableCategory = (props) => {
-  const { categoryList } = props;
+  const { categoryList,setShowModalUpdateCategory,setDataCategory,setShowModalDelete,setDataDelete } = props;
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [categotyPerPage, setCategotyPerPage] = useState(5);
@@ -19,6 +19,16 @@ const TableCategory = (props) => {
   const handlePageClick = (e) => {
     setCurrentPage(+e.selected + 1);
   };
+
+  const handleShowCategory = (x) => {
+    setDataCategory(x)
+    setShowModalUpdateCategory(true)
+  }
+
+  const handleShowModalDelete = (x) => {
+    setDataDelete(x)
+    setShowModalDelete(true)
+  }
 
   return (
     <>
@@ -75,34 +85,26 @@ const TableCategory = (props) => {
                         <GrFormView /> Products
                         {/* <Link to={`${x.categoryID}`}>View Product</Link> */}
                       </button>
-                      {/* <button
+                      <button
                         className='btn btn-success mx-3'
-                        onClick={() => x}>
-                        Update
+                        onClick={() => handleShowCategory(x)}>
+                         <GrEdit />
                       </button>
                       <button
                         className='btn btn-danger'
-                        onClick={() => x}>
-                        Delete
-                      </button> */}
+                        onClick={() => handleShowModalDelete(x)}>
+                        <GrFormTrash />
+                      </button>
                     </td>
                   </tr>
                 );
               })
             )}
 
-            {/* {data && data.length === 0 && (
-            <tr>
-              <th
-                colSpan={'5'}
-                className='text-center'>
-                Data not found
-              </th>
-            </tr>
-          )} */}
+
           </tbody>
         </Table>
-        <div style={{display:'flex',justifyContent:'center'}}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <ReactPaginate
             nextLabel='Next>'
             onPageChange={handlePageClick}
@@ -127,6 +129,7 @@ const TableCategory = (props) => {
         </div>
       </div>
 
+      
       {/* <PaginatedItems  />, */}
     </>
   );

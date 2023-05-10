@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `Battery` VARCHAR(255) NOT NULL,
   `Memory` VARCHAR(255) NOT NULL,
   `Demand` VARCHAR(255) NOT NULL,
-  `Discount` BIT(1) NOT NULL,
+  `Status` BIT(1) NOT NULL,
   PRIMARY KEY (`ProductID`),
   INDEX `fk_Product_Category1_idx` (`CategoryID` ASC) VISIBLE,
   UNIQUE INDEX `Slug_UNIQUE` (`Slug` ASC) VISIBLE,

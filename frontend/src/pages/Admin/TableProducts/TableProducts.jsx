@@ -4,10 +4,10 @@ import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
 import classname from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
+import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
 
 import styles from './TableProducts.module.scss';
 import Loading from '../../../components/Loading/Loading';
-import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
 let cx = classname.bind(styles);
 const TableProducts = (props) => {
   const navigate = useNavigate();

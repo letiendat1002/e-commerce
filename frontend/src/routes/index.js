@@ -14,6 +14,7 @@ import NotFound from '../pages/Client/NotFound/NotFound';
 import Payment from '../pages/Client/Payment';
 import ProductDetail from '../pages/Client/ProductDetail';
 import Profile from '../pages/Client/Profile';
+import AccountComment from '../pages/Client/AccountComment';
 // import Login from '../pages/Admin/components/Login/Login';
 import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
 import ManageCategory from '../pages/Admin/ManageCategory/ManageCategory';
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
       {
         path: '/account/address',
         element: <AccountAddress />,
+      },
+      {
+        path: '/account/comment',
+        element: <AccountComment />,
       },
       {
         path: '/*',

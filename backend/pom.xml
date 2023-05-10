@@ -35,6 +35,7 @@
         </dependency>
 
         <dependency>
+<<<<<<< HEAD
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
@@ -46,6 +47,8 @@
         </dependency>
 
         <dependency>
+=======
+>>>>>>> dev
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>

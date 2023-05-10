@@ -1,5 +1,3 @@
-export const STATIC_HOST = 'https://api.ezfrontend.com'; //api products
-
 export const STATIC_HOST_3 = 'https://tiktok.fullstack.edu.vn/api/'; //api filter products
 
 export const THUMBNAIL_PLACEHOLDER = 'https://via.placeholder.com/444'; //api handle object null

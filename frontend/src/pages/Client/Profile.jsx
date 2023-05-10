@@ -135,6 +135,11 @@ const Profile = () => {
           navigate('/login')
           dispatch(logout())
         }
+        else if (res.payload.status === 401){
+          toast.error("Mật khẩu hiện tại không chính xác!")
+          dispatch(getUserForID(userID))
+          dispatch(getUserID(userID))
+        }
       })
       dispatch(getUserForID(userID))
       dispatch(getUserID(userID))
