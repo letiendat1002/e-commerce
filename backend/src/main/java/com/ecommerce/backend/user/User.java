@@ -78,6 +78,22 @@ public class User implements UserDetails {
     @ToString.Exclude
     private List<Rating> ratings;
 
+    public User(BigInteger userID,
+                String email,
+                String password,
+                String fullName,
+                Gender gender,
+                String phone,
+                String image) {
+        this.userID = userID;
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phone = phone;
+        this.image = image;
+    }
+
     public User(String email,
                 String password,
                 String fullName,
@@ -90,6 +106,26 @@ public class User implements UserDetails {
         this.gender = gender;
         this.phone = phone;
         this.image = image;
+    }
+
+    public User(BigInteger userID,
+                String email,
+                String password,
+                String fullName,
+                Gender gender,
+                String phone,
+                String image,
+                UserRole role,
+                boolean enabled) {
+        this.userID = userID;
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phone = phone;
+        this.image = image;
+        this.role = role;
+        this.enabled = enabled;
     }
 
     public User(String email,

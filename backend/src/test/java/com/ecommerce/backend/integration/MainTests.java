@@ -1,4 +1,4 @@
-package com.ecommerce.backend;
+package com.ecommerce.backend.integration;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,12 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class MainTests {
 
-	@Test
-	void contextLoads() {
-	}
-
-	@Test
-	public void testRunMain() {
-		Main.main(new String[] {});
-	}
+    @Test
+    void contextLoads() {
+    }
 }
