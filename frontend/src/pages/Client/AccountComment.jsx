@@ -1,4 +1,4 @@
-import { Pagination, Rate } from 'antd'
+import { Pagination, Popconfirm, Rate } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { AiFillCloseCircle, AiFillDelete, AiFillEdit } from 'react-icons/ai'
 import { BiCommentDetail, BiMap } from 'react-icons/bi'
@@ -205,9 +205,18 @@ const AccountComment = () => {
                                                                 <i onClick={() => handleRating(productMatches, item)} style={{color: "#e6b112",
                                                                 fontSize: "25px", fontWeight: "600", padding: "0 1rem"
                                                                 }}><AiFillEdit /></i>
-                                                                <i onClick={() => handleDeleteRating(item.orderID, productMatches.productID)} style={{color: "#e02f2f",
-                                                                fontSize: "25px", fontWeight: "600", padding: "0 1rem"
-                                                                }}><AiFillDelete /></i>
+                                                                <Popconfirm
+                                                                    title="Xóa đánh giá sản phẩm"
+                                                                    description="Bạn có chắc xóa đánh giá sản phẩm?"
+                                                                    onConfirm={() => handleDeleteRating(item.orderID, productMatches.productID)}
+                                                                    okText="Yes"
+                                                                    placement="topLeft"
+                                                                    cancelText="No" 
+                                                                >
+                                                                    <i style={{color: "#e02f2f",
+                                                                    fontSize: "25px", fontWeight: "600", padding: "0 1rem"
+                                                                    }}><AiFillDelete /></i>
+                                                                </Popconfirm>
                                                             </td>
                                                         </tr>
                                                     ) 

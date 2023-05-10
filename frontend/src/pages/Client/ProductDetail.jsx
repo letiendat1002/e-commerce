@@ -100,11 +100,11 @@ const ProductDetail = ({match, history}) => {
     totalRating = rating[i].rateAmount + totalRating
   }
 
-  const oneRater = Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)
-  const twoRater = Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)
-  const threeRater = Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)
-  const fourRater =  Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)
-  const fiveRater =  Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)
+  // const oneRater = Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)
+  // const twoRater = Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)
+  // const threeRater = Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)
+  // const fourRater =  Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)
+  // const fiveRater =  Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)
 
   const average = totalRating / rating.length;
 
@@ -389,28 +389,28 @@ const ProductDetail = ({match, history}) => {
                 <div style={{border: "1px solid #d5d5d5", width: "350px", borderRadius: '5px', padding: "10px"}}>
                   <div style={{display: "flex", width: "300px"}}>
                     <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>5<AiFillStar style={{fontSize : "15px"}} /></span>
-                    <SlideAntd values = {fiveRater}/>
-                    <p>{`${fiveRater}%`}</p>
+                    <SlideAntd values = { Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)}/>
+                    <p>{`${ Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)}%`}</p>
                   </div>
                   <div style={{display: "flex", width: "300px"}}>
                     <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>4<AiFillStar style={{fontSize : "15px"}} /></span>
-                    <SlideAntd values = {fourRater}/>
-                    <p>{`${fourRater}%`}</p>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)}%`}</p>
                   </div>
                   <div style={{display: "flex", width: "300px"}}>
                     <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>3<AiFillStar style={{fontSize : "15px"}} /></span>
-                    <SlideAntd values = {threeRater}/>
-                    <p>{`${threeRater}%`}</p>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)}%`}</p>
                   </div>
                   <div style={{display: "flex", width: "300px"}}>
                     <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>2<AiFillStar style={{fontSize : "15px"}} /></span>
-                    <SlideAntd values = {twoRater}/>
-                    <p>{`${twoRater}%`}</p>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)}%`}</p>
                   </div>
                   <div style={{display: "flex", width: "300px"}}>
                     <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>1<AiFillStar style={{fontSize : "15px"}} /></span>
-                    <SlideAntd values = {oneRater}/>
-                    <p>{`${oneRater}%`}</p>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)}%`}</p>
                   </div>
                 </div>
               </div>
