@@ -88,7 +88,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public OrderDetailDTO addOrderDetail(OrderDetailRequest request) {
         checkIfOrderDetailNotExistsByIdOrThrow(
                 request.orderID(),

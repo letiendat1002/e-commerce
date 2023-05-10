@@ -95,25 +95,6 @@ class OrderServiceImplTest {
     void givenUserID_whenfetchAllOrderByUserID_butUserReturnEmptyOptional_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
-        var user = new User(
-                id,
-                "admin@linkking.com",
-                "admin",
-                "string",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
-        );
-        var order = new Order(
-                id,
-                user,
-                BigInteger.valueOf(1),
-                OrderPaymentType.COD,
-                LocalDate.now(),
-                "string"
-        );
 
         // When
         when(userDAO.selectUserByID(id)).thenReturn(Optional.empty());
