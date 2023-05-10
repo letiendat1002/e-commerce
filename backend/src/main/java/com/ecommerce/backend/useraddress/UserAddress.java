@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -39,8 +38,11 @@ public class UserAddress {
     @Column(name = "Address")
     private String address;
 
-    @Transient
-    private LocalDateTime createdAt = LocalDateTime.now();
+    public UserAddress(BigInteger userAddressID, User user, String address) {
+        this.userAddressID = userAddressID;
+        this.user = user;
+        this.address = address;
+    }
 
     public UserAddress(User user, String address) {
         this.user = user;
@@ -52,11 +54,11 @@ public class UserAddress {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserAddress that = (UserAddress) o;
-        return Objects.equals(getCreatedAt(), that.getCreatedAt());
+        return Objects.equals(getAddress(), that.getAddress());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreatedAt());
+        return Objects.hash(getAddress());
     }
 }

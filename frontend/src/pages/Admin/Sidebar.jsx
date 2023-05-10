@@ -46,7 +46,6 @@ const Sidebar = (props) => {
   //     setDisplay("")
   //     setBreakPoint(true)
   //   }
-
   //   if (sizeWidth >= 1000) {
   //     setCollapsed(false)
   //     setDisplay("display")

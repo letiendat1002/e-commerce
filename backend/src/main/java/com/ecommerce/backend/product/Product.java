@@ -60,6 +60,9 @@ public class Product {
     @Column(name = "UnitPrice")
     private BigInteger unitPrice;
 
+    @Column(name = "Discount")
+    private Integer discount;
+
     @Column(name = "Quantity")
     private Long quantity;
 
@@ -106,6 +109,56 @@ public class Product {
     @ToString.Exclude
     private List<OrderDetail> orderDetails;
 
+    public Product(BigInteger productID,
+                   Category category,
+                   String name,
+                   String slug,
+                   String image,
+                   String imageReview1,
+                   String imageReview2,
+                   String imageReview3,
+                   BigInteger unitPrice,
+                   Integer discount,
+                   Long quantity,
+                   String description,
+                   Integer yearRelease,
+                   String manufacturer,
+                   String monitor,
+                   String cpu,
+                   String ram,
+                   String vga,
+                   String hardDisk,
+                   String camera,
+                   String battery,
+                   String memory,
+                   String demand,
+                   Boolean status) {
+        this.productID = productID;
+        this.category = category;
+        this.name = name;
+        this.slug = slug;
+        this.image = image;
+        this.imageReview1 = imageReview1;
+        this.imageReview2 = imageReview2;
+        this.imageReview3 = imageReview3;
+        this.unitPrice = unitPrice;
+        this.discount = discount;
+        this.quantity = quantity;
+        this.description = description;
+        this.yearRelease = yearRelease;
+        this.manufacturer = manufacturer;
+        this.monitor = monitor;
+        this.cpu = cpu;
+        this.ram = ram;
+        this.vga = vga;
+        this.hardDisk = hardDisk;
+        this.camera = camera;
+        this.battery = battery;
+        this.memory = memory;
+        this.demand = demand;
+        this.status = status;
+    }
+
     public Product(Category category,
                    String name,
                    String slug,
@@ -114,6 +167,7 @@ public class Product {
                    String imageReview2,
                    String imageReview3,
                    BigInteger unitPrice,
+                   Integer discount,
                    Long quantity,
                    String description,
                    Integer yearRelease,
@@ -136,6 +190,7 @@ public class Product {
         this.imageReview2 = imageReview2;
         this.imageReview3 = imageReview3;
         this.unitPrice = unitPrice;
+        this.discount = discount;
         this.quantity = quantity;
         this.description = description;
         this.yearRelease = yearRelease;

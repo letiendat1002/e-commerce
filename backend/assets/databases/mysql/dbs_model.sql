@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Product` (
   `ImageReview2` VARCHAR(255) NOT NULL,
   `ImageReview3` VARCHAR(255) NOT NULL,
   `UnitPrice` BIGINT UNSIGNED NOT NULL,
+  `Discount` INT NULL,
   `Quantity` INT UNSIGNED NOT NULL,
   `Description` LONGTEXT NOT NULL,
   `YearRelease` SMALLINT(4) NOT NULL,
