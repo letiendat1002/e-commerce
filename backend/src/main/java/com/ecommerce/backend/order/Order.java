@@ -36,8 +36,11 @@ public class Order {
     @Column(name = "OrderID")
     private BigInteger orderID;
 
+    @Column(name = "UserID")
+    private BigInteger userID;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
+    @JoinColumn(name = "UserID", insertable = false, updatable = false)
     @ToString.Exclude
     private User user;
 
@@ -98,6 +101,18 @@ public class Order {
                  LocalDate dateOrder,
                  String address) {
         this.user = user;
+        this.additionalPrice = additionalPrice;
+        this.paymentType = paymentType;
+        this.dateOrder = dateOrder;
+        this.address = address;
+    }
+
+    public Order(BigInteger userID,
+                 BigInteger additionalPrice,
+                 OrderPaymentType paymentType,
+                 LocalDate dateOrder,
+                 String address) {
+        this.userID = userID;
         this.additionalPrice = additionalPrice;
         this.paymentType = paymentType;
         this.dateOrder = dateOrder;

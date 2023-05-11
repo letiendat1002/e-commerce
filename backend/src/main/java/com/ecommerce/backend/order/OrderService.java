@@ -6,19 +6,21 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface OrderService {
-    List<OrderDTO> fetchAllOrders();
+    List<Order> fetchAllOrders();
 
-    List<OrderDTO> fetchAllOrdersByUserID(BigInteger userID);
+    List<Order> fetchAllOrdersByUserID(BigInteger userID);
 
-    OrderDTO fetchOrderByOrderID(BigInteger orderID);
+    Order fetchOrderByOrderID(BigInteger orderID);
 
-    OrderDTO addOrder(OrderAddRequest request);
+    Order addOrder(OrderAddRequest request);
 
-    OrderDTO updateOrder(BigInteger orderID, OrderUpdateRequest request);
+    Order updateOrder(BigInteger orderID, OrderUpdateRequest request);
 
     void deleteOrder(BigInteger orderID);
 
     boolean existsOrderByID(BigInteger orderID);
 
     boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user);
+
+    void deleteAllOrdersByUserID(BigInteger userID);
 }

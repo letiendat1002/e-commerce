@@ -17,4 +17,8 @@ public interface ProductService {
     void deleteProduct(BigInteger productID);
 
     boolean existsProductByID(BigInteger productID);
+
+    void updateProduct(Product update);
+
+    void updateProductQuantityByAmount(BigInteger productID, int quantity);
 }

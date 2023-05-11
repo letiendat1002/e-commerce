@@ -157,12 +157,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(BigInteger userID) {
         checkIfUserExistsByIdOrThrow(userID);
 
-        // TODO: handle this inside orderService only
-        orderService
-                .fetchAllOrdersByUserID(userID)
-                .forEach(
-                        order -> orderService.deleteOrder(order.orderID())
-                );
+        orderService.deleteAllOrdersByUserID(userID);
 
         userDAO.deleteUserByID(userID);
     }

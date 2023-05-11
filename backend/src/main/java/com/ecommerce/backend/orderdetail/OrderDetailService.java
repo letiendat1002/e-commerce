@@ -4,20 +4,19 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface OrderDetailService {
-    List<OrderDetailDTO> fetchAllOrderDetails();
+    List<OrderDetail> fetchAllOrderDetails();
 
-    List<OrderDetailDTO> fetchAllOrderDetailsByOrderID(BigInteger orderID);
+    List<OrderDetail> fetchAllOrderDetailsByOrderID(BigInteger orderID);
 
-    List<OrderDetailDTO> fetchAllOrderDetailsByProductID(BigInteger productID);
+    List<OrderDetail> fetchAllOrderDetailsByProductID(BigInteger productID);
 
-    OrderDetailDTO fetchOrderDetailByOrderIDAndProductID(BigInteger orderID,
-                                                         BigInteger productID);
+    OrderDetail fetchOrderDetailByOrderIDAndProductID(OrderDetailID orderDetailID);
 
-    OrderDetailDTO addOrderDetail(OrderDetailRequest request);
-
-    OrderDetailDTO updateOrderDetail(OrderDetailRequest request);
-
-    void deleteOrderDetail(BigInteger orderID, BigInteger productID);
+    OrderDetail addOrderDetail(OrderDetailRequest request);
 
     boolean existsOrderDetailByID(OrderDetailID orderDetailID);
+
+    void updateProductQuantityWhenOrderCancelled(BigInteger orderID);
+
+    void deleteAllOrderDetailsByOrderID(BigInteger orderID);
 }

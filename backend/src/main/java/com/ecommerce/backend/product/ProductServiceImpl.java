@@ -5,6 +5,7 @@ import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -108,6 +109,37 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean existsProductByID(BigInteger productID) {
         return productDAO.existsProductByID(productID);
+    }
+
+    @Override
+    public void updateProduct(Product update) {
+        productDAO
+                .updateProduct(update)
+                .orElseThrow(
+                        () -> new FailedOperationException(
+                                "Failed to update product"
+                        ));
+    }
+
+    @Override
+    public void updateProductQuantityByAmount(
+            BigInteger productID,
+            int amount
+    ) {
+        var product = fetchProductByProductID(productID);
+
+        var absoluteAmount = Math.abs(amount);
+        if (amount < 0) {
+            if (product.getQuantity() < absoluteAmount) {
+                throw new DataIntegrityViolationException(
+                        "Product quantity is {%d} but amount needed is {%d}"
+                                .formatted(product.getQuantity(), absoluteAmount)
+                );
+            }
+        }
+        product.setQuantity(product.getQuantity() + amount);
+
+        updateProduct(product);
     }
 
     @Override

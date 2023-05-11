@@ -82,7 +82,7 @@ class OrderServiceImplTest {
 
         // When
         when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
-        when(orderDAO.selectAllOrdersByUser(user)).thenReturn(List.of(order));
+        when(orderDAO.selectAllOrdersByUser(id)).thenReturn(List.of(order));
 
         var expected = List.of(orderDTOMapper.apply(order));
         var actual = orderService.fetchAllOrdersByUserID(id);

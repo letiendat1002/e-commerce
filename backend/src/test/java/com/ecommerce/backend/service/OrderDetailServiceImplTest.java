@@ -103,7 +103,9 @@ class OrderDetailServiceImplTest {
         when(orderDetailDAO.selectOrderDetailByID(new OrderDetailID(id, id))).thenReturn(Optional.of(orderDetail));
 
         var expected = orderDetailDTOMapper.apply(orderDetail);
-        var actual = orderDetailService.fetchOrderDetailByOrderIDAndProductID(id, id);
+        var actual = orderDetailService.fetchOrderDetailByOrderIDAndProductID(
+                new OrderDetailID(id, id)
+        );
 
         // Then
         verify(orderDetailDAO).selectOrderDetailByID(new OrderDetailID(id, id));
@@ -145,7 +147,8 @@ class OrderDetailServiceImplTest {
         when(orderDetailDAO.selectOrderDetailByID(new OrderDetailID(id, id))).thenReturn(Optional.empty());
 
         // Then
-        assertThatThrownBy(() -> orderDetailService.fetchOrderDetailByOrderIDAndProductID(id, id))
+        assertThatThrownBy(() -> orderDetailService
+                .fetchOrderDetailByOrderIDAndProductID(new OrderDetailID(id, id)))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
