@@ -229,7 +229,6 @@ const Dashboard = (props) => {
   useEffect(() => {
     orderDateSame();
   }, [AllOrder]);
-  console.log(dateOrder)
   const dataChart3 = dateOrder
   // const keys = Object.keys(groupedOrders);
   // const firstKey = keys[0];

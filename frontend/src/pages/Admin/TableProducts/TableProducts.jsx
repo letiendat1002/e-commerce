@@ -40,6 +40,7 @@ const TableProducts = (props) => {
   //   console.log(`User requested page number ${event.selected}`);
   // };
 
+
   const handleDelete = (x) => {
     setSetShowDeleteModal(true);
     setDataDelete(x);

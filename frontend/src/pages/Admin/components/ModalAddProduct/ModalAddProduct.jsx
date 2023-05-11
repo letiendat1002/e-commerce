@@ -139,6 +139,7 @@ const ModalAddProduct = (props) => {
     <>
       {product ? (
         <Container>
+          <h4 style={{fontWeight:'bold',margin:'30px 0'}}>Add New Product</h4>
           <Row>
             <Form>
               <Row>
@@ -505,19 +506,22 @@ const ModalAddProduct = (props) => {
                 </div>
               </Row>
 
-              <Button
-                variant='primary'
-                type='submit'
-                              onClick={(e) => handleCreate(e)}
-                          className="m-3">
-                Create
-              </Button>
-              <Button
-                variant='primary'
-                type='submit'
-                onClick={handleBackButtonClick}>
-                Back
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant='secondary'
+                  type='submit'
+                  className='m-3'
+                  onClick={handleBackButtonClick}>
+                  Back
+                </Button>
+                <Button
+                  variant='success'
+                  type='submit'
+                  onClick={(e) => handleCreate(e)}
+                  className='m-3'>
+                  Create
+                </Button>
+              </div>
             </Form>
           </Row>
         </Container>

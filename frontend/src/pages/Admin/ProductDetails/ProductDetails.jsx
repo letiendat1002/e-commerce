@@ -75,9 +75,10 @@ const ProductDetails = (props) => {
         <>
           {product ? (
             <Container>
+              <h4 style={{ fontWeight: 'bold',margin:' 10px 0' }}>Product Details</h4>
               <Row>
                 <Form>
-                  <Row>
+                  <Row className={cx('row')}>
                     <Col xs={6}>
                       <Form.Group
                         className='mb-3'
@@ -445,14 +446,17 @@ const ProductDetails = (props) => {
                     </div>
                   </Row>
 
-                  <Button
-                    variant='primary'
-                    type='submit'
-                    onClick={() => {
-                      navigate('/admin/manage-products');
-                    }}>
-                    Back
-                  </Button>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button
+                      variant='primary'
+                      type='submit'
+                      className='my-3'
+                      onClick={() => {
+                        navigate('/admin/manage-products');
+                      }}>
+                      Back
+                    </Button>
+                  </div>
                 </Form>
               </Row>
             </Container>

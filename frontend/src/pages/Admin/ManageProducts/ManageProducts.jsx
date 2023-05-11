@@ -64,7 +64,7 @@ const ManageProducts = (props) => {
   return (
     <>
       <div className={cx('manage-products-container')}>
-        <div className='title'>Manage Products</div>
+        <div className='title my-3'>Manage Products</div>
 
         <div className='products-content'>
           <div className={cx('btn-add-new')}>

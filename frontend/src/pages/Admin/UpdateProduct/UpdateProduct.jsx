@@ -11,6 +11,7 @@ import apiService from '../../../services/apiServiceProducts';
 import classNames from 'classnames/bind';
 
 import styles from './UpdateProduct.module.scss';
+import { Image } from 'antd';
 let cx = classNames.bind(styles);
 const UpdateProduct = (props) => {
   let { idProduct } = useParams();
@@ -407,9 +408,10 @@ const UpdateProduct = (props) => {
                       onChange={(e) => handleUploadImage(e)}
                     />
                   </Form.Group>
-                  <div className={cx('image-preview')}>
+                  <div>
                     {image ? (
-                      <img
+                      <Image
+                        className={cx('image-preview')}
                         src={require(`../../../assets/images/${imageReview1}`)}
                         alt='Logo'
                       />
@@ -430,9 +432,10 @@ const UpdateProduct = (props) => {
                       onChange={(e) => handleUploadImage(e)}
                     />
                   </Form.Group>
-                  <div className={cx('image-preview')}>
+                  <div>
                     {image ? (
-                      <img
+                      <Image
+                        className={cx('image-preview')}
                         src={require(`../../../assets/images/${imageReview2}`)}
                         alt='Logo'
                       />
@@ -453,9 +456,10 @@ const UpdateProduct = (props) => {
                       onChange={(e) => handleUploadImage(e)}
                     />
                   </Form.Group>
-                  <div className={cx('image-preview')}>
+                  <div>
                     {image ? (
-                      <img
+                      <Image
+                        className={cx('image-preview')}
                         src={require(`../../../assets/images/${imageReview3}`)}
                         alt='Logo'
                       />
@@ -479,9 +483,10 @@ const UpdateProduct = (props) => {
                   </Form.Group>
                 </Col>
 
-                <div className={cx('image-preview')}>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
                   {image ? (
-                    <img
+                    <Image
+                      className={cx('image-preview')}
                       src={require(`../../../assets/images/${image}`)}
                       alt='Logo'
                     />
@@ -491,19 +496,23 @@ const UpdateProduct = (props) => {
                 </div>
               </Row>
 
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
-                variant='primary'
-                type='submit'
-                onClick={(e) => handleUpdate(e)}
-                className='m-3'>
-                Update
-              </Button>
-              <Button
-                variant='primary'
-                type='submit'
-                onClick={handleBackButtonClick}>
-                Back
-              </Button>
+                  variant='secondary'
+                  type='submit'
+                  className='m-3 px-4'
+                  onClick={handleBackButtonClick}>
+                  Back
+                </Button>
+                <Button
+                  variant='success'
+                  type='submit'
+                  onClick={(e) => handleUpdate(e)}
+                  className='m-3'>
+                  Update
+                </Button>
+                
+              </div>
             </Form>
           </Row>
         </Container>
