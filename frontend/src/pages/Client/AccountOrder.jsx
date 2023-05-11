@@ -154,7 +154,7 @@ const AccountOrder = () => {
         if (productMatches){
             return ({
                 STT: <span>{items.orderID}</span>, 
-                image: <Image src={require(`../../assets/images/${productMatches.productID}/${productMatches.image}`)} preview = {true} />,
+                image: <Image src={require(`../../assets/images/${productMatches.image}`)} preview = {true} />,
                 quantity: <span>{items.quantity}</span>,
                 cost: <span>{formatProductPrice(items.purchasePrice)}</span>,
                 SumCost: <span>{formatProductPrice(items.purchasePrice*items.quantity)}</span>,
@@ -366,7 +366,7 @@ const AccountOrder = () => {
                                 </div>
                                 <div style={{display: "flex", justifyContent: "space-around"}}>
                                     <div className="product-info">
-                                        <img src={require(`../../assets/images/${ratingItem[0].productID}/${ratingItem[0].image}`)} alt="" />
+                                        <img src={require(`../../assets/images/${ratingItem[0].image}`)} alt="" />
                                         <div style={{paddingTop: "3rem"}}>
                                             <p>{ratingItem[0].name}</p>
                                             <p>{ratingItem[0].unitPrice}</p>

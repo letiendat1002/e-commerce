@@ -26,7 +26,7 @@ const ModalCreateUser = (props) => {
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('CUSTOMER');
   const [image, setImage] = useState('');
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('MALE');
   const [phone, setPhone] = useState('');
   const [previewImage, setPreviewImage] = useState('');
 
@@ -110,6 +110,7 @@ const ModalCreateUser = (props) => {
                 className='form-control'
                 id='inputEmail4'
                 value={email}
+                placeholder="Enter your email"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -125,6 +126,7 @@ const ModalCreateUser = (props) => {
                 className='form-control'
                 id='inputPassword'
                 value={password}
+                placeholder="Enter your password"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
@@ -133,12 +135,13 @@ const ModalCreateUser = (props) => {
               <label
                 htmlFor='inputUsername'
                 className='form-label'>
-                Username
+                Fullname
               </label>
               <input
                 type='text'
                 className='form-control'
                 id='inputUsername'
+                placeholder='Enter your fullname'
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -154,6 +157,7 @@ const ModalCreateUser = (props) => {
                 className='form-control'
                 id='inputPhone'
                 value={phone}
+                placeholder="Enter your phonenumber"
                 onChange={(e) => setPhone(e.target.value)}
               />
             </div>
@@ -191,7 +195,6 @@ const ModalCreateUser = (props) => {
                 onChange={(e) => setGender(e.target.value)}>
                 <option value='MALE'>MALE</option>
                 <option value='FEMALE'>FEMALE</option>
-                <option value='OTHER'>OTHER</option>
               </select>
             </div>
 

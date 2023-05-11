@@ -1188,7 +1188,7 @@ const Menu = ({ match, history }) => {
                                       key={key}>
                                       <Link to={`/${item.slug}`}>
                                         <div className='child--contains--img'>
-                                          <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
+                                          <img src={require(`../../assets/images/${item.image}`)} alt="" />
                                         </div>
                                         <div className='contains--title'>
                                           <h3>{item.name}</h3>
@@ -1236,7 +1236,7 @@ const Menu = ({ match, history }) => {
                                       key={key}>
                                       <Link to={`/${item.slug}`}>
                                         <div className='child--contains--img'>
-                                          <img src={require(`../../assets/images/${item.productID}/${item.image}`)} alt="" />
+                                          <img src={require(`../../assets/images/${item.image}`)} alt="" />
                                         </div>
                                         <h3>{item.name}</h3>
                                         <div className='child--contains--price'>

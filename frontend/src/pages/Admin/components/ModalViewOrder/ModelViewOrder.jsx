@@ -56,7 +56,7 @@ const ModelViewOrder = () => {
       return ({
         STT: <span>{items.orderID}</span>, 
         productName: <span>{productMatches.name}</span>,
-        productImage: <Image src={require(`../../../../assets/images/${productMatches.productID}/${productMatches.image}`)} preview = {true} />,
+        productImage: <Image src={require(`../../../../assets/images/${productMatches.image}`)} preview = {true} />,
         quantity: <span>{items.quantity}</span>,
         sumcost: <span>{items.purchasePrice*items.quantity}</span>
       })
