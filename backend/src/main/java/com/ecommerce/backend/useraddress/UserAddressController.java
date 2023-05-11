@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 public class UserAddressController {
     private final UserAddressService userAddressService;
+    private final UserAddressDTOMapper userAddressDTOMapper;
 
     @GetMapping
     @PreAuthorize("hasAuthority('user_address:read')")
@@ -28,9 +30,17 @@ public class UserAddressController {
         List<UserAddressDTO> userAddressDTOList;
 
         if (userID == null) {
-            userAddressDTOList = userAddressService.fetchAllUserAddresses();
+            userAddressDTOList = userAddressService
+                    .fetchAllUserAddresses()
+                    .stream()
+                    .map(userAddressDTOMapper)
+                    .toList();
         } else {
-            userAddressDTOList = userAddressService.fetchAllUserAddressesByUserID(userID);
+            userAddressDTOList = userAddressService
+                    .fetchAllUserAddressesByUserID(userID)
+                    .stream()
+                    .map(userAddressDTOMapper)
+                    .toList();
         }
 
         return new UserAddressResponse(
@@ -45,7 +55,11 @@ public class UserAddressController {
     public UserAddressResponse getUserAddressByID(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
-        var userAddressDTOList = List.of(userAddressService.fetchUserAddressByID(userAddressID));
+        var userAddressDTOList = Collections.singletonList(
+                userAddressDTOMapper.apply(
+                        userAddressService.fetchUserAddressByID(userAddressID)
+                )
+        );
 
         return new UserAddressResponse(
                 HttpStatus.OK.value(),
@@ -64,7 +78,11 @@ public class UserAddressController {
             throw new RequestValidationException(errors);
         }
 
-        var userAddressDTOList = List.of(userAddressService.addUserAddress(request));
+        var userAddressDTOList = Collections.singletonList(
+                userAddressDTOMapper.apply(
+                        userAddressService.addUserAddress(request)
+                )
+        );
 
         return new UserAddressResponse(
                 HttpStatus.OK.value(),
@@ -97,7 +115,12 @@ public class UserAddressController {
             throw new RequestValidationException(errors);
         }
 
-        var userAddressDTOList = List.of(userAddressService.updateUserAddress(userAddressID, request));
+        var userAddressDTOList = Collections.singletonList(
+                userAddressDTOMapper.apply(
+                        userAddressService
+                                .updateUserAddress(userAddressID, request)
+                )
+        );
 
         return new UserAddressResponse(
                 HttpStatus.OK.value(),

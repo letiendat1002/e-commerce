@@ -6,8 +6,7 @@ import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import com.ecommerce.backend.user.User;
-import com.ecommerce.backend.user.UserDAO;
+import com.ecommerce.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +21,9 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final OrderDAO orderDAO;
     private final OrderDTOMapper orderDTOMapper;
-    private final UserDAO userDAO;
+    private final UserService userService;
     private final OrderDetailService orderDetailService;
+    //    private final ProductService productService;
     private final ProductDAO productDAO;
 
     @Override
@@ -37,23 +37,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> fetchAllOrdersByUserID(BigInteger userID) {
-        var user = selectUserByIdOrThrow(userID);
+        var user = userService.fetchUserByUserID(userID);
 
         return orderDAO
                 .selectAllOrdersByUser(user)
                 .stream()
                 .map(orderDTOMapper)
                 .collect(Collectors.toList());
-    }
-
-    private User selectUserByIdOrThrow(BigInteger userID) {
-        return userDAO
-                .selectUserByID(userID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "User not found by userID {%d}".formatted(userID)
-                        )
-                );
     }
 
     @Override
@@ -74,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO addOrder(OrderAddRequest request) {
-        var user = selectUserByIdOrThrow(request.userID());
+        var user = userService.fetchUserByUserID(request.userID());
         var order = new Order(
                 user,
                 request.additionalPrice(),
