@@ -126,6 +126,11 @@ public class CategoryServiceImpl implements CategoryService {
         categoryDAO.deleteCategoryByID(categoryID);
     }
 
+    @Override
+    public boolean existsCategoryByID(BigInteger categoryID) {
+        return categoryDAO.existsCategoryByID(categoryID);
+    }
+
     private void checkIfCategoryExistsByIdOrThrow(BigInteger categoryID) {
         var isExisted = categoryDAO.existsCategoryByID(categoryID);
         if (!isExisted) {

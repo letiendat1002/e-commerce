@@ -13,4 +13,6 @@ public interface CategoryService {
     Category updateCategory(BigInteger categoryID, CategoryRequest request);
 
     void deleteCategory(BigInteger categoryID);
+
+    boolean existsCategoryByID(BigInteger categoryID);
 }
