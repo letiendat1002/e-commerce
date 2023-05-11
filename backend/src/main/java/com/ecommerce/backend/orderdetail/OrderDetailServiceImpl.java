@@ -274,4 +274,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 new OrderDetailID(orderID, productID)
         );
     }
+
+    @Override
+    public boolean existsOrderDetailByID(OrderDetailID orderDetailID) {
+        return orderDetailDAO.existsOrderDetailByID(orderDetailID);
+    }
 }

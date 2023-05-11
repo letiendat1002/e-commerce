@@ -15,4 +15,6 @@ public interface ProductService {
     Product updateProduct(BigInteger productID, ProductRequest request);
 
     void deleteProduct(BigInteger productID);
+
+    boolean existsProductByID(BigInteger productID);
 }

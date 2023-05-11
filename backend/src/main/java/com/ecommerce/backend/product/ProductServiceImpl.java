@@ -106,6 +106,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public boolean existsProductByID(BigInteger productID) {
+        return productDAO.existsProductByID(productID);
+    }
+
+    @Override
     public Product updateProduct(BigInteger productID, ProductRequest request) {
         var product = fetchProductByProductID(productID);
 

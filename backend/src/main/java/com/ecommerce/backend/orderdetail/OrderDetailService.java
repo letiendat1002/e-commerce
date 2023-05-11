@@ -18,4 +18,6 @@ public interface OrderDetailService {
     OrderDetailDTO updateOrderDetail(OrderDetailRequest request);
 
     void deleteOrderDetail(BigInteger orderID, BigInteger productID);
+
+    boolean existsOrderDetailByID(OrderDetailID orderDetailID);
 }

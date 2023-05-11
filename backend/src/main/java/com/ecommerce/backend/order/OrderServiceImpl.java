@@ -6,6 +6,7 @@ import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import com.ecommerce.backend.user.User;
 import com.ecommerce.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -172,5 +173,15 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderDAO.deleteOrderByID(orderID);
+    }
+
+    @Override
+    public boolean existsOrderByID(BigInteger orderID) {
+        return orderDAO.existsOrderByID(orderID);
+    }
+
+    @Override
+    public boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user) {
+        return orderDAO.existsOrderByOrderIDAndUser(orderID, user);
     }
 }
