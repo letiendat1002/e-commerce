@@ -3,7 +3,7 @@ import { STATIC_HOST_2 } from '../constant/common';
 
 import axiosClient4 from '../API/axiosCustom';
 
-const createNewUser = (email, password, fullName, gender, phone) => {
+const createNewUser = (email, password, fullName, gender, phone,image) => {
   // const data = new FormData();
   // data.append('email', email);
   // data.append('password', password);
@@ -18,7 +18,7 @@ const createNewUser = (email, password, fullName, gender, phone) => {
     fullName,
     gender,
     phone,
-    image: '',
+    image,
   };
 
   const url = `users`;

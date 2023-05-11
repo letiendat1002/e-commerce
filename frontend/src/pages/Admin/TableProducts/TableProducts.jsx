@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
+import { Image } from 'antd';
 import ReactPaginate from 'react-paginate';
 import classname from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
@@ -57,6 +58,7 @@ const TableProducts = (props) => {
             <thead>
               <tr>
                 <th scope='col'>No</th>
+                <th>Image</th>
                 <th
                   scope='col'
                   className='text-center'>
@@ -101,13 +103,12 @@ const TableProducts = (props) => {
                   return (
                     <tr key={idx}>
                       <th scope='row'>{idx + 1}</th>
-                      {/* <td className='row_img'>
-                      <img
-                        style={{ width: '40px', height: '40px' }}
-                        src={`data:image/jpeg;base64,${x.image}`}
-                        alt=''
-                      />
-                    </td> */}
+                      <td className='row_img'>
+                        <Image
+                          width={100}
+                          src={require(`../../../assets/images/${x.image}`)}
+                        />
+                      </td>
                       <td>{x.name}</td>
                       <td>{x.unitPrice}</td>
                       <td>{x.quantity}</td>

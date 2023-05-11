@@ -7,13 +7,14 @@ import Loading from '../../../../components/Loading/Loading';
 
 import './TableUser.scss';
 import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
+import { Image } from 'antd';
 
 const TableUser = (props) => {
   const { data, setShowModal, handleClickBtnDelete, callApiWithPaginate, handleClickBtnView } =
     props;
 
   const [loading, setLoading] = useState(true);
-  const [image, setImage] = useState('');
+  // const [image, setImage] = useState('');
 
   return (
     <>
@@ -34,11 +35,11 @@ const TableUser = (props) => {
                 className='text-center'>
                 No
               </th>
-              {/* <th
+              <th
                 scope='col'
                 className='text-center'>
                 Avatar
-              </th> */}
+              </th>
               <th
                 scope='col'
                 className='text-center'>
@@ -82,13 +83,14 @@ const TableUser = (props) => {
                       className='text-center'>
                       {idx + 1}
                     </th>
-                    {/* <td className='row_img'>
-                      <img
-                        style={{ width: '40px', height: '40px' }}
-                        src={`data:image/jpeg;base64,${x.image}`}
+                    <td className='row_img'>
+                      <Image
+                        id='showImage'
+                        style={{ width: '80px', height: '80px' }}
+                        src={x.image ? x.image : 'https://via.placeholder.com/444'}
                         alt=''
                       />
-                    </td> */}
+                    </td>
                     <td>{x.email}</td>
                     <td style={{ color: x.fullName.length === 0 ? 'red' : 'black' }}>
                       {x.fullName.length === 0 ? 'No data' : x.fullName}

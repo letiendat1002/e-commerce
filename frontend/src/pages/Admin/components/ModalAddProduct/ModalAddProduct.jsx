@@ -7,16 +7,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import apiService from '../../../services/apiServiceProducts';
 import classNames from 'classnames/bind';
 
-import styles from './UpdateProduct.module.scss';
+import apiService from '../../../../services/apiServiceProducts';
+import styles from './ModalAddProduct.module.scss';
+
 let cx = classNames.bind(styles);
-const UpdateProduct = (props) => {
-  let { idProduct } = useParams();
+const ModalAddProduct = (props) => {
   const navigate = useNavigate();
 
-  const [product, setProduct] = useState({});
   const [imageMain, setImageMain] = useState('');
   const [imageRv1, setImageRv1] = useState('');
   const [imageRv2, setImageRv2] = useState('');
@@ -25,6 +24,31 @@ const UpdateProduct = (props) => {
   const [prImageRV1, setPrImageRV1] = useState('');
   const [prImageRV2, setPrImageRV2] = useState('');
   const [prImageRV3, setPrImageRV3] = useState('');
+  const [product, setProduct] = useState({
+    battery: '',
+    camera: '',
+    cpu: '',
+    description: '',
+    hardDisk: '',
+    manufacturer: '',
+    monitor: '',
+    name: '',
+    quantity: '',
+    ram: '',
+    slug: '',
+    unitPrice: '',
+    vga: '',
+    yearRelease: '',
+    demand: '',
+    memory: '',
+    discount: '',
+    image: '',
+    imageReview1: '',
+    imageReview2: '',
+    imageReview3: '',
+    categoryID: 1,
+    status: true,
+  });
 
   const {
     battery,
@@ -57,22 +81,6 @@ const UpdateProduct = (props) => {
       ...prev,
       ...newValue,
     }));
-  };
-
-  const handleProductDeltails = async (id) => {
-    const response = await apiService.getDetailProduct(id);
-    setProduct(response?.data[0]);
-  };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    const response = await apiService.putProduct(idProduct, product);
-    if (response.status === 200) {
-      toast.success(response.message);
-      navigate('/admin/manage-products');
-    } else {
-      toast.error(response.message);
-    }
   };
 
   function handleBackButtonClick(e) {
@@ -116,11 +124,17 @@ const UpdateProduct = (props) => {
     // console.log('Upload', e.target.files[0]);
   };
 
-  useEffect(() => {
-    handleProductDeltails(idProduct);
-  }, [idProduct]);
-
-  console.log(product);
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    // console.log(product);
+    let { status, message } = await apiService.postProduct(product);
+    if (status === 200) {
+      toast.success(message);
+      navigate('/admin/manage-products');
+    } else {
+      toast.error(message);
+    }
+  };
   return (
     <>
       {product ? (
@@ -408,9 +422,9 @@ const UpdateProduct = (props) => {
                     />
                   </Form.Group>
                   <div className={cx('image-preview')}>
-                    {image ? (
+                    {prImageRV1 ? (
                       <img
-                        src={require(`../../../assets/images/${imageReview1}`)}
+                        src={prImageRV1}
                         alt='Logo'
                       />
                     ) : (
@@ -431,9 +445,9 @@ const UpdateProduct = (props) => {
                     />
                   </Form.Group>
                   <div className={cx('image-preview')}>
-                    {image ? (
+                    {prImageRV2 ? (
                       <img
-                        src={require(`../../../assets/images/${imageReview2}`)}
+                        src={prImageRV2}
                         alt='Logo'
                       />
                     ) : (
@@ -454,9 +468,9 @@ const UpdateProduct = (props) => {
                     />
                   </Form.Group>
                   <div className={cx('image-preview')}>
-                    {image ? (
+                    {prImageRV3 ? (
                       <img
-                        src={require(`../../../assets/images/${imageReview3}`)}
+                        src={prImageRV3}
                         alt='Logo'
                       />
                     ) : (
@@ -480,9 +494,9 @@ const UpdateProduct = (props) => {
                 </Col>
 
                 <div className={cx('image-preview')}>
-                  {image ? (
+                  {prImageMain ? (
                     <img
-                      src={require(`../../../assets/images/${image}`)}
+                      src={prImageMain}
                       alt='Logo'
                     />
                   ) : (
@@ -494,9 +508,9 @@ const UpdateProduct = (props) => {
               <Button
                 variant='primary'
                 type='submit'
-                onClick={(e) => handleUpdate(e)}
-                className='m-3'>
-                Update
+                              onClick={(e) => handleCreate(e)}
+                          className="m-3">
+                Create
               </Button>
               <Button
                 variant='primary'
@@ -514,6 +528,6 @@ const UpdateProduct = (props) => {
   );
 };
 
-UpdateProduct.propTypes = {};
+ModalAddProduct.propTypes = {};
 
-export default UpdateProduct;
+export default ModalAddProduct;

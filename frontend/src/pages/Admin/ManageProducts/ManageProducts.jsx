@@ -81,6 +81,9 @@ const ManageProducts = (props) => {
             <button
               className='btn btn-success'
               style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              onClick={() => {
+                navigate('/admin/add-product')
+              }}
             >
               <GrAddCircle/>
               Add Products

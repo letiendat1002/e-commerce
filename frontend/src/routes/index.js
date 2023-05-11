@@ -25,6 +25,7 @@ import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes
 import ModelViewOrder from '../pages/Admin/components/ModalViewOrder/ModelViewOrder';
 import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
 import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
+import ModalAddProduct from '../pages/Admin/components/ModalAddProduct/ModalAddProduct';
 
 const router = createBrowserRouter([
   {
@@ -138,6 +139,10 @@ const router = createBrowserRouter([
       {
         path: 'manage-orders/:orderID',
         element: <ModelViewOrder />,
+      },
+      {
+        path: 'add-product',
+        element: <ModalAddProduct />,
       },
     ],
   },
