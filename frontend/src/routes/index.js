@@ -25,6 +25,8 @@ import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes
 import ModelViewOrder from '../pages/Admin/components/ModalViewOrder/ModelViewOrder';
 import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
 import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
+import ManageRefund from '../pages/Admin/components/ManagerRefund/ManagerRefund';
+import ModelViewRefund from '../pages/Admin/components/ModelViewRefund/ModelViewRefund';
 
 const router = createBrowserRouter([
   {
@@ -134,6 +136,14 @@ const router = createBrowserRouter([
       {
         path: 'manage-orders',
         element: <ManageOrders />,
+      },
+      {
+        path: 'manage-refund',
+        element: <ManageRefund />,
+      },
+      {
+        path: 'manage-refund/:orderID',
+        element: <ModelViewRefund />,
       },
       {
         path: 'manage-orders/:orderID',

@@ -331,7 +331,7 @@ const Dashboard = (props) => {
       const time = now.toLocaleTimeString();
       const date = now.toLocaleDateString();
       if (user) {
-        const fullName = users.fullName;
+        const fullName = users?.fullName;
         allInfo.push({ fullName, count: orderCount, step, time, date });
       }
     }
@@ -439,7 +439,7 @@ const Dashboard = (props) => {
                 />
               </BarChart>
             </ResponsiveContainer> */}
-            <CardOutLiner className='col-lg-6 col-md-12 col-sm-12' style = {{padding: "0!important"}}
+            <CardOutLiner className=' content-right col-lg-6 col-md-12 col-sm-12' style = {{padding: "0!important"}}
               element={<AlertCard data = {infoOrder}/>}
             />
           {/* </div> */}

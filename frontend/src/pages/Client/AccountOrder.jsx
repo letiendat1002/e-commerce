@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import formatProductPrice from '../../Helper'
-import { getOrderDetail } from '../../Redux/slice/orderDetailSlice'
+import { getOrderDetail, refundOrderID } from '../../Redux/slice/orderDetailSlice'
 import { getOrder, updateOrders } from '../../Redux/slice/paymentSlice'
 import { getAllProducts } from '../../Redux/slice/productSlice'
 import { postRating } from '../../Redux/slice/ratingSlice'
@@ -127,6 +127,10 @@ const AccountOrder = () => {
         {
             title: "Đánh giá",
             dataIndex: 'rating'
+        }, 
+        {
+            title: "Trả Đơn",
+            dataIndex: 'refund'
         }
       ]
 
@@ -144,10 +148,32 @@ const AccountOrder = () => {
 
     const ratingItem = product?.filter(item => item.productID ==productRating)
 
+    const handleRefund = (product, idOrder) => {
+        const data = {
+            orderID: idOrder, 
+            productID: product.productID,
+            status: "ON_REFUND"
+        }
+
+        dispatch(refundOrderID(data))
+        .then((res) => {
+            if (res.payload.status === 200){
+                toast.success(("Hoàn trả sản phẩm hoàn tất"))
+            }
+            else{
+                toast.error('Hoàn trả đơn hàng thất bại')
+            }
+            dispatch(getOrder(userID))
+            dispatch(getOrderDetail())
+        })
+    }
+
     const orderDetailForID = orderDetail.filter(item => item.orderID === viewID)
     const data = orderDetailForID.map((items) => {
         const orders = order.filter(order => order.orderID === items.orderID)
-        const status = orders[0].status
+        const dateOrder = orders[0].dateOrder?.split('-')[orders[0].dateOrder?.split('-').length - 2]
+        const dateCompleted = orders[0].dateCompleted?.split('-')[orders[0].dateCompleted?.split('-').length - 2] || null
+        const status = orders[0]?.status
         const productMatches = product.find((productItem) => {
             return items.productID === productItem.productID;
         });
@@ -164,6 +190,13 @@ const AccountOrder = () => {
                     ) : (
                         <button style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#d5d5d5", color: "#000000"}}>Vote</button>
                     )}
+                </div>,
+                refund: <div>{
+                    (status == "COMPLETED") ? ((dateCompleted != "null" || dateCompleted != "undefined") && ((dateCompleted - dateOrder) <= 3) && ((dateCompleted - dateOrder) >= 0) && (items.status != "ON_REFUND") &&(items.status != "REFUND_COMPLETED")) ? (
+                        <button onClick={() => handleRefund(productMatches, items.orderID)} style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#e6b112", color: "#ffffff"}}>Refund</button>
+                    ) : (
+                        <button style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#d5d5d5", color: "#000000"}}>Refund</button>
+                    ) : (<button style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#d5d5d5", color: "#000000"}}>Refund</button>)}
                 </div>
         })
         }
