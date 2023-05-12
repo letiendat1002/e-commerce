@@ -30,6 +30,17 @@ export const getOrderDetail = createAsyncThunk('getOrderDetail', async(data) => 
     }
 })
 
+export const refundOrderID = createAsyncThunk('refundOrderID', async(data) => {
+    try {
+        const response = await axiosClient4.put('orderdetails/refund', data)
+        return response
+    }
+    catch(error){
+        console.log("error: ", error)
+        throw error
+    }
+})
+
 export const orderDetailSlice = createSlice({
     name: 'orderDetail', 
     initialState, 
@@ -56,6 +67,16 @@ export const orderDetailSlice = createSlice({
             state.data = action.payload
         })
         builder.addCase(getOrderDetail.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(refundOrderID.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(refundOrderID.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+        })
+        builder.addCase(refundOrderID.rejected, (state, action) => {
             state.loading = true
         })
     }

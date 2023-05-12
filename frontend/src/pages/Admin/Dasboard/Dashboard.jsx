@@ -30,6 +30,8 @@ import { getOrderDetail } from '../../../Redux/slice/orderDetailSlice';
 import convertToUSD from '../../../Helper/convertUSD';
 import { getAllOrder } from '../../../Redux/slice/paymentSlice';
 import { Link } from 'react-router-dom';
+import AlertCard from '../components/AlertCard/AlertCard';
+import CardOutLiner from '../components/Card';
 
 export const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -149,7 +151,7 @@ const Dashboard = (props) => {
   const AllOrder = useSelector(state => state.order.data) || []
   const orderTotal = AllOrder.length
   const user = useSelector(state => state.userAPI.data)
-  const Alluser = user.filter((item) => item.roles.includes("ROLE_CUSTOMER"))?.length
+  const Alluser = user?.filter((item) => item.roles.includes("ROLE_CUSTOMER"))?.length
   const data = [
     {
       name: "Laptop",
@@ -210,33 +212,139 @@ const Dashboard = (props) => {
   ]
 
   const [dateOrder, setDateOrder] = useState([]);
+  const [monthOrder, setMonthOrder] = useState([]);
+  const [quyOrder, setQuyOrder] = useState([])
 
-  const orderDateSame = () => {
+  const [sort, setSort] = useState('nam')
+  let [quy, setQuy] = useState('01')
+  let [month, setMonth] = useState(1)
+
+  const orderForMonth = () => {
     const dates = [];
   
     for (let i = 0; i < AllOrder.length; i++) {
-      const date = AllOrder[i].dateOrder;
+      const date = AllOrder[i].dateOrder?.split('-')[AllOrder[i].dateOrder?.split('-').length - 2];
       
       if (!dates.some(d => d.date === date)) {
-        const count = AllOrder.filter(o => o.dateOrder === date).length;
+        const count = AllOrder?.filter(o => o.dateOrder?.split('-')[o.dateOrder?.split('-').length - 2] == date).length;
         dates.push({ date, count });
       }
     }
   
-    setDateOrder(dates);
+    setMonthOrder(dates);
+  } 
+
+
+  const ordersForQuarter = () => {
+    const quarters = [];
+    
+    for (let i = 0; i < AllOrder.length; i++) {
+      const orderDate = new Date(AllOrder[i].dateOrder);
+      const quarter = Math.floor((orderDate.getMonth() + 3) / 3);
+    
+      if (!quarters.some(q => q.quarter === quarter)) {
+        const count = AllOrder?.filter(o => {
+          const oDate = new Date(o.dateOrder);
+          const oQuarter = Math.floor((oDate.getMonth() + 3) / 3);
+          return oQuarter === quarter;
+        }).length;
+        
+        quarters.push({ quarter, count });
+      }
+    }
+    
+    setQuyOrder(quarters);
   }
+
+  const orderDateSame = () => {
+  const ordersByDate = {};
+
+  for (let i = 0; i < AllOrder.length; i++) {
+    const orderDate = new Date(AllOrder[i].dateOrder);
+    
+    if (orderDate.getMonth() === month - 1) {
+      const date = orderDate.getDate();
+      const orderId = AllOrder[i].orderId;
+      const orderValue = AllOrder[i].orderValue;
+      
+      if (!ordersByDate[date]) {
+        ordersByDate[date] = { orderCount: 1, orderValue: orderValue };
+      } else {
+        ordersByDate[date].orderCount++;
+        ordersByDate[date].orderValue += orderValue;
+      }
+    }
+  }
+
+  const dates = Object.keys(ordersByDate).map(date => {
+    return { date: `${date}/${month}`, count: ordersByDate[date].orderCount, value: ordersByDate[date].orderValue };
+  });
+
+  setDateOrder(dates);
+}
   
   useEffect(() => {
-    orderDateSame();
+    orderForMonth()
   }, [AllOrder]);
-  const dataChart3 = dateOrder
-  // const keys = Object.keys(groupedOrders);
-  // const firstKey = keys[0];
-  // const firstItemLength = groupedOrders[firstKey].length;
-  
-  // console.log(`First key: ${firstKey}`);
-  // console.log(`Length of array for first key: ${firstItemLength}`);
 
+  useEffect(() => {
+    orderDateSame();
+  }, [month])
+
+  useEffect(() => {
+    ordersForQuarter()
+  }, [AllOrder, quy])
+
+  const dataChart3 = dateOrder
+  const dataChartMonth = monthOrder
+  const dataChartQuater = quyOrder
+  const handleChageSort = (e) => {
+    setSort(e.target.value)
+    setMonth('01')
+    setQuy('01')
+  }
+
+  const [orderSort, setOrderSort] = useState([])
+
+  const getTenOrderTop = () => {
+      const orderSelect = [];
+      for(let i = 0; i < AllOrder.length; i++){
+        const userId = AllOrder[i].userID
+        if (!orderSelect.some(d => d.userId === userId)) {
+          const count = AllOrder?.filter(o => o.userID == userId).length;
+          orderSelect.push({ userId, count });
+        }
+      }
+      setOrderSort(orderSelect)
+  }
+
+  const orderTop = orderSort?.sort((a,b) => a.count - b.count)
+  const [infoOrder, setInfoOrder] = useState([])
+  const getAllInfo = () => {
+    const allInfo = [];
+    for (let i = 0; i < orderTop.length; i++) {
+      const userId = orderTop[i].userId;
+      const orderCount = orderTop[i].count;
+      const users = user?.find(u => u.userID === userId);
+      const step = allInfo.length + 1
+      const now = new Date(); 
+      const time = now.toLocaleTimeString();
+      const date = now.toLocaleDateString();
+      if (user) {
+        const fullName = users?.fullName;
+        allInfo.push({ fullName, count: orderCount, step, time, date });
+      }
+    }
+    setInfoOrder(allInfo);
+  }
+
+  useEffect(() => {
+    getTenOrderTop()
+  }, [AllOrder])
+
+  useEffect(() => {
+    getAllInfo()
+  }, [orderTop])
   return (
     <div className='dashboard-container '>
       <div className='dashboard-title'><h1 style={{padding: "1rem 10px"}}>Trang Chủ</h1></div>
@@ -308,8 +416,8 @@ const Dashboard = (props) => {
               </Link>
             </div>      
           </div>
-          <div className='content-right col-lg-6 col-md-12 col-sm-12'>
-            <ResponsiveContainer
+          {/* <div className='content-right col-lg-6 col-md-12 col-sm-12'> */}
+            {/* <ResponsiveContainer
               width='100%'
               height='100%'>
               <BarChart
@@ -330,38 +438,119 @@ const Dashboard = (props) => {
                   fill='#82ca9d'
                 />
               </BarChart>
-            </ResponsiveContainer>
-          </div>
+            </ResponsiveContainer> */}
+            <CardOutLiner className=' content-right col-lg-6 col-md-12 col-sm-12' style = {{padding: "0!important"}}
+              element={<AlertCard data = {infoOrder}/>}
+            />
+          {/* </div> */}
         </div>
       </div>
 
       <div className='container'>
         <div className='dashboard-content-2 row'>
-          <h3 style={{padding: "1rem 0 0.5rem 0"}}>Thống kê đơn hàng trong tháng</h3>
+        <div style={{display: "flex", justifyContent: "space-around"}} className='col-lg-7 sortChart'>
+            {(sort == "nam") ? (
+              <h3 style={{padding: "1rem 0 0.5rem 0"}}>Thống kê ĐH theo từng năm</h3>
+            ): (sort == "quy") ? (
+              <h3 style={{padding: "1rem 0 0.5rem 0"}}>Thống kê đơn hàng theo từng qúy</h3>
+            ) : (
+              <h3 style={{padding: "1rem 0 0.5rem 0"}}>Thống kê đơn hàng theo tháng</h3>
+            )    
+            }
+            <select onChange={(e) => handleChageSort(e)}>
+              <option value="nam" >Hiển Thị Theo Năm</option>
+              <option value="thang" >Hiển Thị Theo Tháng</option>
+              <option value="quy" >Hiển Thị Theo Quý</option>
+            </select>
+            { (sort == "thang") ? (
+                <select onChange={(e) => setMonth(e.target.value)}>
+                  <option value="01">Tháng 1</option>
+                  <option value="02">Tháng 2</option>
+                  <option value="03">Tháng 3</option>
+                  <option value="04">Tháng 4</option>
+                  <option value="05">Tháng 5</option>
+                  <option value="06">Tháng 6</option>
+                  <option value="07">Tháng 7</option>
+                  <option value="08">Tháng 8</option>
+                  <option value="09">Tháng 9</option>
+                  <option value="10">Tháng 10</option>
+                  <option value="11">Tháng 11</option>
+                  <option value="12">Tháng 12</option>
+                </select>
+              ) : (<div></div>)
+            }
+          </div>
           <div className='content-left-2 col-lg-7 col-md-12 col-sm-12'>
             <ResponsiveContainer
               width='100%'
               height='100%'>
-              <AreaChart
-                data={dataChart3}
-                syncId='anyId'
-                margin={{
-                  top: 10,
-                  right: 30,
-                  left: 0,
-                  bottom: 0,
-                }}>
-                <CartesianGrid strokeDasharray='3 3' />
-                <XAxis dataKey='date' />
-                <YAxis />
-                <Tooltip />
-                <Area
-                  type='monotone'
-                  dataKey='count'
-                  stroke='#82ca9d'
-                  fill='#82ca9d'
-                />
-              </AreaChart>
+              {
+                (sort == "thang") ? (
+                  <AreaChart
+                  data={dataChart3}
+                  syncId='anyId'
+                  margin={{
+                    top: 10,
+                    right: 30,
+                    left: 0,
+                    bottom: 0,
+                  }}>
+                  <CartesianGrid strokeDasharray='3 3' />
+                  <XAxis dataKey='date' />
+                  <YAxis />
+                  <Tooltip />
+                  <Area
+                    type='monotone'
+                    dataKey='count'
+                    stroke='#82ca9d'
+                    fill='#82ca9d'
+                  />
+                </AreaChart>
+                ) : (sort == "nam") ? (
+                  <AreaChart
+                  data={dataChartMonth.sort((a,b) => a.date - b.date)}
+                  syncId='anyId'
+                  margin={{
+                    top: 10,
+                    right: 30,
+                    left: 0,
+                    bottom: 0,
+                  }}>
+                  <CartesianGrid strokeDasharray='3 3' />
+                  <XAxis dataKey='date' />
+                  <YAxis />
+                  <Tooltip />
+                  <Area
+                    type='monotone'
+                    dataKey='count'
+                    stroke='#82ca9d'
+                    fill='#82ca9d'
+                  />
+                </AreaChart>
+                ) : (
+                  <AreaChart
+                  data={dataChartQuater}
+                  syncId='anyId'
+                  margin={{
+                    top: 10,
+                    right: 30,
+                    left: 0,
+                    bottom: 0,
+                  }}>
+                  <CartesianGrid strokeDasharray='3 3' />
+                  <XAxis dataKey='quarter' />
+                  <YAxis />
+                  <Tooltip />
+                  <Area
+                    type='monotone'
+                    dataKey='count'
+                    stroke='#82ca9d'
+                    fill='#82ca9d'
+                  />
+                </AreaChart>
+                )
+              }
+             
             </ResponsiveContainer>
           </div>
           <div className='content-right-2 col-lg-5 col-md-12 col-sm-12'> 

@@ -84,7 +84,12 @@ const ProductDetail = ({match, history}) => {
     let PC = Products.filter(product => product.categoryID === 4);
 
   const AddToCartHandle = (products) => {
-    dispatch(addToCart(products))
+    let productPrice = products.unitPrice
+    if (products.discount != null){
+      productPrice = products.unitPrice - (products.unitPrice * (products.discount / 100)) 
+    }
+    const updatedProduct = {...products, unitPrice: productPrice};
+    dispatch(addToCart(updatedProduct))
   };
 
   const productID = Products.filter((item) => item.slug === slug)[0]?.productID
@@ -286,8 +291,8 @@ const ProductDetail = ({match, history}) => {
               <div className="product-right col-lg-6 col-sm-12 col-md-12 col-12 ps-4">
                 <div className="product">
                   <div className="product-price">
-                    <span className="offer-price">{formatProductPrice(product.unitPrice)}</span>
-                    <span className="sale-price"><del>30.000.000 đ</del></span>
+                    <span className="offer-price">{(product.discount) ? formatProductPrice((product.unitPrice - (product.unitPrice * (product.discount/100)))) : (formatProductPrice((product.unitPrice)))}</span>
+                    <span className="sale-price">{(product.discount) ? (<del>{formatProductPrice(product.unitPrice)}</del>) : ("")}</span>
                   </div>
                   <div className="product-details">
                     <p> {product.description}</p>
@@ -350,7 +355,7 @@ const ProductDetail = ({match, history}) => {
                       Products.map((products ,idx) => {
                         if (products.slug === slug){
                           return (
-                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(products)}  key={idx}>
+                            <Link to= {"/cart"} onClick= {() => AddToCartHandle(products)}  key={idx}>
                               <i className="bx bxs-zap"></i> Mua Ngay
                             </Link>        
                           )
@@ -634,7 +639,7 @@ const ProductDetail = ({match, history}) => {
                         <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
                               <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                         </div></Link>
                       )
                     })
@@ -647,7 +652,7 @@ const ProductDetail = ({match, history}) => {
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
                               <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                           </div></Link>
                       )
                     })
@@ -660,7 +665,7 @@ const ProductDetail = ({match, history}) => {
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
                               <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                           </div></Link>
                       )
                     })
@@ -673,7 +678,7 @@ const ProductDetail = ({match, history}) => {
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
                               <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                           </div></Link>
                       )
                     })
