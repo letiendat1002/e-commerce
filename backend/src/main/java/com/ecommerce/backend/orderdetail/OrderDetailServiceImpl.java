@@ -134,12 +134,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     ) {
         fetchAllOrderDetailsByOrderID(orderID)
                 .forEach(
-                        orderDetail -> {
-                            productService.updateProductQuantityByAmount(
-                                    orderDetail.getProductID(),
-                                    orderDetail.getQuantity()
-                            );
-                        }
+                        orderDetail -> productService.updateProductQuantityByAmount(
+                                orderDetail.getProductID(),
+                                orderDetail.getQuantity()
+                        )
                 );
     }
 
@@ -148,14 +146,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public void deleteAllOrderDetailsByOrderID(BigInteger orderID) {
         fetchAllOrderDetailsByOrderID(orderID)
                 .forEach(
-                        orderDetail -> {
-                            deleteOrderDetail(
-                                    new OrderDetailID(
-                                            orderDetail.getOrderID(),
-                                            orderDetail.getProductID()
-                                    )
-                            );
-                        }
+                        orderDetail -> deleteOrderDetail(
+                                new OrderDetailID(
+                                        orderDetail.getOrderID(),
+                                        orderDetail.getProductID()
+                                )
+                        )
                 );
     }
 
@@ -214,10 +210,18 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     ) {
         var isChanged = false;
 
-        if (!request.status().equals(orderDetail.getStatus())) {
-            orderDetail.setStatus(request.status());
+        if (request.status() != null) {
+            if (!request.status().equals(orderDetail.getStatus())) {
+                orderDetail.setStatus(request.status());
+                isChanged = true;
+            }
+        }
+
+        if (request.status() == null && orderDetail.getStatus() != null) {
+            orderDetail.setStatus(null);
             isChanged = true;
         }
+
 
         if (!isChanged) {
             throw new DuplicateResourceException(
