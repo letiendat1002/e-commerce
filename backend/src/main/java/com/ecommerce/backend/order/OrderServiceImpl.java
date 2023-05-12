@@ -75,9 +75,11 @@ public class OrderServiceImpl implements OrderService {
                 beforeChangeStatus == OrderStatus.PENDING ||
                         beforeChangeStatus == OrderStatus.CONFIRMED;
 
-        if (isBeforeStatusPendingOrConfirmed &&
-                afterChangeStatus == OrderStatus.CANCELLED
-        ) {
+        var isStatusPendingOrConfirmedChangedToCancelled =
+                isBeforeStatusPendingOrConfirmed &&
+                        afterChangeStatus == OrderStatus.CANCELLED;
+
+        if (isStatusPendingOrConfirmedChangedToCancelled) {
             orderDetailService
                     .updateProductQuantityWhenOrderCancelled(
                             orderID
