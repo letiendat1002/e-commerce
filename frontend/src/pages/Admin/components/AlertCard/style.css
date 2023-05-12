@@ -105,6 +105,17 @@
     justify-content: space-between;
 }
 
+.warning-data-table-container .data-table-body {
+    height: calc(100% - 35px);
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* hide scrollbar in IE 10+ */
+    scrollbar-width: none; /* hide scrollbar in Firefox */
+}
+
+.warning-data-table-container .data-table-body::-webkit-scrollbar {
+    width: 0 !important; /* hide scrollbar in Chrome, Safari and Opera */
+}
+
 .warning-data-table-container .data-table-header .table-header-col {
     width: 96px;
     height: 100%;
@@ -160,21 +171,4 @@
 
 .warning-data-table-container .data-table-row .content-col {
     width: 287px;
-}
-
-::-webkit-scrollbar {
-    width: 7px;
-}
-
-::-webkit-scrollbar-thumb {
-    /* background: var(--blue-500); */
-    background: linear-gradient(180deg, #ee4d2d, #40a20300);
-    border-radius: 5px;
-    border-radius: 3rem;
-}
-
-::-webkit-scrollbar-track {
-    background: linear-gradient(180deg, #ee4d2d, #40a20300);
-    border-radius: 5px;
-    border: none;
 }

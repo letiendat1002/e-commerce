@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Logo from '../assets/images/Logo.svg';
+// import Logo from '../assets/images/Logo.svg';
+import Logo from '../components/Logo/Logo';
 import '../assets/css/Header.scss';
 import '../assets/css/config.scss';
 import { Form, InputGroup, NavItem } from 'react-bootstrap';
@@ -93,7 +94,8 @@ const Header = () => {
               className='menu__tablet--item--child'
               onClick={() => handleCloseMenu()}>
               <div className='tablet--item--child'>
-                <img src={Logo}></img>
+                {/* <img src={Logo}></img> */}
+                <Logo />
               </div>
               <i
                 className='closeIcon'
@@ -226,10 +228,11 @@ const Header = () => {
             className='menu__tablet--overlay d-none'
             onClick={() => handleCloseMenu()}></div>
         </div>
-        <img
+        {/* <img
           src={Logo}
           alt=''
-        />
+        /> */}
+        <Logo></Logo>
         <InputGroup className='input__form__search'>
           <Form.Control
             as='input'
