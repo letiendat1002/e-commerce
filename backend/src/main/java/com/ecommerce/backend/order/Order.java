@@ -13,7 +13,6 @@ import lombok.ToString;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,8 +36,11 @@ public class Order {
     @Column(name = "OrderID")
     private BigInteger orderID;
 
+    @Column(name = "UserID")
+    private BigInteger userID;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
+    @JoinColumn(name = "UserID", insertable = false, updatable = false)
     @ToString.Exclude
     private User user;
 
@@ -54,27 +56,51 @@ public class Order {
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(name = "DateOrder")
-    private LocalDate dateOrder;
+    private LocalDate dateOrder = LocalDate.now();
 
     @Column(name = "Address")
     private String address;
 
-    @Transient
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "DateCompleted")
+    private LocalDate dateCompleted;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<OrderDetail> orderDetails;
 
-    public Order(User user,
-                 BigInteger total,
+    public Order(BigInteger orderID,
+                 BigInteger userID,
+                 BigInteger additionalPrice,
                  OrderPaymentType paymentType,
-                 LocalDate dateOrder,
                  String address) {
-        this.user = user;
-        this.additionalPrice = total;
+        this.orderID = orderID;
+        this.userID = userID;
+        this.additionalPrice = additionalPrice;
         this.paymentType = paymentType;
-        this.dateOrder = dateOrder;
+        this.address = address;
+    }
+
+    public Order(BigInteger orderID,
+                 BigInteger userID,
+                 BigInteger additionalPrice,
+                 OrderPaymentType paymentType,
+                 OrderStatus status,
+                 String address) {
+        this.orderID = orderID;
+        this.userID = userID;
+        this.additionalPrice = additionalPrice;
+        this.paymentType = paymentType;
+        this.status = status;
+        this.address = address;
+    }
+
+    public Order(BigInteger userID,
+                 BigInteger additionalPrice,
+                 OrderPaymentType paymentType,
+                 String address) {
+        this.userID = userID;
+        this.additionalPrice = additionalPrice;
+        this.paymentType = paymentType;
         this.address = address;
     }
 
@@ -83,11 +109,11 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(getCreatedAt(), order.getCreatedAt());
+        return Objects.equals(getAdditionalPrice(), order.getAdditionalPrice()) && getPaymentType() == order.getPaymentType() && Objects.equals(getDateOrder(), order.getDateOrder()) && Objects.equals(getAddress(), order.getAddress());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreatedAt());
+        return Objects.hash(getAdditionalPrice(), getPaymentType(), getDateOrder(), getAddress());
     }
 }

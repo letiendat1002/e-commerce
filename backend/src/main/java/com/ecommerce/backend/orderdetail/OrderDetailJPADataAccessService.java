@@ -1,5 +1,6 @@
 package com.ecommerce.backend.orderdetail;
 
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -50,5 +51,10 @@ public class OrderDetailJPADataAccessService implements OrderDetailDAO {
     @Override
     public boolean existsOrderDetailByID(OrderDetailID orderDetailID) {
         return orderDetailRepository.existsById(orderDetailID);
+    }
+
+    @Override
+    public List<OrderDetail> selectAllOnRefundOrderDetails() {
+        return orderDetailRepository.findAllByStatus(OrderDetailStatus.ON_REFUND);
     }
 }

@@ -28,6 +28,7 @@ import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/P
 import ManageRefund from '../pages/Admin/components/ManagerRefund/ManagerRefund';
 import ModelViewRefund from '../pages/Admin/components/ModelViewRefund/ModelViewRefund';
 
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -56,7 +57,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <Login />,
+        element: (
+          <ProtectRoutesLogin>
+            <Login />
+          </ProtectRoutesLogin>
+        ),
       },
       {
         path: '/logout',
@@ -114,7 +119,7 @@ const router = createBrowserRouter([
         element: <ProductDetails />,
       },
       {
-        path: 'manage-products/Update/:idProduct',
+        path: 'manage-products/update/:idProduct',
         element: <UpdateProduct />,
       },
       {
@@ -148,6 +153,10 @@ const router = createBrowserRouter([
       {
         path: 'manage-orders/:orderID',
         element: <ModelViewOrder />,
+      },
+      {
+        path: 'add-product',
+        element: <ModalAddProduct />,
       },
     ],
   },

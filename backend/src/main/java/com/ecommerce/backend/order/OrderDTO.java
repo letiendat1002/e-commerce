@@ -13,6 +13,7 @@ public record OrderDTO(
         OrderPaymentType paymentType,
         OrderStatus status,
         LocalDate dateOrder,
-        String address
+        String address,
+        LocalDate dateCompleted
 ) {
 }

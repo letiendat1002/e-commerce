@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, BigInteger> {
-    List<Order> findAllByUser(User user);
+    List<Order> findAllByUserID(BigInteger userID);
 
     boolean existsByOrderIDAndUser(BigInteger orderID, User user);
 }

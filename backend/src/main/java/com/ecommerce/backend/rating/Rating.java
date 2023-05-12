@@ -10,7 +10,6 @@ import lombok.ToString;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -70,18 +69,17 @@ public class Rating {
     @Column(name = "DateRating")
     private LocalDate dateRating;
 
-    @Transient
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     public Rating(BigInteger userID,
                   BigInteger orderID,
                   BigInteger productID,
+                  User user,
                   Integer rateAmount,
                   String comment,
                   LocalDate dateRating) {
         this.userID = userID;
         this.orderID = orderID;
         this.productID = productID;
+        this.user = user;
         this.rateAmount = rateAmount;
         this.comment = comment;
         this.dateRating = dateRating;
@@ -92,11 +90,11 @@ public class Rating {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rating rating = (Rating) o;
-        return Objects.equals(getCreatedAt(), rating.getCreatedAt());
+        return Objects.equals(getUserID(), rating.getUserID()) && Objects.equals(getOrderID(), rating.getOrderID()) && Objects.equals(getProductID(), rating.getProductID());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreatedAt());
+        return Objects.hash(getUserID(), getOrderID(), getProductID());
     }
 }

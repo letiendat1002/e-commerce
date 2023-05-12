@@ -51,20 +51,31 @@ const ModalUpdateUser = (props) => {
       setGender(data1.gender);
       setImage('');
       if (data1.image) {
-        setPreviewImage(`data:image/jpeg;base64,${data1.image}`);
+        setPreviewImage(data1.image);
       }
     }
   }, [data1]);
 
-  const handleUploadImage = (e) => {
+  console.log(data1);
+
+  const handleUploadImage = async (e) => {
     if (e.target && e.target.files && e.target.files[0]) {
       setPreviewImage(URL.createObjectURL(e.target.files[0]));
-      setImage(e.target.files[0]);
+      const rss = await toBase64(e.target.files[0]);
+      setImage(rss);
     } else {
       setPreviewImage('');
     }
     console.log('Upload', e.target.files[0]);
   };
+
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
 
   const validateEmail = (email) => {
     return String(email)
@@ -77,16 +88,15 @@ const ModalUpdateUser = (props) => {
   const { userID } = data1;
 
   const handleCreateUser = async () => {
-    // const isValidate = validateEmail(email);
-    // if (!isValidate) {
-    //   // alert("Error")
-    //   toast.error('Invalid Email');
-    //   return;
-    // }
+    const isValidate = validateEmail(email);
+    if (!isValidate) {
+      // alert("Error")
+      toast.error('Invalid Email');
+      return;
+    }
 
     // if (!password) {
     //   toast.error('Invalid password');
-    //   return;
     // }
 
     let data = await putUpdateUser(userID, username, gender, phone, image);
@@ -102,6 +112,8 @@ const ModalUpdateUser = (props) => {
     }
   };
 
+  console.log(image);
+
   return (
     <div>
       <Modal
@@ -114,7 +126,7 @@ const ModalUpdateUser = (props) => {
           <Modal.Title>Update User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className='row gx-5'>
+          <form className='row'>
             <div className='col-md-6'>
               <label
                 htmlFor='inputEmail4'
@@ -130,7 +142,7 @@ const ModalUpdateUser = (props) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-{/* 
+            {/* 
             <div className='col-md-6'>
               <label
                 className='form-label'
@@ -209,7 +221,7 @@ const ModalUpdateUser = (props) => {
               </select>
             </div>
 
-            {/* <div className='col-12'>
+            <div className='col-12'>
               <label
                 htmlFor='img'
                 className='form-label label-upload'>
@@ -220,7 +232,6 @@ const ModalUpdateUser = (props) => {
                 type='file'
                 id='img'
                 hidden
-                disabled
                 onChange={(e) => handleUploadImage(e)}
               />
             </div>
@@ -234,7 +245,7 @@ const ModalUpdateUser = (props) => {
               ) : (
                 <span>Upload File Image</span>
               )}
-            </div> */}
+            </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
@@ -249,9 +260,13 @@ const ModalUpdateUser = (props) => {
             // onClick={handleCloseModal}
             onClick={handleCreateUser}
             // onClick={handleClose}
-            style={{display:"flex",justifyContent:'space-between',alignItems:'center',gap:'5px'}}
-          >
-             Update <GrCheckmark/>
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '5px',
+            }}>
+            Update <GrCheckmark />
           </Button>
         </Modal.Footer>
       </Modal>

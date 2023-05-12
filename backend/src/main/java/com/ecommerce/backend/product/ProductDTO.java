@@ -12,6 +12,7 @@ public record ProductDTO(
         String imageReview2,
         String imageReview3,
         BigInteger unitPrice,
+        Integer discount,
         Long quantity,
         String description,
         Integer yearRelease,

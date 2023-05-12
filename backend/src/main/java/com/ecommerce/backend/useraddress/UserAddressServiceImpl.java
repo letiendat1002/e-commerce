@@ -3,71 +3,46 @@ package com.ecommerce.backend.useraddress;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import com.ecommerce.backend.user.User;
-import com.ecommerce.backend.user.UserDAO;
+import com.ecommerce.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class UserAddressServiceImpl implements UserAddressService {
     private final UserAddressDAO userAddressDAO;
-    private final UserAddressDTOMapper userAddressDTOMapper;
-    private final UserDAO userDAO;
+    private final UserService userService;
 
     @Override
-    public List<UserAddressDTO> fetchAllUserAddresses() {
-        return userAddressDAO
-                .selectAllUserAddresss()
-                .stream()
-                .map(userAddressDTOMapper)
-                .collect(Collectors.toList());
+    public List<UserAddress> fetchAllUserAddresses() {
+        return userAddressDAO.selectAllUserAddresss();
     }
 
     @Override
-    public List<UserAddressDTO> fetchAllUserAddressesByUserID(BigInteger userID) {
-        var user = selectUserByIdOrThrow(userID);
+    public List<UserAddress> fetchAllUserAddressesByUserID(BigInteger userID) {
+        var user = userService.fetchUserByUserID(userID);
 
-        return userAddressDAO
-                .selectAllUserAddresssByUser(user)
-                .stream()
-                .map(userAddressDTOMapper)
-                .collect(Collectors.toList());
-    }
-
-    private User selectUserByIdOrThrow(BigInteger userID) {
-        return userDAO
-                .selectUserByID(userID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "User not found by userID {%d}".formatted(userID)
-                        )
-                );
+        return userAddressDAO.selectAllUserAddresssByUser(user);
     }
 
     @Override
-    public UserAddressDTO fetchUserAddressByID(BigInteger userAddressID) {
-        return userAddressDTOMapper
-                .apply(selectUserAddressByIdOrThrow(userAddressID));
-    }
-
-    private UserAddress selectUserAddressByIdOrThrow(BigInteger userAddressID) {
+    public UserAddress fetchUserAddressByID(BigInteger userAddressID) {
         return userAddressDAO
                 .selectUserAddressByID(userAddressID)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
-                                "User address not found by userAddressID {%d}".formatted(userAddressID)
+                                "User address not found by userAddressID {%d}"
+                                        .formatted(userAddressID)
                         )
                 );
     }
 
     @Override
-    public UserAddressDTO addUserAddress(UserAddressRequest request) {
-        var user = selectUserByIdOrThrow(request.userID());
+    public UserAddress addUserAddress(UserAddressRequest request) {
+        var user = userService.fetchUserByUserID(request.userID());
 
         var userAddress = new UserAddress(
                 user,
@@ -76,7 +51,6 @@ public class UserAddressServiceImpl implements UserAddressService {
 
         return userAddressDAO
                 .insertUserAddress(userAddress)
-                .map(userAddressDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to add user address"
@@ -85,15 +59,17 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
-    public UserAddressDTO updateUserAddress(BigInteger userAddressID, UserAddressRequest request) {
-        var userAddress = selectUserAddressByIdOrThrow(userAddressID);
+    public UserAddress updateUserAddress(
+            BigInteger userAddressID,
+            UserAddressRequest request
+    ) {
+        var userAddress = fetchUserAddressByID(userAddressID);
 
         checkIfUserExistsByIdOrThrow(request.userID());
         checkAndUpdateChangesOrThrow(request, userAddress);
 
         return userAddressDAO
                 .updateUserAddress(userAddress)
-                .map(userAddressDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to update user address"
@@ -102,7 +78,7 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     private void checkIfUserExistsByIdOrThrow(BigInteger userID) {
-        var isExists = userDAO.existsUserByID(userID);
+        var isExists = userService.existsUserByID(userID);
         if (!isExists) {
             throw new ResourceNotFoundException(
                     "User not found by userID {%d}".formatted(userID)
@@ -110,12 +86,15 @@ public class UserAddressServiceImpl implements UserAddressService {
         }
     }
 
-    private void checkAndUpdateChangesOrThrow(UserAddressRequest request, UserAddress userAddress) {
+    private void checkAndUpdateChangesOrThrow(
+            UserAddressRequest request,
+            UserAddress userAddress
+    ) {
         var isChanged = false;
 
         if (!request.userID().equals(userAddress.getUser().getUserID())
         ) {
-            var user = selectUserByIdOrThrow(request.userID());
+            var user = userService.fetchUserByUserID(request.userID());
             userAddress.setUser(user);
             isChanged = true;
         }
@@ -142,7 +121,8 @@ public class UserAddressServiceImpl implements UserAddressService {
         var isExists = userAddressDAO.existsUserAddressByID(userAddressID);
         if (!isExists) {
             throw new ResourceNotFoundException(
-                    "User address not found by userAddressID {%d}".formatted(userAddressID)
+                    "User address not found by userAddressID {%d}"
+                            .formatted(userAddressID)
             );
         }
     }

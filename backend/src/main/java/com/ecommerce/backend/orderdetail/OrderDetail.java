@@ -2,6 +2,7 @@ package com.ecommerce.backend.orderdetail;
 
 
 import com.ecommerce.backend.order.Order;
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import com.ecommerce.backend.product.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +11,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -35,6 +35,10 @@ public class OrderDetail {
     @Column(name = "Quantity")
     private Integer quantity;
 
+    @Column(name = "Status")
+    @Enumerated(EnumType.STRING)
+    private OrderDetailStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OrderID", insertable = false, updatable = false)
     @ToString.Exclude
@@ -44,9 +48,6 @@ public class OrderDetail {
     @JoinColumn(name = "ProductID", insertable = false, updatable = false)
     @ToString.Exclude
     private Product product;
-
-    @Transient
-    private LocalDateTime createdAt = LocalDateTime.now();
 
     public OrderDetail(BigInteger orderID,
                        BigInteger productID,
@@ -63,11 +64,11 @@ public class OrderDetail {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDetail that = (OrderDetail) o;
-        return Objects.equals(getCreatedAt(), that.getCreatedAt());
+        return Objects.equals(getOrderID(), that.getOrderID()) && Objects.equals(getProductID(), that.getProductID());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreatedAt());
+        return Objects.hash(getOrderID(), getProductID());
     }
 }
