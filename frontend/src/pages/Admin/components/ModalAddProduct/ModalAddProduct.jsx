@@ -142,14 +142,14 @@ const ModalAddProduct = (props) => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    console.log(product);
-    // let { status, message } = await apiService.postProduct(product);
-    // if (status === 200) {
-    //   toast.success(message);
-    //   navigate('/admin/manage-products');
-    // } else {
-    //   toast.error(message);
-    // }
+    // console.log(product);
+    let { status, message } = await apiService.postProduct(product);
+    if (status === 200) {
+      toast.success(message);
+      navigate('/admin/manage-products');
+    } else {
+      toast.error(message);
+    }
   };
   return (
     <>
