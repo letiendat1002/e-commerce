@@ -27,6 +27,9 @@ import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUp
 import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
 import ManageRefund from '../pages/Admin/components/ManagerRefund/ManagerRefund';
 import ModelViewRefund from '../pages/Admin/components/ModelViewRefund/ModelViewRefund';
+import ModalAddProduct from '../pages/Admin/components/ModalAddProduct/ModalAddProduct';
+import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin'
+// import Prod
 
 
 const router = createBrowserRouter([
