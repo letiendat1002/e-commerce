@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { getOrderDetail, refundOrderID } from '../../../../Redux/slice/orderDetailSlice'
 import { getAllProducts } from '../../../../Redux/slice/productSlice'
 import TableComponent from '../../../../components/Table'
+import formatProductPrice from '../../../../Helper/index'
 import { Image, Pagination } from 'antd'
 import '../ManagerRefund/style.scss'
 import { toast } from 'react-toastify'
@@ -80,8 +81,8 @@ const ModelViewRefund = () => {
                 <td>{items.orderID}</td>
                 <td>{productMatches.name}</td>
                 <td><Image style={{maxHeight: "150px", maxWidth: "150px"}} src={require(`../../../../assets/images/${productMatches.image}`)} preview = {true} /></td>
-                <td>{items.purchasePrice}</td>
-                <td>{items.purchasePrice*items.quantity}</td>
+                <td>{formatProductPrice(items.purchasePrice)}</td>
+                <td>{formatProductPrice(items.purchasePrice*items.quantity)}</td>
                 <td><button onClick={() => handleRefund(items, productMatches)} style={{padding: "4px 20px", backgroundColor: "#e6b112",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xác nhận</button></td>
               </tr>
             )
