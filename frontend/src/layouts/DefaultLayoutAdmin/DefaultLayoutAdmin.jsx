@@ -33,6 +33,11 @@ const DefaultLayoutAdmin = (props) => {
     // callProductsFilter();
   }, [collapsed, dispatch]);
 
+  const containerTransition = {
+    enter: 'slide',
+    exit: 'slide',
+  };
+
   return (
     <>
       <div className='admin-container'>
@@ -62,15 +67,16 @@ const DefaultLayoutAdmin = (props) => {
         </div>
         <ToastContainer
           position='top-right'
-          autoClose={5000}
+          autoClose={1500}
+          limit={2}
           hideProgressBar={false}
-          newestOnTop={false}
+          newestOnTop={true}
           closeOnClick
           rtl={false}
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme='dark'
+          theme='light'
         />
       </div>
     </>

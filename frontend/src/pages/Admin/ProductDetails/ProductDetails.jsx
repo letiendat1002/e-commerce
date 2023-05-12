@@ -75,7 +75,7 @@ const ProductDetails = (props) => {
         <>
           {product ? (
             <Container>
-              <h4 style={{ fontWeight: 'bold',margin:' 10px 0' }}>Product Details</h4>
+              <h4 style={{ fontWeight: 'bold', margin: ' 10px 0' }}>Product Details</h4>
               <Row>
                 <Form>
                   <Row className={cx('row')}>
@@ -360,7 +360,7 @@ const ProductDetails = (props) => {
                         />
                       </Form.Group>
                       <div className={cx('image-preview')}>
-                        {image ? (
+                        {imageReview1 ? (
                           <img
                             src={require(`../../../assets/images/${imageReview1}`)}
                             alt='Logo'
@@ -384,7 +384,7 @@ const ProductDetails = (props) => {
                         />
                       </Form.Group>
                       <div className={cx('image-preview')}>
-                        {image ? (
+                        {imageReview2 ? (
                           <img
                             src={require(`../../../assets/images/${imageReview2}`)}
                             alt='Logo'
@@ -408,7 +408,7 @@ const ProductDetails = (props) => {
                         />
                       </Form.Group>
                       <div className={cx('image-preview')}>
-                        {image ? (
+                        {imageReview3 ? (
                           <img
                             src={require(`../../../assets/images/${imageReview3}`)}
                             alt='Logo'

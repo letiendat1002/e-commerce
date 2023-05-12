@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -12,6 +12,7 @@ import classNames from 'classnames/bind';
 import apiService from '../../../../services/apiServiceProducts';
 import styles from './ModalAddProduct.module.scss';
 import { Select } from 'antd';
+import { CiCircleRemove } from 'react-icons/ci';
 
 let cx = classNames.bind(styles);
 const ModalAddProduct = (props) => {
@@ -77,6 +78,47 @@ const ModalAddProduct = (props) => {
     status,
   } = product;
 
+  const fileInputRefMain = useRef(null);
+  const fileInputRefRv1 = useRef(null);
+  const fileInputRefRv2 = useRef(null);
+  const fileInputRefRv3 = useRef(null);
+  const handleDeleteImageMain = () => {
+    setPrImageMain('');
+    setImageMain('');
+    fileInputRefMain.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      image: '',
+    }));
+  };
+  const handleDeleteImageRv1 = () => {
+    setPrImageRV1('');
+    setImageRv1('');
+    fileInputRefRv1.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      imageReview1: '',
+    }));
+  };
+  const handleDeleteImageRv2 = () => {
+    setPrImageRV2('');
+    setImageRv2('');
+    fileInputRefRv2.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      imageReview2: '',
+    }));
+  };
+  const handleDeleteImageRv3 = () => {
+    setPrImageRV3('');
+    setImageRv3('');
+    fileInputRefRv3.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      imageReview3: '',
+    }));
+  };
+
   const handleOnChange = (newValue) => {
     setProduct((prev) => ({
       ...prev,
@@ -84,15 +126,28 @@ const ModalAddProduct = (props) => {
     }));
   };
 
+  const convertSlug = (text) => {
+    const newText = text.split(' ');
+    const results = newText.join('-');
+    setProduct((prev) => ({
+      ...prev,
+      slug: results,
+    }));
+    return results;
+  };
+  const onChangeSlug = (e) => {
+    convertSlug(e.target.value);
+  };
+
   const handleOnChangeCategory = (category) => {
-    console.log(category)
+    console.log(category);
     setProduct((prev) => ({
       ...prev,
       categoryID: category,
     }));
   };
   const handleOnChangeStatus = (status) => {
-    console.log(status)
+    console.log(status);
     setProduct((prev) => ({
       ...prev,
       status: status,
@@ -142,7 +197,6 @@ const ModalAddProduct = (props) => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    // console.log(product);
     let { status, message } = await apiService.postProduct(product);
     if (status === 200) {
       toast.success(message);
@@ -150,12 +204,14 @@ const ModalAddProduct = (props) => {
     } else {
       toast.error(message);
     }
+    // console.log(product);
   };
+  console.log(product);
   return (
     <>
       {product ? (
         <Container>
-          <h4 style={{fontWeight:'bold',margin:'30px 0'}}>Add New Product</h4>
+          <h4 style={{ fontWeight: 'bold', margin: '30px 0' }}>Add New Product</h4>
           <Row>
             <Form>
               <Row>
@@ -182,7 +238,7 @@ const ModalAddProduct = (props) => {
                       type='text'
                       placeholder='Slug'
                       value={slug || ''}
-                      onChange={(e) => handleOnChange({ slug: e.target.value })}
+                      onChange={onChangeSlug}
                     />
                   </Form.Group>
                 </Col>
@@ -477,6 +533,7 @@ const ModalAddProduct = (props) => {
                     className='mb-3'>
                     <Form.Label>Image review 1</Form.Label>
                     <Form.Control
+                      ref={fileInputRefRv1}
                       type='file'
                       name='ImageRV1'
                       onChange={(e) => handleUploadImage(e)}
@@ -491,6 +548,10 @@ const ModalAddProduct = (props) => {
                     ) : (
                       <span>Upload File Image</span>
                     )}
+                    <CiCircleRemove
+                      className={cx('delete-image')}
+                      onClick={handleDeleteImageRv1}
+                    />
                   </div>
                 </Col>
 
@@ -500,6 +561,7 @@ const ModalAddProduct = (props) => {
                     className='mb-3'>
                     <Form.Label>Image review 2</Form.Label>
                     <Form.Control
+                      ref={fileInputRefRv2}
                       type='file'
                       name='ImageRV2'
                       onChange={(e) => handleUploadImage(e)}
@@ -514,6 +576,10 @@ const ModalAddProduct = (props) => {
                     ) : (
                       <span>Upload File Image</span>
                     )}
+                    <CiCircleRemove
+                      className={cx('delete-image')}
+                      onClick={handleDeleteImageRv2}
+                    />
                   </div>
                 </Col>
 
@@ -523,6 +589,7 @@ const ModalAddProduct = (props) => {
                     className='mb-3'>
                     <Form.Label>Image review 3</Form.Label>
                     <Form.Control
+                      ref={fileInputRefRv3}
                       type='file'
                       name='ImageRV3'
                       onChange={(e) => handleUploadImage(e)}
@@ -537,6 +604,10 @@ const ModalAddProduct = (props) => {
                     ) : (
                       <span>Upload File Image</span>
                     )}
+                    <CiCircleRemove
+                      className={cx('delete-image')}
+                      onClick={handleDeleteImageRv3}
+                    />
                   </div>
                 </Col>
               </Row>
@@ -547,6 +618,7 @@ const ModalAddProduct = (props) => {
                     className='mb-3'>
                     <Form.Label>Image</Form.Label>
                     <Form.Control
+                      ref={fileInputRefMain}
                       type='file'
                       name='ImageMain'
                       onChange={(e) => handleUploadImage(e)}
@@ -563,6 +635,10 @@ const ModalAddProduct = (props) => {
                   ) : (
                     <span>Upload File Image</span>
                   )}
+                  <CiCircleRemove
+                    className={cx('delete-image')}
+                    onClick={handleDeleteImageMain}
+                  />
                 </div>
               </Row>
 

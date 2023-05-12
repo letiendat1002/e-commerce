@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -14,6 +14,7 @@ import classNames from 'classnames/bind';
 import styles from './UpdateProduct.module.scss';
 import './UpdateProduct.scss';
 import { Image } from 'antd';
+import { CiCircleRemove } from 'react-icons/ci';
 let cx = classNames.bind(styles);
 const UpdateProduct = (props) => {
   let { idProduct } = useParams();
@@ -28,6 +29,7 @@ const UpdateProduct = (props) => {
   const [prImageRV1, setPrImageRV1] = useState('');
   const [prImageRV2, setPrImageRV2] = useState('');
   const [prImageRV3, setPrImageRV3] = useState('');
+  const [prevSlug, setPrevSlug] = useState('');
 
   const {
     battery,
@@ -55,22 +57,82 @@ const UpdateProduct = (props) => {
     status,
   } = product;
 
+
+  const fileInputRefMain = useRef(null);
+  const fileInputRefRv1 = useRef(null);
+  const fileInputRefRv2 = useRef(null);
+  const fileInputRefRv3 = useRef(null);
+
+  // fileInputRefMain.current=image
+
+  console.log(fileInputRefMain)
+  const handleDeleteImageMain = () => {
+    setPrImageMain('');
+    setImageMain('');
+    // fileInputRefMain.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      image: '',
+    }));
+  };
+  const handleDeleteImageRv1 = () => {
+    setPrImageRV1('');
+    setImageRv1('');
+    // fileInputRefRv1.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      imageReview1: '',
+    }));
+  };
+  const handleDeleteImageRv2 = () => {
+    setPrImageRV2('');
+    setImageRv2('');
+    // fileInputRefRv2.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      imageReview2: '',
+    }));
+  };
+  const handleDeleteImageRv3 = () => {
+    setPrImageRV3('');
+    setImageRv3('');
+    // fileInputRefRv3.current.value = '';
+    setProduct((prev) => ({
+      ...prev,
+      imageReview3: '',
+    }));
+  };
+
   const handleOnChange = (newValue) => {
+    convertSlug(slug);
     setProduct((prev) => ({
       ...prev,
       ...newValue,
     }));
   };
 
+  const convertSlug = (text) => {
+    const newText = text.split(' ');
+    const results = newText.join('-');
+    setProduct((prev) => ({
+      ...prev,
+      slug: results,
+    }));
+    return results;
+  };
+  const onChangeSlug = (e) => {
+    convertSlug(e.target.value);
+  };
+
   const handleOnChangeCategory = (category) => {
-    console.log(category)
+    console.log(category);
     setProduct((prev) => ({
       ...prev,
       categoryID: category,
     }));
   };
   const handleOnChangeStatus = (status) => {
-    console.log(status)
+    console.log(status);
     setProduct((prev) => ({
       ...prev,
       status: status,
@@ -92,8 +154,10 @@ const UpdateProduct = (props) => {
       toast.error(response.message);
     }
 
-    console.log(product);
+    // console.log(product);
   };
+
+  console.log(product);
 
   function handleBackButtonClick(e) {
     e.preventDefault();
@@ -133,7 +197,7 @@ const UpdateProduct = (props) => {
         }));
       }
     }
-    // console.log('Upload', e.target.files[0]);
+    console.log('Upload', e.target.files[0]);
   };
 
   useEffect(() => {
@@ -170,7 +234,7 @@ const UpdateProduct = (props) => {
                       type='text'
                       placeholder='Slug'
                       value={slug || ''}
-                      onChange={(e) => handleOnChange({ slug: e.target.value })}
+                      onChange={onChangeSlug}
                     />
                   </Form.Group>
                 </Col>
@@ -469,16 +533,20 @@ const UpdateProduct = (props) => {
                       onChange={(e) => handleUploadImage(e)}
                     />
                   </Form.Group>
-                  <div>
-                    {image ? (
+                  <div className={cx('image-preview')}>
+                    {imageReview1 ? (
                       <Image
-                        className={cx('image-preview')}
+                        className={cx('image-preview1')}
                         src={require(`../../../assets/images/${imageReview1}`)}
                         alt='Logo'
                       />
                     ) : (
                       <span>Upload File Image</span>
                     )}
+                    <CiCircleRemove
+                    className={cx('delete-image')}
+                    onClick={handleDeleteImageRv1}
+                  />
                   </div>
                 </Col>
 
@@ -493,16 +561,20 @@ const UpdateProduct = (props) => {
                       onChange={(e) => handleUploadImage(e)}
                     />
                   </Form.Group>
-                  <div>
-                    {image ? (
+                  <div className={cx('image-preview')}>
+                    {imageReview2 ? (
                       <Image
-                        className={cx('image-preview')}
+                        className={cx('image-preview1')}
                         src={require(`../../../assets/images/${imageReview2}`)}
                         alt='Logo'
                       />
                     ) : (
                       <span>Upload File Image</span>
                     )}
+                    <CiCircleRemove
+                    className={cx('delete-image')}
+                    onClick={handleDeleteImageRv2}
+                  />
                   </div>
                 </Col>
 
@@ -517,16 +589,20 @@ const UpdateProduct = (props) => {
                       onChange={(e) => handleUploadImage(e)}
                     />
                   </Form.Group>
-                  <div>
-                    {image ? (
+                  <div className={cx('image-preview')}>
+                    {imageReview3 ? (
                       <Image
-                        className={cx('image-preview')}
+                        className={cx('image-preview1')}
                         src={require(`../../../assets/images/${imageReview3}`)}
                         alt='Logo'
                       />
                     ) : (
                       <span>Upload File Image</span>
                     )}
+                    <CiCircleRemove
+                    className={cx('delete-image')}
+                    onClick={handleDeleteImageRv3}
+                  />
                   </div>
                 </Col>
               </Row>
@@ -537,6 +613,8 @@ const UpdateProduct = (props) => {
                     className='mb-3'>
                     <Form.Label>Image</Form.Label>
                     <Form.Control
+                      ref={fileInputRefMain}
+                      // value={image}
                       type='file'
                       name='ImageMain'
                       onChange={(e) => handleUploadImage(e)}
@@ -544,16 +622,22 @@ const UpdateProduct = (props) => {
                   </Form.Group>
                 </Col>
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                  className={cx('image-preview')}>
                   {image ? (
                     <Image
-                      className={cx('image-preview')}
+                      className={cx('image-preview1')}
                       src={require(`../../../assets/images/${image}`)}
                       alt='Logo'
                     />
                   ) : (
                     <span>Upload File Image</span>
                   )}
+                  <CiCircleRemove
+                    className={cx('delete-image')}
+                    onClick={handleDeleteImageMain}
+                  />
                 </div>
               </Row>
 
