@@ -10,6 +10,18 @@
     font-weight: 600;
   }
 
+  .sortChart{
+    display: flex;
+    select{
+      margin-top: 1rem;
+      padding: 5px 10px;
+      max-height: 30px;
+      border-radius: 5px;
+      border: none;
+      box-shadow: 0 0 0 2.5px #d5d5d5
+    }
+  }
+
   .dashboard-content {
     display: flex;
     justify-content: space-between;
