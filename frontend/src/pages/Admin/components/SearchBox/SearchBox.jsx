@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState,createContext  } from 'react';
+import React, { useEffect, useRef, useState, createContext } from 'react';
 import PropTypes from 'prop-types';
 import Tippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
@@ -31,7 +31,7 @@ const SearchBox = (props) => {
     setProducts(data);
   };
 
-  let rsSearch=[]
+  let rsSearch = [];
   const handleClear = () => {
     setSearchValue('');
     // setSearchResult([]);
@@ -40,7 +40,7 @@ const SearchBox = (props) => {
     // rsSearch = [];
 
     // rsSearch.splice(0, rsSearch.length);
-    setProducts([])
+    setProducts([]);
   };
 
   // console.log(showResult);
@@ -56,7 +56,7 @@ const SearchBox = (props) => {
   useEffect(() => {
     if (debouce.trim() === '') {
       // setSearchResult([]);
-      setProducts([])
+      setProducts([]);
       return;
     }
     try {
@@ -67,7 +67,7 @@ const SearchBox = (props) => {
       console.log(err);
     }
   }, [debouce]);
- 
+
   if (products.length > 0) {
     rsSearch = products.filter((x) => {
       return x.name.toLowerCase().includes(debouce.toLowerCase());
@@ -79,66 +79,64 @@ const SearchBox = (props) => {
   return (
     <div>
       <ShowContext.Provider value={setShowResult}>
-  
-      <Tippy
-        interactive
-        visible={showResult && rsSearch && rsSearch?.length > 0}
-        render={(attrs) => {
-          return (
-            <div
-              className={cx('search-results')}
-              tabIndex='-1'
-              {...attrs}>
-              <Popper setShowResult={setShowResult}>
-                <h4 className={cx('search-title')}>Products</h4>
-                {rsSearch &&
-                  rsSearch?.map((x) => {
-                    return (
-                      <AccountItem
-                        setShowResult={setShowResult}
-                        x={x}
-                        // key={x.productID}
-                      />
-                    );
-                  })}
-              </Popper>
-            </div>
-          );
-        }}
-        onClickOutside={handleHideResults}>
-        <div className={cx('search')}>
-          <input
-            ref={inputValue}
-            type='text'
-            placeholder='Enter products'
-            spellCheck={false}
-            onChange={(e) => handleSetSearchValue(e)}
-            value={searchValue}
-            onFocus={() => setShowResult(true)}
-          />
-
-          {!!searchValue && !loading && (
-            <button
-              className={cx('clear')}
-              onClick={handleClear}>
-              <FontAwesomeIcon icon={faCircleXmark} />
-            </button>
-          )}
-
-          {/* Loading */}
-          {loading && (
-            <FontAwesomeIcon
-              className={cx('loading')}
-              icon={faSpinner}
+        <Tippy
+          interactive
+          visible={showResult && rsSearch && rsSearch?.length > 0}
+          render={(attrs) => {
+            return (
+              <div
+                className={cx('search-results')}
+                tabIndex='-1'
+                {...attrs}>
+                <Popper setShowResult={setShowResult}>
+                  <h4 className={cx('search-title')}>Products</h4>
+                  {rsSearch ?
+                    rsSearch?.map((x) => {
+                      return (
+                        <AccountItem
+                          setShowResult={setShowResult}
+                          x={x}
+                          key={x ? x.productID : 1}
+                        />
+                      );
+                    }):(<div>No product match</div>)}
+                </Popper>
+              </div>
+            );
+          }}
+          onClickOutside={handleHideResults}>
+          <div className={cx('search')}>
+            <input
+              ref={inputValue}
+              type='text'
+              placeholder='Enter products'
+              spellCheck={false}
+              onChange={(e) => handleSetSearchValue(e)}
+              value={searchValue}
+              onFocus={() => setShowResult(true)}
             />
-          )}
 
-          <button className={cx('search-btn')}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </div>
+            {!!searchValue && !loading && (
+              <button
+                className={cx('clear')}
+                onClick={handleClear}>
+                <FontAwesomeIcon icon={faCircleXmark} />
+              </button>
+            )}
+
+            {/* Loading */}
+            {loading && (
+              <FontAwesomeIcon
+                className={cx('loading')}
+                icon={faSpinner}
+              />
+            )}
+
+            <button className={cx('search-btn')}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </button>
+          </div>
         </Tippy>
-              
       </ShowContext.Provider>
     </div>
   );

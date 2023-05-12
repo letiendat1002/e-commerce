@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
+import { Image } from 'antd';
 import ReactPaginate from 'react-paginate';
 import classname from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
@@ -56,7 +57,16 @@ const TableProducts = (props) => {
             hover>
             <thead>
               <tr>
-                <th scope='col'>No</th>
+                <th
+                  scope='col'
+                  className='text-center'>
+                  No
+                </th>
+                <th
+                  scope='col'
+                  className='text-center'>
+                  Image
+                </th>
                 <th
                   scope='col'
                   className='text-center'>
@@ -100,14 +110,17 @@ const TableProducts = (props) => {
                 currentProduct.map((x, idx) => {
                   return (
                     <tr key={idx}>
-                      <th scope='row'>{idx + 1}</th>
-                      {/* <td className='row_img'>
-                      <img
-                        style={{ width: '40px', height: '40px' }}
-                        src={`data:image/jpeg;base64,${x.image}`}
-                        alt=''
-                      />
-                    </td> */}
+                      <th
+                        scope='row'
+                        className='text-center'>
+                        {idx + 1}
+                      </th>
+                      <td className='row_img'>
+                        <Image
+                          width={100}
+                          src={require(`../../../assets/images/${x.image}`)}
+                        />
+                      </td>
                       <td>{x.name}</td>
                       <td>{x.unitPrice}</td>
                       <td>{x.quantity}</td>
@@ -123,7 +136,7 @@ const TableProducts = (props) => {
                         <button
                           className='btn btn-success mx-3'
                           onClick={() => {
-                            navigate(`/admin/manage-products/Update/${x.productID}`);
+                            navigate(`/admin/manage-products/update/${x.productID}`);
                           }}>
                           <GrEdit />
                         </button>

@@ -62,7 +62,6 @@ const MangeUser = (props) => {
 
   const handleClickBtnUpdate = (x, id) => {
     setData1(x);
-    console.log(x, id);
     getAllUsers();
     setShowModalUpdateUser(!false);
   };

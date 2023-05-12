@@ -31,7 +31,7 @@ const DefaultLayoutAdmin = (props) => {
     //   }
     // };
     // callProductsFilter();
-  }, [collapsed,dispatch]);
+  }, [collapsed, dispatch]);
 
   return (
     <>
@@ -48,8 +48,9 @@ const DefaultLayoutAdmin = (props) => {
             <span onClick={() => setCollapsed(!collapsed)}>
               <FaBars className='leftside' />
             </span>
-
-            <SearchBox/>
+            <div className='centerside'>
+              <SearchBox />
+            </div>
 
             <div className='header__admin--dropdown rightside'>
               <HeaderAdmin />

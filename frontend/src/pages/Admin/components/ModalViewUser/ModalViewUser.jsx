@@ -48,7 +48,7 @@ const ModalViewUser = (props) => {
       setGender(data1?.gender);
       setImage('');
       if (data1.image) {
-        setPreviewImage(`data:image/jpeg;base64,${data1.image}`);
+        setPreviewImage(data1.image);
       }
     }
   }, [data1]);
@@ -155,16 +155,16 @@ const ModalViewUser = (props) => {
               </label>
             </div> */}
 
-            {/* <div className='col-12 img-preview text-center'>
+            <div className='col-12 img-preview text-center my-3' >
               {previewImage ? (
                 <img
                   src={previewImage}
                   alt='Logo'
                 />
               ) : (
-                <span>Upload File Image</span>
+                <span>No Image</span>
               )}
-            </div> */}
+            </div>
           </form>
         </Modal.Body>
         <Modal.Footer>

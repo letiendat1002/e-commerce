@@ -7,10 +7,10 @@ import NotAuthorized from '../NotAuthorized/NotAuthorized';
 
 const RolesBase = (props) => {
     const { current } = useSelector((state) => state.user);
+    const navigate = useNavigate();
     const checkPath = window.location.pathname.startsWith('/admin');
     const { roles } = current[0]
     const checkAdmin = roles.includes('ROLE_ADMIN')
-    const navigate = useNavigate();
   if (checkPath && checkAdmin === true) {
     // navigate('/admin')
       return <>{props.children}</>;

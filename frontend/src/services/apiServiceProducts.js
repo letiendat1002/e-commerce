@@ -24,15 +24,7 @@ const productApi = {
   },
 
   async putProduct(id, payload) {
-    const data = {
-      image: '',
-      imageReview1: '',
-      imageReview2: '',
-      imageReview3: '',
-      ...payload,
-    };
-    const putProduct = await axiosClient4.put(`products/${id}`, data);
-    console.log(putProduct);
+    const putProduct = await axiosClient4.put(`products/${id}`, payload);
     return putProduct;
   },
 
@@ -58,6 +50,10 @@ const productApi = {
   async deleteCategories(id) {
     const addCategories = await axiosClient4.delete(`categories/${id}`);
     return addCategories;
+  },
+  async postProduct(payload) {
+    const postProduct = await axiosClient4.post(`products`, payload);
+    return postProduct;
   },
 };
 

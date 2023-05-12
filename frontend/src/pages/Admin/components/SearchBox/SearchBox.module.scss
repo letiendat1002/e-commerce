@@ -7,13 +7,14 @@ input, [tabindex] {
 .search {
     height: var(--search-height);
     background-color: rgba(22, 24, 35, 0.06);
-    border-radius: 92px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     padding-left: 16px;
     overflow: hidden;
     position: relative;
     border: 1.5px solid transparent;
+    width: 100%;
   
     input {
       font-size: 1rem;
@@ -47,7 +48,7 @@ input, [tabindex] {
   }
   
   .search-results {
-    width: 361px;
+    width: 700px;
   }
   
   .search-title{
