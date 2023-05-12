@@ -1,70 +1,44 @@
 package com.ecommerce.backend.orderdetail;
 
-import com.ecommerce.backend.order.OrderDAO;
-import com.ecommerce.backend.order.enums.OrderStatus;
-import com.ecommerce.backend.product.ProductDAO;
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
+import com.ecommerce.backend.product.ProductService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
     private final OrderDetailDAO orderDetailDAO;
-    private final OrderDetailDTOMapper orderDetailDTOMapper;
-    private final OrderDAO orderDAO;
-    private final ProductDAO productDAO;
+    private final ProductService productService;
 
     @Override
-    public List<OrderDetailDTO> fetchAllOrderDetails() {
-        return orderDetailDAO
-                .selectAllOrderDetails()
-                .stream()
-                .map(orderDetailDTOMapper)
-                .collect(Collectors.toList());
+    public List<OrderDetail> fetchAllOrderDetails() {
+        return orderDetailDAO.selectAllOrderDetails();
     }
 
     @Override
-    public List<OrderDetailDTO> fetchAllOrderDetailsByOrderID(BigInteger orderID) {
-        checkIfOrderExistsByIdOrThrow(orderID);
-
-        return orderDetailDAO
-                .selectOrderDetailsByOrderID(orderID)
-                .stream()
-                .map(orderDetailDTOMapper)
-                .collect(Collectors.toList());
-    }
-
-    private void checkIfOrderExistsByIdOrThrow(BigInteger orderID) {
-        var isExists = orderDAO.existsOrderByID(orderID);
-        if (!isExists) {
-            throw new ResourceNotFoundException(
-                    "Order not found by orderID {%d}".formatted(orderID)
-            );
-        }
+    public List<OrderDetail> fetchAllOrderDetailsByOrderID(BigInteger orderID) {
+        return orderDetailDAO.selectOrderDetailsByOrderID(orderID);
     }
 
     @Override
-    public List<OrderDetailDTO> fetchAllOrderDetailsByProductID(BigInteger productID) {
+    public List<OrderDetail> fetchAllOrderDetailsByProductID(
+            BigInteger productID
+    ) {
         checkIfProductExistsByIdOrThrow(productID);
 
-        return orderDetailDAO
-                .selectOrderDetailsByProductID(productID)
-                .stream()
-                .map(orderDetailDTOMapper)
-                .collect(Collectors.toList());
+        return orderDetailDAO.selectOrderDetailsByProductID(productID);
     }
 
     private void checkIfProductExistsByIdOrThrow(BigInteger productID) {
-        var isExists = productDAO.existsProductByID(productID);
+        var isExists = productService.existsProductByID(productID);
         if (!isExists) {
             throw new ResourceNotFoundException(
                     "Product not found by productID {%d}".formatted(productID)
@@ -73,44 +47,34 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public OrderDetailDTO fetchOrderDetailByOrderIDAndProductID(BigInteger orderID, BigInteger productID) {
+    public OrderDetail fetchOrderDetailByOrderIDAndProductID(
+            OrderDetailID orderDetailID
+    ) {
         return orderDetailDAO
-                .selectOrderDetailByID(
-                        new OrderDetailID(orderID, productID)
-                )
-                .map(orderDetailDTOMapper)
+                .selectOrderDetailByID(orderDetailID)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
                                 "Order detail not found by orderID {%d} and productID {%d}"
-                                        .formatted(orderID, productID)
+                                        .formatted(
+                                                orderDetailID.getOrderID(),
+                                                orderDetailID.getProductID()
+                                        )
                         )
                 );
     }
 
     @Override
     @Transactional
-    public OrderDetailDTO addOrderDetail(OrderDetailRequest request) {
+    public OrderDetail addOrderDetail(OrderDetailAddRequest request) {
         checkIfOrderDetailNotExistsByIdOrThrow(
                 request.orderID(),
                 request.productID()
         );
 
-        var orderStatus = orderDAO.selectOrderByID(request.orderID())
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Order not found by orderID {%d}"
-                                        .formatted(request.orderID())
-                        )
-                );
-
-        if (orderStatus.getStatus() != OrderStatus.PENDING) {
-            throw new FailedOperationException(
-                    "Failed to add order detail, order status is not at PENDING stage, but it was {%s}"
-                            .formatted(orderStatus.getStatus())
-            );
-        }
-
-        updateProductQuantity(request.productID(), request.quantity());
+        productService.updateProductQuantityByAmount(
+                request.productID(),
+                -request.quantity()
+        );
 
         var orderDetail = new OrderDetail(
                 request.orderID(),
@@ -121,7 +85,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         return orderDetailDAO
                 .insertOrderDetail(orderDetail)
-                .map(orderDetailDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to add order detail"
@@ -129,35 +92,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 );
     }
 
-    private void updateProductQuantity(BigInteger productID, Integer quantity) {
-        var product = productDAO
-                .selectProductByID(productID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Product not found by productID {%d}"
-                                        .formatted(productID)
-                        )
-                );
-
-        if (product.getQuantity() < quantity) {
-            throw new DataIntegrityViolationException(
-                    "Product quantity is {%d} but quantity needed more to succeed is {%d}"
-                            .formatted(product.getQuantity(), quantity)
-            );
-        }
-
-        product.setQuantity(product.getQuantity() - quantity);
-        productDAO.updateProduct(product).orElseThrow(
-                () -> new FailedOperationException(
-                        "Failed to update product quantity"
-                )
-        );
-    }
-
     private void checkIfOrderDetailNotExistsByIdOrThrow(BigInteger orderID,
-                                                        BigInteger productID) {
-        checkIfOrderExistsByIdOrThrow(orderID);
-        checkIfProductExistsByIdOrThrow(productID);
+                                                        BigInteger productID
+    ) {
         var isExists = orderDetailDAO.existsOrderDetailByID(
                 new OrderDetailID(orderID, productID)
         );
@@ -169,42 +106,101 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
     }
 
-    @Override
-    @Transactional
-    public OrderDetailDTO updateOrderDetail(OrderDetailRequest request) {
-        var orderDetail = selectOrderDetailOrThrow(
-                request.orderID(),
-                request.productID()
-        );
-
-        var order = orderDAO.selectOrderByID(request.orderID())
+    private OrderDetail selectOrderDetailByIdOrThrow(
+            OrderDetailID orderDetailID
+    ) {
+        return orderDetailDAO
+                .selectOrderDetailByID(orderDetailID)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
-                                "Order not found by orderID {%d}"
-                                        .formatted(request.orderID())
+                                "Order detail not found by orderID {%d} and productID {%d}"
+                                        .formatted(
+                                                orderDetailID.getOrderID(),
+                                                orderDetailID.getProductID()
+                                        )
                         )
                 );
+    }
 
-        if (order.getStatus() != OrderStatus.PENDING) {
-            throw new FailedOperationException(
-                    "Failed to update order detail, order status is not at PENDING stage, but it was {%s}"
-                            .formatted(order.getStatus())
+    @Override
+    public boolean existsOrderDetailByID(OrderDetailID orderDetailID) {
+        return orderDetailDAO.existsOrderDetailByID(orderDetailID);
+    }
+
+    @Override
+    @Transactional
+    public void updateProductQuantityWhenOrderCancelled(
+            BigInteger orderID
+    ) {
+        fetchAllOrderDetailsByOrderID(orderID)
+                .forEach(
+                        orderDetail -> {
+                            productService.updateProductQuantityByAmount(
+                                    orderDetail.getProductID(),
+                                    orderDetail.getQuantity()
+                            );
+                        }
+                );
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllOrderDetailsByOrderID(BigInteger orderID) {
+        fetchAllOrderDetailsByOrderID(orderID)
+                .forEach(
+                        orderDetail -> {
+                            deleteOrderDetail(
+                                    new OrderDetailID(
+                                            orderDetail.getOrderID(),
+                                            orderDetail.getProductID()
+                                    )
+                            );
+                        }
+                );
+    }
+
+    private void deleteOrderDetail(OrderDetailID orderDetailID) {
+        var orderDetail = selectOrderDetailByIdOrThrow(orderDetailID);
+
+        productService.updateProductQuantityByAmount(
+                orderDetailID.getProductID(),
+                orderDetail.getQuantity()
+        );
+
+        orderDetailDAO.deleteOrderDetailByID(orderDetailID);
+    }
+
+    @Override
+    public List<OrderDetail> fetchAllOnRefundOrderDetails() {
+        return orderDetailDAO.selectAllOnRefundOrderDetails();
+    }
+
+    @Override
+    public OrderDetail updateOrderDetail(OrderDetailUpdateRequest request) {
+        var orderDetail = selectOrderDetailByIdOrThrow(
+                new OrderDetailID(
+                        request.orderID(),
+                        request.productID()
+                )
+        );
+
+        var beforeChangeStatus = orderDetail.getStatus();
+        checkAndUpdateChangesOrThrow(request, orderDetail);
+        var afterChangeStatus = orderDetail.getStatus();
+
+        var isStatusOnRefundChangedToRefundCompleted =
+                beforeChangeStatus == OrderDetailStatus.ON_REFUND &&
+                        afterChangeStatus == OrderDetailStatus.REFUND_COMPLETED;
+
+        if (isStatusOnRefundChangedToRefundCompleted) {
+            productService.updateProductQuantityByAmount(
+                    orderDetail.getProductID(),
+                    orderDetail.getQuantity()
             );
         }
 
-        var updateQuantity = -(orderDetail.getQuantity() - request.quantity());
-
-        if (updateQuantity > 0) {
-            updateProductQuantity(request.productID(), updateQuantity);
-        } else if (updateQuantity < 0) {
-            updateProductQuantity(request.productID(), updateQuantity);
-        }
-
-        checkAndUpdateChangesOrThrow(request, orderDetail);
-
         return orderDetailDAO
                 .updateOrderDetail(orderDetail)
-                .map(orderDetailDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to update order detail"
@@ -212,30 +208,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 );
     }
 
-    private OrderDetail selectOrderDetailOrThrow(BigInteger orderID,
-                                                 BigInteger productID) {
-        return orderDetailDAO
-                .selectOrderDetailByID(
-                        new OrderDetailID(orderID, productID)
-                )
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Order detail not found by orderID {%d} and productID {%d}"
-                                        .formatted(orderID, productID)
-                        )
-                );
-    }
-
-    private void checkAndUpdateChangesOrThrow(OrderDetailRequest request, OrderDetail orderDetail) {
+    private void checkAndUpdateChangesOrThrow(
+            OrderDetailUpdateRequest request,
+            OrderDetail orderDetail
+    ) {
         var isChanged = false;
 
-        if (!request.purchasePrice().equals(orderDetail.getPurchasePrice())) {
-            orderDetail.setPurchasePrice(request.purchasePrice());
-            isChanged = true;
-        }
-
-        if (!request.quantity().equals(orderDetail.getQuantity())) {
-            orderDetail.setQuantity(request.quantity());
+        if (!request.status().equals(orderDetail.getStatus())) {
+            orderDetail.setStatus(request.status());
             isChanged = true;
         }
 
@@ -244,34 +224,5 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                     "No data changes detected"
             );
         }
-    }
-
-    @Override
-    @Transactional
-    public void deleteOrderDetail(BigInteger orderID, BigInteger productID) {
-        var orderDetail = selectOrderDetailOrThrow(
-                orderID,
-                productID
-        );
-
-        var order = orderDAO.selectOrderByID(orderID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Order not found by orderID {%d}"
-                                        .formatted(orderID)
-                        )
-                );
-
-        var orderStatus = order.getStatus();
-
-        if (orderStatus == OrderStatus.PENDING
-                || orderStatus == OrderStatus.CONFIRMED
-        ) {
-            updateProductQuantity(productID, -orderDetail.getQuantity());
-        }
-
-        orderDetailDAO.deleteOrderDetailByID(
-                new OrderDetailID(orderID, productID)
-        );
     }
 }

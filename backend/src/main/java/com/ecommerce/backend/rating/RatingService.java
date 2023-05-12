@@ -4,25 +4,25 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface RatingService {
-    List<RatingDTO> fetchAllRatings();
+    List<Rating> fetchAllRatings();
 
-    List<RatingDTO> fetchRatingsByUserID(BigInteger userID);
+    List<Rating> fetchRatingsByUserID(BigInteger userID);
 
-    List<RatingDTO> fetchRatingsByProductID(BigInteger productID);
+    List<Rating> fetchRatingsByProductID(BigInteger productID);
 
-    List<RatingDTO> fetchRatingsByUserIDAndProductID(BigInteger userID, BigInteger productID);
+    List<Rating> fetchRatingsByUserIDAndProductID(BigInteger userID, BigInteger productID);
 
-    RatingDTO fetchRatingByOrderID(BigInteger orderID);
+    Rating fetchRatingByOrderID(BigInteger orderID);
 
-    RatingDTO fetchRatingByUserIdAndOrderId(BigInteger userID, BigInteger orderID);
+    Rating fetchRatingByUserIdAndOrderId(BigInteger userID, BigInteger orderID);
 
-    RatingDTO fetchRatingByOrderIdAndProductId(BigInteger productID, BigInteger orderID);
+    Rating fetchRatingByOrderIdAndProductId(BigInteger productID, BigInteger orderID);
 
-    RatingDTO fetchRatingByID(RatingID ratingID);
+    Rating fetchRatingByID(RatingID ratingID);
 
-    RatingDTO addRating(RatingRequest request);
+    Rating addRating(RatingRequest request);
 
-    RatingDTO updateRating(RatingRequest request);
+    Rating updateRating(RatingRequest request);
 
     void deleteRatingByID(RatingID ratingID);
 }

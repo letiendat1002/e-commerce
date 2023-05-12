@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface OrderDAO {
     List<Order> selectAllOrders();
 
-    List<Order> selectAllOrdersByUser(User user);
+    List<Order> selectAllOrdersByUser(BigInteger userID);
 
     Optional<Order> selectOrderByID(BigInteger orderID);
 

@@ -1,53 +1,49 @@
 package com.ecommerce.backend.product;
 
-import com.ecommerce.backend.category.Category;
-import com.ecommerce.backend.category.CategoryDAO;
+import com.ecommerce.backend.category.CategoryService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductDAO productDAO;
-    private final ProductDTOMapper productDTOMapper;
-    private final CategoryDAO categoryDAO;
+    private final CategoryService categoryService;
 
     @Override
-    public List<ProductDTO> fetchAllProducts() {
+    public List<Product> fetchAllProducts() {
+        return productDAO.selectAllProducts();
+    }
+
+    @Override
+    public List<Product> fetchAllProductsByCategoryID(BigInteger categoryID) {
+        var category = categoryService.fetchCategoryByID(categoryID);
+
+        return productDAO.selectAllProductsByCategory(category);
+    }
+
+    @Override
+    public Product fetchProductByProductID(BigInteger productID) {
         return productDAO
-                .selectAllProducts()
-                .stream()
-                .map(productDTOMapper)
-                .collect(Collectors.toList());
+                .selectProductByID(productID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Product not found by productID {%d}"
+                                        .formatted(productID)
+                        )
+                );
     }
 
     @Override
-    public List<ProductDTO> fetchAllProductsByCategoryID(BigInteger categoryID) {
-        var category = selectCategoryByIdOrThrow(categoryID);
-
-        return productDAO
-                .selectAllProductsByCategory(category)
-                .stream()
-                .map(productDTOMapper)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public ProductDTO fetchProductByProductID(BigInteger productID) {
-        return productDTOMapper
-                .apply(selectProductByIdOrThrow(productID));
-    }
-
-    @Override
-    public ProductDTO addProduct(ProductRequest request) {
-        var category = selectCategoryByIdOrThrow(request.categoryID());
+    public Product addProduct(ProductRequest request) {
+        var category = categoryService.fetchCategoryByID(request.categoryID());
 
         checkIfProductNotExistsBySlugOrThrow(request.slug());
 
@@ -79,7 +75,6 @@ public class ProductServiceImpl implements ProductService {
 
         return productDAO
                 .insertProduct(product)
-                .map(productDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to add product"
@@ -94,16 +89,6 @@ public class ProductServiceImpl implements ProductService {
                     "Product with slug {%s} is already existed".formatted(slug)
             );
         }
-    }
-
-    private Category selectCategoryByIdOrThrow(BigInteger categoryID) {
-        return categoryDAO
-                .selectCategoryByID(categoryID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Category not found by categoryID {%d}".formatted(categoryID)
-                        )
-                );
     }
 
     @Override
@@ -122,8 +107,44 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(BigInteger productID, ProductRequest request) {
-        var product = selectProductByIdOrThrow(productID);
+    public boolean existsProductByID(BigInteger productID) {
+        return productDAO.existsProductByID(productID);
+    }
+
+    @Override
+    public void updateProduct(Product update) {
+        productDAO
+                .updateProduct(update)
+                .orElseThrow(
+                        () -> new FailedOperationException(
+                                "Failed to update product"
+                        ));
+    }
+
+    @Override
+    public void updateProductQuantityByAmount(
+            BigInteger productID,
+            int amount
+    ) {
+        var product = fetchProductByProductID(productID);
+
+        var absoluteAmount = Math.abs(amount);
+        if (amount < 0) {
+            if (product.getQuantity() < absoluteAmount) {
+                throw new DataIntegrityViolationException(
+                        "Product quantity is {%d} but amount needed is {%d}"
+                                .formatted(product.getQuantity(), absoluteAmount)
+                );
+            }
+        }
+        product.setQuantity(product.getQuantity() + amount);
+
+        updateProduct(product);
+    }
+
+    @Override
+    public Product updateProduct(BigInteger productID, ProductRequest request) {
+        var product = fetchProductByProductID(productID);
 
         checkIfCategoryExistsByIdOrThrow(request.categoryID());
         checkIfOtherProductNotExistsBySlugOrThrow(request.slug(), productID);
@@ -131,7 +152,6 @@ public class ProductServiceImpl implements ProductService {
 
         return productDAO
                 .updateProduct(product)
-                .map(productDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to update product"
@@ -139,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void checkIfCategoryExistsByIdOrThrow(BigInteger categoryID) {
-        var isExisted = categoryDAO.existsCategoryByID(categoryID);
+        var isExisted = categoryService.existsCategoryByID(categoryID);
         if (!isExisted) {
             throw new ResourceNotFoundException(
                     "Category not found by categoryID {%d}".formatted(categoryID)
@@ -147,18 +167,21 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    private void checkAndUpdateChangesOrThrow(ProductRequest request, Product product) {
+    private void checkAndUpdateChangesOrThrow(ProductRequest request,
+                                              Product product) {
         var isChanged = false;
 
         if (product.getCategory() != null) {
             if (!request.categoryID().equals(product.getCategory().getCategoryID())
             ) {
-                var category = selectCategoryByIdOrThrow(request.categoryID());
+                var category = categoryService.fetchCategoryByID(
+                        request.categoryID()
+                );
                 product.setCategory(category);
                 isChanged = true;
             }
         } else {
-            var category = selectCategoryByIdOrThrow(request.categoryID());
+            var category = categoryService.fetchCategoryByID(request.categoryID());
             product.setCategory(category);
             isChanged = true;
         }
@@ -306,15 +329,5 @@ public class ProductServiceImpl implements ProductService {
                     "Product with slug {%s} is already existed".formatted(slug)
             );
         }
-    }
-
-    private Product selectProductByIdOrThrow(BigInteger productID) {
-        return productDAO
-                .selectProductByID(productID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Product not found by productID {%d}".formatted(productID)
-                        )
-                );
     }
 }

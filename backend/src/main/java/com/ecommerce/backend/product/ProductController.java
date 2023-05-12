@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 public class ProductController {
     private final ProductService productService;
+    private final ProductDTOMapper productDTOMapper;
 
     @GetMapping
     public ProductResponse getProducts(
@@ -26,9 +28,17 @@ public class ProductController {
         List<ProductDTO> productDTOList;
 
         if (categoryID == null) {
-            productDTOList = productService.fetchAllProducts();
+            productDTOList = productService
+                    .fetchAllProducts()
+                    .stream()
+                    .map(productDTOMapper)
+                    .toList();
         } else {
-            productDTOList = productService.fetchAllProductsByCategoryID(categoryID);
+            productDTOList = productService
+                    .fetchAllProductsByCategoryID(categoryID)
+                    .stream()
+                    .map(productDTOMapper)
+                    .toList();
         }
 
         return new ProductResponse(
@@ -42,7 +52,11 @@ public class ProductController {
     public ProductResponse getProductByProductID(
             @PathVariable("productID") BigInteger productID
     ) {
-        var productDTOList = List.of(productService.fetchProductByProductID(productID));
+        var productDTOList = Collections.singletonList(
+                productDTOMapper.apply(
+                        productService.fetchProductByProductID(productID)
+                )
+        );
 
         return new ProductResponse(
                 HttpStatus.OK.value(),
@@ -61,7 +75,11 @@ public class ProductController {
             throw new RequestValidationException(errors);
         }
 
-        var productDTOList = List.of(productService.addProduct(request));
+        var productDTOList = Collections.singletonList(
+                productDTOMapper.apply(
+                        productService.addProduct(request)
+                )
+        );
 
         return new ProductResponse(
                 HttpStatus.OK.value(),
@@ -94,7 +112,11 @@ public class ProductController {
             throw new RequestValidationException(errors);
         }
 
-        var productDTOList = List.of(productService.updateProduct(productID, request));
+        var productDTOList = Collections.singletonList(
+                productDTOMapper.apply(
+                        productService.updateProduct(productID, request)
+                )
+        );
 
         return new ProductResponse(
                 HttpStatus.OK.value(),

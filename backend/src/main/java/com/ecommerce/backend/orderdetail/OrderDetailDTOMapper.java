@@ -12,7 +12,8 @@ public class OrderDetailDTOMapper implements Function<OrderDetail, OrderDetailDT
                 orderDetail.getOrderID(),
                 orderDetail.getProductID(),
                 orderDetail.getPurchasePrice(),
-                orderDetail.getQuantity()
+                orderDetail.getQuantity(),
+                orderDetail.getStatus()
         );
     }
 }
