@@ -31,7 +31,12 @@ const DefaultLayoutAdmin = (props) => {
     //   }
     // };
     // callProductsFilter();
-  }, [collapsed,dispatch]);
+  }, [collapsed, dispatch]);
+
+  const containerTransition = {
+    enter: 'slide',
+    exit: 'slide',
+  };
 
   return (
     <>
@@ -48,9 +53,9 @@ const DefaultLayoutAdmin = (props) => {
             <span onClick={() => setCollapsed(!collapsed)}>
               <FaBars className='leftside' />
             </span>
-
-            {/* <FormFilterProducts /> */}
-            <SearchBox/>
+            <div className='centerside'>
+              <SearchBox />
+            </div>
 
             <div className='header__admin--dropdown rightside'>
               <HeaderAdmin />
@@ -62,15 +67,16 @@ const DefaultLayoutAdmin = (props) => {
         </div>
         <ToastContainer
           position='top-right'
-          autoClose={5000}
+          autoClose={1500}
+          limit={2}
           hideProgressBar={false}
-          newestOnTop={false}
+          newestOnTop={true}
           closeOnClick
           rtl={false}
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme='dark'
+          theme='light'
         />
       </div>
     </>

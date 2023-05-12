@@ -1,6 +1,6 @@
-import { Image } from 'antd'
+import { Image, Pagination, Rate } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { AiOutlineRight } from 'react-icons/ai'
+import { AiFillCloseCircle, AiOutlineRight } from 'react-icons/ai'
 import { BiCommentDetail, BiMap } from 'react-icons/bi'
 import { MdNotificationsActive } from 'react-icons/md'
 import { RiAccountCircleLine } from 'react-icons/ri'
@@ -9,9 +9,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import formatProductPrice from '../../Helper'
-import { getOrderDetail } from '../../Redux/slice/orderDetailSlice'
+import { getOrderDetail, refundOrderID } from '../../Redux/slice/orderDetailSlice'
 import { getOrder, updateOrders } from '../../Redux/slice/paymentSlice'
 import { getAllProducts } from '../../Redux/slice/productSlice'
+import { postRating } from '../../Redux/slice/ratingSlice'
 import '../../assets/css/profile.scss'
 import EmptyCart from '../../assets/images/empty-cart.png'
 import Avatar from '../../assets/images/img-user.png'
@@ -45,6 +46,8 @@ const AccountOrder = () => {
     const name = (fullname[fullname.length - 2] + " " + fullname[fullname.length - 1])
 
     const userID = user[0].userID
+    const userName = user[0].fullName
+
     useEffect(() => {
         dispatch(getOrder(userID))
         dispatch(getOrderDetail())
@@ -72,6 +75,7 @@ const AccountOrder = () => {
     const closePopup = () => {
         const table = document.querySelector('.orderDetail-view')
         const overlay = document.querySelector('.overlay')
+        const ratingForms = document.querySelector('.rating-container')
         if (table.classList.contains('d-none') && overlay.classList.contains('d-none')){
             table.classList.remove('d-none')
             overlay.classList.remove('d-none')
@@ -80,13 +84,15 @@ const AccountOrder = () => {
             table.classList.add('d-none')
             overlay.classList.add('d-none')
         }
-
+        ratingForms.classList.add('d-none')
     }
 
     useEffect(() => {
         dispatch(getAllProducts())
     }, [])
 
+    const [rateAmount, setRateAmount] = useState(3);
+    const [comment, setComment] = useState("")
     const product = useSelector(state => state.product.data)
     const collums = [
         {
@@ -117,21 +123,81 @@ const AccountOrder = () => {
           sorter: {
     
           }
+        }, 
+        {
+            title: "Đánh giá",
+            dataIndex: 'rating'
+        }, 
+        {
+            title: "Trả Đơn",
+            dataIndex: 'refund'
         }
       ]
 
+    const [productRating, setProductRating] = useState([])
+    const [orderIDOrder, setOrderIDOrder] = useState('')
+
+    const handleRating = (product, idOrder) => {
+        setProductRating(product.productID)
+        setOrderIDOrder(idOrder)
+        const ratingForms = document.querySelector('.rating-container')
+        ratingForms.classList.remove('d-none')
+        const viewPopup = document.querySelector('.orderDetail-view');
+        viewPopup.classList.add('d-none')
+    }
+
+    const ratingItem = product?.filter(item => item.productID ==productRating)
+
+    const handleRefund = (product, idOrder) => {
+        const data = {
+            orderID: idOrder, 
+            productID: product.productID,
+            status: "ON_REFUND"
+        }
+
+        dispatch(refundOrderID(data))
+        .then((res) => {
+            if (res.payload.status === 200){
+                toast.success(("Hoàn trả sản phẩm hoàn tất"))
+            }
+            else{
+                toast.error('Hoàn trả đơn hàng thất bại')
+            }
+            dispatch(getOrder(userID))
+            dispatch(getOrderDetail())
+        })
+    }
+
     const orderDetailForID = orderDetail.filter(item => item.orderID === viewID)
     const data = orderDetailForID.map((items) => {
+        const orders = order.filter(order => order.orderID === items.orderID)
+        const dateOrder = orders[0].dateOrder?.split('-')[orders[0].dateOrder?.split('-').length - 2]
+        const dateCompleted = orders[0].dateCompleted?.split('-')[orders[0].dateCompleted?.split('-').length - 2] || null
+        const status = orders[0]?.status
         const productMatches = product.find((productItem) => {
             return items.productID === productItem.productID;
         });
         if (productMatches){
             return ({
                 STT: <span>{items.orderID}</span>, 
-                image: <Image src={require(`../../assets/images/${productMatches.productID}/${productMatches.image}`)} preview = {true} />,
+                image: <Image src={require(`../../assets/images/${productMatches.image}`)} preview = {true} />,
                 quantity: <span>{items.quantity}</span>,
                 cost: <span>{formatProductPrice(items.purchasePrice)}</span>,
-                SumCost: <span>{formatProductPrice(items.purchasePrice*items.quantity)}</span>
+                SumCost: <span>{formatProductPrice(items.purchasePrice*items.quantity)}</span>,
+                rating: <div>{
+                    (status == "COMPLETED") ? (
+                        <button onClick={() => handleRating(productMatches, items.orderID)} style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#e6b112", color: "#ffffff"}}>Vote</button>
+                    ) : (
+                        <button style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#d5d5d5", color: "#000000"}}>Vote</button>
+                    )}
+                </div>,
+                refund: <div>{
+                    (status == "COMPLETED") ? ((dateCompleted != "null" || dateCompleted != "undefined") && ((dateCompleted - dateOrder) <= 3) && ((dateCompleted - dateOrder) >= 0) && (items.status != "ON_REFUND") &&(items.status != "REFUND_COMPLETED")) ? (
+                        <button onClick={() => handleRefund(productMatches, items.orderID)} style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#e6b112", color: "#ffffff"}}>Refund</button>
+                    ) : (
+                        <button style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#d5d5d5", color: "#000000"}}>Refund</button>
+                    ) : (<button style={{padding: "5px 5px", borderRadius: "5px", backgroundColor: "#d5d5d5", color: "#000000"}}>Refund</button>)}
+                </div>
         })
         }
     })
@@ -160,6 +226,46 @@ const AccountOrder = () => {
           }
         })
     }
+
+    const handleCloseRating = () => {
+        const ratingForms = document.querySelector('.rating-container')
+        const overlay = document.querySelector('.overlay')
+        const table = document.querySelector('.orderDetail-view')
+        ratingForms.classList.add('d-none')
+        overlay.classList.add('d-none')
+        table.classList.add('d-none')
+    }
+
+    const handleRatingProduct = (e) => {
+        e.preventDefault()
+        const data = {
+            userID, 
+            orderID: orderIDOrder, 
+            productID: productRating, 
+            rateAmount, 
+            comment, 
+            userFullName: userName
+        }
+        dispatch(postRating(data))
+        .then((res) => {
+            if (res.payload.status === 200){
+                toast.success("Đánh giá thành công!")
+            }
+            else if (res.payload.status === 400){
+                toast.error("Sản phẩm đã được đánh giá!")
+            }
+        })
+    }
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const itemsPerPage = 9;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = currentPage * itemsPerPage - 1;
     return (
     <>
         <div className="profile container-fluid">
@@ -216,7 +322,7 @@ const AccountOrder = () => {
                                             <th>Hủy ĐH</th>
                                         </tr>
                                         {
-                                            order.map((item) => {
+                                            order.slice(startIndex, endIndex + 1).map((item) => {
                                                 const orderDetails = orderDetail.filter((detail) => detail.orderID === item.orderID);
                                                 const total = orderDetails.reduce((acc, curr) => acc + curr.quantity * curr.purchasePrice, 0);
                                                 return (
@@ -252,7 +358,14 @@ const AccountOrder = () => {
                                                 );
                                             })
                                         }
+                                        <Pagination style={{padding: "1rem 0"}}
+                                        current={currentPage}
+                                        pageSize={itemsPerPage}
+                                        total={order.length}
+                                        onChange={handlePageChange}
+                                        />
                                     </table>
+                                        
                                 ) : (
                                     <div className='right--container--notOrder'>
                                         <img src={EmptyCart} alt="" />
@@ -276,6 +389,35 @@ const AccountOrder = () => {
                                 pageSize={5}
                             />
                     </div>
+                    {
+                        (ratingItem?.length > 0) ? (
+                        <div className="rating-container">
+                            <form className='rating'>
+                                <div style={{display: "flex", justifyContent:"space-between", padding: "0 1rem"}}>
+                                    <h3>Đánh giá sản phẩm</h3>
+                                    <AiFillCloseCircle onClick={() => handleCloseRating()} style={{fontSize: "20px", color: "#000000"}}/>
+                                </div>
+                                <div style={{display: "flex", justifyContent: "space-around"}}>
+                                    <div className="product-info">
+                                        <img src={require(`../../assets/images/${ratingItem[0].image}`)} alt="" />
+                                        <div style={{paddingTop: "3rem"}}>
+                                            <p>{ratingItem[0].name}</p>
+                                            <p>{ratingItem[0].unitPrice}</p>
+                                        </div>
+                                    </div>
+                                    <div className="product-rating">
+                                        <h3>Đánh giá của bạn</h3>
+                                        <Rate style={{paddingBottom: "2rem"}} defaultValue={3} onChange={(value) => setRateAmount(value)} /> <br />
+                                        <textarea type="text" placeholder='Vui lòng nhập ý kiến của bạn' onChange={(e) => setComment(e.target.value)} />
+                                        <button onClick={(e) => handleRatingProduct(e)} style={{padding: "10px 2rem", backgroundColor: "#cb1e23", color: "#ffffff", borderRadius: "5px", marginTop: "1.5rem"}}>Đánh Giá</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        )  : (
+                            <div></div>
+                        )
+                    }
                 </div>
                 <div className="profile__container--item--tablet col-lg-12 col-md-12 col-sm-12 col-12">
                     <div className="profile__container--item--left col-lg-3 col-md-12 col-sm-12 col-12 pe-3">

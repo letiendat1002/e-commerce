@@ -8,7 +8,7 @@ import {GrFormNext} from 'react-icons/gr'
 import { useSelector , useDispatch} from "react-redux";
 import EmptyCart from '../../assets/images/empty-cart.png' 
 import { decreamentFromCart, increamentFromCart, removeFromToCart } from "../../Redux/slice/cartSlice.js";
-import { Button, Image } from "antd";
+import { Button, Image, Popconfirm } from "antd";
 import TableComponent from "../../components/Table/index.jsx";
 
 const Cart = () => {
@@ -117,7 +117,7 @@ const Cart = () => {
     return ({
         STT: <span>{index + 1}</span>, 
         name: <p>{item.name}</p>,
-        image: <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />,
+        image: <Image src={require(`../../assets/images/${item.image}`)} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>
@@ -129,7 +129,15 @@ const Cart = () => {
         </div>,
         cost: <span>{formatProductPrice(item.unitPrice)}</span>,
         SumCost: <span>{formatProductPrice(item.unitPrice*item.cartQuantity)}</span>,
-        Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
+        Action: <Popconfirm 
+            title="Xóa sản phẩm khỏi giỏ hàng"
+            description="Bạn có muốn xóa sản phẩm khỏi giỏ hàng?"
+            onConfirm={() => handleRemoveFromCart(item)}
+            okText="Yes"
+            cancelText="No"
+          >
+          <button className="delete-item"><AiOutlineDelete /></button>
+          </Popconfirm>
       }
     )
   })
@@ -138,7 +146,7 @@ const Cart = () => {
     return ({
         STT: <span>{index + 1}</span>, 
         name: <p>{item.name}</p>,
-        image: <Image src={require(`../../assets/images/${item.productID}/${item.image}`)} preview = {true} />,
+        image: <Image src={require(`../../assets/images/${item.image}`)} preview = {true} />,
         quantity: 
         <div>
           <button onClick={() => dispatch(decreamentFromCart(item))}>
@@ -149,7 +157,15 @@ const Cart = () => {
         </div>,
         cost: <span>{formatProductPrice(item.UnitPrice)}</span>,
         SumCost: <span>{formatProductPrice(item.unitPrice*item.cartQuantity)}</span>,
-        Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
+        Action: <Popconfirm 
+            title="Xóa sản phẩm khỏi giỏ hàng"
+            description="Bạn có muốn xóa sản phẩm khỏi giỏ hàng?"
+            onConfirm={() => handleRemoveFromCart(item)}
+            okText="Yes"
+            cancelText="No"
+          >
+          <button className="delete-item"><AiOutlineDelete /></button>
+          </Popconfirm>
       }
     )
   })
@@ -173,7 +189,15 @@ const Cart = () => {
           </div>,
         cost: <span>{formatProductPrice(item.unitPrice)}</span>,
         SumCost: <span>{formatProductPrice(item.unitPrice*item.cartQuantity)}</span>,
-        Action: <button className="delete-item" onClick={() => handleRemoveFromCart(item)}><AiOutlineDelete /></button>
+        Action: <Popconfirm 
+            title="Xóa sản phẩm khỏi giỏ hàng"
+            description="Bạn có muốn xóa sản phẩm khỏi giỏ hàng?"
+            onConfirm={() => handleRemoveFromCart(item)}
+            okText="Yes"
+            cancelText="No"
+          >
+          <button className="delete-item"><AiOutlineDelete /></button>
+          </Popconfirm>
       }
     )
   })

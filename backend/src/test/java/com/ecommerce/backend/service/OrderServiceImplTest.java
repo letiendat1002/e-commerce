@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,16 +72,15 @@ class OrderServiceImplTest {
         );
         var order = new Order(
                 id,
-                user,
+                id,
                 BigInteger.valueOf(1),
                 OrderPaymentType.COD,
-                LocalDate.now(),
                 "string"
         );
 
         // When
         when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
-        when(orderDAO.selectAllOrdersByUser(user)).thenReturn(List.of(order));
+        when(orderDAO.selectAllOrdersByUser(id)).thenReturn(List.of(order));
 
         var expected = List.of(orderDTOMapper.apply(order));
         var actual = orderService.fetchAllOrdersByUserID(id);
@@ -110,10 +108,9 @@ class OrderServiceImplTest {
         var id = BigInteger.valueOf(1);
         var order = new Order(
                 id,
-                new User(),
+                id,
                 BigInteger.valueOf(1),
                 OrderPaymentType.COD,
-                LocalDate.now(),
                 "string"
         );
 
@@ -175,10 +172,9 @@ class OrderServiceImplTest {
 
         var order = new Order(
                 id,
-                user,
+                id,
                 BigInteger.valueOf(1),
                 OrderPaymentType.COD,
-                LocalDate.now(),
                 "string"
         );
 
@@ -272,11 +268,10 @@ class OrderServiceImplTest {
 
         var order = new Order(
                 id,
-                user,
+                id,
                 BigInteger.valueOf(1),
                 OrderPaymentType.COD,
                 OrderStatus.CONFIRMED,
-                LocalDate.now(),
                 "string"
         );
 
@@ -321,11 +316,10 @@ class OrderServiceImplTest {
 
         var order = new Order(
                 id,
-                user,
+                id,
                 BigInteger.valueOf(1),
                 OrderPaymentType.COD,
                 OrderStatus.CONFIRMED,
-                LocalDate.now(),
                 "string"
         );
 
@@ -361,11 +355,10 @@ class OrderServiceImplTest {
 
         var order = new Order(
                 id,
-                user,
+                id,
                 BigInteger.valueOf(1),
                 request.paymentType(),
                 request.status(),
-                LocalDate.now(),
                 request.address()
         );
 
@@ -383,11 +376,10 @@ class OrderServiceImplTest {
         var id = BigInteger.valueOf(1);
         var order = new Order(
                 id,
-                new User(),
+                id,
                 BigInteger.valueOf(1),
                 OrderPaymentType.COD,
                 OrderStatus.CONFIRMED,
-                LocalDate.now(),
                 "string"
         );
 

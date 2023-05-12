@@ -20,4 +20,6 @@ public interface OrderDetailDAO {
     void deleteOrderDetailByID(OrderDetailID orderDetailID);
 
     boolean existsOrderDetailByID(OrderDetailID orderDetailID);
+
+    List<OrderDetail> selectAllOnRefundOrderDetails();
 }

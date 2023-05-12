@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import TableProducts from '../TableProducts/TableProducts';
-import apiService from '../../../services/apiServiceProducts';
 import { useDispatch, useSelector } from 'react-redux';
-import ModalDeleteProduct from '../components/ModalDeleteProduct/ModalDeleteProduct';
-import Pagination from '../components/Pagination/Pagination';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { MdHomeFilled } from 'react-icons/md';
 import classnames from 'classnames/bind';
-import styles from './ManageProduct.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { GrAddCircle, GrHome } from 'react-icons/gr';
 
+import TableProducts from '../TableProducts/TableProducts';
+import apiService from '../../../services/apiServiceProducts';
+import ModalDeleteProduct from '../components/ModalDeleteProduct/ModalDeleteProduct';
+import Pagination from '../components/Pagination/Pagination';
+import styles from './ManageProduct.module.scss';
+
 let cx = classnames.bind(styles);
+
 const ManageProducts = (props) => {
   const navigate = useNavigate();
   const [productsList, setProductsList] = useState([]);
@@ -50,7 +52,6 @@ const ManageProducts = (props) => {
   const lengtProduct = productsList.length;
 
   const newData = productsList.filter((product) => product.status === true);
-  console.log(newData);
 
   const changePage = (number) => {
     setIdLastProduct(number);
@@ -63,7 +64,7 @@ const ManageProducts = (props) => {
   return (
     <>
       <div className={cx('manage-products-container')}>
-        <div className='title'>Manage Products</div>
+        <div className='title my-3'>Manage Products</div>
 
         <div className='products-content'>
           <div className={cx('btn-add-new')}>
@@ -80,6 +81,9 @@ const ManageProducts = (props) => {
             <button
               className='btn btn-success'
               style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              onClick={() => {
+                navigate('/admin/add-product')
+              }}
             >
               <GrAddCircle/>
               Add Products

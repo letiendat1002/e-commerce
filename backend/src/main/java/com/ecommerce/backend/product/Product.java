@@ -60,6 +60,9 @@ public class Product {
     @Column(name = "UnitPrice")
     private BigInteger unitPrice;
 
+    @Column(name = "Discount")
+    private Integer discount;
+
     @Column(name = "Quantity")
     private Long quantity;
 
@@ -115,6 +118,7 @@ public class Product {
                    String imageReview2,
                    String imageReview3,
                    BigInteger unitPrice,
+                   Integer discount,
                    Long quantity,
                    String description,
                    Integer yearRelease,
@@ -138,6 +142,7 @@ public class Product {
         this.imageReview2 = imageReview2;
         this.imageReview3 = imageReview3;
         this.unitPrice = unitPrice;
+        this.discount = discount;
         this.quantity = quantity;
         this.description = description;
         this.yearRelease = yearRelease;
@@ -162,6 +167,7 @@ public class Product {
                    String imageReview2,
                    String imageReview3,
                    BigInteger unitPrice,
+                   Integer discount,
                    Long quantity,
                    String description,
                    Integer yearRelease,
@@ -184,6 +190,7 @@ public class Product {
         this.imageReview2 = imageReview2;
         this.imageReview3 = imageReview3;
         this.unitPrice = unitPrice;
+        this.discount = discount;
         this.quantity = quantity;
         this.description = description;
         this.yearRelease = yearRelease;

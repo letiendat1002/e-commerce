@@ -13,12 +13,8 @@ const Pagination = ({
   totalUsers,
   changePage,
 }) => {
-  // Invoke when user click to request another page.
-
   const handlePageClick = (event) => {
-    // callApiWithPaginate(+event.selected + 1);
     changePage(+event.selected + 1);
-    console.log(`User requested page number ${event.selected}`);
   };
 
   const pageCount2 = Math.ceil(totalUsers / userPerPage);

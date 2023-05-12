@@ -5,6 +5,7 @@ import apiService from '../../../../services/apiServiceProducts';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import classname from 'classnames/bind';
 import Table from 'react-bootstrap/Table';
+import { Image } from 'antd';
 import styles from './ProductFromCategory.module.scss';
 import ReactPaginate from 'react-paginate';
 import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
@@ -43,7 +44,6 @@ const ProductFromCategory = (props) => {
     // callApiCategory();
     callAllProducts();
   }, []);
-  console.log(loading);
   return (
     <>
       {loading === true ? (
@@ -67,6 +67,11 @@ const ProductFromCategory = (props) => {
               <thead>
                 <tr>
                   <th scope='col'>No</th>
+                  <th
+                    scope='col'
+                    className='text-center'>
+                    Image
+                  </th>
                   <th
                     scope='col'
                     className='text-center'>
@@ -111,13 +116,13 @@ const ProductFromCategory = (props) => {
                     return (
                       <tr key={idx}>
                         <th scope='row'>{idx + 1}</th>
-                        {/* <td className='row_img'>
-                        <img
-                          style={{ width: '40px', height: '40px' }}
-                          src={`data:image/jpeg;base64,${x.image}`}
+                        <td className='row_img'>
+                        <Image
+                          style={{ width: '50px', height: '50px' }}
+                          src={require(`../../../../assets/images/${x.image}`)}
                           alt=''
                         />
-                      </td> */}
+                      </td>
                         <td>{x.name}</td>
                         <td>{x.unitPrice}</td>
                         <td>{x.quantity}</td>

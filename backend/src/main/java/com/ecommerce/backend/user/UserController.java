@@ -11,18 +11,23 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Collections;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 @RestController
 public class UserController {
     private final UserService userService;
+    private final UserDTOMapper userDTOMapper;
 
     @GetMapping
     @PreAuthorize("hasAuthority('user:read')")
     public UserResponse getUsers() {
-        var userDTOList = userService.fetchAllUsers();
+        var userDTOList = userService
+                .fetchAllUsers()
+                .stream()
+                .map(userDTOMapper)
+                .toList();
 
         return new UserResponse(
                 HttpStatus.OK.value(),
@@ -36,7 +41,9 @@ public class UserController {
     public UserResponse getUserByUserID(
             @PathVariable("userID") BigInteger userID
     ) {
-        var userDTOList = List.of(userService.fetchUserByUserID(userID));
+        var userDTOList = Collections.singletonList(
+                userDTOMapper.apply(userService.fetchUserByUserID(userID))
+        );
 
         return new UserResponse(
                 HttpStatus.OK.value(),
@@ -55,7 +62,9 @@ public class UserController {
             throw new RequestValidationException(errors);
         }
 
-        var userDTOList = List.of(userService.addUser(request));
+        var userDTOList = Collections.singletonList(
+                userDTOMapper.apply(userService.addUser(request))
+        );
 
         return new UserResponse(
                 HttpStatus.OK.value(),
@@ -88,7 +97,9 @@ public class UserController {
             throw new RequestValidationException(errors);
         }
 
-        var userDTOList = List.of(userService.updateUser(userID, request));
+        var userDTOList = Collections.singletonList(
+                userDTOMapper.apply(userService.updateUser(userID, request))
+        );
 
         return new UserResponse(
                 HttpStatus.OK.value(),

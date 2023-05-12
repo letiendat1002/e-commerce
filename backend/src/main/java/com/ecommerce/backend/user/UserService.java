@@ -4,19 +4,21 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface UserService {
-    List<UserDTO> fetchAllUsers();
+    List<User> fetchAllUsers();
 
-    UserDTO fetchUserByUserID(BigInteger userID);
+    User fetchUserByUserID(BigInteger userID);
 
-    UserDTO fetchUserByEmail(String email);
+    User fetchUserByEmail(String email);
 
-    UserDTO addUser(UserRegistrationRequest request);
+    User addUser(UserRegistrationRequest request);
 
-    UserDTO updateUser(BigInteger userID, UserUpdateRequest request);
+    User updateUser(BigInteger userID, UserUpdateRequest request);
 
     void deleteUser(BigInteger userID);
 
-    void enableUser(String username);
+    void enableUser(String email);
 
-    UserDTO updateUserPassword(String email, String newPassword);
+    User updateUserPassword(String email, String newPassword);
+
+    boolean existsUserByID(BigInteger userID);
 }

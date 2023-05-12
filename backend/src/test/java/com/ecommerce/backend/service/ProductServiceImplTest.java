@@ -84,6 +84,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,
@@ -150,6 +151,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,
@@ -182,6 +184,7 @@ class ProductServiceImplTest {
                 request.imageReview2(),
                 request.imageReview3(),
                 request.unitPrice(),
+                request.discount(),
                 request.quantity(),
                 request.description(),
                 request.yearRelease(),
@@ -224,6 +227,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,
@@ -277,6 +281,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,
@@ -354,6 +359,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 100L,
                 "string",
                 0,
@@ -381,6 +387,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,
@@ -417,6 +424,7 @@ class ProductServiceImplTest {
         assertThat(capturedProduct.getImageReview2()).isEqualTo(request.imageReview2());
         assertThat(capturedProduct.getImageReview3()).isEqualTo(request.imageReview3());
         assertThat(capturedProduct.getUnitPrice()).isEqualTo(request.unitPrice());
+        assertThat(capturedProduct.getDiscount()).isEqualTo(request.discount());
         assertThat(capturedProduct.getQuantity()).isEqualTo(request.quantity());
         assertThat(capturedProduct.getDescription()).isEqualTo(request.description());
         assertThat(capturedProduct.getYearRelease()).isEqualTo(request.yearRelease());
@@ -453,6 +461,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 100L,
                 "string",
                 0,
@@ -480,6 +489,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,
@@ -525,6 +535,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,
@@ -552,6 +563,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
+                null,
                 50L,
                 "string",
                 0,

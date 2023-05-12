@@ -4,13 +4,15 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryDTO> fetchAllCategories();
+    List<Category> fetchAllCategories();
 
-    CategoryDTO fetchCategoryByID(BigInteger categoryID);
+    Category fetchCategoryByID(BigInteger categoryID);
 
-    CategoryDTO addCategory(CategoryRequest request);
+    Category addCategory(CategoryRequest request);
 
-    CategoryDTO updateCategory(BigInteger categoryID, CategoryRequest request);
+    Category updateCategory(BigInteger categoryID, CategoryRequest request);
 
     void deleteCategory(BigInteger categoryID);
+
+    boolean existsCategoryByID(BigInteger categoryID);
 }

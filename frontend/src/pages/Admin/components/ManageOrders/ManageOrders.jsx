@@ -1,4 +1,4 @@
-import { Image, Pagination } from 'antd';
+import { Image, Pagination, Popconfirm } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AiFillCloseCircle, AiFillDelete } from 'react-icons/ai';
 import { GrFormSubtract } from 'react-icons/gr';
@@ -224,7 +224,15 @@ const ManageOrders = (props) => {
                               CANCELLED
                             </li>
                           </ul>
-                        <button onClick={() => handleDeleteOrder(item.orderID)} style={{padding: "4px 22px", backgroundColor: "#a93411",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xóa</button>
+                        <Popconfirm 
+                          title="Xóa đơn hàng"
+                          description="Bạn có chắc muốn xóa đơn hàng?"
+                          onConfirm={() => handleDeleteOrder(item.orderID)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <button style={{padding: "4px 22px", backgroundColor: "#a93411",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xóa</button>
+                        </Popconfirm>
                       </div>
                       </td>
                   </tr>
@@ -259,7 +267,7 @@ const ManageOrders = (props) => {
                     return (
                       <tr>
                         <td><span>{item.name}</span></td>
-                        <td><Image src={require(`../../../../assets/images/${item.productID}/${item.image}`)} preview = {true}/></td>
+                        <td><Image src={require(`../../../../assets/images/${item.image}`)} preview = {true}/></td>
                         <td><span>{formatProductPrice(item.unitPrice)}</span></td>
                         <td>
                           <button onClick={() => handleAddItemTocart(item)}>
@@ -294,14 +302,24 @@ const ManageOrders = (props) => {
                               cartAdmin.slice(startIndexCartAdmin, endIndexCartAdmin + 1).map((item) => {
                                 return (
                                   <tr>
-                                    <td><Image src={require(`../../../../assets/images/${item.productID}/${item.image}`)} preview = {true}/></td>
+                                    <td><Image src={require(`../../../../assets/images/${item.image}`)} preview = {true}/></td>
                                     <td><div style={{display: "flex", justifyContent: "space-evenly", padding: "0 1.5rem"}}>
                                         <i onClick={() => dispatch(decreamentFromCartAdmin(item))} style={{color: "#f00c00"}}><GrFormSubtract /></i>
                                         <span>{item.cartQuantity}</span>
                                         <i onClick={() => dispatch(increamentFromCartAdmin(item))} style={{color: "#f00c00"}}><MdAdd /></i>
                                     </div></td>
                                     <td><span>{formatProductPrice(item.cartQuantity * item.unitPrice)}</span></td>
-                                    <td><i onClick={() => dispatch(removeFromToCartAdmin(item))} style={{color: "#f00c00"}}><AiFillDelete /></i></td>
+                                    <td>
+                                      <Popconfirm 
+                                        title="Xóa sản phẩm khỏi giỏ hàng!"
+                                        description="Bạn có muốn xóa sản phẩm khỏi đơn hàng?"
+                                        onConfirm={() => dispatch(removeFromToCartAdmin(item))}
+                                        okText="Yes"
+                                        cancelText="No"
+                                      >
+                                        <i style={{color: "#f00c00"}}><AiFillDelete /></i>
+                                      </Popconfirm>
+                                    </td>
                                   </tr>
                                 )
                               })

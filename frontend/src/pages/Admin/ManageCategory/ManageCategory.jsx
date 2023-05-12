@@ -2,19 +2,27 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import classnames from 'classnames/bind';
+import { GrAddCircle, GrHome } from 'react-icons/gr';
+import { useNavigate } from 'react-router-dom';
 import TableCategory from './TableCategory/TableCategory';
 import categoryApi from '../../../services/apiGetCategory';
 import apiService from '../../../services/apiServiceProducts';
-import { GrAddCircle, GrHome } from 'react-icons/gr';
-import { useNavigate } from 'react-router-dom';
-import styles from './ManageCategory.module.scss'
-let cx = classnames.bind(styles);
+import styles from './ManageCategory.module.scss';
+import ModalUpdateCategory from '../components/ModalUpdateCategory/ModalUpdateCategory';
+import ModalAddCategory from '../components/ModalAddCategory/ModalAddCategory';
+import ModalDeleteCategory from '../components/ModalDeleteCategory/ModalDeleteCategory';
 
+let cx = classnames.bind(styles);
 const ManageCategory = (props) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [categoryList, setCategoryList] = useState('');
   const [product, setProduct] = useState([]);
+  const [showModalUpdateCategory, setShowModalUpdateCategory] = useState(false);
+  const [showModalAddCategory, setShowModalAddCategory] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [dataCategory, setDataCategory] = useState({});
+  const [dataDelete, setDataDelete] = useState({});
 
   const callAllProducts = async () => {
     try {
@@ -34,6 +42,10 @@ const ManageCategory = (props) => {
     }
   };
 
+  const handleAddCategory = () => {
+    setShowModalAddCategory(true)
+  }
+
   useEffect(() => {
     callApiCategory();
     callAllProducts();
@@ -46,50 +58,49 @@ const ManageCategory = (props) => {
 
         <div className='products-content'>
           <div className={cx('btn-add-new')}>
-            
-          <button
+            <button
               className='btn btn-primary'
               style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
               onClick={() => {
                 navigate('/admin');
               }}>
-              <GrHome/>
+              <GrHome />
               Back Home
             </button>
-            <button
-              className='btn btn-primary'
-              //   onClick={(e) => setShow(true)}
-            >
-              {/* <AiFillPlusCircle /> */}
-              <GrAddCircle/> Add New Category
+            <button className='btn btn-primary' onClick={handleAddCategory}>
+              <GrAddCircle /> Add New Category
             </button>
           </div>
 
           <div className='table-products-container'>
             <TableCategory
               categoryList={categoryList}
-              //   countPage={countPage}
-              // setCurrentPage={setCurrentPage}
-              //   handlePageChange={handlePageChange}
+              setShowModalUpdateCategory={setShowModalUpdateCategory}
+              setDataCategory={setDataCategory}
+              setDataDelete={setDataDelete}
+              setShowModalDelete={setShowModalDelete}
             />
-            {/* <TableUser
-            data={data}
-            setShowModal={handleClickBtnUpdate}
-            handleClickBtnDelete={handleClickBtnDelete}
-            handleClickBtnView={handleClickBtnView}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-          <Pagination
-            callApiWithPaginate={callApiWithPaginate}
-            pageCount={pageCount}
-            setPageCount={setPageCount}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          /> */}
           </div>
         </div>
       </div>
+      <ModalUpdateCategory
+        showModalUpdateCategory={showModalUpdateCategory}
+        setShowModalUpdateCategory={setShowModalUpdateCategory}
+        dataCategory={dataCategory}
+        callApiCategory={callApiCategory}
+        setDataCategory={setDataCategory}
+      />
+      <ModalAddCategory
+        showModalAddCategory={showModalAddCategory}
+        setShowModalAddCategory={setShowModalAddCategory}
+        callApiCategory={callApiCategory}
+      />
+      <ModalDeleteCategory
+        showModalDelete={showModalDelete}
+        setShowModalDelete={setShowModalDelete}
+        dataDelete={dataDelete}
+        callApiCategory={callApiCategory}
+      />
     </>
   );
 };

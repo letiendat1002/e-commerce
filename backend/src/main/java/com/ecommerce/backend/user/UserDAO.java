@@ -25,7 +25,7 @@ public interface UserDAO {
 
     Optional<User> updateUser(User update);
 
-    void enableUser(String email);
+    int enableUser(String email);
 
-    void updateUserPassword(String email, String randomPassword);
+    int updateUserPassword(String email, String randomPassword);
 }

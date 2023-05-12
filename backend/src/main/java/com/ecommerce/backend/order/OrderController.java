@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 public class OrderController {
     private final OrderService orderService;
+    private final OrderDTOMapper orderDTOMapper;
 
     @GetMapping
     @PreAuthorize("hasAuthority('order:read')")
@@ -27,9 +29,17 @@ public class OrderController {
         List<OrderDTO> orderDTOList;
 
         if (userID == null) {
-            orderDTOList = orderService.fetchAllOrders();
+            orderDTOList = orderService
+                    .fetchAllOrders()
+                    .stream()
+                    .map(orderDTOMapper)
+                    .toList();
         } else {
-            orderDTOList = orderService.fetchAllOrdersByUserID(userID);
+            orderDTOList = orderService
+                    .fetchAllOrdersByUserID(userID)
+                    .stream()
+                    .map(orderDTOMapper)
+                    .toList();
         }
 
         return new OrderResponse(
@@ -44,7 +54,9 @@ public class OrderController {
     public OrderResponse getOrderByOrderID(
             @PathVariable("orderID") BigInteger orderID
     ) {
-        var orderDTOList = List.of(orderService.fetchOrderByOrderID(orderID));
+        var orderDTOList = Collections.singletonList(
+                orderDTOMapper.apply(orderService.fetchOrderByOrderID(orderID))
+        );
 
         return new OrderResponse(
                 HttpStatus.OK.value(),
@@ -63,7 +75,9 @@ public class OrderController {
             throw new RequestValidationException(errors);
         }
 
-        var orderDTOList = List.of(orderService.addOrder(request));
+        var orderDTOList = Collections.singletonList(
+                orderDTOMapper.apply(orderService.addOrder(request))
+        );
 
         return new OrderResponse(
                 HttpStatus.OK.value(),
@@ -96,7 +110,9 @@ public class OrderController {
             throw new RequestValidationException(errors);
         }
 
-        var orderDTOList = List.of(orderService.updateOrder(orderID, request));
+        var orderDTOList = Collections.singletonList(
+                orderDTOMapper.apply(orderService.updateOrder(orderID, request))
+        );
 
         return new OrderResponse(
                 HttpStatus.OK.value(),

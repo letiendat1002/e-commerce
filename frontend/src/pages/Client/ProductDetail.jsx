@@ -6,15 +6,19 @@ import formatProductPrice from "../../Helper/index.js";
 import Catagory from "../../assets/data/catagory.js";
 import {FaMobileAlt} from 'react-icons/fa'
 import {MdOutlineCamera} from 'react-icons/md'
-import {AiOutlineCamera} from 'react-icons/ai'
+import {AiOutlineCamera, AiFillStar} from 'react-icons/ai'
 import {CiMicrochip} from 'react-icons/ci'
 import {BiMemoryCard} from 'react-icons/bi'
+import {Pagination, Rate} from 'antd'
 import Slider from "react-slick";
 import productData from "../../Helper/GetProduct.js";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../Redux/slice/cartSlice.js";
 import { getAllProducts } from "../../Redux/slice/productSlice.js";
 import { getAllCategories } from "../../Redux/slice/categorySlice.js";
+import { getRatingForProduct } from "../../Redux/slice/ratingSlice.js";
+import { getAllUser } from "../../Redux/slice/usersSlice.js";
+import SlideAntd from '../../components/SlideAntd'
 
 const ProductDetail = ({match, history}) => {
   const {slug} = useParams();
@@ -80,9 +84,44 @@ const ProductDetail = ({match, history}) => {
     let PC = Products.filter(product => product.categoryID === 4);
 
   const AddToCartHandle = (products) => {
-    dispatch(addToCart(products))
+    let productPrice = products.unitPrice
+    if (products.discount != null){
+      productPrice = products.unitPrice - (products.unitPrice * (products.discount / 100)) 
+    }
+    const updatedProduct = {...products, unitPrice: productPrice};
+    dispatch(addToCart(updatedProduct))
   };
 
+  const productID = Products.filter((item) => item.slug === slug)[0]?.productID
+
+  useEffect(() => {
+    dispatch(getRatingForProduct(productID))
+  }, [Products])
+
+  const rating = useSelector(state => state.rating.data) || []
+  let totalRating = 0;
+
+  for(let i = 0 ; i < rating.length; i++){
+    totalRating = rating[i].rateAmount + totalRating
+  }
+
+  // const oneRater = Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)
+  // const twoRater = Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)
+  // const threeRater = Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)
+  // const fourRater =  Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)
+  // const fiveRater =  Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)
+
+  const average = totalRating / rating.length;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const itemsPerPage = 3;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = currentPage * itemsPerPage - 1;
   return (
     <div className="product__detail container-fluid"> 
       <div className="product-main col-lg-12 col-md-12 col-sm-12 col-12 py-3">
@@ -123,12 +162,12 @@ const ProductDetail = ({match, history}) => {
                       Products.map((product) => {
                         if (product.slug === slug && previewImg === ''){
                           return (
-                            <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" id="product-main-image" />
+                            <img src={require(`../../assets/images/${product.image}`)} alt="" id="product-main-image" />
                           )
                         }
                         else if (product.slug === slug && previewImg != []){
                           return (
-                            <img src={require(`../../assets/images/${product.productID}/${previewImg}`)} alt="" id="product-main-image" />
+                            <img src={require(`../../assets/images/${previewImg}`)} alt="" id="product-main-image" />
                           )
                         }
                       })
@@ -140,25 +179,25 @@ const ProductDetail = ({match, history}) => {
                           return (
                             <div className="product-image-slider col-lg-12 col-md-12 col-sm-12 col-12 pe-4">
                               <img
-                                  src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)}
+                                  src={require(`../../assets/images/${product.imageReview1}`)}
                                   alt=""
                                   className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                   onClick={() => setPreviewImg(product.imageReview1)}
                                   />
                               <img
-                                src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)}
+                                src={require(`../../assets/images/${product.imageReview2}`)}
                                 alt=""
                                 className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                 onClick={() => setPreviewImg(product.imageReview2)}
                               />
                               <img
-                                src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)}
+                                src={require(`../../assets/images/${product.imageReview3}`)}
                                 alt=""
                                 className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                 onClick={() => setPreviewImg(product.imageReview3)}
                               />
                               <img
-                                src={require(`../../assets/images/${product.productID}/${product.image}`)}
+                                src={require(`../../assets/images/${product.image}`)}
                                 alt=""
                                 className="image-list col-lg-3 col-md-3 col-sm-3 col-3"
                                 onClick={() => setPreviewImg(product.image)}
@@ -252,8 +291,8 @@ const ProductDetail = ({match, history}) => {
               <div className="product-right col-lg-6 col-sm-12 col-md-12 col-12 ps-4">
                 <div className="product">
                   <div className="product-price">
-                    <span className="offer-price">{formatProductPrice(product.unitPrice)}</span>
-                    <span className="sale-price"><del>30.000.000 đ</del></span>
+                    <span className="offer-price">{(product.discount) ? formatProductPrice((product.unitPrice - (product.unitPrice * (product.discount/100)))) : (formatProductPrice((product.unitPrice)))}</span>
+                    <span className="sale-price">{(product.discount) ? (<del>{formatProductPrice(product.unitPrice)}</del>) : ("")}</span>
                   </div>
                   <div className="product-details">
                     <p> {product.description}</p>
@@ -316,7 +355,7 @@ const ProductDetail = ({match, history}) => {
                       Products.map((products ,idx) => {
                         if (products.slug === slug){
                           return (
-                            <Link to={'/cart'}  onClick= {() => AddToCartHandle(products)}  key={idx}>
+                            <Link to= {"/cart"} onClick= {() => AddToCartHandle(products)}  key={idx}>
                               <i className="bx bxs-zap"></i> Mua Ngay
                             </Link>        
                           )
@@ -337,6 +376,74 @@ const ProductDetail = ({match, history}) => {
               </div>
           </div>
         </div>
+        
+        {
+          (rating.length > 0 ) ? (
+            <div className="rating__product">
+            <div className="rating__product--container">
+              <div style={{display: "flex", justifyContent: "space-around"}}>
+                <h5 style={{paddingRight: "10px", fontSize: "20px", fontWeight: '600'}}>Đánh giá sản phẩm</h5>
+                <h3 style={{maxWidth: "40%"}}>{product.name}</h3>
+              </div>
+              <div className="container--slider">
+                <div className="rating--title">
+                  <h5>{average}</h5>
+                  <Rate disabled style={{marginTop: "-5px", paddingRight: "10px"}} value={average}/>
+                  <span style={{fontSize: "18px", marginRight: "1rem"}}>{rating.length} đánh giá</span>
+                </div>
+                <div style={{border: "1px solid #d5d5d5", width: "350px", borderRadius: '5px', padding: "10px"}}>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>5<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = { Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)}/>
+                    <p>{`${ Math.round((rating.filter(item => item.rateAmount == 5).length / rating.length) * 100)}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>4<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 4).length / rating.length) * 100)}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>3<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 3).length / rating.length) * 100)}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>2<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 2).length / rating.length) * 100)}%`}</p>
+                  </div>
+                  <div style={{display: "flex", width: "300px"}}>
+                    <span style={{fontSize: "20px", padding: "0 5px 0 0"}}>1<AiFillStar style={{fontSize : "15px"}} /></span>
+                    <SlideAntd values = {Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)}/>
+                    <p>{`${Math.round((rating.filter(item => item.rateAmount == 1).length / rating.length) * 100)}%`}</p>
+                  </div>
+                </div>
+              </div>
+              {
+                rating.slice(startIndex, endIndex + 1).map((item) => {
+                  return (
+                    <div className="rating--item-contains">
+                        <h5 style={{fontWeight: "600"}}>{item.userFullName}</h5>
+                        <Rate disabled value={item.rateAmount}/>
+                        <p>{item.comment}</p>
+                        <span style={{fontSize :" 16px", color: "#9c9c9c"}}>{item.dateRating}</span>
+                    </div>
+                  )
+                })
+              }
+            </div>
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={rating.length}
+              onChange={handlePageChange}
+            />
+        </div>
+          ) : (
+            <div></div>
+          )
+        }
+
         <div className="product__descript py-4">
             <div className="product__descript--contain col-lg-12 col-md-12 col-sm-12 col-12">
                 <div className="descript--contain--left col-lg-7 col-md-12 col-sm-12 col-12" >
@@ -349,16 +456,16 @@ const ProductDetail = ({match, history}) => {
                             <div className="product__descript-slider">
                                 <Slider {...settings} >
                                     <div className="descript-slider--item">
-                                        <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                                        <img src={require(`../../assets/images/${product.image}`)} alt="" />
                                     </div>
                                    <div className="descript-slider--item">
-                                    <img src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)} alt="" />
+                                    <img src={require(`../../assets/images/${product.imageReview1}`)} alt="" />
                                     </div>
                                     <div className="descript-slider--item">
-                                      <img src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)} alt="" />
+                                      <img src={require(`../../assets/images/${product.imageReview2}`)} alt="" />
                                     </div>
                                     <div className="descript-slider--item">
-                                      <img src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)} alt="" />
+                                      <img src={require(`../../assets/images/${product.imageReview3}`)} alt="" />
                                     </div>
                                 </Slider>
                             </div>
@@ -369,7 +476,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview2}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.imageReview2}`)} alt="" />
                             </div>
                             <div className="product__descript--content-child">
                               <p className="danhgia">Tương lai công nghệ hiển thị</p>
@@ -378,7 +485,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview3}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.imageReview3}`)} alt="" />
                             </div>
                             <div className="product__descript--content-child">
                               <p className="danhgia">Vẻ đẹp từ sắc màu thiên nhiên tinh tế</p>
@@ -387,7 +494,7 @@ const ProductDetail = ({match, history}) => {
                               </p>
                             </div>
                             <div className="descript--image--content">
-                              <img src={require(`../../assets/images/${product.productID}/${product.imageReview1}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.imageReview1}`)} alt="" />
                             </div>
                           </div>
                         )
@@ -530,9 +637,9 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, laptop).map((product,idx) => {
                       return (
                         <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                         </div></Link>
                       )
                     })
@@ -543,9 +650,9 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, phone).map((product,idx) => {
                       return (
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                           </div></Link>
                       )
                     })
@@ -556,9 +663,9 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, tablet).map((product,idx) => {
                       return (
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                           </div></Link>
                       )
                     })
@@ -569,9 +676,9 @@ const ProductDetail = ({match, history}) => {
                     productData.GetProductsForRecommendation(8, PC).map((product,idx) => {
                       return (
                           <Link to = {`/${product.slug}`}><div className="descript-slider--item" key={idx}>
-                              <img src={require(`../../assets/images/${product.productID}/${product.image}`)} alt="" />
+                              <img src={require(`../../assets/images/${product.image}`)} alt="" />
                               <p className="name">{product.name}</p>
-                              <p className="price">{formatProductPrice(product.unitPrice)}</p>
+                              <p className="price">{(product.discount) ? (formatProductPrice(product.unitPrice - ((product.unitPrice) * (product.discount/100)))) : (formatProductPrice(product.unitPrice))}</p>
                           </div></Link>
                       )
                     })

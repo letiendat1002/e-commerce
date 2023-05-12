@@ -18,7 +18,6 @@ const ModalDeleteProduct = (props) => {
       toast.success(data.message);
       handleClose();
       }
-      console.log(data)
 
     if (data && data.status !== 200) {
       toast.error(data.message);

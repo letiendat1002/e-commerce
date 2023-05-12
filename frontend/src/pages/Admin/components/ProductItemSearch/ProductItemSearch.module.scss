@@ -9,8 +9,8 @@
 }
 
 img.avatar {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   margin: 2rem 2rem;
@@ -19,6 +19,7 @@ img.avatar {
 .info {
 }
 .name {
+  font-size: 1.2rem;
 }
 .check {
   margin-left: 8px;
@@ -27,4 +28,20 @@ img.avatar {
 }
 .username {
   // color: aqua !important;
+}
+
+.link-product{
+  text-decoration: none !important;
+  color: black;
+  
+  .top-item-search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  &:hover{
+    color: black;
+    opacity: 0.5;
+  }
 }
