@@ -56,66 +56,51 @@ public class Order {
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(name = "DateOrder")
-    private LocalDate dateOrder;
+    private LocalDate dateOrder = LocalDate.now();
 
     @Column(name = "Address")
     private String address;
+
+    @Column(name = "DateCompleted")
+    private LocalDate dateCompleted;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<OrderDetail> orderDetails;
 
     public Order(BigInteger orderID,
-                 User user,
+                 BigInteger userID,
                  BigInteger additionalPrice,
                  OrderPaymentType paymentType,
-                 LocalDate dateOrder,
                  String address) {
         this.orderID = orderID;
-        this.user = user;
+        this.userID = userID;
         this.additionalPrice = additionalPrice;
         this.paymentType = paymentType;
-        this.dateOrder = dateOrder;
         this.address = address;
     }
 
     public Order(BigInteger orderID,
-                 User user,
+                 BigInteger userID,
                  BigInteger additionalPrice,
                  OrderPaymentType paymentType,
                  OrderStatus status,
-                 LocalDate dateOrder,
                  String address) {
         this.orderID = orderID;
-        this.user = user;
+        this.userID = userID;
         this.additionalPrice = additionalPrice;
         this.paymentType = paymentType;
         this.status = status;
-        this.dateOrder = dateOrder;
-        this.address = address;
-    }
-
-    public Order(User user,
-                 BigInteger additionalPrice,
-                 OrderPaymentType paymentType,
-                 LocalDate dateOrder,
-                 String address) {
-        this.user = user;
-        this.additionalPrice = additionalPrice;
-        this.paymentType = paymentType;
-        this.dateOrder = dateOrder;
         this.address = address;
     }
 
     public Order(BigInteger userID,
                  BigInteger additionalPrice,
                  OrderPaymentType paymentType,
-                 LocalDate dateOrder,
                  String address) {
         this.userID = userID;
         this.additionalPrice = additionalPrice;
         this.paymentType = paymentType;
-        this.dateOrder = dateOrder;
         this.address = address;
     }
 

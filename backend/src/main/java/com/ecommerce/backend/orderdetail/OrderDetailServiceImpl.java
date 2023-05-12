@@ -1,5 +1,6 @@
 package com.ecommerce.backend.orderdetail;
 
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import com.ecommerce.backend.product.ProductService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
@@ -64,7 +65,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
-    public OrderDetail addOrderDetail(OrderDetailRequest request) {
+    public OrderDetail addOrderDetail(OrderDetailAddRequest request) {
         checkIfOrderDetailNotExistsByIdOrThrow(
                 request.orderID(),
                 request.productID()
@@ -121,29 +122,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 );
     }
 
-    private void checkAndUpdateChangesOrThrow(
-            OrderDetailRequest request,
-            OrderDetail orderDetail
-    ) {
-        var isChanged = false;
-
-        if (!request.purchasePrice().equals(orderDetail.getPurchasePrice())) {
-            orderDetail.setPurchasePrice(request.purchasePrice());
-            isChanged = true;
-        }
-
-        if (!request.quantity().equals(orderDetail.getQuantity())) {
-            orderDetail.setQuantity(request.quantity());
-            isChanged = true;
-        }
-
-        if (!isChanged) {
-            throw new DuplicateResourceException(
-                    "No data changes detected"
-            );
-        }
-    }
-
     @Override
     public boolean existsOrderDetailByID(OrderDetailID orderDetailID) {
         return orderDetailDAO.existsOrderDetailByID(orderDetailID);
@@ -190,5 +168,61 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         );
 
         orderDetailDAO.deleteOrderDetailByID(orderDetailID);
+    }
+
+    @Override
+    public List<OrderDetail> fetchAllOnRefundOrderDetails() {
+        return orderDetailDAO.selectAllOnRefundOrderDetails();
+    }
+
+    @Override
+    public OrderDetail updateOrderDetail(OrderDetailUpdateRequest request) {
+        var orderDetail = selectOrderDetailByIdOrThrow(
+                new OrderDetailID(
+                        request.orderID(),
+                        request.productID()
+                )
+        );
+
+        var beforeChangeStatus = orderDetail.getStatus();
+        checkAndUpdateChangesOrThrow(request, orderDetail);
+        var afterChangeStatus = orderDetail.getStatus();
+
+        var isStatusOnRefundChangedToRefundCompleted =
+                beforeChangeStatus == OrderDetailStatus.ON_REFUND &&
+                        afterChangeStatus == OrderDetailStatus.REFUND_COMPLETED;
+
+        if (isStatusOnRefundChangedToRefundCompleted) {
+            productService.updateProductQuantityByAmount(
+                    orderDetail.getProductID(),
+                    orderDetail.getQuantity()
+            );
+        }
+
+        return orderDetailDAO
+                .updateOrderDetail(orderDetail)
+                .orElseThrow(
+                        () -> new FailedOperationException(
+                                "Failed to update order detail"
+                        )
+                );
+    }
+
+    private void checkAndUpdateChangesOrThrow(
+            OrderDetailUpdateRequest request,
+            OrderDetail orderDetail
+    ) {
+        var isChanged = false;
+
+        if (!request.status().equals(orderDetail.getStatus())) {
+            orderDetail.setStatus(request.status());
+            isChanged = true;
+        }
+
+        if (!isChanged) {
+            throw new DuplicateResourceException(
+                    "No data changes detected"
+            );
+        }
     }
 }

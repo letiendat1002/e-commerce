@@ -12,11 +12,15 @@ public interface OrderDetailService {
 
     OrderDetail fetchOrderDetailByOrderIDAndProductID(OrderDetailID orderDetailID);
 
-    OrderDetail addOrderDetail(OrderDetailRequest request);
+    OrderDetail addOrderDetail(OrderDetailAddRequest request);
 
     boolean existsOrderDetailByID(OrderDetailID orderDetailID);
 
     void updateProductQuantityWhenOrderCancelled(BigInteger orderID);
 
     void deleteAllOrderDetailsByOrderID(BigInteger orderID);
+
+    List<OrderDetail> fetchAllOnRefundOrderDetails();
+
+    OrderDetail updateOrderDetail(OrderDetailUpdateRequest request);
 }

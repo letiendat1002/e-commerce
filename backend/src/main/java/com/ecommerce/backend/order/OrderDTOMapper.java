@@ -15,7 +15,8 @@ public class OrderDTOMapper implements Function<Order, OrderDTO> {
                 order.getPaymentType(),
                 order.getStatus(),
                 order.getDateOrder(),
-                order.getAddress()
+                order.getAddress(),
+                order.getDateCompleted()
         );
     }
 }

@@ -70,7 +70,7 @@ public class OrderDetailController {
     @PostMapping
     @PreAuthorize("hasAuthority('order_detail:write')")
     public OrderDetailResponse postOrderDetail(
-            @Validated @RequestBody OrderDetailRequest request,
+            @Validated @RequestBody OrderDetailAddRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
@@ -80,6 +80,45 @@ public class OrderDetailController {
         var orderDetailDTOList = Collections.singletonList(
                 orderDetailDTOMapper.apply(
                         orderDetailService.addOrderDetail(request)
+                )
+        );
+
+        return new OrderDetailResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDetailDTOList
+        );
+    }
+
+    @GetMapping("/refund")
+    @PreAuthorize("hasAuthority('order_detail:read')")
+    public OrderDetailResponse getOnRefundOrderDetails() {
+        var orderDetailDTOList = orderDetailService
+                .fetchAllOnRefundOrderDetails()
+                .stream()
+                .map(orderDetailDTOMapper)
+                .toList();
+
+        return new OrderDetailResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDetailDTOList
+        );
+    }
+
+    @PutMapping("/refund")
+    @PreAuthorize("hasAuthority('order_detail:write')")
+    public OrderDetailResponse putOnRefundOrderDetail(
+            @Validated @RequestBody OrderDetailUpdateRequest request,
+            BindingResult errors
+    ) {
+        if (errors.hasErrors()) {
+            throw new RequestValidationException(errors);
+        }
+
+        var orderDetailDTOList = Collections.singletonList(
+                orderDetailDTOMapper.apply(
+                        orderDetailService.updateOrderDetail(request)
                 )
         );
 

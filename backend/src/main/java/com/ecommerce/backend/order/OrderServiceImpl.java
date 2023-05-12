@@ -49,7 +49,6 @@ public class OrderServiceImpl implements OrderService {
                 request.userID(),
                 request.additionalPrice(),
                 request.paymentType(),
-                LocalDate.now(),
                 request.address()
         );
 
@@ -108,6 +107,9 @@ public class OrderServiceImpl implements OrderService {
 
         if (!request.status().equals(order.getStatus())) {
             order.setStatus(request.status());
+            if (order.getStatus().equals(OrderStatus.COMPLETED)) {
+                order.setDateCompleted(LocalDate.now());
+            }
             isChanged = true;
         }
 

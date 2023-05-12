@@ -52,13 +52,11 @@ public class OrderDetail {
     public OrderDetail(BigInteger orderID,
                        BigInteger productID,
                        BigInteger purchasePrice,
-                       Integer quantity,
-                       OrderDetailStatus status) {
+                       Integer quantity) {
         this.orderID = orderID;
         this.productID = productID;
         this.purchasePrice = purchasePrice;
         this.quantity = quantity;
-        this.status = status;
     }
 
     @Override

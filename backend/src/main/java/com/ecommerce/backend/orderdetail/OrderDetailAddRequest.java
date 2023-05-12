@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigInteger;
 
-public record OrderDetailRequest(
+public record OrderDetailAddRequest(
         @NotNull(message = "Order ID must not be null")
         BigInteger orderID,
 
