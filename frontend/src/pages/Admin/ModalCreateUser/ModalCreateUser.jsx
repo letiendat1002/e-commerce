@@ -6,6 +6,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import { createNewUser } from '../../../services/apiServiceUser';
 import './ModalCreateUser.scss';
+import { GrCheckmark } from 'react-icons/gr';
 
 const ModalCreateUser = (props) => {
   const { show, setShow, callApi, callApiWithPaginate, setCurrentPage, getAllUsers } = props;
@@ -49,6 +50,9 @@ const ModalCreateUser = (props) => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
+  // const validatePassword = (password) => {
+  //   return String(password).toLowerCase().match('^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$');
+  // };
 
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -66,8 +70,14 @@ const ModalCreateUser = (props) => {
       return;
     }
 
+    // const validatePw = validatePassword(password);
+    // if (!validatePw) {
+
     if (!password) {
-      toast.error('Invalid password');
+      toast.error('Invalid password & Password < 5 char');
+    }
+    if (+password.length <= 5) {
+      toast.error('Invalid password & Password < 5 char');
       return;
     }
 
@@ -80,7 +90,6 @@ const ModalCreateUser = (props) => {
       // setCurrentPage(1);
       // await callApiWithPaginate(1);
     }
-    console.log(data);
     const FR = new FileReader();
 
     console.log(FR.readAsDataURL(image));
@@ -143,7 +152,7 @@ const ModalCreateUser = (props) => {
               />
             </div>
 
-            <div className='col-md-6'>
+            <div className='col-md-6 my-2'>
               <label
                 htmlFor='inputUsername'
                 className='form-label'>
@@ -158,7 +167,7 @@ const ModalCreateUser = (props) => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div className='col-md-6'>
+            <div className='col-md-6 my-2'>
               <label
                 htmlFor='inputPhone'
                 className='form-label'>
@@ -249,8 +258,8 @@ const ModalCreateUser = (props) => {
             // onClick={handleCloseModal}
             onClick={handleCreateUser}
             // onClick={handleClose}
-          >
-            Save Changes
+            style={{ display: 'flex', alignItems: 'center', gap:'5px' }}>
+            Create User <GrCheckmark />
           </Button>
         </Modal.Footer>
       </Modal>

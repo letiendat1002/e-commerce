@@ -11,6 +11,7 @@ import classNames from 'classnames/bind';
 
 import apiService from '../../../../services/apiServiceProducts';
 import styles from './ModalAddProduct.module.scss';
+import { Select } from 'antd';
 
 let cx = classNames.bind(styles);
 const ModalAddProduct = (props) => {
@@ -83,6 +84,21 @@ const ModalAddProduct = (props) => {
     }));
   };
 
+  const handleOnChangeCategory = (category) => {
+    console.log(category)
+    setProduct((prev) => ({
+      ...prev,
+      categoryID: category,
+    }));
+  };
+  const handleOnChangeStatus = (status) => {
+    console.log(status)
+    setProduct((prev) => ({
+      ...prev,
+      status: status,
+    }));
+  };
+
   function handleBackButtonClick(e) {
     e.preventDefault();
     navigate(-1);
@@ -126,14 +142,14 @@ const ModalAddProduct = (props) => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    // console.log(product);
-    let { status, message } = await apiService.postProduct(product);
-    if (status === 200) {
-      toast.success(message);
-      navigate('/admin/manage-products');
-    } else {
-      toast.error(message);
-    }
+    console.log(product);
+    // let { status, message } = await apiService.postProduct(product);
+    // if (status === 200) {
+    //   toast.success(message);
+    //   navigate('/admin/manage-products');
+    // } else {
+    //   toast.error(message);
+    // }
   };
   return (
     <>
@@ -187,7 +203,7 @@ const ModalAddProduct = (props) => {
                   </Form.Group>
                 </Col>
 
-                <Col xs={2}>
+                <Col xs={3}>
                   <Form.Group
                     className='mb-3'
                     controlId='formQuantity'>
@@ -214,16 +230,43 @@ const ModalAddProduct = (props) => {
                     />
                   </Form.Group>
                 </Col>
-                <Col xs={2}>
+                <Col xs={3}>
                   <Form.Group
                     className='mb-3'
                     controlId='formCategory'>
                     <Form.Label>Category</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       type='text'
                       placeholder='Enter number category'
                       value={categoryID || ''}
                       onChange={(e) => handleOnChange({ categoryID: +e.target.value })}
+                    /> */}
+
+                    <Select
+                      // defaultValue="Laptop"
+                      value={categoryID}
+                      style={{
+                        width: '100%',
+                      }}
+                      onChange={handleOnChangeCategory}
+                      options={[
+                        {
+                          value: 1,
+                          label: 'Laptop',
+                        },
+                        {
+                          value: 2,
+                          label: 'Phone',
+                        },
+                        {
+                          value: 3,
+                          label: 'Tablet',
+                        },
+                        {
+                          value: 4,
+                          label: 'PC',
+                        },
+                      ]}
                     />
                   </Form.Group>
                 </Col>
@@ -306,11 +349,28 @@ const ModalAddProduct = (props) => {
                     className='mb-3'
                     controlId='formBasicStatus'>
                     <Form.Label>Status</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       type='text'
                       placeholder='Enter year relase'
                       value={status || ''}
                       onChange={(e) => handleOnChange({ status: e.target.value })}
+                    /> */}
+                    <Select
+                      defaultValue='true'
+                      style={{
+                        width: '100%',
+                      }}
+                      onChange={handleOnChangeStatus}
+                      options={[
+                        {
+                          value: true,
+                          label: 'true',
+                        },
+                        {
+                          value: false,
+                          label: 'false',
+                        },
+                      ]}
                     />
                   </Form.Group>
                 </Col>

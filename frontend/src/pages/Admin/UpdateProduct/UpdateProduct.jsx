@@ -7,10 +7,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Select, Space } from 'antd';
 import apiService from '../../../services/apiServiceProducts';
 import classNames from 'classnames/bind';
 
 import styles from './UpdateProduct.module.scss';
+import './UpdateProduct.scss';
 import { Image } from 'antd';
 let cx = classNames.bind(styles);
 const UpdateProduct = (props) => {
@@ -60,6 +62,21 @@ const UpdateProduct = (props) => {
     }));
   };
 
+  const handleOnChangeCategory = (category) => {
+    console.log(category)
+    setProduct((prev) => ({
+      ...prev,
+      categoryID: category,
+    }));
+  };
+  const handleOnChangeStatus = (status) => {
+    console.log(status)
+    setProduct((prev) => ({
+      ...prev,
+      status: status,
+    }));
+  };
+
   const handleProductDeltails = async (id) => {
     const response = await apiService.getDetailProduct(id);
     setProduct(response?.data[0]);
@@ -74,6 +91,8 @@ const UpdateProduct = (props) => {
     } else {
       toast.error(response.message);
     }
+
+    console.log(product);
   };
 
   function handleBackButtonClick(e) {
@@ -121,7 +140,6 @@ const UpdateProduct = (props) => {
     handleProductDeltails(idProduct);
   }, [idProduct]);
 
-  console.log(product);
   return (
     <>
       {product ? (
@@ -173,7 +191,7 @@ const UpdateProduct = (props) => {
                   </Form.Group>
                 </Col>
 
-                <Col xs={2}>
+                <Col xs={3}>
                   <Form.Group
                     className='mb-3'
                     controlId='formQuantity'>
@@ -200,16 +218,42 @@ const UpdateProduct = (props) => {
                     />
                   </Form.Group>
                 </Col>
-                <Col xs={2}>
+                <Col xs={3}>
                   <Form.Group
                     className='mb-3'
                     controlId='formCategory'>
                     <Form.Label>Category</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       type='text'
                       placeholder='Enter number category'
                       value={categoryID || ''}
                       onChange={(e) => handleOnChange({ categoryID: +e.target.value })}
+                    /> */}
+                    <Select
+                      // defaultValue="Latop"
+                      value={categoryID}
+                      style={{
+                        width: '100%',
+                      }}
+                      onChange={handleOnChangeCategory}
+                      options={[
+                        {
+                          value: 1,
+                          label: 'Laptop',
+                        },
+                        {
+                          value: 2,
+                          label: 'Phone',
+                        },
+                        {
+                          value: 3,
+                          label: 'Tablet',
+                        },
+                        {
+                          value: 4,
+                          label: 'PC',
+                        },
+                      ]}
                     />
                   </Form.Group>
                 </Col>
@@ -292,11 +336,28 @@ const UpdateProduct = (props) => {
                     className='mb-3'
                     controlId='formBasicStatus'>
                     <Form.Label>Status</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       type='text'
                       placeholder='Enter year relase'
                       value={status || ''}
                       onChange={(e) => handleOnChange({ status: e.target.value })}
+                    /> */}
+                    <Select
+                      defaultValue='true'
+                      style={{
+                        width: '100%',
+                      }}
+                      onChange={handleOnChangeStatus}
+                      options={[
+                        {
+                          value: true,
+                          label: 'true',
+                        },
+                        {
+                          value: false,
+                          label: 'false',
+                        },
+                      ]}
                     />
                   </Form.Group>
                 </Col>
@@ -497,7 +558,7 @@ const UpdateProduct = (props) => {
               </Row>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
+                <Button
                   variant='secondary'
                   type='submit'
                   className='m-3 px-4'
@@ -511,7 +572,6 @@ const UpdateProduct = (props) => {
                   className='m-3'>
                   Update
                 </Button>
-                
               </div>
             </Form>
           </Row>

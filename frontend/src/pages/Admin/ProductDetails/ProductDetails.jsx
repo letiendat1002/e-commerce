@@ -123,7 +123,7 @@ const ProductDetails = (props) => {
                       </Form.Group>
                     </Col>
 
-                    <Col xs={2}>
+                    <Col xs={3}>
                       <Form.Group
                         className='mb-3'
                         controlId='formQuantity'>
@@ -150,7 +150,7 @@ const ProductDetails = (props) => {
                         />
                       </Form.Group>
                     </Col>
-                    <Col xs={2}>
+                    <Col xs={3}>
                       <Form.Group
                         className='mb-3'
                         controlId='formCategory'>
