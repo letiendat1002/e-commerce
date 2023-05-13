@@ -28,9 +28,9 @@ import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/P
 import ManageRefund from '../pages/Admin/components/ManagerRefund/ManagerRefund';
 import ModelViewRefund from '../pages/Admin/components/ModelViewRefund/ModelViewRefund';
 import ModalAddProduct from '../pages/Admin/components/ModalAddProduct/ModalAddProduct';
-import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin'
+import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin';
+import ManageAddress from '../pages/Admin/components/ManageAddress/ManageAddress';
 // import Prod
-
 
 const router = createBrowserRouter([
   {
@@ -160,6 +160,10 @@ const router = createBrowserRouter([
       {
         path: 'add-product',
         element: <ModalAddProduct />,
+      },
+      {
+        path: 'manage-address',
+        element: <ManageAddress />,
       },
     ],
   },

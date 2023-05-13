@@ -14,19 +14,18 @@ const ProductItemSearch = ({ x, key, setShowResult }) => {
   // const { setShowResult } = useContext(ShowContext);
   // console.log(contextValue)
   const handleRedirect = (e) => {
-    // e.preventDefault()
-    // setShowResult(false)
+    e.preventDefault();
+    setShowResult(false);
   };
   return (
     <div
       className={cx('wrapper-items')}
-      key={productID}>
+      key={productID}
+      onClick={handleRedirect}>
       <Link
         to={`/admin/manage-products/${productID}`}
         className={cx('link-product')}>
-        <div
-          className={cx('top-item-search')}
-          onClick={handleRedirect}>
+        <div className={cx('top-item-search')}>
           <img
             className={cx('avatar')}
             src={avatar ? avatar : 'https://via.placeholder.com/444'}

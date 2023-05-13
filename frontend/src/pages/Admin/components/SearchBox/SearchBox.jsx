@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { FaCentercode } from 'react-icons/fa';
 
 import AccountItem from '../ProductItemSearch/ProductItemSearch';
 import Popper from '../Popper/Popper';
@@ -13,6 +14,7 @@ import styles from './SearchBox.module.scss';
 import useDebouce from '../../hooks/useDebounce';
 import apiFilterProducts from '../../../../services/apiFilterProducts';
 import apiService from '../../../../services/apiServiceProducts';
+import NotFoundProduct from '../NotFoundProduct/NotFoundProduct';
 
 export const ShowContext = createContext();
 const cx = classNames.bind(styles);
@@ -21,6 +23,7 @@ const SearchBox = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
   const [products, setProducts] = useState([]);
 
   const debouce = useDebouce(searchValue, 300);
@@ -31,16 +34,18 @@ const SearchBox = (props) => {
     setProducts(data);
   };
 
-  let rsSearch = [];
+  // const timer
+
+  // let rsSearch = [];
   const handleClear = () => {
     setSearchValue('');
-    // setSearchResult([]);
+    setSearchResult([]);
     setShowResult(false);
     inputValue.current.focus();
     // rsSearch = [];
 
     // rsSearch.splice(0, rsSearch.length);
-    setProducts([]);
+    // setProducts([]);
   };
 
   // console.log(showResult);
@@ -51,14 +56,33 @@ const SearchBox = (props) => {
 
   const handleSetSearchValue = (e) => {
     setSearchValue(e.target.value);
+    setLoadingSearch(true);
   };
 
   useEffect(() => {
     if (debouce.trim() === '') {
-      // setSearchResult([]);
-      setProducts([]);
+      setSearchResult([]);
+      // setProducts([]);
+      setLoadingSearch(false);
       return;
     }
+
+    const timerId = setTimeout(() => {
+      setLoadingSearch(false);
+      if (products.length > 0) {
+        const rsSearch = products.filter((x) => {
+          return x.name.toLowerCase().includes(debouce.toLowerCase());
+        });
+        setSearchResult(rsSearch);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [debouce, products]);
+
+  useEffect(() => {
     try {
       setLoading(true);
       getProducts();
@@ -66,32 +90,24 @@ const SearchBox = (props) => {
     } catch (err) {
       console.log(err);
     }
-  }, [debouce]);
-
-  if (products.length > 0) {
-    rsSearch = products.filter((x) => {
-      return x.name.toLowerCase().includes(debouce.toLowerCase());
-    });
-  }
-
-  // setSearchResult(rsSearch)
+  }, []);
 
   return (
     <div>
       <ShowContext.Provider value={setShowResult}>
         <Tippy
           interactive
-          visible={showResult && rsSearch && rsSearch?.length > 0}
+          visible={showResult === true && searchValue !== ''&&loadingSearch===false}
           render={(attrs) => {
             return (
               <div
                 className={cx('search-results')}
                 tabIndex='-1'
                 {...attrs}>
-                <Popper setShowResult={setShowResult}>
-                  <h4 className={cx('search-title')}>Products</h4>
-                  {rsSearch ?
-                    rsSearch?.map((x) => {
+                {searchResult.length > 0 && searchValue.length !== '' ? (
+                  <Popper setShowResult={setShowResult}>
+                    <h4 className={cx('search-title')}>Products</h4>
+                    {searchResult?.map((x) => {
                       return (
                         <AccountItem
                           setShowResult={setShowResult}
@@ -99,8 +115,13 @@ const SearchBox = (props) => {
                           key={x ? x.productID : 1}
                         />
                       );
-                    }):(<div>No product match</div>)}
-                </Popper>
+                    })}
+                  </Popper>
+                ) : (
+                  <Popper>
+                      <NotFoundProduct debouce={debouce} />
+                  </Popper>
+                )}
               </div>
             );
           }}
@@ -116,7 +137,7 @@ const SearchBox = (props) => {
               onFocus={() => setShowResult(true)}
             />
 
-            {!!searchValue && !loading && (
+            {!!searchValue && !loadingSearch && (
               <button
                 className={cx('clear')}
                 onClick={handleClear}>
@@ -125,7 +146,7 @@ const SearchBox = (props) => {
             )}
 
             {/* Loading */}
-            {loading && (
+            {loadingSearch && (
               <FontAwesomeIcon
                 className={cx('loading')}
                 icon={faSpinner}
