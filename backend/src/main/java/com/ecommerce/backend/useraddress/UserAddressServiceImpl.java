@@ -18,14 +18,23 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public List<UserAddress> fetchAllUserAddresses() {
-        return userAddressDAO.selectAllUserAddresss();
+        return userAddressDAO.selectAllUserAddresses();
     }
 
     @Override
     public List<UserAddress> fetchAllUserAddressesByUserID(BigInteger userID) {
-        var user = userService.fetchUserByUserID(userID);
+        checkIfUserExistsByIdOrThrow(userID);
 
-        return userAddressDAO.selectAllUserAddresssByUser(user);
+        return userAddressDAO.selectAllUserAddressesByUserID(userID);
+    }
+
+    private void checkIfUserExistsByIdOrThrow(BigInteger userID) {
+        var isExists = userService.existsUserByID(userID);
+        if (!isExists) {
+            throw new ResourceNotFoundException(
+                    "User not found by userID {%d}".formatted(userID)
+            );
+        }
     }
 
     @Override
@@ -41,11 +50,11 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
-    public UserAddress addUserAddress(UserAddressRequest request) {
-        var user = userService.fetchUserByUserID(request.userID());
+    public UserAddress addUserAddress(UserAddressAddRequest request) {
+        checkIfUserExistsByIdOrThrow(request.userID());
 
         var userAddress = new UserAddress(
-                user,
+                request.userID(),
                 request.address()
         );
 
@@ -61,11 +70,10 @@ public class UserAddressServiceImpl implements UserAddressService {
     @Override
     public UserAddress updateUserAddress(
             BigInteger userAddressID,
-            UserAddressRequest request
+            UserAddressUpdateRequest request
     ) {
         var userAddress = fetchUserAddressByID(userAddressID);
 
-        checkIfUserExistsByIdOrThrow(request.userID());
         checkAndUpdateChangesOrThrow(request, userAddress);
 
         return userAddressDAO
@@ -77,27 +85,11 @@ public class UserAddressServiceImpl implements UserAddressService {
                 );
     }
 
-    private void checkIfUserExistsByIdOrThrow(BigInteger userID) {
-        var isExists = userService.existsUserByID(userID);
-        if (!isExists) {
-            throw new ResourceNotFoundException(
-                    "User not found by userID {%d}".formatted(userID)
-            );
-        }
-    }
-
     private void checkAndUpdateChangesOrThrow(
-            UserAddressRequest request,
+            UserAddressUpdateRequest request,
             UserAddress userAddress
     ) {
         var isChanged = false;
-
-        if (!request.userID().equals(userAddress.getUser().getUserID())
-        ) {
-            var user = userService.fetchUserByUserID(request.userID());
-            userAddress.setUser(user);
-            isChanged = true;
-        }
 
         if (!request.address().equals(userAddress.getAddress())) {
             userAddress.setAddress(request.address());

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigInteger;
 
-public record UserAddressRequest(
+public record UserAddressAddRequest(
         @NotNull(message = "User ID must not be null")
         BigInteger userID,
 

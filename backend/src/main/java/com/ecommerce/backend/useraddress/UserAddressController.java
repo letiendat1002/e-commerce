@@ -71,7 +71,7 @@ public class UserAddressController {
     @PostMapping
     @PreAuthorize("hasAuthority('user_address:write')")
     public UserAddressResponse postUserAddress(
-            @Validated @RequestBody UserAddressRequest request,
+            @Validated @RequestBody UserAddressAddRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
@@ -108,7 +108,7 @@ public class UserAddressController {
     @PreAuthorize("hasAuthority('user_address:write')")
     public UserAddressResponse putUserAddress(
             @PathVariable("userAddressID") BigInteger userAddressID,
-            @Validated @RequestBody UserAddressRequest request,
+            @Validated @RequestBody UserAddressUpdateRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
