@@ -39,11 +39,6 @@ public class Order {
     @Column(name = "UserID")
     private BigInteger userID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID", insertable = false, updatable = false)
-    @ToString.Exclude
-    private User user;
-
     @Column(name = "AdditionalPrice")
     private BigInteger additionalPrice;
 
@@ -63,6 +58,11 @@ public class Order {
 
     @Column(name = "DateCompleted")
     private LocalDate dateCompleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UserID", insertable = false, updatable = false)
+    @ToString.Exclude
+    private User user;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @ToString.Exclude

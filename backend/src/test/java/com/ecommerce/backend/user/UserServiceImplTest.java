@@ -290,7 +290,9 @@ class UserServiceImplTest {
 
         // When
         when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
-        when(userDAO.existsOtherUserByPhone(any(), any())).thenReturn(true);
+        when(userDAO
+                .existsOtherUserByPhone(any(String.class), any(BigInteger.class)))
+                .thenReturn(true);
 
         // Then
         assertThatThrownBy(() -> userService
@@ -483,7 +485,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void existsUserByID_butNotFound() {
+    void notExistsUserByID() {
         // Given
         var id = BigInteger.valueOf(1);
 

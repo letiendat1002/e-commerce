@@ -74,9 +74,11 @@ class ProductServiceImplTest {
                 .thenThrow(ResourceNotFoundException.class);
 
         // Then
-        assertThatThrownBy(() -> productService.fetchAllProductsByCategoryID(id))
+        assertThatThrownBy(() -> productService
+                .fetchAllProductsByCategoryID(id))
                 .isInstanceOf(ResourceNotFoundException.class);
-        verify(productDAO, never()).selectAllProductsByCategory(any());
+        verify(productDAO, never())
+                .selectAllProductsByCategory(any(Category.class));
     }
 
     @Test
@@ -976,7 +978,7 @@ class ProductServiceImplTest {
                 .thenReturn(true);
         when(productDAO.existsOtherProductBySlug(request.slug(), id))
                 .thenReturn(false);
-        when(productDAO.updateProduct(any()))
+        when(productDAO.updateProduct(any(Product.class)))
                 .thenReturn(Optional.empty());
 
         // Then
@@ -1076,7 +1078,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void existsProductByID__butNotFound() {
+    void notExistsProductByID() {
         // Given
         var id = BigInteger.valueOf(1);
 
@@ -1099,8 +1101,10 @@ class ProductServiceImplTest {
         product.setQuantity(100L);
 
         // When
-        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
-        when(productDAO.updateProduct(any())).thenReturn(Optional.of(product));
+        when(productDAO.selectProductByID(id))
+                .thenReturn(Optional.of(product));
+        when(productDAO.updateProduct(any(Product.class)))
+                .thenReturn(Optional.of(product));
         productService.updateProductQuantityByAmount(id, amount);
 
         // Then
@@ -1121,8 +1125,10 @@ class ProductServiceImplTest {
         product.setQuantity(100L);
 
         // When
-        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
-        when(productDAO.updateProduct(any())).thenReturn(Optional.of(product));
+        when(productDAO.selectProductByID(id))
+                .thenReturn(Optional.of(product));
+        when(productDAO.updateProduct(any(Product.class)))
+                .thenReturn(Optional.of(product));
         productService.updateProductQuantityByAmount(id, amount);
 
         // Then
@@ -1178,8 +1184,10 @@ class ProductServiceImplTest {
         product.setQuantity(100L);
 
         // When
-        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
-        when(productDAO.updateProduct(any())).thenReturn(Optional.empty());
+        when(productDAO.selectProductByID(id))
+                .thenReturn(Optional.of(product));
+        when(productDAO.updateProduct(any(Product.class)))
+                .thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(

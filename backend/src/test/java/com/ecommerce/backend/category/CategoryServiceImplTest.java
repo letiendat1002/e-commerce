@@ -125,7 +125,7 @@ class CategoryServiceImplTest {
         // When
         when(categoryDAO.existsCategoryBySlug(request.slug()))
                 .thenReturn(false);
-        when(categoryDAO.insertCategory(any()))
+        when(categoryDAO.insertCategory(any(Category.class)))
                 .thenReturn(Optional.empty());
 
         // Then
@@ -339,7 +339,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void existsCategoryByID_butNotFound() {
+    void notExistsCategoryByID() {
         // Given
         var id = BigInteger.valueOf(1);
 

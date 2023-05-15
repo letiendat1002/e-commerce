@@ -173,13 +173,13 @@ public class UserAddressServiceImplTest {
         // When
         when(userService.existsUserByID(request.userID()))
                 .thenReturn(true);
-        when(userAddressDAO.insertUserAddress(any()))
+        when(userAddressDAO.insertUserAddress(any(UserAddress.class)))
                 .thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> userAddressService.addUserAddress(request))
                 .isInstanceOf(FailedOperationException.class);
-        verify(userAddressDAO).insertUserAddress(any());
+        verify(userAddressDAO).insertUserAddress(any(UserAddress.class));
     }
 
     @Test

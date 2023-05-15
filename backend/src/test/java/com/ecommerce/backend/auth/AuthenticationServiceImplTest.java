@@ -2,6 +2,7 @@ package com.ecommerce.backend.auth;
 
 import com.ecommerce.backend.auth.enums.ActivateStatus;
 import com.ecommerce.backend.shared.constants.VariableConstants;
+import com.ecommerce.backend.shared.email.CustomEmail;
 import com.ecommerce.backend.shared.email.EmailSenderService;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
@@ -21,10 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailSendException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.*;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -96,7 +94,7 @@ class AuthenticationServiceImplTest {
         // Then
         verify(userService).addUser(request);
         verify(jwtService).generateToken(request.email(), expire);
-        verify(emailSenderService).sendEmail(any());
+        verify(emailSenderService).sendEmail(any(CustomEmail.class));
         assertThat(generatedToken).isEqualTo(token);
     }
 
@@ -116,11 +114,11 @@ class AuthenticationServiceImplTest {
 
         // When
         doThrow(new MailSendException("Test message"))
-                .when(emailSenderService)
-                .sendEmail(any());
+                .when(emailSenderService).sendEmail(any());
 
         // Then
-        assertThatThrownBy(() -> emailSenderService.sendEmail(any()))
+        assertThatThrownBy(() -> emailSenderService
+                .sendEmail(any(CustomEmail.class)))
                 .isInstanceOf(MailSendException.class);
 
         assertThatThrownBy(() -> {
@@ -161,7 +159,8 @@ class AuthenticationServiceImplTest {
         // Then
         verify(userService).fetchUserByEmail(user.getEmail());
         verify(jwtService).generateToken(user.getEmail(), expire);
-        verify(authenticationManager).authenticate(any());
+        verify(authenticationManager)
+                .authenticate(any(UsernamePasswordAuthenticationToken.class));
         assertThat(generatedToken).isEqualTo(token);
         assertThat(actual).isEqualTo(expected);
     }
@@ -173,7 +172,8 @@ class AuthenticationServiceImplTest {
                 .thenThrow(BadCredentialsException.class);
 
         // Then
-        assertThatThrownBy(() -> authenticationManager.authenticate(any()))
+        assertThatThrownBy(() -> authenticationManager
+                .authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .isInstanceOf(BadCredentialsException.class);
     }
 
@@ -184,7 +184,8 @@ class AuthenticationServiceImplTest {
                 .thenThrow(DisabledException.class);
 
         // Then
-        assertThatThrownBy(() -> authenticationManager.authenticate(any()))
+        assertThatThrownBy(() -> authenticationManager
+                .authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .isInstanceOf(DisabledException.class);
     }
 
@@ -195,7 +196,8 @@ class AuthenticationServiceImplTest {
                 .thenThrow(LockedException.class);
 
         // Then
-        assertThatThrownBy(() -> authenticationManager.authenticate(any()))
+        assertThatThrownBy(() -> authenticationManager
+                .authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .isInstanceOf(LockedException.class);
     }
 
@@ -254,7 +256,7 @@ class AuthenticationServiceImplTest {
         // Then
         verify(passwordGenerator).generateRandomPassword();
         verify(userService).updateUserPassword(email, randomPassword);
-        verify(emailSenderService).sendEmail(any());
+        verify(emailSenderService).sendEmail(any(CustomEmail.class));
     }
 
     @Test
@@ -275,7 +277,8 @@ class AuthenticationServiceImplTest {
 
         // Then
         verify(jwtService).extractUsername(token);
-        verify(authenticationManager).authenticate(any());
+        verify(authenticationManager)
+                .authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(userService).updateUserPassword(email, newPassword);
     }
 
