@@ -334,6 +334,7 @@ class CategoryServiceImplTest {
         var result = categoryService.existsCategoryByID(id);
 
         // Then
+        verify(categoryDAO).existsCategoryByID(id);
         assertThat(result).isTrue();
     }
 
@@ -347,6 +348,7 @@ class CategoryServiceImplTest {
         var result = categoryService.existsCategoryByID(id);
 
         // Then
+        verify(categoryDAO).existsCategoryByID(id);
         assertThat(result).isFalse();
     }
 }

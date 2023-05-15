@@ -1071,6 +1071,7 @@ class ProductServiceImplTest {
         var result = productService.existsProductByID(id);
 
         // Then
+        verify(productDAO).existsProductByID(id);
         assertThat(result).isTrue();
     }
 
@@ -1084,6 +1085,7 @@ class ProductServiceImplTest {
         var result = productService.existsProductByID(id);
 
         // Then
+        verify(productDAO).existsProductByID(id);
         assertThat(result).isFalse();
     }
 
