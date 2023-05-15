@@ -416,7 +416,7 @@ const Login = () => {
                       return Promise.resolve();
                     }
                     return Promise.reject(
-                      new Error('The two passwords that you entered do not match!')
+                      new Error('Mật khẩu của bản nhập chưa trùng khớp!')
                     );
                   },
                 }),
@@ -431,30 +431,30 @@ const Login = () => {
             </Form.Item>
             <Form.Item
               name='gender'
-              label='Gender'
+              label='Giới tính'
               rules={[
                 {
                   required: true,
                 },
               ]}>
               <Select
-                placeholder='Select a gender above'
+                placeholder='Vui lòng chọn giới tính của bạn'
                 style={{
                   width: '100%',
                   margin: '5px 0',
                 }}
                 options={[
                   {
-                    value: 'MALE',
-                    label: 'MALE',
+                    value: 'Nam',
+                    label: 'Nam',
                   },
                   {
-                    value: 'FEMALE',
-                    label: 'FEMALE',
+                    value: 'Nữ',
+                    label:'Nữ',
                   },
                   {
-                    value: 'OTHER',
-                    label: 'OTHER',
+                    value: 'Khác',
+                    label:  'Khác',
                   },
                 ]}
               />
