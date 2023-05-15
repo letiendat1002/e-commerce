@@ -987,7 +987,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void whenUpdate__butHasNoChanges_thenThrowException() {
+    void whenUpdate__butHasNoChange_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
         var category = new Category(

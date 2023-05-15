@@ -267,7 +267,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void whenUpdate_butHasNoChanges_thenThrowException() {
+    void whenUpdate_butHasNoChange_thenThrowException() {
         var id = BigInteger.valueOf(1);
         var request = new CategoryRequest(
                 "string",
