@@ -112,16 +112,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Product update) {
-        productDAO
-                .updateProduct(update)
-                .orElseThrow(
-                        () -> new FailedOperationException(
-                                "Failed to update product"
-                        ));
-    }
-
-    @Override
     public void updateProductQuantityByAmount(
             BigInteger productID,
             int amount
@@ -139,7 +129,12 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setQuantity(product.getQuantity() + amount);
 
-        updateProduct(product);
+        productDAO
+                .updateProduct(product)
+                .orElseThrow(
+                        () -> new FailedOperationException(
+                                "Failed to update product"
+                        ));
     }
 
     @Override
@@ -186,6 +181,19 @@ public class ProductServiceImpl implements ProductService {
             isChanged = true;
         }
 
+        if (product.getDiscount() != null && request.discount() != null) {
+            if (!request.discount().equals(product.getDiscount())
+            ) {
+                product.setDiscount(request.discount());
+                isChanged = true;
+            }
+        } else if (product.getDiscount() == null && request.discount() == null) {
+            isChanged = false;
+        } else {
+            product.setDiscount(request.discount());
+            isChanged = true;
+        }
+
         if (!request.name().equals(product.getName())
         ) {
             product.setName(request.name());
@@ -225,12 +233,6 @@ public class ProductServiceImpl implements ProductService {
         if (!request.unitPrice().equals(product.getUnitPrice())
         ) {
             product.setUnitPrice(request.unitPrice());
-            isChanged = true;
-        }
-
-        if (!request.discount().equals(product.getDiscount())
-        ) {
-            product.setDiscount(request.discount());
             isChanged = true;
         }
 

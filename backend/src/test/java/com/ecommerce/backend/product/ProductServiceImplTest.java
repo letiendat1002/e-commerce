@@ -1,8 +1,11 @@
-package com.ecommerce.backend.service;
+package com.ecommerce.backend.product;
 
 import com.ecommerce.backend.category.Category;
-import com.ecommerce.backend.category.CategoryDAO;
-import com.ecommerce.backend.product.*;
+import com.ecommerce.backend.category.CategoryService;
+import com.ecommerce.backend.product.Product;
+import com.ecommerce.backend.product.ProductDAO;
+import com.ecommerce.backend.product.ProductRequest;
+import com.ecommerce.backend.product.ProductServiceImpl;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
@@ -23,17 +26,15 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
-
-    private final ProductDTOMapper productDTOMapper = new ProductDTOMapper();
     private ProductServiceImpl productService;
     @Mock
     private ProductDAO productDAO;
     @Mock
-    private CategoryDAO categoryDAO;
+    private CategoryService categoryService;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductServiceImpl(productDAO, productDTOMapper, categoryDAO);
+        productService = new ProductServiceImpl(productDAO, categoryService);
     }
 
     @Test
@@ -58,11 +59,27 @@ class ProductServiceImplTest {
         );
 
         // When
-        when(categoryDAO.selectCategoryByID(id)).thenReturn(Optional.of(category));
+        when(categoryService.fetchCategoryByID(id))
+                .thenReturn(category);
         productService.fetchAllProductsByCategoryID(id);
 
         // Then
         verify(productDAO).selectAllProductsByCategory(category);
+    }
+
+    @Test
+    void whenFetchAllProductsByCategoryID_butCategoryNotFound_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(categoryService.fetchCategoryByID(id))
+                .thenThrow(ResourceNotFoundException.class);
+
+        // Then
+        assertThatThrownBy(() -> productService.fetchAllProductsByCategoryID(id))
+                .isInstanceOf(ResourceNotFoundException.class);
+        verify(productDAO, never()).selectAllProductsByCategory(any());
     }
 
     @Test
@@ -104,15 +121,14 @@ class ProductServiceImplTest {
         // When
         when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
 
-        var expected = productDTOMapper.apply(product);
         var actual = productService.fetchProductByProductID(id);
 
         // Then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(product);
     }
 
     @Test
-    void givenID_whenFetchProductByID_butReturnEmptyOptional_thenThrowException() {
+    void whenFetchProductByID_butReturnEmptyOptional_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
 
@@ -122,20 +138,6 @@ class ProductServiceImplTest {
         // Then
         assertThatThrownBy(() -> productService.fetchProductByProductID(id))
                 .isInstanceOf(ResourceNotFoundException.class);
-    }
-
-    @Test
-    void givenID_whenFetchProductByID_butIdNotFound_thenThrowException() {
-        // Given
-        var id = BigInteger.valueOf(9_999_999);
-
-        // When
-        when(productDAO.selectProductByID(id)).thenThrow(ResourceNotFoundException.class);
-
-        // Then
-        assertThatThrownBy(() -> productService.fetchProductByProductID(id))
-                .isInstanceOf(ResourceNotFoundException.class);
-        verify(productDAO).selectProductByID(id);
     }
 
     @Test
@@ -202,9 +204,12 @@ class ProductServiceImplTest {
         );
 
         // When
-        when(categoryDAO.selectCategoryByID(request.categoryID())).thenReturn(Optional.of(category));
-        when(productDAO.existsAnyProductBySlug(request.slug())).thenReturn(false);
-        when(productDAO.insertProduct(product)).thenReturn(Optional.of(product));
+        when(categoryService.fetchCategoryByID(request.categoryID()))
+                .thenReturn(category);
+        when(productDAO.existsAnyProductBySlug(request.slug()))
+                .thenReturn(false);
+        when(productDAO.insertProduct(product))
+                .thenReturn(Optional.of(product));
         productService.addProduct(request);
 
         // Then
@@ -252,8 +257,10 @@ class ProductServiceImplTest {
         );
 
         // When
-        when(categoryDAO.selectCategoryByID(request.categoryID())).thenReturn(Optional.of(category));
-        when(productDAO.existsAnyProductBySlug(request.slug())).thenReturn(false);
+        when(categoryService.fetchCategoryByID(request.categoryID()))
+                .thenReturn(category);
+        when(productDAO.existsAnyProductBySlug(request.slug()))
+                .thenReturn(false);
 
         // Then
         assertThatThrownBy(() -> productService.addProduct(request))
@@ -261,7 +268,46 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void givenSlug_whenAddProduct_butExistsProductBySlug_thenThrowException() {
+    void whenAddProduct_butCategoryNotFound_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new ProductRequest(
+                id,
+                "string",
+                "test-add-product",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                null,
+                50L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        when(categoryService.fetchCategoryByID(request.categoryID()))
+                .thenThrow(ResourceNotFoundException.class);
+
+        // Then
+        assertThatThrownBy(() -> productService.addProduct(request))
+                .isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    void whenAddProduct_butExistsProductBySlug_thenThrowException() {
         // Given
         var slug = "string";
 
@@ -299,8 +345,10 @@ class ProductServiceImplTest {
         );
 
         // When
-        when(categoryDAO.selectCategoryByID(request.categoryID())).thenReturn(Optional.of(category));
-        when(productDAO.existsAnyProductBySlug(slug)).thenReturn(true);
+        when(categoryService.fetchCategoryByID(request.categoryID()))
+                .thenReturn(category);
+        when(productDAO.existsAnyProductBySlug(slug))
+                .thenReturn(true);
 
         // Then
         assertThatThrownBy(
@@ -309,7 +357,6 @@ class ProductServiceImplTest {
 
         verify(productDAO, never()).insertProduct(any());
     }
-
 
     @Test
     void deleteProduct() {
@@ -327,7 +374,7 @@ class ProductServiceImplTest {
     @Test
     void givenId_whenDeleteProduct_butIdNotFound_thenThrowException() {
         // Given
-        var id = BigInteger.valueOf(9_999_999);
+        var id = BigInteger.valueOf(1);
 
         // When
         when(productDAO.existsProductByID(id)).thenReturn(false);
@@ -376,7 +423,6 @@ class ProductServiceImplTest {
                 true
         );
 
-        // When
         var product = new Product(
                 id,
                 category,
@@ -404,9 +450,12 @@ class ProductServiceImplTest {
                 true
         );
 
+        // When
         when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
-        when(categoryDAO.existsCategoryByID(request.categoryID())).thenReturn(true);
-        when(productDAO.existsOtherProductBySlug(request.slug(), id)).thenReturn(false);
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id))
+                .thenReturn(false);
         when(productDAO.updateProduct(product)).thenReturn(Optional.of(product));
         productService.updateProduct(id, request);
 
@@ -446,14 +495,14 @@ class ProductServiceImplTest {
         // Given
         var id = BigInteger.valueOf(1);
         var category = new Category(
-                BigInteger.valueOf(1),
+                id,
                 "string",
                 "string",
                 "string"
         );
 
         var request = new ProductRequest(
-                category.getCategoryID(),
+                id,
                 "test-update-product-name",
                 "test-update-product-slug",
                 "",
@@ -478,7 +527,6 @@ class ProductServiceImplTest {
                 true
         );
 
-        // When
         var product = new Product(
                 id,
                 category,
@@ -506,9 +554,12 @@ class ProductServiceImplTest {
                 true
         );
 
+        // When
         when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
-        when(categoryDAO.existsCategoryByID(request.categoryID())).thenReturn(true);
-        when(productDAO.existsOtherProductBySlug(request.slug(), id)).thenReturn(false);
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id))
+                .thenReturn(false);
 
         // Then
         assertThatThrownBy(() -> productService.updateProduct(id, request))
@@ -581,8 +632,10 @@ class ProductServiceImplTest {
         );
 
         when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
-        when(categoryDAO.existsCategoryByID(request.categoryID())).thenReturn(true);
-        when(productDAO.existsOtherProductBySlug(request.slug(), id)).thenReturn(false);
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id))
+                .thenReturn(false);
 
         // Then
         assertThatThrownBy(() -> productService.updateProduct(id, request))
