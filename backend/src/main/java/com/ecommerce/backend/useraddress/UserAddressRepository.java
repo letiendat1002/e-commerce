@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface UserAddressRepository extends JpaRepository<UserAddress, BigInteger> {
-    List<UserAddress> findAllByUser(User user);
+    List<UserAddress> findAllByUserID(BigInteger userID);
 }

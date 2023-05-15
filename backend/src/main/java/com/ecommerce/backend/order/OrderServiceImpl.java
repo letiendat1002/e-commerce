@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> fetchAllOrdersByUserID(BigInteger userID) {
-        return orderDAO.selectAllOrdersByUser(userID);
+        return orderDAO.selectAllOrdersByUserID(userID);
     }
 
     @Override

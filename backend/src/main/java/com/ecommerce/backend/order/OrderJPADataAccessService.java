@@ -19,7 +19,7 @@ public class OrderJPADataAccessService implements OrderDAO {
     }
 
     @Override
-    public List<Order> selectAllOrdersByUser(BigInteger userID) {
+    public List<Order> selectAllOrdersByUserID(BigInteger userID) {
         return orderRepository.findAllByUserID(userID);
     }
 

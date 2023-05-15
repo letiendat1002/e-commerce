@@ -10,9 +10,9 @@ public interface UserAddressService {
 
     UserAddress fetchUserAddressByID(BigInteger userAddressID);
 
-    UserAddress addUserAddress(UserAddressRequest request);
+    UserAddress addUserAddress(UserAddressAddRequest request);
 
-    UserAddress updateUserAddress(BigInteger userAddressID, UserAddressRequest request);
+    UserAddress updateUserAddress(BigInteger userAddressID, UserAddressUpdateRequest request);
 
     void deleteUserAddress(BigInteger userAddressID);
 }

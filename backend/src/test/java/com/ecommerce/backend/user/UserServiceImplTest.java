@@ -1,17 +1,14 @@
-package com.ecommerce.backend.service;
+package com.ecommerce.backend.user;
 
 import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import com.ecommerce.backend.user.*;
 import com.ecommerce.backend.user.enums.Gender;
 import com.ecommerce.backend.user.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -27,7 +24,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
-    private final UserDTOMapper userDTOMapper = new UserDTOMapper();
     private UserServiceImpl userService;
     @Mock
     private UserDAO userDAO;
@@ -38,7 +34,7 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(userDAO, userDTOMapper, passwordEncoder, orderService);
+        userService = new UserServiceImpl(userDAO, passwordEncoder, orderService);
     }
 
     @Test
@@ -56,28 +52,25 @@ class UserServiceImplTest {
         var id = BigInteger.valueOf(1);
         var user = new User(
                 id,
-                "admin@linkking.com",
-                "admin",
+                "test@example.com",
+                "test",
                 "string",
                 Gender.MALE,
                 "",
-                "",
-                UserRole.ADMIN,
-                true
+                ""
         );
 
         // When
         when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
 
-        var expected = userDTOMapper.apply(user);
         var actual = userService.fetchUserByUserID(id);
 
         // Then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(user);
     }
 
     @Test
-    void givenID_whenFetchUserByID_butReturnEmptyOptional_thenThrowException() {
+    void whenFetchUserByID_butReturnEmptyOptional_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
 
@@ -94,36 +87,34 @@ class UserServiceImplTest {
     void fetchUserByEmail() {
         // Given
         var id = BigInteger.valueOf(1);
-        var email = "admin@linkking.com";
+        var email = "test@example.com";
         var user = new User(
                 id,
-                "admin@linkking.com",
-                "admin",
+                email,
+                "test",
                 "string",
                 Gender.MALE,
                 "",
-                "",
-                UserRole.ADMIN,
-                true
+                ""
         );
 
         // When
         when(userDAO.selectUserByEmail(email)).thenReturn(Optional.of(user));
 
-        var expected = userDTOMapper.apply(user);
         var actual = userService.fetchUserByEmail(email);
 
         // Then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(user);
     }
 
     @Test
-    void givenEmail_whenFetchUserByEmail_butReturnEmptyOptional_thenThrowException() {
+    void whenFetchUserByEmail_butReturnEmptyOptional_thenThrowException() {
         // Given
-        var email = "admin@linkking.com";
+        var email = "test@example.com";
 
         // When
-        when(userDAO.selectUserByEmail(email)).thenReturn(Optional.empty());
+        when(userDAO.selectUserByEmail(email))
+                .thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> userService.fetchUserByEmail(email))
@@ -175,9 +166,9 @@ class UserServiceImplTest {
     }
 
     @Test
-    void givenEmail_whenAddUser_butExistsUserByEmail_thenThrowException() {
+    void whenAddUser_butExistsUserByEmail_thenThrowException() {
         // Given
-        var email = "admin@linkking.com";
+        var email = "test@example.com";
         var request = new UserRegistrationRequest(
                 email,
                 "password",
@@ -198,7 +189,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void givenPhone_whenAddUser_butExistsUserByPhone_thenThrowException() {
+    void whenAddUser_butExistsUserByPhone_thenThrowException() {
         // Given
         var phone = "";
         var request = new UserRegistrationRequest(
@@ -246,28 +237,27 @@ class UserServiceImplTest {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new UserUpdateRequest(
-                Collections.singletonList(UserRole.ADMIN),
-                "admin-update",
+                Collections.singletonList(UserRole.EMPLOYEE),
+                "test-update",
+                Gender.MALE,
+                "",
+                ""
+        );
+
+        var user = new User(
+                id,
+                null,
+                null,
+                "test-user",
                 Gender.MALE,
                 "",
                 ""
         );
 
         // When
-        var user = new User(
-                id,
-                null,
-                null,
-                "Admin",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
-        );
-
         when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
-        when(userDAO.existsOtherUserByPhone(request.phone(), id)).thenReturn(false);
+        when(userDAO.existsOtherUserByPhone(request.phone(), id))
+                .thenReturn(false);
         when(userDAO.updateUser(user)).thenReturn(Optional.of(user));
         userService.updateUser(id, request);
 
@@ -283,7 +273,31 @@ class UserServiceImplTest {
         assertThat(capturedUser.getPhone()).isEqualTo(request.phone());
         assertThat(capturedUser.getImage()).isEqualTo(request.image());
         assertThat(capturedUser.getRole()).isEqualTo(request.roles().get(0));
-        assertThat(capturedUser.isEnabled()).isTrue();
+    }
+
+    @Test
+    void whenUpdateUser_butExistsOtherUserByPhone_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new UserUpdateRequest(
+                Collections.singletonList(UserRole.EMPLOYEE),
+                "test-update",
+                Gender.MALE,
+                "",
+                ""
+        );
+        var user = new User();
+
+        // When
+        when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
+        when(userDAO
+                .existsOtherUserByPhone(any(String.class), any(BigInteger.class)))
+                .thenReturn(true);
+
+        // Then
+        assertThatThrownBy(() -> userService
+                .updateUser(id, request))
+                .isInstanceOf(DuplicateResourceException.class);
     }
 
     @Test
@@ -292,27 +306,19 @@ class UserServiceImplTest {
         var id = BigInteger.valueOf(1);
         var request = new UserUpdateRequest(
                 Collections.singletonList(UserRole.ADMIN),
-                "admin-update",
+                "test-update",
                 Gender.MALE,
                 "",
                 ""
         );
 
         // When
-        var user = new User(
-                id,
-                null,
-                null,
-                "Admin",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
-        );
+        var user = new User();
 
         when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
-        when(userDAO.existsOtherUserByPhone(request.phone(), id)).thenReturn(false);
+        when(userDAO.existsOtherUserByPhone(request.phone(), id))
+                .thenReturn(false);
+        when(userDAO.updateUser(user)).thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> userService.updateUser(id, request))
@@ -320,12 +326,12 @@ class UserServiceImplTest {
     }
 
     @Test
-    void whenUpdate_butHasNoChanges_thenThrowException() {
+    void whenUpdate_butHasNoChange_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new UserUpdateRequest(
                 Collections.singletonList(UserRole.ADMIN),
-                "admin-update",
+                "test-update",
                 Gender.MALE,
                 "",
                 ""
@@ -345,7 +351,8 @@ class UserServiceImplTest {
         );
 
         when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
-        when(userDAO.existsOtherUserByPhone(request.phone(), id)).thenReturn(false);
+        when(userDAO.existsOtherUserByPhone(request.phone(), id))
+                .thenReturn(false);
 
         // Then
         assertThatThrownBy(() -> userService.updateUser(id, request))
@@ -367,10 +374,27 @@ class UserServiceImplTest {
         verify(userDAO).deleteUserByID(id);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"admin@linkking.com"})
-    void enableUser(String username) {
+    @Test
+    void whenDeleteUser_butUserNotExistsByID_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
         // When
+        when(userDAO.existsUserByID(id)).thenReturn(false);
+
+        // Then
+        assertThatThrownBy(() -> userService.deleteUser(id))
+                .isInstanceOf(ResourceNotFoundException.class);
+        verify(userDAO, never()).deleteUserByID(id);
+    }
+
+    @Test
+    void enableUser() {
+        // Given
+        var username = "test@example.com";
+
+        // When
+        when(userDAO.enableUser(username)).thenReturn(1);
         userService.enableUser(username);
 
         // Then
@@ -378,29 +402,99 @@ class UserServiceImplTest {
     }
 
     @Test
-    void updateUserPassword() {
+    void whenEnableUserFailed_thenThrowException() {
         // Given
-        var email = "admin@linkking.com";
-        var newPassword = "testPassword";
-        var passwordHash = "¢5554ml;f;lsd";
+        var username = "test@example.com";
 
         // When
-        var user = new User(
-                email,
-                passwordEncoder.encode(newPassword),
-                null,
-                null,
-                null,
-                null
-        );
+        when(userDAO.enableUser(username)).thenReturn(0);
 
+        // Then
+        assertThatThrownBy(() -> userService.enableUser(username))
+                .isInstanceOf(FailedOperationException.class);
+    }
+
+    @Test
+    void updateUserPassword() {
+        // Given
+        var email = "test@example.com";
+        var newPassword = "testPassword";
+        var passwordHash = "¢5554ml;f;lsd";
+        var user = new User();
+
+        // When
         when(userDAO.existsUserByEmail(email)).thenReturn(true);
         when(userDAO.selectUserByEmail(email)).thenReturn(Optional.of(user));
         when(passwordEncoder.encode(newPassword)).thenReturn(passwordHash);
+        when(userDAO.updateUserPassword(email, passwordHash)).thenReturn(1);
+        when(userDAO.selectUserByEmail(email)).thenReturn(Optional.of(user));
 
         userService.updateUserPassword(email, newPassword);
 
         // Then
         verify(userDAO).updateUserPassword(email, passwordHash);
+    }
+
+    @Test
+    void whenUpdatePassword_butUserNotExistsByEmail_thenThrowException() {
+        // Given
+        var email = "user@example.com";
+        var newPassword = "testPassword";
+
+        // When
+        when(userDAO.existsUserByEmail(email)).thenReturn(false);
+
+        // Then
+        assertThatThrownBy(() -> userService
+                .updateUserPassword(email, newPassword))
+                .isInstanceOf(ResourceNotFoundException.class);
+        verify(userDAO, never()).updateUserPassword(any(), any());
+    }
+
+    @Test
+    void whenUpdatePasswordFailed_thenThrowException() {
+        // Given
+        var email = "test@example.com";
+        var newPassword = "testPassword";
+        var passwordHash = "¢5554ml;f;lsd";
+
+        // When
+        when(userDAO.existsUserByEmail(email)).thenReturn(true);
+        when(passwordEncoder.encode(newPassword)).thenReturn(passwordHash);
+        when(userDAO.updateUserPassword(email, passwordHash)).thenReturn(0);
+
+        // Then
+        assertThatThrownBy(() -> userService
+                .updateUserPassword(email, newPassword))
+                .isInstanceOf(FailedOperationException.class);
+        verify(userDAO).updateUserPassword(email, passwordHash);
+    }
+
+    @Test
+    void existsUserByID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(userDAO.existsUserByID(id)).thenReturn(true);
+        var result = userService.existsUserByID(id);
+
+        // Then
+        verify(userDAO).existsUserByID(id);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void notExistsUserByID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(userDAO.existsUserByID(id)).thenReturn(false);
+        var result = userService.existsUserByID(id);
+
+        // Then
+        verify(userDAO).existsUserByID(id);
+        assertThat(result).isFalse();
     }
 }

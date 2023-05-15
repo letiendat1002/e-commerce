@@ -1,23 +1,19 @@
-package com.ecommerce.backend.service;
+package com.ecommerce.backend.order;
 
-import com.ecommerce.backend.order.*;
 import com.ecommerce.backend.order.enums.OrderPaymentType;
 import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.orderdetail.OrderDetailService;
-import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import com.ecommerce.backend.user.User;
-import com.ecommerce.backend.user.UserDAO;
-import com.ecommerce.backend.user.enums.Gender;
-import com.ecommerce.backend.user.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationContext;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -25,25 +21,26 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
-    private final OrderDTOMapper orderDTOMapper = new OrderDTOMapper();
     private OrderServiceImpl orderService;
     @Mock
     private OrderDAO orderDAO;
     @Mock
-    private UserDAO userDAO;
-    @Mock
     private OrderDetailService orderDetailService;
     @Mock
-    private ProductDAO productDAO;
+    private ApplicationContext applicationContext;
 
     @BeforeEach
     void setUp() {
-        orderService = new OrderServiceImpl(orderDAO, orderDTOMapper, userDAO, orderDetailService, productDAO);
+        orderService = new OrderServiceImpl(
+                orderDAO,
+                orderDetailService,
+                applicationContext
+        );
     }
 
     @Test
@@ -59,17 +56,6 @@ class OrderServiceImplTest {
     void fetchAllOrdersByUserID() {
         // Given
         var id = BigInteger.valueOf(1);
-        var user = new User(
-                id,
-                "admin@linkking.com",
-                "admin",
-                "string",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
-        );
         var order = new Order(
                 id,
                 id,
@@ -79,27 +65,12 @@ class OrderServiceImplTest {
         );
 
         // When
-        when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
-        when(orderDAO.selectAllOrdersByUser(id)).thenReturn(List.of(order));
+        when(orderDAO.selectAllOrdersByUserID(id)).thenReturn(List.of(order));
 
-        var expected = List.of(orderDTOMapper.apply(order));
         var actual = orderService.fetchAllOrdersByUserID(id);
 
         // Then
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @Test
-    void givenUserID_whenfetchAllOrderByUserID_butUserReturnEmptyOptional_thenThrowException() {
-        // Given
-        var id = BigInteger.valueOf(1);
-
-        // When
-        when(userDAO.selectUserByID(id)).thenReturn(Optional.empty());
-
-        // Then
-        assertThatThrownBy(() -> orderService.fetchAllOrdersByUserID(id))
-                .isInstanceOf(ResourceNotFoundException.class);
+        assertThat(actual).isEqualTo(List.of(order));
     }
 
     @Test
@@ -117,15 +88,14 @@ class OrderServiceImplTest {
         // When
         when(orderDAO.selectOrderByID(id)).thenReturn(Optional.of(order));
 
-        var expected = orderDTOMapper.apply(order);
         var actual = orderService.fetchOrderByOrderID(id);
 
         // Then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(order);
     }
 
     @Test
-    void givenID_whenFetchOrderByID_butReturnEmptyOptional_thenThrowException() {
+    void whenFetchOrderByID_butReturnEmptyOptional_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
 
@@ -138,79 +108,41 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void givenID_whenFetchOrderByID_butNotExistOrderID_thenThrowException() {
-        // Given
-        var id = BigInteger.valueOf(9_999_999);
-
-        // Then
-        assertThatThrownBy(() -> orderService.fetchOrderByOrderID(id))
-                .isInstanceOf(ResourceNotFoundException.class);
-    }
-
-    @Test
     void addOrder() {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderAddRequest(
                 id,
-                BigInteger.valueOf(1),
+                BigInteger.valueOf(10),
                 OrderPaymentType.COD,
                 "string"
-        );
-
-        var user = new User(
-                id,
-                "admin@linkking.com",
-                "admin",
-                "string",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
         );
 
         var order = new Order(
-                id,
-                id,
-                BigInteger.valueOf(1),
-                OrderPaymentType.COD,
-                "string"
+                request.userID(),
+                request.additionalPrice(),
+                request.paymentType(),
+                request.address()
         );
 
         // When
-        when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
         when(orderDAO.insertOrder(order)).thenReturn(Optional.of(order));
+
         orderService.addOrder(request);
 
         // Then
         var captor = ArgumentCaptor.forClass(Order.class);
         verify(orderDAO).insertOrder(captor.capture());
         var capturedOrder = captor.getValue();
-        assertThat(capturedOrder).isEqualTo(order);
         assertThat(capturedOrder.getOrderID()).isNull();
-        assertThat(capturedOrder.getUser()).isEqualTo(user);
-        assertThat(capturedOrder.getAdditionalPrice()).isEqualTo(request.additionalPrice());
-        assertThat(capturedOrder.getPaymentType()).isEqualTo(request.paymentType());
-    }
-
-    @Test
-    void givenUserID_whenAddOrder_butUserReturnEmptyOptional_thenThrowException() {
-        // Given
-        var id = BigInteger.valueOf(1);
-        var request = new OrderAddRequest(
-                id,
-                BigInteger.valueOf(1),
-                OrderPaymentType.COD,
-                "string"
-        );
-
-        // When
-        when(userDAO.selectUserByID(id)).thenReturn(Optional.empty());
-
-        // Then
-        assertThatThrownBy(() -> orderService.addOrder(request))
-                .isInstanceOf(ResourceNotFoundException.class);
+        assertThat(capturedOrder.getUserID())
+                .isEqualTo(request.userID());
+        assertThat(capturedOrder.getAdditionalPrice())
+                .isEqualTo(request.additionalPrice());
+        assertThat(capturedOrder.getPaymentType())
+                .isEqualTo(request.paymentType());
+        assertThat(capturedOrder.getAddress())
+                .isEqualTo(request.address());
     }
 
     @Test
@@ -219,25 +151,14 @@ class OrderServiceImplTest {
         var id = BigInteger.valueOf(1);
         var request = new OrderAddRequest(
                 id,
-                BigInteger.valueOf(1),
+                BigInteger.valueOf(10),
                 OrderPaymentType.COD,
                 "string"
         );
 
-        var user = new User(
-                id,
-                "admin@linkking.com",
-                "admin",
-                "string",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
-        );
-
         // When
-        when(userDAO.selectUserByID(id)).thenReturn(Optional.of(user));
+        when(orderDAO.insertOrder(any(Order.class)))
+                .thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> orderService.addOrder(request))
@@ -245,32 +166,20 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void updateOrder() {
+    void updateOrder_changeStatusToCompleted() {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
                 OrderPaymentType.COD,
-                OrderStatus.CONFIRMED,
+                OrderStatus.COMPLETED,
                 "test-update"
-        );
-
-        var user = new User(
-                id,
-                "admin@linkking.com",
-                "admin",
-                "string",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
         );
 
         var order = new Order(
                 id,
                 id,
                 BigInteger.valueOf(1),
-                OrderPaymentType.COD,
+                null,
                 OrderStatus.CONFIRMED,
                 "string"
         );
@@ -286,8 +195,46 @@ class OrderServiceImplTest {
         var capturedOrder = captor.getValue();
         assertThat(capturedOrder).isEqualTo(order);
         assertThat(capturedOrder.getOrderID()).isEqualTo(id);
-        assertThat(capturedOrder.getUser()).isEqualTo(user);
-        assertThat(capturedOrder.getPaymentType()).isEqualTo(request.paymentType());
+        assertThat(capturedOrder.getUserID()).isEqualTo(id);
+        assertThat(capturedOrder.getPaymentType())
+                .isEqualTo(request.paymentType());
+        assertThat(capturedOrder.getStatus()).isEqualTo(request.status());
+        assertThat(capturedOrder.getAddress()).isEqualTo(request.address());
+    }
+
+    @Test
+    void updateOrder_changeStatusPendingOrConfirmedToCancelled() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new OrderUpdateRequest(
+                OrderPaymentType.COD,
+                OrderStatus.CANCELLED,
+                "test-update"
+        );
+
+        var order = new Order(
+                id,
+                id,
+                BigInteger.valueOf(1),
+                OrderPaymentType.COD,
+                OrderStatus.PENDING,
+                "string"
+        );
+
+        // When
+        when(orderDAO.selectOrderByID(id)).thenReturn(Optional.of(order));
+        when(orderDAO.updateOrder(order)).thenReturn(Optional.of(order));
+        orderService.updateOrder(id, request);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Order.class);
+        verify(orderDAO).updateOrder(captor.capture());
+        var capturedOrder = captor.getValue();
+        assertThat(capturedOrder).isEqualTo(order);
+        assertThat(capturedOrder.getOrderID()).isEqualTo(id);
+        assertThat(capturedOrder.getUserID()).isEqualTo(id);
+        assertThat(capturedOrder.getPaymentType())
+                .isEqualTo(request.paymentType());
         assertThat(capturedOrder.getStatus()).isEqualTo(request.status());
         assertThat(capturedOrder.getAddress()).isEqualTo(request.address());
     }
@@ -300,18 +247,6 @@ class OrderServiceImplTest {
                 OrderPaymentType.COD,
                 OrderStatus.CONFIRMED,
                 "test-update"
-        );
-
-        var user = new User(
-                id,
-                "admin@linkking.com",
-                "admin",
-                "string",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
         );
 
         var order = new Order(
@@ -332,25 +267,13 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void whenUpdate_butHasNoChanges_thenThrowException() {
+    void whenUpdate_butHasNoChange_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
                 OrderPaymentType.COD,
                 OrderStatus.CONFIRMED,
                 "test-update"
-        );
-
-        var user = new User(
-                id,
-                "admin@linkking.com",
-                "admin",
-                "string",
-                Gender.MALE,
-                "",
-                "",
-                UserRole.ADMIN,
-                true
         );
 
         var order = new Order(
@@ -388,16 +311,102 @@ class OrderServiceImplTest {
         orderService.deleteOrder(id);
 
         // Then
+        verify(orderDetailService).deleteAllOrderDetailsByOrderID(id);
         verify(orderDAO).deleteOrderByID(id);
     }
 
     @Test
-    void givenID_whenDeleteOrder_butNotExistOrderID_thenThrowException() {
+    void whenDeleteOrder_butNotExistOrderID_thenThrowException() {
         // Given
-        var id = BigInteger.valueOf(9_999_999);
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(orderDAO.selectOrderByID(id)).thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> orderService.deleteOrder(id))
                 .isInstanceOf(ResourceNotFoundException.class);
+        verify(orderDetailService, never())
+                .deleteAllOrderDetailsByOrderID(id);
+        verify(orderDAO, never()).deleteOrderByID(id);
+    }
+
+    @Test
+    void existsOrderByID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(orderDAO.existsOrderByID(id)).thenReturn(true);
+        var result = orderService.existsOrderByID(id);
+
+        // Then
+        verify(orderDAO).existsOrderByID(id);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void notExistsOrderByID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(orderDAO.existsOrderByID(id)).thenReturn(false);
+        var result = orderService.existsOrderByID(id);
+
+        // Then
+        verify(orderDAO).existsOrderByID(id);
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void existsOrderByOrderIDAndUser() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var user = new User();
+
+        // When
+        when(orderDAO.existsOrderByOrderIDAndUser(id, user)).thenReturn(true);
+        var result = orderService.existsOrderByOrderIDAndUser(id, user);
+
+        // Then
+        verify(orderDAO).existsOrderByOrderIDAndUser(id, user);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void notExistsOrderByOrderIDAndUser() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var user = new User();
+
+        // When
+        when(orderDAO.existsOrderByOrderIDAndUser(id, user))
+                .thenReturn(false);
+        var result = orderService.existsOrderByOrderIDAndUser(id, user);
+
+        // Then
+        verify(orderDAO).existsOrderByOrderIDAndUser(id, user);
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void deleteAllOrdersByUserID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var order = new Order();
+        order.setOrderID(id);
+
+        // When
+        when(orderService.fetchAllOrdersByUserID(id)).thenReturn(List.of(order));
+        when(applicationContext.getBean(OrderService.class)).thenReturn(orderService);
+        when(orderDAO.selectOrderByID(id)).thenReturn(Optional.of(order));
+        orderService.deleteAllOrdersByUserID(id);
+
+        // Then
+        verify(orderDAO).selectAllOrdersByUserID(id);
+        verify(orderDAO).selectOrderByID(id);
+        verify(orderDetailService).deleteAllOrderDetailsByOrderID(id);
+        verify(orderDAO).deleteOrderByID(id);
     }
 }
