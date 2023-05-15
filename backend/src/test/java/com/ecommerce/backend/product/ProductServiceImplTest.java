@@ -2,10 +2,6 @@ package com.ecommerce.backend.product;
 
 import com.ecommerce.backend.category.Category;
 import com.ecommerce.backend.category.CategoryService;
-import com.ecommerce.backend.product.Product;
-import com.ecommerce.backend.product.ProductDAO;
-import com.ecommerce.backend.product.ProductRequest;
-import com.ecommerce.backend.product.ProductServiceImpl;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
@@ -15,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.math.BigInteger;
 import java.util.Optional;
@@ -372,7 +369,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void givenId_whenDeleteProduct_butIdNotFound_thenThrowException() {
+    void whenDeleteProduct_butIdNotFound_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
 
@@ -387,7 +384,122 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void updateProduct() {
+    void updateProduct_whenProductCategoryIsNotNull() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var category = new Category(
+                BigInteger.valueOf(1),
+                "string",
+                "string",
+                "string"
+        );
+
+        var request = new ProductRequest(
+                category.getCategoryID(),
+                "test-update-product-name",
+                "test-update-product-slug",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                null,
+                100L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        var productCategory = new Category(
+                BigInteger.valueOf(2),
+                "product-category-string",
+                "product-category-string",
+                "product-category-string"
+        );
+
+        var product = new Product(
+                id,
+                productCategory,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                null,
+                50L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id))
+                .thenReturn(false);
+        when(categoryService.fetchCategoryByID(request.categoryID()))
+                .thenReturn(category);
+        when(productDAO.updateProduct(product)).thenReturn(Optional.of(product));
+        productService.updateProduct(id, request);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Product.class);
+        verify(productDAO).updateProduct(captor.capture());
+        verify(categoryService)
+                .fetchCategoryByID(request.categoryID());
+
+        var capturedProduct = captor.getValue();
+        assertThat(capturedProduct.getProductID()).isEqualTo(id);
+        assertThat(capturedProduct.getCategory()).isEqualTo(category);
+        assertThat(capturedProduct.getName()).isEqualTo(request.name());
+        assertThat(capturedProduct.getSlug()).isEqualTo(request.slug());
+        assertThat(capturedProduct.getImage()).isEqualTo(request.image());
+        assertThat(capturedProduct.getImageReview1()).isEqualTo(request.imageReview1());
+        assertThat(capturedProduct.getImageReview2()).isEqualTo(request.imageReview2());
+        assertThat(capturedProduct.getImageReview3()).isEqualTo(request.imageReview3());
+        assertThat(capturedProduct.getUnitPrice()).isEqualTo(request.unitPrice());
+        assertThat(capturedProduct.getDiscount()).isEqualTo(request.discount());
+        assertThat(capturedProduct.getQuantity()).isEqualTo(request.quantity());
+        assertThat(capturedProduct.getDescription()).isEqualTo(request.description());
+        assertThat(capturedProduct.getYearRelease()).isEqualTo(request.yearRelease());
+        assertThat(capturedProduct.getManufacturer()).isEqualTo(request.manufacturer());
+        assertThat(capturedProduct.getMonitor()).isEqualTo(request.monitor());
+        assertThat(capturedProduct.getCpu()).isEqualTo(request.cpu());
+        assertThat(capturedProduct.getRam()).isEqualTo(request.ram());
+        assertThat(capturedProduct.getVga()).isEqualTo(request.vga());
+        assertThat(capturedProduct.getHardDisk()).isEqualTo(request.hardDisk());
+        assertThat(capturedProduct.getCamera()).isEqualTo(request.camera());
+        assertThat(capturedProduct.getBattery()).isEqualTo(request.battery());
+        assertThat(capturedProduct.getMemory()).isEqualTo(request.memory());
+        assertThat(capturedProduct.getDemand()).isEqualTo(request.demand());
+        assertThat(capturedProduct.getStatus()).isEqualTo(request.status());
+    }
+
+    @Test
+    void updateProduct_whenProductCategoryIsNull() {
         // Given
         var id = BigInteger.valueOf(1);
         var category = new Category(
@@ -425,7 +537,7 @@ class ProductServiceImplTest {
 
         var product = new Product(
                 id,
-                category,
+                null,
                 "string",
                 "string",
                 "string",
@@ -434,6 +546,112 @@ class ProductServiceImplTest {
                 "string",
                 BigInteger.valueOf(0),
                 null,
+                50L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id))
+                .thenReturn(false);
+        when(categoryService.fetchCategoryByID(request.categoryID()))
+                .thenReturn(category);
+        when(productDAO.updateProduct(product)).thenReturn(Optional.of(product));
+        productService.updateProduct(id, request);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Product.class);
+        verify(productDAO).updateProduct(captor.capture());
+
+        var capturedProduct = captor.getValue();
+        assertThat(capturedProduct.getProductID()).isEqualTo(id);
+        assertThat(capturedProduct.getCategory()).isEqualTo(category);
+        assertThat(capturedProduct.getName()).isEqualTo(request.name());
+        assertThat(capturedProduct.getSlug()).isEqualTo(request.slug());
+        assertThat(capturedProduct.getImage()).isEqualTo(request.image());
+        assertThat(capturedProduct.getImageReview1()).isEqualTo(request.imageReview1());
+        assertThat(capturedProduct.getImageReview2()).isEqualTo(request.imageReview2());
+        assertThat(capturedProduct.getImageReview3()).isEqualTo(request.imageReview3());
+        assertThat(capturedProduct.getUnitPrice()).isEqualTo(request.unitPrice());
+        assertThat(capturedProduct.getDiscount()).isEqualTo(request.discount());
+        assertThat(capturedProduct.getQuantity()).isEqualTo(request.quantity());
+        assertThat(capturedProduct.getDescription()).isEqualTo(request.description());
+        assertThat(capturedProduct.getYearRelease()).isEqualTo(request.yearRelease());
+        assertThat(capturedProduct.getManufacturer()).isEqualTo(request.manufacturer());
+        assertThat(capturedProduct.getMonitor()).isEqualTo(request.monitor());
+        assertThat(capturedProduct.getCpu()).isEqualTo(request.cpu());
+        assertThat(capturedProduct.getRam()).isEqualTo(request.ram());
+        assertThat(capturedProduct.getVga()).isEqualTo(request.vga());
+        assertThat(capturedProduct.getHardDisk()).isEqualTo(request.hardDisk());
+        assertThat(capturedProduct.getCamera()).isEqualTo(request.camera());
+        assertThat(capturedProduct.getBattery()).isEqualTo(request.battery());
+        assertThat(capturedProduct.getMemory()).isEqualTo(request.memory());
+        assertThat(capturedProduct.getDemand()).isEqualTo(request.demand());
+        assertThat(capturedProduct.getStatus()).isEqualTo(request.status());
+    }
+
+    @Test
+    void updateProduct_whenProductAndRequestDiscountIsNotNull() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var category = new Category(
+                BigInteger.valueOf(2),
+                "string",
+                "string",
+                "string"
+        );
+
+        var request = new ProductRequest(
+                category.getCategoryID(),
+                "test-update-product-name",
+                "test-update-product-slug",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                20,
+                100L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        var product = new Product(
+                id,
+                category,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                15,
                 50L,
                 "string",
                 0,
@@ -491,18 +709,18 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void whenUpdateFailed_thenThrowException() {
+    void updateProduct_whenProductOrRequestDiscountIsNotNull() {
         // Given
         var id = BigInteger.valueOf(1);
         var category = new Category(
-                id,
+                BigInteger.valueOf(2),
                 "string",
                 "string",
                 "string"
         );
 
         var request = new ProductRequest(
-                id,
+                category.getCategoryID(),
                 "test-update-product-name",
                 "test-update-product-slug",
                 "",
@@ -537,7 +755,7 @@ class ProductServiceImplTest {
                 "string",
                 "string",
                 BigInteger.valueOf(0),
-                null,
+                15,
                 50L,
                 "string",
                 0,
@@ -560,6 +778,206 @@ class ProductServiceImplTest {
                 .thenReturn(true);
         when(productDAO.existsOtherProductBySlug(request.slug(), id))
                 .thenReturn(false);
+        when(productDAO.updateProduct(product)).thenReturn(Optional.of(product));
+        productService.updateProduct(id, request);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Product.class);
+        verify(productDAO).updateProduct(captor.capture());
+
+        var capturedProduct = captor.getValue();
+        assertThat(capturedProduct.getProductID()).isEqualTo(id);
+        assertThat(capturedProduct.getCategory()).isEqualTo(category);
+        assertThat(capturedProduct.getName()).isEqualTo(request.name());
+        assertThat(capturedProduct.getSlug()).isEqualTo(request.slug());
+        assertThat(capturedProduct.getImage()).isEqualTo(request.image());
+        assertThat(capturedProduct.getImageReview1()).isEqualTo(request.imageReview1());
+        assertThat(capturedProduct.getImageReview2()).isEqualTo(request.imageReview2());
+        assertThat(capturedProduct.getImageReview3()).isEqualTo(request.imageReview3());
+        assertThat(capturedProduct.getUnitPrice()).isEqualTo(request.unitPrice());
+        assertThat(capturedProduct.getDiscount()).isEqualTo(request.discount());
+        assertThat(capturedProduct.getQuantity()).isEqualTo(request.quantity());
+        assertThat(capturedProduct.getDescription()).isEqualTo(request.description());
+        assertThat(capturedProduct.getYearRelease()).isEqualTo(request.yearRelease());
+        assertThat(capturedProduct.getManufacturer()).isEqualTo(request.manufacturer());
+        assertThat(capturedProduct.getMonitor()).isEqualTo(request.monitor());
+        assertThat(capturedProduct.getCpu()).isEqualTo(request.cpu());
+        assertThat(capturedProduct.getRam()).isEqualTo(request.ram());
+        assertThat(capturedProduct.getVga()).isEqualTo(request.vga());
+        assertThat(capturedProduct.getHardDisk()).isEqualTo(request.hardDisk());
+        assertThat(capturedProduct.getCamera()).isEqualTo(request.camera());
+        assertThat(capturedProduct.getBattery()).isEqualTo(request.battery());
+        assertThat(capturedProduct.getMemory()).isEqualTo(request.memory());
+        assertThat(capturedProduct.getDemand()).isEqualTo(request.demand());
+        assertThat(capturedProduct.getStatus()).isEqualTo(request.status());
+    }
+
+    @Test
+    void whenUpdateProduct_butIdNotFound_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new ProductRequest(
+                BigInteger.valueOf(1),
+                "test-update-product-name",
+                "test-update-product-slug",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                null,
+                100L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.empty());
+
+        // Then
+        assertThatThrownBy(() -> productService.updateProduct(id, request))
+                .isInstanceOf(ResourceNotFoundException.class);
+
+        verify(productDAO, never()).updateProduct(any());
+    }
+
+    @Test
+    void whenUpdateProduct_butCategoryNotExists_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new ProductRequest(
+                BigInteger.valueOf(1),
+                "test-update-product-name",
+                "test-update-product-slug",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                null,
+                100L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(new Product()));
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(false);
+
+        // Then
+        assertThatThrownBy(() -> productService.updateProduct(id, request))
+                .isInstanceOf(ResourceNotFoundException.class);
+
+        verify(productDAO, never()).updateProduct(any());
+    }
+
+    @Test
+    void whenUpdateProduct_butSlugAlreadyExists_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new ProductRequest(
+                id,
+                "test-update-product-name",
+                "test-update-product-slug",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                null,
+                100L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        when(productDAO.selectProductByID(id))
+                .thenReturn(Optional.of(new Product()));
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id))
+                .thenReturn(true);
+
+        // Then
+        assertThatThrownBy(() -> productService.updateProduct(id, request))
+                .isInstanceOf(DuplicateResourceException.class);
+
+        verify(productDAO, never()).updateProduct(any());
+    }
+
+    @Test
+    void whenUpdateFailed_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new ProductRequest(
+                id,
+                "test-update-product-name",
+                "test-update-product-slug",
+                "",
+                "string",
+                "string",
+                "string",
+                BigInteger.valueOf(0),
+                null,
+                100L,
+                "string",
+                0,
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                true
+        );
+
+        // When
+        when(productDAO.selectProductByID(id))
+                .thenReturn(Optional.of(new Product()));
+        when(categoryService.existsCategoryByID(request.categoryID()))
+                .thenReturn(true);
+        when(productDAO.existsOtherProductBySlug(request.slug(), id))
+                .thenReturn(false);
+        when(productDAO.updateProduct(any()))
+                .thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> productService.updateProduct(id, request))
@@ -603,34 +1021,34 @@ class ProductServiceImplTest {
                 true
         );
 
-        // When
         var product = new Product(
                 id,
                 category,
-                "string",
-                "string",
-                "",
-                "string",
-                "string",
-                "string",
-                BigInteger.valueOf(0),
-                null,
-                50L,
-                "string",
-                0,
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                true
+                request.name(),
+                request.slug(),
+                request.image(),
+                request.imageReview1(),
+                request.imageReview2(),
+                request.imageReview3(),
+                request.unitPrice(),
+                request.discount(),
+                request.quantity(),
+                request.description(),
+                request.yearRelease(),
+                request.manufacturer(),
+                request.monitor(),
+                request.cpu(),
+                request.ram(),
+                request.vga(),
+                request.hardDisk(),
+                request.camera(),
+                request.battery(),
+                request.memory(),
+                request.demand(),
+                request.status()
         );
 
+        // When
         when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
         when(categoryService.existsCategoryByID(request.categoryID()))
                 .thenReturn(true);
@@ -641,5 +1059,130 @@ class ProductServiceImplTest {
         assertThatThrownBy(() -> productService.updateProduct(id, request))
                 .isInstanceOf(DuplicateResourceException.class);
         verify(productDAO, never()).updateProduct(any());
+    }
+
+    @Test
+    void existsProductByID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(productDAO.existsProductByID(id)).thenReturn(true);
+        var result = productService.existsProductByID(id);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void existsProductByID__butNotFound() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(productDAO.existsProductByID(id)).thenReturn(false);
+        var result = productService.existsProductByID(id);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void updateProductQuantityByAmount_whenAmountIsPositive() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var amount = 10;
+
+        var product = new Product();
+        product.setQuantity(100L);
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
+        when(productDAO.updateProduct(any())).thenReturn(Optional.of(product));
+        productService.updateProductQuantityByAmount(id, amount);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Product.class);
+        verify(productDAO).updateProduct(captor.capture());
+
+        var capturedProduct = captor.getValue();
+        assertThat(capturedProduct.getQuantity()).isEqualTo(110);
+    }
+
+    @Test
+    void updateProductQuantityByAmount_whenAmountIsNegative() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var amount = -10;
+
+        var product = new Product();
+        product.setQuantity(100L);
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
+        when(productDAO.updateProduct(any())).thenReturn(Optional.of(product));
+        productService.updateProductQuantityByAmount(id, amount);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Product.class);
+        verify(productDAO).updateProduct(captor.capture());
+
+        var capturedProduct = captor.getValue();
+        assertThat(capturedProduct.getQuantity()).isEqualTo(90);
+    }
+
+    @Test
+    void whenUpdateProductQuantityByAmount_butAmountIsNegativeAndAbsoluteIsLargerThanProductQuantity_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var amount = -10;
+
+        var product = new Product();
+        product.setQuantity(5L);
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
+
+        // Then
+        assertThatThrownBy(
+                () -> productService
+                        .updateProductQuantityByAmount(id, amount))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void whenUpdateProductQuantityByAmount__butProductNotFound_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var amount = 10;
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.empty());
+
+        // Then
+        assertThatThrownBy(
+                () -> productService
+                        .updateProductQuantityByAmount(id, amount))
+                .isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    void whenUpdateProductQuantityByAmountFailed_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var amount = 10;
+
+        var product = new Product();
+        product.setQuantity(100L);
+
+        // When
+        when(productDAO.selectProductByID(id)).thenReturn(Optional.of(product));
+        when(productDAO.updateProduct(any())).thenReturn(Optional.empty());
+
+        // Then
+        assertThatThrownBy(
+                () -> productService
+                        .updateProductQuantityByAmount(id, amount))
+                .isInstanceOf(FailedOperationException.class);
     }
 }

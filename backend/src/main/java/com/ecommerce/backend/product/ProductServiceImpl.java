@@ -162,6 +162,18 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    private void checkIfOtherProductNotExistsBySlugOrThrow(
+            String slug,
+            BigInteger productID
+    ) {
+        var isExisted = productDAO.existsOtherProductBySlug(slug, productID);
+        if (isExisted) {
+            throw new DuplicateResourceException(
+                    "Product with slug {%s} is already existed".formatted(slug)
+            );
+        }
+    }
+
     private void checkAndUpdateChangesOrThrow(ProductRequest request,
                                               Product product) {
         var isChanged = false;
@@ -317,18 +329,6 @@ public class ProductServiceImpl implements ProductService {
         if (!isChanged) {
             throw new DuplicateResourceException(
                     "No data changes detected"
-            );
-        }
-    }
-
-    private void checkIfOtherProductNotExistsBySlugOrThrow(
-            String slug,
-            BigInteger productID
-    ) {
-        var isExisted = productDAO.existsOtherProductBySlug(slug, productID);
-        if (isExisted) {
-            throw new DuplicateResourceException(
-                    "Product with slug {%s} is already existed".formatted(slug)
             );
         }
     }
