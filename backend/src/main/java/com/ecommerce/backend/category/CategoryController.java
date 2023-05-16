@@ -53,7 +53,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('category:write')")
+    @PreAuthorize("hasAuthority('category:create')")
     public CategoryResponse postCategory(
             @Validated @RequestBody CategoryRequest request,
             BindingResult errors
@@ -73,21 +73,8 @@ public class CategoryController {
         );
     }
 
-    @DeleteMapping("{categoryID}")
-    @PreAuthorize("hasAuthority('category:write')")
-    public BaseResponse deleteCategory(
-            @PathVariable("categoryID") BigInteger categoryID
-    ) {
-        categoryService.deleteCategory(categoryID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{categoryID}")
-    @PreAuthorize("hasAuthority('category:write')")
+    @PreAuthorize("hasAuthority('category:update')")
     public CategoryResponse putCategory(
             @PathVariable("categoryID") BigInteger categoryID,
             @Validated @RequestBody CategoryRequest request,
@@ -107,6 +94,19 @@ public class CategoryController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 categoryDTOList
+        );
+    }
+
+    @DeleteMapping("{categoryID}")
+    @PreAuthorize("hasAuthority('category:delete')")
+    public BaseResponse deleteCategory(
+            @PathVariable("categoryID") BigInteger categoryID
+    ) {
+        categoryService.deleteCategory(categoryID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

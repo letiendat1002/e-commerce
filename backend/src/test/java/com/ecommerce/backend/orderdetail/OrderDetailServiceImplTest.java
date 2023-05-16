@@ -416,7 +416,7 @@ class OrderDetailServiceImplTest {
                 .thenReturn(Optional.of(orderDetail));
         when(orderDetailDAO.updateOrderDetail(orderDetail))
                 .thenReturn(Optional.of(orderDetail));
-        orderDetailService.updateOrderDetail(request);
+        orderDetailService.updateOrderDetailStatus(request);
 
         // Then
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);
@@ -455,7 +455,7 @@ class OrderDetailServiceImplTest {
 
         // Then
         assertThatThrownBy(
-                () -> orderDetailService.updateOrderDetail(request)
+                () -> orderDetailService.updateOrderDetailStatus(request)
         ).isInstanceOf(FailedOperationException.class);
 
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);
@@ -491,7 +491,7 @@ class OrderDetailServiceImplTest {
                 .thenReturn(Optional.of(orderDetail));
         when(orderDetailDAO.updateOrderDetail(orderDetail))
                 .thenReturn(Optional.of(orderDetail));
-        orderDetailService.updateOrderDetail(request);
+        orderDetailService.updateOrderDetailStatus(request);
 
         // Then
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);
@@ -526,7 +526,7 @@ class OrderDetailServiceImplTest {
 
         // Then
         assertThatThrownBy(
-                () -> orderDetailService.updateOrderDetail(request)
+                () -> orderDetailService.updateOrderDetailStatus(request)
         ).isInstanceOf(DuplicateResourceException.class);
 
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);

@@ -21,7 +21,7 @@ public class UserController {
     private final UserDTOMapper userDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('user:read_all')")
     public UserResponse getUsers() {
         var userDTOList = userService
                 .fetchAllUsers()
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("{userID}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('user:read_one')")
     public UserResponse getUserByUserID(
             @PathVariable("userID") BigInteger userID
     ) {
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('user:write')")
+    @PreAuthorize("hasAuthority('user:create')")
     public UserResponse postUser(
             @Validated @RequestBody UserRegistrationRequest request,
             BindingResult errors
@@ -73,21 +73,8 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("{userID}")
-    @PreAuthorize("hasAuthority('user:write')")
-    public BaseResponse deleteUser(
-            @PathVariable("userID") BigInteger userID
-    ) {
-        userService.deleteUser(userID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{userID}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('user:update')")
     public UserResponse putUser(
             @PathVariable("userID") BigInteger userID,
             @Validated @RequestBody UserUpdateRequest request,
@@ -105,6 +92,19 @@ public class UserController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 userDTOList
+        );
+    }
+
+    @DeleteMapping("{userID}")
+    @PreAuthorize("hasAuthority('user:delete')")
+    public BaseResponse deleteUser(
+            @PathVariable("userID") BigInteger userID
+    ) {
+        userService.deleteUser(userID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

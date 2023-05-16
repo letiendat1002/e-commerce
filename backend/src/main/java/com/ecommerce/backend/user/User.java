@@ -3,7 +3,7 @@ package com.ecommerce.backend.user;
 import com.ecommerce.backend.order.Order;
 import com.ecommerce.backend.rating.Rating;
 import com.ecommerce.backend.user.enums.Gender;
-import com.ecommerce.backend.user.enums.UserRole;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import com.ecommerce.backend.useraddress.UserAddress;
 import jakarta.persistence.*;
 import lombok.*;

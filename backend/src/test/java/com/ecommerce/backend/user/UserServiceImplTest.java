@@ -5,7 +5,7 @@ import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import com.ecommerce.backend.user.enums.Gender;
-import com.ecommerce.backend.user.enums.UserRole;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

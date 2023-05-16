@@ -22,7 +22,7 @@ public class OrderController {
     private final OrderDTOMapper orderDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('order:read')")
+    @PreAuthorize("hasAuthority('order:read_all')")
     public OrderResponse getOrders(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
@@ -50,7 +50,7 @@ public class OrderController {
     }
 
     @GetMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:read')")
+    @PreAuthorize("hasAuthority('order:read_one')")
     public OrderResponse getOrderByOrderID(
             @PathVariable("orderID") BigInteger orderID
     ) {
@@ -66,7 +66,7 @@ public class OrderController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('order:write')")
+    @PreAuthorize("hasAuthority('order:create')")
     public OrderResponse postOrder(
             @Validated @RequestBody OrderAddRequest request,
             BindingResult errors
@@ -86,21 +86,8 @@ public class OrderController {
         );
     }
 
-    @DeleteMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:write')")
-    public BaseResponse deleteOrderByOrderID(
-            @PathVariable("orderID") BigInteger orderID
-    ) {
-        orderService.deleteOrder(orderID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:write')")
+    @PreAuthorize("hasAuthority('order:update')")
     public OrderResponse putOrderByOrderID(
             @PathVariable("orderID") BigInteger orderID,
             @Validated @RequestBody OrderUpdateRequest request,
@@ -118,6 +105,19 @@ public class OrderController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 orderDTOList
+        );
+    }
+
+    @DeleteMapping("{orderID}")
+    @PreAuthorize("hasAuthority('order:delete')")
+    public BaseResponse deleteOrderByOrderID(
+            @PathVariable("orderID") BigInteger orderID
+    ) {
+        orderService.deleteOrder(orderID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

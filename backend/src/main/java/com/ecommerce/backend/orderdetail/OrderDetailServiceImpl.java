@@ -173,7 +173,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public OrderDetail updateOrderDetail(OrderDetailUpdateRequest request) {
+    public OrderDetail updateOrderDetailStatus(OrderDetailUpdateRequest request) {
         var orderDetail = selectOrderDetailByIdOrThrow(
                 new OrderDetailID(
                         request.orderID(),
@@ -222,7 +222,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             orderDetail.setStatus(null);
             isChanged = true;
         }
-
 
         if (!isChanged) {
             throw new DuplicateResourceException(
