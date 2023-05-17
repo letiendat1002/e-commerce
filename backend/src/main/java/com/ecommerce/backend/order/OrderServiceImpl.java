@@ -70,15 +70,16 @@ public class OrderServiceImpl implements OrderService {
         checkAndUpdateChangesOrThrow(request, order);
         var afterChangeStatus = order.getStatus();
 
-        var isBeforeStatusPendingOrConfirmed =
+        var isBeforeStatusAbleToUpdateProductQuantity =
                 beforeChangeStatus == OrderStatus.PENDING ||
-                        beforeChangeStatus == OrderStatus.CONFIRMED;
+                        beforeChangeStatus == OrderStatus.CONFIRMED ||
+                        beforeChangeStatus == OrderStatus.ON_SHIPPING;
 
-        var isStatusPendingOrConfirmedChangedToCancelled =
-                isBeforeStatusPendingOrConfirmed &&
+        var isAbleToUpdateProductQuantity =
+                isBeforeStatusAbleToUpdateProductQuantity &&
                         afterChangeStatus == OrderStatus.CANCELLED;
 
-        if (isStatusPendingOrConfirmedChangedToCancelled) {
+        if (isAbleToUpdateProductQuantity) {
             orderDetailService
                     .updateProductQuantityWhenOrderCancelled(
                             orderID
@@ -100,21 +101,21 @@ public class OrderServiceImpl implements OrderService {
     ) {
         var isChanged = false;
 
-        if (!request.paymentType().equals(order.getPaymentType())) {
-            order.setPaymentType(request.paymentType());
-            isChanged = true;
-        }
-
         if (!request.status().equals(order.getStatus())) {
             order.setStatus(request.status());
-            if (order.getStatus().equals(OrderStatus.COMPLETED)) {
-                order.setDateCompleted(LocalDate.now());
+            if (order.getStatus().equals(OrderStatus.CONFIRMED)) {
+                order.setPreparing(true);
+                order.setDatePreparing(LocalDate.now());
             }
-            isChanged = true;
-        }
-
-        if (!request.address().equals(order.getAddress())) {
-            order.setAddress(request.address());
+            if (order.getStatus().equals(OrderStatus.ON_SHIPPING)) {
+                order.setShipping(true);
+                order.setDateShipping(LocalDate.now());
+            }
+            if (order.getStatus().equals(OrderStatus.COMPLETED)) {
+                order.setCompleted(true);
+                order.setDateCompleted(LocalDate.now());
+                order.setWorkerID(request.workerID());
+            }
             isChanged = true;
         }
 
@@ -134,6 +135,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (orderStatus == OrderStatus.PENDING
                 || orderStatus == OrderStatus.CONFIRMED
+                || orderStatus == OrderStatus.ON_SHIPPING
         ) {
             orderDetailService.deleteAllOrderDetailsByOrderID(orderID);
         }

@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -166,13 +167,52 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void updateOrder_changeStatusToCompleted() {
+    void updateOrder_changeStatusPendingToConfirmed() {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
-                OrderPaymentType.COD,
-                OrderStatus.COMPLETED,
-                "test-update"
+                OrderStatus.CONFIRMED,
+                id
+        );
+
+        var order = new Order(
+                id,
+                id,
+                BigInteger.valueOf(1),
+                null,
+                OrderStatus.PENDING,
+                "string"
+        );
+
+        // When
+        when(orderDAO.selectOrderByID(id)).thenReturn(Optional.of(order));
+        when(orderDAO.updateOrder(order)).thenReturn(Optional.of(order));
+        orderService.updateOrder(id, request);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Order.class);
+        verify(orderDAO).updateOrder(captor.capture());
+        var capturedOrder = captor.getValue();
+        assertThat(capturedOrder).isEqualTo(order);
+        assertThat(capturedOrder.getOrderID()).isEqualTo(id);
+        assertThat(capturedOrder.getUserID()).isEqualTo(id);
+        assertThat(capturedOrder.getStatus()).isEqualTo(request.status());
+        assertThat(capturedOrder.isPreparing()).isTrue();
+        assertThat(capturedOrder.getDatePreparing()).isEqualTo(LocalDate.now());
+        assertThat(capturedOrder.isShipping()).isFalse();
+        assertThat(capturedOrder.getDateShipping()).isNull();
+        assertThat(capturedOrder.isCompleted()).isFalse();
+        assertThat(capturedOrder.getDateCompleted()).isNull();
+        assertThat(capturedOrder.getWorkerID()).isNull();
+    }
+
+    @Test
+    void updateOrder_changeStatusConfirmedToOnShipping() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new OrderUpdateRequest(
+                OrderStatus.ON_SHIPPING,
+                id
         );
 
         var order = new Order(
@@ -196,20 +236,57 @@ class OrderServiceImplTest {
         assertThat(capturedOrder).isEqualTo(order);
         assertThat(capturedOrder.getOrderID()).isEqualTo(id);
         assertThat(capturedOrder.getUserID()).isEqualTo(id);
-        assertThat(capturedOrder.getPaymentType())
-                .isEqualTo(request.paymentType());
         assertThat(capturedOrder.getStatus()).isEqualTo(request.status());
-        assertThat(capturedOrder.getAddress()).isEqualTo(request.address());
+        assertThat(capturedOrder.isShipping()).isTrue();
+        assertThat(capturedOrder.getDateShipping()).isEqualTo(LocalDate.now());
+        assertThat(capturedOrder.isCompleted()).isFalse();
+        assertThat(capturedOrder.getDateCompleted()).isNull();
+        assertThat(capturedOrder.getWorkerID()).isNull();
     }
 
     @Test
-    void updateOrder_changeStatusPendingOrConfirmedToCancelled() {
+    void updateOrder_changeStatusOnShippingToCompleted() {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
-                OrderPaymentType.COD,
+                OrderStatus.COMPLETED,
+                id
+        );
+
+        var order = new Order(
+                id,
+                id,
+                BigInteger.valueOf(1),
+                null,
+                OrderStatus.ON_SHIPPING,
+                "string"
+        );
+
+        // When
+        when(orderDAO.selectOrderByID(id)).thenReturn(Optional.of(order));
+        when(orderDAO.updateOrder(order)).thenReturn(Optional.of(order));
+        orderService.updateOrder(id, request);
+
+        // Then
+        var captor = ArgumentCaptor.forClass(Order.class);
+        verify(orderDAO).updateOrder(captor.capture());
+        var capturedOrder = captor.getValue();
+        assertThat(capturedOrder).isEqualTo(order);
+        assertThat(capturedOrder.getOrderID()).isEqualTo(id);
+        assertThat(capturedOrder.getUserID()).isEqualTo(id);
+        assertThat(capturedOrder.getStatus()).isEqualTo(request.status());
+        assertThat(capturedOrder.isCompleted()).isTrue();
+        assertThat(capturedOrder.getDateCompleted()).isEqualTo(LocalDate.now());
+        assertThat(capturedOrder.getWorkerID()).isEqualTo(id);
+    }
+
+    @Test
+    void updateOrder_changeStatusAbleToUpdateProductQuantityToCancelled() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new OrderUpdateRequest(
                 OrderStatus.CANCELLED,
-                "test-update"
+                id
         );
 
         var order = new Order(
@@ -233,10 +310,8 @@ class OrderServiceImplTest {
         assertThat(capturedOrder).isEqualTo(order);
         assertThat(capturedOrder.getOrderID()).isEqualTo(id);
         assertThat(capturedOrder.getUserID()).isEqualTo(id);
-        assertThat(capturedOrder.getPaymentType())
-                .isEqualTo(request.paymentType());
         assertThat(capturedOrder.getStatus()).isEqualTo(request.status());
-        assertThat(capturedOrder.getAddress()).isEqualTo(request.address());
+        assertThat(capturedOrder.getWorkerID()).isNull();
     }
 
     @Test
@@ -244,9 +319,8 @@ class OrderServiceImplTest {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
-                OrderPaymentType.COD,
-                OrderStatus.CONFIRMED,
-                "test-update"
+                OrderStatus.COMPLETED,
+                id
         );
 
         var order = new Order(
@@ -260,6 +334,7 @@ class OrderServiceImplTest {
 
         // When
         when(orderDAO.selectOrderByID(id)).thenReturn(Optional.of(order));
+        when(orderDAO.updateOrder(order)).thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> orderService.updateOrder(id, request))
@@ -271,18 +346,17 @@ class OrderServiceImplTest {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
-                OrderPaymentType.COD,
                 OrderStatus.CONFIRMED,
-                "test-update"
+                id
         );
 
         var order = new Order(
                 id,
                 id,
                 BigInteger.valueOf(1),
-                request.paymentType(),
+                OrderPaymentType.COD,
                 request.status(),
-                request.address()
+                "Test address"
         );
 
         // When

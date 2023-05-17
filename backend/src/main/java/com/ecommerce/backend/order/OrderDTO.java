@@ -14,6 +14,12 @@ public record OrderDTO(
         OrderStatus status,
         LocalDate dateOrder,
         String address,
-        LocalDate dateCompleted
+        boolean isPreparing,
+        LocalDate datePreparing,
+        boolean isShipping,
+        LocalDate dateShipping,
+        boolean isCompleted,
+        LocalDate dateCompleted,
+        BigInteger workerID
 ) {
 }
