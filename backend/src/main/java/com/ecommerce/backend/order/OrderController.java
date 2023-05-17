@@ -86,6 +86,42 @@ public class OrderController {
         );
     }
 
+    @GetMapping("/statistic/worker/month")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderStatisticResponse getCountCompletedOrdersInMonthByWorkerID(
+            @RequestParam(value = "id") BigInteger id,
+            @RequestParam(value = "month") int month
+    ) {
+        var count = orderService.fetchCountCompletedOrdersInMonthByWorkerID(
+                id,
+                month
+        );
+
+        return new OrderStatisticResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                count
+        );
+    }
+
+    @GetMapping("/statistic/worker/year")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderStatisticResponse getCountCompletedOrdersInYearByWorkerID(
+            @RequestParam(value = "id") BigInteger id,
+            @RequestParam(value = "year") int year
+    ) {
+        var count = orderService.fetchCountCompletedOrdersInYearByWorkerID(
+                id,
+                year
+        );
+
+        return new OrderStatisticResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                count
+        );
+    }
+
     @GetMapping("{orderID}")
     @PreAuthorize("hasAuthority('order:read_one')")
     public OrderResponse getOrderByOrderID(

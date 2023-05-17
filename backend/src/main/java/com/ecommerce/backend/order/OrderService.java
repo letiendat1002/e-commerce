@@ -28,4 +28,8 @@ public interface OrderService {
     boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user);
 
     void deleteAllOrdersByUserID(BigInteger userID);
+
+    int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month);
+
+    int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year);
 }

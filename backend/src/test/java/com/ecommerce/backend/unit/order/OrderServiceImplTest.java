@@ -124,6 +124,44 @@ class OrderServiceImplTest {
     }
 
     @Test
+    void fetchCountCompletedOrdersInMonthByWorkerID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var month = 1;
+        var count = 100;
+
+        // When
+        when(orderDAO.selectCountCompletedOrdersInMonthByWorkerID(id, month))
+                .thenReturn(count);
+
+        var actual = orderService
+                .fetchCountCompletedOrdersInMonthByWorkerID(id, month);
+
+        // Then
+        verify(orderDAO).selectCountCompletedOrdersInMonthByWorkerID(id, month);
+        assertThat(actual).isEqualTo(count);
+    }
+
+    @Test
+    void fetchCountCompletedOrdersInYearByWorkerID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var year = 2023;
+        var count = 100;
+
+        // When
+        when(orderDAO.selectCountCompletedOrdersInYearByWorkerID(id, year))
+                .thenReturn(count);
+
+        var actual = orderService
+                .fetchCountCompletedOrdersInYearByWorkerID(id, year);
+
+        // Then
+        verify(orderDAO).selectCountCompletedOrdersInYearByWorkerID(id, year);
+        assertThat(actual).isEqualTo(count);
+    }
+
+    @Test
     void fetchOrderByOrderID() {
         // Given
         var id = BigInteger.valueOf(1);

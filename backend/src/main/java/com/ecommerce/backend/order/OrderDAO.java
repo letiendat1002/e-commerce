@@ -27,4 +27,8 @@ public interface OrderDAO {
     boolean existsOrderByID(BigInteger orderID);
 
     boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user);
+
+    int selectCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month);
+
+    int selectCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year);
 }

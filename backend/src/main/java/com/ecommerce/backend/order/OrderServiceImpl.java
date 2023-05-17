@@ -173,4 +173,14 @@ public class OrderServiceImpl implements OrderService {
                                 .deleteOrder(order.getOrderID())
                 );
     }
+
+    @Override
+    public int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month) {
+        return orderDAO.selectCountCompletedOrdersInMonthByWorkerID(workerID, month);
+    }
+
+    @Override
+    public int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year) {
+        return orderDAO.selectCountCompletedOrdersInYearByWorkerID(workerID, year);
+    }
 }
