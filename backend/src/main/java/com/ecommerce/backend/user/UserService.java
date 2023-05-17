@@ -25,4 +25,6 @@ public interface UserService {
     User updateUserPassword(String email, String newPassword);
 
     boolean existsUserByID(BigInteger userID);
+
+    boolean isUserEnabledByEmail(String username);
 }

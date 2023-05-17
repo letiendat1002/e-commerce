@@ -12,4 +12,6 @@ public interface AuthenticationService {
     void resetPassword(String email);
 
     void changePassword(AuthenticationChangePasswordRequest request);
+
+    void sendRegisterActivation(String email);
 }

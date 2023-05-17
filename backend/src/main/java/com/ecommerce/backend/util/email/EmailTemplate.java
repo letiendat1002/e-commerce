@@ -25,6 +25,7 @@ public class EmailTemplate {
                 );
     }
 
+    // TODO: Handle this when FE implement activate page
     public static String createRegistrationUrl(String url, String token) {
         return url + "/api/v1/auth/activate?token=" + token;
     }

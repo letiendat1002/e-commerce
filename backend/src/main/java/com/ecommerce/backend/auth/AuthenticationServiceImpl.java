@@ -1,19 +1,21 @@
 package com.ecommerce.backend.auth;
 
 import com.ecommerce.backend.auth.enums.ActivateStatus;
+import com.ecommerce.backend.user.UserDTOMapper;
+import com.ecommerce.backend.user.UserRegistrationRequest;
+import com.ecommerce.backend.user.UserService;
 import com.ecommerce.backend.util.constants.VariableConstants;
 import com.ecommerce.backend.util.email.CustomEmail;
+import com.ecommerce.backend.util.email.EmailPatternMatcher;
 import com.ecommerce.backend.util.email.EmailSenderService;
 import com.ecommerce.backend.util.email.EmailTemplate;
 import com.ecommerce.backend.util.enums.MessageStatus;
 import com.ecommerce.backend.util.exception.DuplicateResourceException;
 import com.ecommerce.backend.util.exception.FailedOperationException;
+import com.ecommerce.backend.util.exception.InvalidArgumentException;
 import com.ecommerce.backend.util.exception.JwtAuthenticationException;
 import com.ecommerce.backend.util.security.jwt.JwtService;
 import com.ecommerce.backend.util.security.util.PasswordGenerator;
-import com.ecommerce.backend.user.UserDTOMapper;
-import com.ecommerce.backend.user.UserRegistrationRequest;
-import com.ecommerce.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
@@ -116,17 +118,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public String activate(String token) {
         var username = jwtService.extractUsername(token);
-        var user = userService.fetchUserByEmail(username);
-        if (!user.isEnabled()) {
+        var isEnabled = userService.isUserEnabledByEmail(username);
+        if (isEnabled) {
             return ActivateStatus.ALREADY_ACTIVATED.message();
         }
         userService.enableUser(username);
-        return ActivateStatus.ACTIVATED.message();
+        return ActivateStatus.ACTIVATED_SUCCESSFULLY.message();
     }
 
     @Override
     @Transactional
     public void resetPassword(String email) {
+        // TODO: Handle this when Forgot Password Page is implemented
         var randomPassword = passwordGenerator.generateRandomPassword();
 
         var user = userService.updateUserPassword(
@@ -167,5 +170,43 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         userService.updateUserPassword(username, request.newPassword());
+    }
+
+    @Override
+    public void sendRegisterActivation(String email) {
+        if (!EmailPatternMatcher.patternMatches(email)) {
+            throw new InvalidArgumentException(
+                    "Email is not valid"
+            );
+        }
+
+        var user = userService.fetchUserByEmail(email);
+
+        if (user.isEnabled()) {
+            throw new FailedOperationException(
+                    "User is already activated"
+            );
+        }
+
+        var token = jwtService.generateToken(
+                user.getEmail(),
+                Date.from(
+                        Instant.now().plus(15, MINUTES)
+                )
+        );
+
+        var registrationUrl = EmailTemplate.createRegistrationUrl(
+                variableConstants.getUrl(),
+                token
+        );
+
+        sendEmail(
+                user.getEmail(),
+                EmailTemplate.REGISTRATION_SUBJECT,
+                EmailTemplate.getRegistrationMessage(
+                        user.getFullName(),
+                        registrationUrl
+                )
+        );
     }
 }

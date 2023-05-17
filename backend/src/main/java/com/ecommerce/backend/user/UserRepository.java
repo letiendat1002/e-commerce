@@ -34,4 +34,7 @@ public interface UserRepository extends JpaRepository<User, BigInteger> {
     @Query("UPDATE User a " +
             "SET a.password = ?2 WHERE a.email = ?1")
     int updateUserPassword(String email, String password);
+
+    @Query("SELECT o.enabled FROM User o WHERE o.email = ?1")
+    boolean isUserEnabledByEmail(String username);
 }

@@ -218,4 +218,9 @@ public class UserServiceImpl implements UserService {
     public boolean existsUserByID(BigInteger userID) {
         return userDAO.existsUserByID(userID);
     }
+
+    @Override
+    public boolean isUserEnabledByEmail(String username) {
+        return userDAO.isUserEnabledByEmail(username);
+    }
 }

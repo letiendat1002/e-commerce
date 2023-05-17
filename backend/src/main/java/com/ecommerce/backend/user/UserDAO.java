@@ -32,4 +32,6 @@ public interface UserDAO {
     int updateUserPassword(String email, String randomPassword);
 
     List<User> selectUsersByRole(UserRole role);
+
+    boolean isUserEnabledByEmail(String username);
 }

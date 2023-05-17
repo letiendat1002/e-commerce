@@ -2,9 +2,9 @@ package com.ecommerce.backend.user;
 
 import com.ecommerce.backend.order.Order;
 import com.ecommerce.backend.rating.Rating;
-import com.ecommerce.backend.util.security.enums.UserRole;
 import com.ecommerce.backend.user.enums.Gender;
 import com.ecommerce.backend.useraddress.UserAddress;
+import com.ecommerce.backend.util.security.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -176,6 +176,7 @@ public class User implements UserDetails {
         return true;
     }
 
+    // TODO: Handle this when FE implement activate page
     @Override
     public boolean isEnabled() {
         return true;

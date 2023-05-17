@@ -78,4 +78,9 @@ public class UserJPADataAccessService implements UserDAO {
     public List<User> selectUsersByRole(UserRole role) {
         return userRepository.findAllByRole(role);
     }
+
+    @Override
+    public boolean isUserEnabledByEmail(String username) {
+        return userRepository.isUserEnabledByEmail(username);
+    }
 }

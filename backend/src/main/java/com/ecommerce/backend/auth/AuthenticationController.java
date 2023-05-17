@@ -1,12 +1,11 @@
 package com.ecommerce.backend.auth;
 
+import com.ecommerce.backend.user.UserRegistrationRequest;
 import com.ecommerce.backend.util.enums.MessageStatus;
 import com.ecommerce.backend.util.exception.RequestValidationException;
 import com.ecommerce.backend.util.response.BaseResponse;
-import com.ecommerce.backend.user.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -48,10 +47,15 @@ public class AuthenticationController {
     }
 
     @GetMapping("/activate")
-    public ResponseEntity<String> activate(
+    public AuthenticationActivateResponse activate(
             @RequestParam("token") String token
     ) {
-        return ResponseEntity.ok(authenticationService.activate(token));
+        var message = authenticationService.activate(token);
+
+        return new AuthenticationActivateResponse(
+                HttpStatus.OK.value(),
+                message
+        );
     }
 
     @PostMapping("/resetPassword")
@@ -77,6 +81,18 @@ public class AuthenticationController {
         }
 
         authenticationService.changePassword(request);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
+        );
+    }
+
+    @GetMapping("/resend/register-activation")
+    public BaseResponse resendRegisterActivation(
+            @RequestParam("email") String email
+    ) {
+        authenticationService.sendRegisterActivation(email);
 
         return new BaseResponse(
                 HttpStatus.OK.value(),

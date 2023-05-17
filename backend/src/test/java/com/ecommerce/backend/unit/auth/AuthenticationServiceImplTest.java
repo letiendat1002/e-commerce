@@ -5,6 +5,11 @@ import com.ecommerce.backend.auth.AuthenticationChangePasswordRequest;
 import com.ecommerce.backend.auth.AuthenticationRequest;
 import com.ecommerce.backend.auth.AuthenticationServiceImpl;
 import com.ecommerce.backend.auth.enums.ActivateStatus;
+import com.ecommerce.backend.user.User;
+import com.ecommerce.backend.user.UserDTOMapper;
+import com.ecommerce.backend.user.UserRegistrationRequest;
+import com.ecommerce.backend.user.UserService;
+import com.ecommerce.backend.user.enums.Gender;
 import com.ecommerce.backend.util.constants.VariableConstants;
 import com.ecommerce.backend.util.email.CustomEmail;
 import com.ecommerce.backend.util.email.EmailSenderService;
@@ -14,11 +19,6 @@ import com.ecommerce.backend.util.exception.FailedOperationException;
 import com.ecommerce.backend.util.exception.JwtAuthenticationException;
 import com.ecommerce.backend.util.security.jwt.JwtService;
 import com.ecommerce.backend.util.security.util.PasswordGenerator;
-import com.ecommerce.backend.user.User;
-import com.ecommerce.backend.user.UserDTOMapper;
-import com.ecommerce.backend.user.UserRegistrationRequest;
-import com.ecommerce.backend.user.UserService;
-import com.ecommerce.backend.user.enums.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -210,22 +210,33 @@ class AuthenticationServiceImplTest {
         // Given
         var token = "example token";
         var username = "test@example.com";
-        var user = new User();
 
         // When
         when(jwtService.extractUsername(token)).thenReturn(username);
-        when(userService.fetchUserByEmail(username)).thenReturn(user);
+        when(userService.isUserEnabledByEmail(username)).thenReturn(false);
         var result = authenticationService.activate(token);
 
         // Then
         verify(jwtService).extractUsername(token);
-        verify(userService).fetchUserByEmail(username);
-        assertThat(result).isEqualTo(ActivateStatus.ACTIVATED.message());
+        verify(userService).isUserEnabledByEmail(username);
+        assertThat(result).isEqualTo(ActivateStatus.ACTIVATED_SUCCESSFULLY.message());
     }
 
     @Test
     void whenActivate_butAlreadyActivated() {
-        // TODO: Handle user activation
+        // Given
+        var token = "example token";
+        var username = "test@example.com";
+
+        // When
+        when(jwtService.extractUsername(token)).thenReturn(username);
+        when(userService.isUserEnabledByEmail(username)).thenReturn(true);
+        var result = authenticationService.activate(token);
+
+        // Then
+        verify(jwtService).extractUsername(token);
+        verify(userService).isUserEnabledByEmail(username);
+        assertThat(result).isEqualTo(ActivateStatus.ALREADY_ACTIVATED.message());
     }
 
     @Test
@@ -334,5 +345,10 @@ class AuthenticationServiceImplTest {
         verify(authenticationManager, never()).authenticate(any());
         verify(userService, never())
                 .updateUserPassword(request.email(), request.newPassword());
+    }
+
+    @Test
+    void sendRegisterActivation() {
+        // TODO: Handle this when FE implement activate page
     }
 }

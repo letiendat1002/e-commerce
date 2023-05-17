@@ -2,6 +2,7 @@ package com.ecommerce.backend.util.exception.handler;
 
 import com.ecommerce.backend.util.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -14,7 +15,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -150,6 +153,19 @@ public class DefaultExceptionHandler {
         );
     }
 
+    @ExceptionHandler(PasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleException(
+            PasswordException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
     @ExceptionHandler(InsufficientAuthenticationException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiResponse handleException(
@@ -163,14 +179,27 @@ public class DefaultExceptionHandler {
         );
     }
 
-    @ExceptionHandler(PasswordException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DisabledException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiResponse handleException(
-            PasswordException exception,
+            DisabledException exception,
             HttpServletRequest request) {
         return new ApiResponse(
                 request.getRequestURI(),
-                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.FORBIDDEN.value(),
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(LockedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiResponse handleException(
+            LockedException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.FORBIDDEN.value(),
                 exception.getMessage(),
                 LocalDateTime.now()
         );
@@ -263,6 +292,19 @@ public class DefaultExceptionHandler {
                 request.getRequestURI(),
                 HttpStatus.UNAUTHORIZED.value(),
                 "JWT token signature is invalid",
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(JwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiResponse handleException(
+            JwtException exception,
+            HttpServletRequest request) {
+        return new ApiResponse(
+                request.getRequestURI(),
+                HttpStatus.UNAUTHORIZED.value(),
+                exception.getMessage(),
                 LocalDateTime.now()
         );
     }

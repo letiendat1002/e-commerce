@@ -1,12 +1,12 @@
 package com.ecommerce.backend.unit.user;
 
 import com.ecommerce.backend.order.OrderService;
+import com.ecommerce.backend.user.*;
+import com.ecommerce.backend.user.enums.Gender;
 import com.ecommerce.backend.util.exception.DuplicateResourceException;
 import com.ecommerce.backend.util.exception.FailedOperationException;
 import com.ecommerce.backend.util.exception.ResourceNotFoundException;
 import com.ecommerce.backend.util.security.enums.UserRole;
-import com.ecommerce.backend.user.*;
-import com.ecommerce.backend.user.enums.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -524,5 +524,20 @@ class UserServiceImplTest {
         // Then
         verify(userDAO).existsUserByID(id);
         assertThat(result).isFalse();
+    }
+
+    @Test
+    void isUserEnabledByEmail() {
+        // Given
+        var email = "test@example.com";
+
+        // When
+        when(userDAO.isUserEnabledByEmail(email)).thenReturn(true);
+
+        var result = userService.isUserEnabledByEmail(email);
+
+        // Then
+        verify(userDAO).isUserEnabledByEmail(email);
+        assertThat(result).isTrue();
     }
 }
