@@ -1,5 +1,9 @@
-package com.ecommerce.backend.auth;
+package com.ecommerce.backend.unit.auth;
 
+import com.ecommerce.backend.auth.AuthenticationAuthenticateResponse;
+import com.ecommerce.backend.auth.AuthenticationChangePasswordRequest;
+import com.ecommerce.backend.auth.AuthenticationRequest;
+import com.ecommerce.backend.auth.AuthenticationServiceImpl;
 import com.ecommerce.backend.auth.enums.ActivateStatus;
 import com.ecommerce.backend.shared.constants.VariableConstants;
 import com.ecommerce.backend.shared.email.CustomEmail;

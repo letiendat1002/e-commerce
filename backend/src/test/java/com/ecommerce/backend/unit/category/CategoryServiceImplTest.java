@@ -1,5 +1,9 @@
-package com.ecommerce.backend.category;
+package com.ecommerce.backend.unit.category;
 
+import com.ecommerce.backend.category.Category;
+import com.ecommerce.backend.category.CategoryDAO;
+import com.ecommerce.backend.category.CategoryRequest;
+import com.ecommerce.backend.category.CategoryServiceImpl;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;

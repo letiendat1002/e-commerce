@@ -33,6 +33,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> fetchAllOrdersByOrderStatus(OrderStatus orderStatus) {
+        return orderDAO.selectAllOrdersByOrderStatus(orderStatus);
+    }
+
+    @Override
+    public List<Order> fetchAllOrdersByWorkerID(BigInteger workerID) {
+        return orderDAO.selectAllOrdersByWorkerID(workerID);
+    }
+
+    @Override
     public Order fetchOrderByOrderID(BigInteger orderID) {
         return orderDAO
                 .selectOrderByID(orderID)

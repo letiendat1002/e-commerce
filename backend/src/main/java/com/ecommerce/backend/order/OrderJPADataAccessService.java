@@ -1,5 +1,6 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,16 @@ public class OrderJPADataAccessService implements OrderDAO {
     @Override
     public List<Order> selectAllOrdersByUserID(BigInteger userID) {
         return orderRepository.findAllByUserID(userID);
+    }
+
+    @Override
+    public List<Order> selectAllOrdersByOrderStatus(OrderStatus orderStatus) {
+        return orderRepository.findAllByStatus(orderStatus);
+    }
+
+    @Override
+    public List<Order> selectAllOrdersByWorkerID(BigInteger workerID) {
+        return orderRepository.findAllByWorkerID(workerID);
     }
 
     @Override

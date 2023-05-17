@@ -1,9 +1,10 @@
-package com.ecommerce.backend.rating;
+package com.ecommerce.backend.unit.rating;
 
 import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.orderdetail.OrderDetailID;
 import com.ecommerce.backend.orderdetail.OrderDetailService;
 import com.ecommerce.backend.product.ProductService;
+import com.ecommerce.backend.rating.*;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;

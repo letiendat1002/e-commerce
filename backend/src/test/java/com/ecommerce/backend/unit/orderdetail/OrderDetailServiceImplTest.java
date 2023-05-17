@@ -1,5 +1,6 @@
-package com.ecommerce.backend.orderdetail;
+package com.ecommerce.backend.unit.orderdetail;
 
+import com.ecommerce.backend.orderdetail.*;
 import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import com.ecommerce.backend.product.ProductService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;

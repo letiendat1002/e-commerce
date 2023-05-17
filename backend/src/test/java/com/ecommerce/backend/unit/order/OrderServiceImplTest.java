@@ -1,5 +1,6 @@
-package com.ecommerce.backend.order;
+package com.ecommerce.backend.unit.order;
 
+import com.ecommerce.backend.order.*;
 import com.ecommerce.backend.order.enums.OrderPaymentType;
 import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.orderdetail.OrderDetailService;
@@ -71,6 +72,54 @@ class OrderServiceImplTest {
         var actual = orderService.fetchAllOrdersByUserID(id);
 
         // Then
+        verify(orderDAO).selectAllOrdersByUserID(id);
+        assertThat(actual).isEqualTo(List.of(order));
+    }
+
+    @Test
+    void fetchAllOrdersByOrderStatus() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var orderStatus = OrderStatus.PENDING;
+        var order = new Order(
+                id,
+                id,
+                BigInteger.valueOf(1),
+                OrderPaymentType.COD,
+                "string"
+        );
+
+        // When
+        when(orderDAO.selectAllOrdersByOrderStatus(orderStatus))
+                .thenReturn(List.of(order));
+
+        var actual = orderService.fetchAllOrdersByOrderStatus(orderStatus);
+
+        // Then
+        verify(orderDAO).selectAllOrdersByOrderStatus(orderStatus);
+        assertThat(actual).isEqualTo(List.of(order));
+    }
+
+    @Test
+    void fetchAllOrdersByWorkerID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var order = new Order(
+                id,
+                id,
+                BigInteger.valueOf(1),
+                OrderPaymentType.COD,
+                "string"
+        );
+
+        // When
+        when(orderDAO.selectAllOrdersByWorkerID(id))
+                .thenReturn(List.of(order));
+
+        var actual = orderService.fetchAllOrdersByWorkerID(id);
+
+        // Then
+        verify(orderDAO).selectAllOrdersByWorkerID(id);
         assertThat(actual).isEqualTo(List.of(order));
     }
 

@@ -1,5 +1,6 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
@@ -41,6 +42,42 @@ public class OrderController {
                     .map(orderDTOMapper)
                     .toList();
         }
+
+        return new OrderResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDTOList
+        );
+    }
+
+    @GetMapping("/status")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderResponse getOrdersByOrderStatus(
+            @RequestParam(value = "orderStatus") OrderStatus orderStatus
+    ) {
+        var orderDTOList = orderService
+                .fetchAllOrdersByOrderStatus(orderStatus)
+                .stream()
+                .map(orderDTOMapper)
+                .toList();
+
+        return new OrderResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDTOList
+        );
+    }
+
+    @GetMapping("/worker")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderResponse getOrdersByWorkerID(
+            @RequestParam(value = "workerID") BigInteger workerID
+    ) {
+        var orderDTOList = orderService
+                .fetchAllOrdersByWorkerID(workerID)
+                .stream()
+                .map(orderDTOMapper)
+                .toList();
 
         return new OrderResponse(
                 HttpStatus.OK.value(),
