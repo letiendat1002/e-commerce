@@ -373,7 +373,7 @@ class OrderDetailServiceImplTest {
     }
 
     @Test
-    void fetchAllOnRefundOrderDetails() {
+    void fetchOrderDetailsByStatus() {
         // Given
         var id = BigInteger.valueOf(1);
         var orderDetail = new OrderDetail(
@@ -382,15 +382,16 @@ class OrderDetailServiceImplTest {
                 BigInteger.ONE,
                 10
         );
+        var status = OrderDetailStatus.ON_REFUND;
 
         // When
-        when(orderDetailDAO.selectAllOnRefundOrderDetails())
+        when(orderDetailDAO.selectOrderDetailsByStatus(status))
                 .thenReturn(List.of(orderDetail));
 
-        var result = orderDetailService.fetchAllOnRefundOrderDetails();
+        var result = orderDetailService.fetchOrderDetailsByStatus(status);
 
         // Then
-        verify(orderDetailDAO).selectAllOnRefundOrderDetails();
+        verify(orderDetailDAO).selectOrderDetailsByStatus(status);
         assertThat(result).isEqualTo(List.of(orderDetail));
     }
 

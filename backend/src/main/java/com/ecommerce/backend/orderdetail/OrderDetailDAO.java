@@ -1,5 +1,7 @@
 package com.ecommerce.backend.orderdetail;
 
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
+
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -21,5 +23,5 @@ public interface OrderDetailDAO {
 
     boolean existsOrderDetailByID(OrderDetailID orderDetailID);
 
-    List<OrderDetail> selectAllOnRefundOrderDetails();
+    List<OrderDetail> selectOrderDetailsByStatus(OrderDetailStatus status);
 }

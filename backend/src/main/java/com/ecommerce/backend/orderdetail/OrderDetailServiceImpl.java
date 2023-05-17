@@ -168,8 +168,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public List<OrderDetail> fetchAllOnRefundOrderDetails() {
-        return orderDetailDAO.selectAllOnRefundOrderDetails();
+    public List<OrderDetail> fetchOrderDetailsByStatus(OrderDetailStatus status) {
+        return orderDetailDAO.selectOrderDetailsByStatus(status);
     }
 
     @Override
