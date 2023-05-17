@@ -33,6 +33,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> fetchAllOrdersByOrderStatus(OrderStatus orderStatus) {
+        return orderDAO.selectAllOrdersByOrderStatus(orderStatus);
+    }
+
+    @Override
+    public List<Order> fetchAllOrdersByWorkerID(BigInteger workerID) {
+        return orderDAO.selectAllOrdersByWorkerID(workerID);
+    }
+
+    @Override
     public Order fetchOrderByOrderID(BigInteger orderID) {
         return orderDAO
                 .selectOrderByID(orderID)
@@ -70,15 +80,16 @@ public class OrderServiceImpl implements OrderService {
         checkAndUpdateChangesOrThrow(request, order);
         var afterChangeStatus = order.getStatus();
 
-        var isBeforeStatusPendingOrConfirmed =
+        var isBeforeStatusAbleToUpdateProductQuantity =
                 beforeChangeStatus == OrderStatus.PENDING ||
-                        beforeChangeStatus == OrderStatus.CONFIRMED;
+                        beforeChangeStatus == OrderStatus.CONFIRMED ||
+                        beforeChangeStatus == OrderStatus.ON_SHIPPING;
 
-        var isStatusPendingOrConfirmedChangedToCancelled =
-                isBeforeStatusPendingOrConfirmed &&
+        var isAbleToUpdateProductQuantity =
+                isBeforeStatusAbleToUpdateProductQuantity &&
                         afterChangeStatus == OrderStatus.CANCELLED;
 
-        if (isStatusPendingOrConfirmedChangedToCancelled) {
+        if (isAbleToUpdateProductQuantity) {
             orderDetailService
                     .updateProductQuantityWhenOrderCancelled(
                             orderID
@@ -100,21 +111,21 @@ public class OrderServiceImpl implements OrderService {
     ) {
         var isChanged = false;
 
-        if (!request.paymentType().equals(order.getPaymentType())) {
-            order.setPaymentType(request.paymentType());
-            isChanged = true;
-        }
-
         if (!request.status().equals(order.getStatus())) {
             order.setStatus(request.status());
-            if (order.getStatus().equals(OrderStatus.COMPLETED)) {
-                order.setDateCompleted(LocalDate.now());
+            if (order.getStatus().equals(OrderStatus.CONFIRMED)) {
+                order.setPreparing(true);
+                order.setDatePreparing(LocalDate.now());
             }
-            isChanged = true;
-        }
-
-        if (!request.address().equals(order.getAddress())) {
-            order.setAddress(request.address());
+            if (order.getStatus().equals(OrderStatus.ON_SHIPPING)) {
+                order.setShipping(true);
+                order.setDateShipping(LocalDate.now());
+            }
+            if (order.getStatus().equals(OrderStatus.COMPLETED)) {
+                order.setCompleted(true);
+                order.setDateCompleted(LocalDate.now());
+                order.setWorkerID(request.workerID());
+            }
             isChanged = true;
         }
 
@@ -134,6 +145,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (orderStatus == OrderStatus.PENDING
                 || orderStatus == OrderStatus.CONFIRMED
+                || orderStatus == OrderStatus.ON_SHIPPING
         ) {
             orderDetailService.deleteAllOrderDetailsByOrderID(orderID);
         }
@@ -160,5 +172,15 @@ public class OrderServiceImpl implements OrderService {
                                 .getBean(OrderService.class)
                                 .deleteOrder(order.getOrderID())
                 );
+    }
+
+    @Override
+    public int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month) {
+        return orderDAO.selectCountCompletedOrdersInMonthByWorkerID(workerID, month);
+    }
+
+    @Override
+    public int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year) {
+        return orderDAO.selectCountCompletedOrdersInYearByWorkerID(workerID, year);
     }
 }

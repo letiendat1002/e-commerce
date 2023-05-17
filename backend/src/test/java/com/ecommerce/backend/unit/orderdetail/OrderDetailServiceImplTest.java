@@ -1,5 +1,6 @@
-package com.ecommerce.backend.orderdetail;
+package com.ecommerce.backend.unit.orderdetail;
 
+import com.ecommerce.backend.orderdetail.*;
 import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import com.ecommerce.backend.product.ProductService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
@@ -416,7 +417,7 @@ class OrderDetailServiceImplTest {
                 .thenReturn(Optional.of(orderDetail));
         when(orderDetailDAO.updateOrderDetail(orderDetail))
                 .thenReturn(Optional.of(orderDetail));
-        orderDetailService.updateOrderDetail(request);
+        orderDetailService.updateOrderDetailStatus(request);
 
         // Then
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);
@@ -455,7 +456,7 @@ class OrderDetailServiceImplTest {
 
         // Then
         assertThatThrownBy(
-                () -> orderDetailService.updateOrderDetail(request)
+                () -> orderDetailService.updateOrderDetailStatus(request)
         ).isInstanceOf(FailedOperationException.class);
 
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);
@@ -491,7 +492,7 @@ class OrderDetailServiceImplTest {
                 .thenReturn(Optional.of(orderDetail));
         when(orderDetailDAO.updateOrderDetail(orderDetail))
                 .thenReturn(Optional.of(orderDetail));
-        orderDetailService.updateOrderDetail(request);
+        orderDetailService.updateOrderDetailStatus(request);
 
         // Then
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);
@@ -526,7 +527,7 @@ class OrderDetailServiceImplTest {
 
         // Then
         assertThatThrownBy(
-                () -> orderDetailService.updateOrderDetail(request)
+                () -> orderDetailService.updateOrderDetailStatus(request)
         ).isInstanceOf(DuplicateResourceException.class);
 
         verify(orderDetailDAO).selectOrderDetailByID(orderDetailID);

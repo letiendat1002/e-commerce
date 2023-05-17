@@ -22,5 +22,5 @@ public interface OrderDetailService {
 
     List<OrderDetail> fetchAllOnRefundOrderDetails();
 
-    OrderDetail updateOrderDetail(OrderDetailUpdateRequest request);
+    OrderDetail updateOrderDetailStatus(OrderDetailUpdateRequest request);
 }

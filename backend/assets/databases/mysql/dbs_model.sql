@@ -60,7 +60,13 @@ CREATE TABLE IF NOT EXISTS `myecommerce`.`Order` (
   `Status` VARCHAR(255) NOT NULL,
   `DateOrder` DATE NOT NULL,
   `Address` VARCHAR(255) NOT NULL,
+  `IsPreparing` BIT(1) NOT NULL,
+  `DatePreparing` DATE NULL,
+  `IsShipping` BIT(1) NOT NULL,
+  `DateShipping` DATE NULL,
+  `IsCompleted` BIT(1) NOT NULL,
   `DateCompleted` DATE NULL,
+  `WorkerID` BIGINT UNSIGNED NULL,
   PRIMARY KEY (`OrderID`),
   INDEX `fk_Order_User1_idx` (`UserID` ASC) VISIBLE,
   CONSTRAINT `fk_Order_User1`

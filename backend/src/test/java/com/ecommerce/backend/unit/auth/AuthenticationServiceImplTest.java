@@ -1,5 +1,9 @@
-package com.ecommerce.backend.auth;
+package com.ecommerce.backend.unit.auth;
 
+import com.ecommerce.backend.auth.AuthenticationAuthenticateResponse;
+import com.ecommerce.backend.auth.AuthenticationChangePasswordRequest;
+import com.ecommerce.backend.auth.AuthenticationRequest;
+import com.ecommerce.backend.auth.AuthenticationServiceImpl;
 import com.ecommerce.backend.auth.enums.ActivateStatus;
 import com.ecommerce.backend.shared.constants.VariableConstants;
 import com.ecommerce.backend.shared.email.CustomEmail;
@@ -222,21 +226,6 @@ class AuthenticationServiceImplTest {
     @Test
     void whenActivate_butAlreadyActivated() {
         // TODO: Handle user activation
-//        // Given
-//        var token = "example token";
-//        var username = "test@example.com";
-//        var user = new User();
-//        user.setEnabled(true);
-//
-//        // When
-//        when(jwtService.extractUsername(token)).thenReturn(username);
-//        when(userService.fetchUserByEmail(username)).thenReturn(user);
-//        var result = authenticationService.activate(token);
-//
-//        // Then
-//        verify(jwtService).extractUsername(token);
-//        verify(userService).fetchUserByEmail(username);
-//        assertThat(result).isEqualTo(ActivateStatus.ALREADY_ACTIVATED.message());
     }
 
     @Test

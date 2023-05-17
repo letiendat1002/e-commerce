@@ -1,5 +1,6 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.user.User;
 
 import java.math.BigInteger;
@@ -9,6 +10,10 @@ public interface OrderService {
     List<Order> fetchAllOrders();
 
     List<Order> fetchAllOrdersByUserID(BigInteger userID);
+
+    List<Order> fetchAllOrdersByOrderStatus(OrderStatus orderStatus);
+
+    List<Order> fetchAllOrdersByWorkerID(BigInteger workerID);
 
     Order fetchOrderByOrderID(BigInteger orderID);
 
@@ -23,4 +28,8 @@ public interface OrderService {
     boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user);
 
     void deleteAllOrdersByUserID(BigInteger userID);
+
+    int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month);
+
+    int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year);
 }
