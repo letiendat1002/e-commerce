@@ -226,21 +226,6 @@ class AuthenticationServiceImplTest {
     @Test
     void whenActivate_butAlreadyActivated() {
         // TODO: Handle user activation
-//        // Given
-//        var token = "example token";
-//        var username = "test@example.com";
-//        var user = new User();
-//        user.setEnabled(true);
-//
-//        // When
-//        when(jwtService.extractUsername(token)).thenReturn(username);
-//        when(userService.fetchUserByEmail(username)).thenReturn(user);
-//        var result = authenticationService.activate(token);
-//
-//        // Then
-//        verify(jwtService).extractUsername(token);
-//        verify(userService).fetchUserByEmail(username);
-//        assertThat(result).isEqualTo(ActivateStatus.ALREADY_ACTIVATED.message());
     }
 
     @Test

@@ -127,11 +127,11 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return isPreparing() == order.isPreparing() && isShipping() == order.isShipping() && isCompleted() == order.isCompleted() && Objects.equals(getUserID(), order.getUserID()) && Objects.equals(getAdditionalPrice(), order.getAdditionalPrice()) && getPaymentType() == order.getPaymentType() && getStatus() == order.getStatus() && Objects.equals(getDateOrder(), order.getDateOrder()) && Objects.equals(getAddress(), order.getAddress()) && Objects.equals(getDatePreparing(), order.getDatePreparing()) && Objects.equals(getDateShipping(), order.getDateShipping()) && Objects.equals(getDateCompleted(), order.getDateCompleted()) && Objects.equals(getWorkerID(), order.getWorkerID()) && Objects.equals(getUser(), order.getUser()) && Objects.equals(getOrderDetails(), order.getOrderDetails());
+        return Objects.equals(getUserID(), order.getUserID()) && Objects.equals(getAdditionalPrice(), order.getAdditionalPrice()) && getPaymentType() == order.getPaymentType() && getStatus() == order.getStatus() && Objects.equals(getDateOrder(), order.getDateOrder()) && Objects.equals(getAddress(), order.getAddress());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUserID(), getAdditionalPrice(), getPaymentType(), getStatus(), getDateOrder(), getAddress(), isPreparing(), getDatePreparing(), isShipping(), getDateShipping(), isCompleted(), getDateCompleted(), getWorkerID(), getUser(), getOrderDetails());
+        return Objects.hash(getUserID(), getAdditionalPrice(), getPaymentType(), getStatus(), getDateOrder(), getAddress());
     }
 }
