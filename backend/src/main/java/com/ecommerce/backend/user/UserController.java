@@ -3,6 +3,7 @@ package com.ecommerce.backend.user;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +45,24 @@ public class UserController {
         var userDTOList = Collections.singletonList(
                 userDTOMapper.apply(userService.fetchUserByUserID(userID))
         );
+
+        return new UserResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                userDTOList
+        );
+    }
+
+    @GetMapping("/role")
+    @PreAuthorize("hasAuthority('user:read_all')")
+    public UserResponse getUsersByRole(
+            @RequestParam(value = "role") UserRole role
+    ) {
+        var userDTOList = userService
+                .fetchUsersByRole(role)
+                .stream()
+                .map(userDTOMapper)
+                .toList();
 
         return new UserResponse(
                 HttpStatus.OK.value(),

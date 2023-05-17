@@ -4,9 +4,9 @@ import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import com.ecommerce.backend.user.*;
 import com.ecommerce.backend.user.enums.Gender;
-import com.ecommerce.backend.shared.security.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,6 +46,32 @@ class UserServiceImplTest {
 
         // Then
         verify(userDAO).selectAllUsers();
+    }
+
+    @Test
+    void fetchUsersByRole() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var user = new User(
+                id,
+                "test@example.com",
+                "test",
+                "string",
+                Gender.MALE,
+                "",
+                ""
+        );
+        var role = UserRole.CUSTOMER;
+
+        // When
+        when(userDAO.selectUsersByRole(role))
+                .thenReturn(List.of(user));
+
+        var actual = userService.fetchUsersByRole(role);
+
+        // Then
+        verify(userDAO).selectUsersByRole(role);
+        assertThat(actual).isEqualTo(List.of(user));
     }
 
     @Test
