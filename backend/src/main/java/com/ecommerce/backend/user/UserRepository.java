@@ -1,6 +1,6 @@
 package com.ecommerce.backend.user;
 
-import com.ecommerce.backend.shared.security.enums.UserRole;
+import com.ecommerce.backend.util.security.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

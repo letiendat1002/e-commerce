@@ -1,6 +1,6 @@
 package com.ecommerce.backend.user;
 
-import com.ecommerce.backend.shared.security.enums.UserRole;
+import com.ecommerce.backend.util.security.enums.UserRole;
 
 import java.math.BigInteger;
 import java.util.List;

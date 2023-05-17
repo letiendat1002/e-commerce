@@ -2,9 +2,9 @@ package com.ecommerce.backend.order;
 
 import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.orderdetail.OrderDetailService;
-import com.ecommerce.backend.shared.exception.DuplicateResourceException;
-import com.ecommerce.backend.shared.exception.FailedOperationException;
-import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import com.ecommerce.backend.util.exception.DuplicateResourceException;
+import com.ecommerce.backend.util.exception.FailedOperationException;
+import com.ecommerce.backend.util.exception.ResourceNotFoundException;
 import com.ecommerce.backend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
