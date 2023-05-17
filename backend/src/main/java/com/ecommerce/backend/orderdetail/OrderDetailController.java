@@ -1,5 +1,6 @@
 package com.ecommerce.backend.orderdetail;
 
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
 import lombok.RequiredArgsConstructor;
@@ -94,9 +95,11 @@ public class OrderDetailController {
 
     @GetMapping("/refund")
     @PreAuthorize("hasAuthority('order_detail:read_all')")
-    public OrderDetailResponse getAllOnRefundOrderDetails() {
+    public OrderDetailResponse getOrderDetailsByStatus(
+            @RequestParam(value = "status") OrderDetailStatus status
+    ) {
         var orderDetailDTOList = orderDetailService
-                .fetchAllOnRefundOrderDetails()
+                .fetchOrderDetailsByStatus(status)
                 .stream()
                 .map(orderDetailDTOMapper)
                 .toList();
