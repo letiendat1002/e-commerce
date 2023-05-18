@@ -77,18 +77,26 @@ const Profile = () => {
       
     }
     
-
+    const [isValid, setIsValid] = useState(true);
+    
     const handleChangePhone = (e) => {
-      setPhone(e.target.value)
-      if ((e.target.value).trim() === ""){
-        setErrorPhone("Bạn chưa nhập số điện thoại")
-        
-      } else{
-        setErrorPhone()
-       
-        
-      }
+      const inputValue = e.target.value;
+      setPhone(inputValue)
+     
+    const phoneRegex = /^(0[1-9]|84[1-9])(\d{8}|\d{9})$/;
+    if (phoneRegex.test(inputValue)) {
+      setIsValid(true);
+      setErrorPhone()
+    } else {
+      setIsValid(false);
+      setErrorPhone("Số điện thoại không hợp lệ")
     }
+    }
+    
+
+
+
+    
 
     const handleUpdateAccount = (e) => {
       e.preventDefault()
@@ -305,7 +313,7 @@ const Profile = () => {
                   />
                  
                 </div>
-                {<div style= {{color:'red', marginTop:'-10px',marginLeft:'-290px'}} > {errorPhone} </div>}
+                { (<div style= {{color:'red', marginTop:'-10px',marginLeft:'-290px'}} > {errorPhone} </div>)}
                 <div className='container--profile--item'>
                   <span>Email</span>
                   <input
