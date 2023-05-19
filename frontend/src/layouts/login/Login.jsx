@@ -7,12 +7,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { login, register } from '../../Redux/slice/userSlice';
 import { resetPassword } from '../../Redux/slice/usersSlice';
-import Logo from '../../assets/images/Logo.svg';
+// import Logo from '../../assets/images/Logo.svg';
 import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
 import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
 import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
 import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import './style.scss';
+import Logo from '../../components/Logo/Logo';
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -159,12 +160,12 @@ const Login = () => {
   return (
     <div id='login'>
       <div className='login__container'>
-        <div className='login__container--form'>
-          <img
-            src={Logo}
-            alt=''
-          />
+        <div className='login__container--form' style={{padding: "1rem 2rem"}}>
+        <div style={{margin: "0 auto", display: "flex", justifyContent :"center", alignItems :"center"}}>
+        <Logo style = {{margin: "0 auto", padding: "1rem 0", display: "flex", justifyContent: "center", alignItems: "center"}}/>
+        </div>
           <Form
+          style={{padding: "1rem 0"}}
             layout='vertical'
             form={form}
             validateMessages={validateMessages}
@@ -224,7 +225,7 @@ const Login = () => {
                 style={inputText}
               />
             </Form.Item>
-            <div className='login__left--contains'>
+            <div className='login__left--contains' >
               <Form.Item
                 // name='remember'
                 valuePropName='checked'>
@@ -277,11 +278,14 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className='register__container--form d-none'>
-          <img
+        <div className='register__container--form d-none' style={{padding: "1rem 2rem"}}>
+          {/* <img
             src={Logo}
             alt=''
-          />
+          /> */}
+          <div style={{margin: "0 auto", display: "flex", justifyContent :"center", alignItems :"center"}}>
+          <Logo style = {{margin: "0 auto!important", padding: "1rem 0", display: "flex", justifyContent: "center!important", alignItems: "center!important"}}/>
+          </div>
           <Form
             layout='vertical'
             validateMessages={validateMessages}
@@ -416,7 +420,7 @@ const Login = () => {
                       return Promise.resolve();
                     }
                     return Promise.reject(
-                      new Error('Mật khẩu của bản nhập chưa trùng khớp!')
+                      new Error('The two passwords that you entered do not match!')
                     );
                   },
                 }),
@@ -431,30 +435,30 @@ const Login = () => {
             </Form.Item>
             <Form.Item
               name='gender'
-              label='Giới tính'
+              label='Gender'
               rules={[
                 {
                   required: true,
                 },
               ]}>
               <Select
-                placeholder='Vui lòng chọn giới tính của bạn'
+                placeholder='Select a gender above'
                 style={{
                   width: '100%',
                   margin: '5px 0',
                 }}
                 options={[
                   {
-                    value: 'Nam',
-                    label: 'Nam',
+                    value: 'MALE',
+                    label: 'MALE',
                   },
                   {
-                    value: 'Nữ',
-                    label:'Nữ',
+                    value: 'FEMALE',
+                    label: 'FEMALE',
                   },
                   {
-                    value: 'Khác',
-                    label:  'Khác',
+                    value: 'OTHER',
+                    label: 'OTHER',
                   },
                 ]}
               />
