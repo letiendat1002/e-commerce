@@ -61,15 +61,40 @@ const Profile = () => {
     const [phone, setPhone] = useState('')
     const [image, setImage] = useState((user[0]?.image == "") ?  ("string") : user[0]?.image)
     const [fullName, setfullName] = useState('')
+    const [errorName, setErrorName] = useState('')
+    const [errorPhone, setErrorPhone] = useState('')
     const gender = accountInfo[0]?.gender
     const roles = ["CUSTOMER"]
     const handleChangeName = (e) => {
       setfullName(e.target.value)
-    }
+      if ((e.target.value).trim() === ""){
+        setErrorName("Bạn chưa nhập họ tên")
+      } else{
+        setErrorName()
+      }
+     
 
-    const handleChangePhone = (e) => {
-      setPhone(e.target.value)
+      
     }
+    
+    const [isValid, setIsValid] = useState(true);
+    
+    const handleChangePhone = (e) => {
+      const inputValue = e.target.value;
+      setPhone(inputValue)
+     
+    const phoneRegex = /^(0[1-9]|84[1-9])(\d{8}|\d{9})$/;
+    if (phoneRegex.test(inputValue)) {
+      setErrorPhone()
+    } else {
+      setErrorPhone("Số điện thoại không hợp lệ")
+    }
+    }
+    
+
+
+
+    
 
     const handleUpdateAccount = (e) => {
       e.preventDefault()
@@ -105,7 +130,9 @@ const Profile = () => {
       }
       }
       )
+      
     }
+    
 
     const navigate = useNavigate()
 
@@ -158,6 +185,9 @@ const Profile = () => {
         formUpdate.classList.add('d-none')
       }
     } 
+    
+      
+  
   return (
     <div className='profile container-fluid'>
       <div
@@ -254,8 +284,8 @@ const Profile = () => {
                   id=''
                   placeholder='Chọn ảnh'
                 />
-              </div>
-              <form
+              </div> 
+              <form 
                 className='right--container--profile'>
                 <div className='container--profile--item'>
                   <span>Họ và Tên</span>
@@ -264,9 +294,12 @@ const Profile = () => {
                     name='fullname'
                     placeholder='Vui lòng nhập họ và tên'
                     defaultValue={fullname}
-                    onChange={e => handleChangeName(e)}
+                    onChange={e => handleChangeName(e) }
+                    
+                    
                   />
                 </div>
+               {<div style= {{color:'red', marginTop:'-10px',marginLeft:'-330px'}} > {errorName} </div>}
                 <div className='container--profile--item'>
                   <span>Số điện thoại</span>
                   <input
@@ -275,8 +308,11 @@ const Profile = () => {
                     placeholder='Vui lòng nhập số điện thoại'
                     defaultValue={phones}
                     onChange={e => handleChangePhone(e)}
+                    
                   />
+                 
                 </div>
+                { (<div style= {{color:'red', marginTop:'-10px',marginLeft:'-290px'}} > {errorPhone} </div>)}
                 <div className='container--profile--item'>
                   <span>Email</span>
                   <input
@@ -297,7 +333,7 @@ const Profile = () => {
                     value='123456789'
                   />
                 </div>
-                <button onClick={handleUpdateAccount}>Lưu Thay Đổi</button>
+                <button  onClick={handleUpdateAccount} >Lưu Thay Đổi</button>
               </form>
             </div>
           </div>

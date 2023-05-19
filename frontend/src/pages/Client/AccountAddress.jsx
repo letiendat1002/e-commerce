@@ -72,6 +72,15 @@ const AccountAddress = () => {
     const addresses = useSelector(state => state.userAddress.data)
 
     const [address, setAddress] = useState('')
+    const [error, setError] = useState('')
+    const handleChangeAddress = (e) => {
+        setAddress(e.target.value)
+        if (e.target.value === ''){
+            setError('Vui lòng nhập địa chỉ của bạn!')
+        }else{
+            setError()
+        }
+    }
     const handleAddAddress = (e) => {
         e.preventDefault()
         const data = {
@@ -385,7 +394,8 @@ const AccountAddress = () => {
                             <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
                             <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
                     </select>
-                    <input type="text" name='address' defaultValue={address} onChange={(e) => setAddress(e.target.value)} placeholder='Nhập địa chỉ' />< br/>
+                    <input  type="text" name='address' defaultValue={address} onChange={handleChangeAddress} placeholder='Nhập địa chỉ' />< br/>
+                    {<div style= {{color:'red', marginTop:'-10px'}} > {error} </div>}
                     <input type="checkbox" name="defaultAddress" id="" />
                     <span>Chọn làm địa chỉ mặc định</span>
                     <br/>

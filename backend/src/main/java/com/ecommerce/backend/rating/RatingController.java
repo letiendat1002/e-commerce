@@ -116,7 +116,7 @@ public class RatingController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('rating:write')")
+    @PreAuthorize("hasAuthority('rating:create')")
     public RatingResponse postRating(
             @Validated @RequestBody RatingRequest request,
             BindingResult errors
@@ -138,23 +138,8 @@ public class RatingController {
         );
     }
 
-    @DeleteMapping
-    @PreAuthorize("hasAuthority('rating:write')")
-    public BaseResponse deleteRating(
-            @RequestParam(value = "userID") BigInteger userID,
-            @RequestParam("orderID") BigInteger orderID,
-            @RequestParam(value = "productID") BigInteger productID
-    ) {
-        ratingService.deleteRatingByID(new RatingID(userID, orderID, productID));
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping
-    @PreAuthorize("hasAuthority('rating:write')")
+    @PreAuthorize("hasAuthority('rating:update')")
     public RatingResponse putRating(
             @Validated @RequestBody RatingRequest request,
             BindingResult errors
@@ -173,6 +158,21 @@ public class RatingController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 ratingDTOList
+        );
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasAuthority('rating:delete')")
+    public BaseResponse deleteRating(
+            @RequestParam(value = "userID") BigInteger userID,
+            @RequestParam("orderID") BigInteger orderID,
+            @RequestParam(value = "productID") BigInteger productID
+    ) {
+        ratingService.deleteRatingByID(new RatingID(userID, orderID, productID));
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

@@ -67,8 +67,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Transactional
     public OrderDetail addOrderDetail(OrderDetailAddRequest request) {
         checkIfOrderDetailNotExistsByIdOrThrow(
-                request.orderID(),
-                request.productID()
+                new OrderDetailID(
+                        request.orderID(),
+                        request.productID()
+                )
         );
 
         productService.updateProductQuantityByAmount(
@@ -92,34 +94,17 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 );
     }
 
-    private void checkIfOrderDetailNotExistsByIdOrThrow(BigInteger orderID,
-                                                        BigInteger productID
-    ) {
-        var isExists = orderDetailDAO.existsOrderDetailByID(
-                new OrderDetailID(orderID, productID)
-        );
+    private void checkIfOrderDetailNotExistsByIdOrThrow(OrderDetailID orderDetailID) {
+        var isExists = orderDetailDAO.existsOrderDetailByID(orderDetailID);
         if (isExists) {
             throw new DuplicateResourceException(
                     "Order detail already exists by orderID {%d} and productID {%d}"
-                            .formatted(orderID, productID)
+                            .formatted(
+                                    orderDetailID.getOrderID(),
+                                    orderDetailID.getProductID()
+                            )
             );
         }
-    }
-
-    private OrderDetail selectOrderDetailByIdOrThrow(
-            OrderDetailID orderDetailID
-    ) {
-        return orderDetailDAO
-                .selectOrderDetailByID(orderDetailID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Order detail not found by orderID {%d} and productID {%d}"
-                                        .formatted(
-                                                orderDetailID.getOrderID(),
-                                                orderDetailID.getProductID()
-                                        )
-                        )
-                );
     }
 
     @Override
@@ -166,13 +151,29 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderDetailDAO.deleteOrderDetailByID(orderDetailID);
     }
 
-    @Override
-    public List<OrderDetail> fetchAllOnRefundOrderDetails() {
-        return orderDetailDAO.selectAllOnRefundOrderDetails();
+    private OrderDetail selectOrderDetailByIdOrThrow(
+            OrderDetailID orderDetailID
+    ) {
+        return orderDetailDAO
+                .selectOrderDetailByID(orderDetailID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Order detail not found by orderID {%d} and productID {%d}"
+                                        .formatted(
+                                                orderDetailID.getOrderID(),
+                                                orderDetailID.getProductID()
+                                        )
+                        )
+                );
     }
 
     @Override
-    public OrderDetail updateOrderDetail(OrderDetailUpdateRequest request) {
+    public List<OrderDetail> fetchOrderDetailsByStatus(OrderDetailStatus status) {
+        return orderDetailDAO.selectOrderDetailsByStatus(status);
+    }
+
+    @Override
+    public OrderDetail updateOrderDetailStatus(OrderDetailUpdateRequest request) {
         var orderDetail = selectOrderDetailByIdOrThrow(
                 new OrderDetailID(
                         request.orderID(),
@@ -221,7 +222,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             orderDetail.setStatus(null);
             isChanged = true;
         }
-
 
         if (!isChanged) {
             throw new DuplicateResourceException(

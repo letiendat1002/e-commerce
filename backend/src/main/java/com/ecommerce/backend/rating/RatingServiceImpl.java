@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -151,7 +150,7 @@ public class RatingServiceImpl implements RatingService {
                 request.orderID()
         );
 
-        checkIfRatingNotExistsByIdOrThrow(
+        checkIfRatingNotExistByIdOrThrow(
                 new RatingID(
                         request.userID(),
                         request.orderID(),
@@ -167,8 +166,7 @@ public class RatingServiceImpl implements RatingService {
                 request.productID(),
                 user,
                 request.rateAmount(),
-                request.comment(),
-                LocalDate.now()
+                request.comment()
         );
 
         return ratingDAO
@@ -209,7 +207,7 @@ public class RatingServiceImpl implements RatingService {
         }
     }
 
-    private void checkIfRatingNotExistsByIdOrThrow(RatingID ratingID) {
+    private void checkIfRatingNotExistByIdOrThrow(RatingID ratingID) {
         var isExists = ratingDAO.existsRatingByID(ratingID);
         if (isExists) {
             throw new DuplicateResourceException(

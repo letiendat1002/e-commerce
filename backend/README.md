@@ -18,7 +18,7 @@
 ## Resources
 
 1. [MySQL Scripts](assets/databases/mysql)
-2. [Database Design](assets/images/database/database_info_v1.png)
+2. [Database Design](assets/images/database/database_design.png)
 3. [Spring Security Architecture](assets/images/security)
 4. [Documentation](docs)
 
