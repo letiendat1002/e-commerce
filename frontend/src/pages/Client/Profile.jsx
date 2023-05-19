@@ -131,7 +131,7 @@ const Profile = () => {
           toast.error("Mật khẩu mới trùng với mật khẩu cũ")
         }
         else if (res.payload.status === 200){
-          toast.error("Thay đổi mật khẩu thành công!")
+          toast.success("Thay đổi mật khẩu thành công!")
           navigate('/login')
           dispatch(logout())
         }
@@ -140,9 +140,10 @@ const Profile = () => {
           dispatch(getUserForID(userID))
           dispatch(getUserID(userID))
         }
+        dispatch(getUserForID(userID))
+        dispatch(getUserID(userID))
       })
-      dispatch(getUserForID(userID))
-      dispatch(getUserID(userID))
+      
     }
 
     const handleOpenUpdateModel = () => {

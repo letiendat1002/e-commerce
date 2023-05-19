@@ -151,7 +151,7 @@ const Dashboard = (props) => {
   const AllOrder = useSelector(state => state.order.data) || []
   const orderTotal = AllOrder.length
   const user = useSelector(state => state.userAPI.data)
-  const Alluser = user?.filter((item) => item.roles.includes("ROLE_CUSTOMER"))?.length
+  const Alluser = user?.filter((item) => item.roles.includes("ROLE_CUSTOMER"))?.length || []
   const data = [
     {
       name: "Laptop",
