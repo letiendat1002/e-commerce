@@ -126,6 +126,12 @@ const Sidebar = (props) => {
                 <Link to='manage-products' />
                 {/* Quản lý sản phẩm */}
               </MenuItem>
+              <MenuItem>
+                {/* {t('sidebar.title8')} */}
+                Manage Refund Product
+                <Link to='manage-refund' />
+                {/* Quản lý sản phẩm */}
+              </MenuItem>
             </SubMenu>
           </Menu>
         </SidebarContent>

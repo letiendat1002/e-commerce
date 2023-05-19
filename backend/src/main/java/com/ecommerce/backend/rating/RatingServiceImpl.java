@@ -1,54 +1,43 @@
 package com.ecommerce.backend.rating;
 
 
-import com.ecommerce.backend.order.OrderDAO;
-import com.ecommerce.backend.orderdetail.OrderDetailDAO;
+import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.orderdetail.OrderDetailID;
-import com.ecommerce.backend.product.ProductDAO;
+import com.ecommerce.backend.orderdetail.OrderDetailService;
+import com.ecommerce.backend.product.ProductService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import com.ecommerce.backend.user.UserDAO;
+import com.ecommerce.backend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class RatingServiceImpl implements RatingService {
     private final RatingDAO ratingDAO;
-    private final RatingDTOMapper ratingDTOMapper;
-    private final UserDAO userDAO;
-    private final OrderDAO orderDAO;
-    private final ProductDAO productDAO;
-    private final OrderDetailDAO orderDetailDAO;
+    private final UserService userService;
+    private final ProductService productService;
+    private final OrderService orderService;
+    private final OrderDetailService orderDetailService;
 
     @Override
-    public List<RatingDTO> fetchAllRatings() {
-        return ratingDAO
-                .selectAllRatings()
-                .stream()
-                .map(ratingDTOMapper)
-                .collect(Collectors.toList());
+    public List<Rating> fetchAllRatings() {
+        return ratingDAO.selectAllRatings();
     }
 
     @Override
-    public List<RatingDTO> fetchRatingsByUserID(BigInteger userID) {
+    public List<Rating> fetchRatingsByUserID(BigInteger userID) {
         checkIfUserExistsByIdOrThrow(userID);
 
-        return ratingDAO
-                .selectRatingsByUserID(userID)
-                .stream()
-                .map(ratingDTOMapper)
-                .collect(Collectors.toList());
+        return ratingDAO.selectRatingsByUserID(userID);
     }
 
     private void checkIfUserExistsByIdOrThrow(BigInteger userID) {
-        var isExists = userDAO.existsUserByID(userID);
+        var isExists = userService.existsUserByID(userID);
         if (!isExists) {
             throw new ResourceNotFoundException(
                     "User not found by userID {%d}".formatted(userID)
@@ -57,30 +46,14 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<RatingDTO> fetchRatingsByProductID(BigInteger productID) {
+    public List<Rating> fetchRatingsByProductID(BigInteger productID) {
         checkIfProductExistsByIdOrThrow(productID);
 
-        return ratingDAO
-                .selectRatingsByProductID(productID)
-                .stream()
-                .map(ratingDTOMapper)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RatingDTO> fetchRatingsByUserIDAndProductID(BigInteger userID, BigInteger productID) {
-        checkIfUserExistsByIdOrThrow(userID);
-        checkIfProductExistsByIdOrThrow(productID);
-
-        return ratingDAO
-                .selectRatingsByUserIDAndProductID(userID, productID)
-                .stream()
-                .map(ratingDTOMapper)
-                .collect(Collectors.toList());
+        return ratingDAO.selectRatingsByProductID(productID);
     }
 
     private void checkIfProductExistsByIdOrThrow(BigInteger productID) {
-        var isExists = productDAO.existsProductByID(productID);
+        var isExists = productService.existsProductByID(productID);
         if (!isExists) {
             throw new ResourceNotFoundException(
                     "Product not found by productID {%d}".formatted(productID)
@@ -89,15 +62,30 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingDTO fetchRatingByOrderID(BigInteger orderID) {
+    public List<Rating> fetchRatingsByUserIDAndProductID(
+            BigInteger userID,
+            BigInteger productID
+    ) {
+        checkIfUserExistsByIdOrThrow(userID);
+        checkIfProductExistsByIdOrThrow(productID);
+
+        return ratingDAO
+                .selectRatingsByUserIDAndProductID(userID, productID);
+    }
+
+    @Override
+    public Rating fetchRatingByOrderID(BigInteger orderID) {
         checkIfOrderExistsByIdOrThrow(orderID);
 
-        return ratingDTOMapper
-                .apply(selectRatingByOrderIdOrThrow(orderID));
+        return ratingDAO
+                .selectRatingByOrderID(orderID)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Rating not found by orderID {%d}".formatted(orderID)
+                ));
     }
 
     private void checkIfOrderExistsByIdOrThrow(BigInteger orderID) {
-        var isExists = orderDAO.existsOrderByID(orderID);
+        var isExists = orderService.existsOrderByID(orderID);
         if (!isExists) {
             throw new ResourceNotFoundException(
                     "Order not found by orderID {%d}".formatted(orderID)
@@ -106,50 +94,41 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingDTO fetchRatingByUserIdAndOrderId(BigInteger userID, BigInteger orderID) {
+    public Rating fetchRatingByUserIdAndOrderId(BigInteger userID,
+                                                BigInteger orderID) {
         checkIfUserExistsByIdOrThrow(userID);
         checkIfOrderExistsByIdOrThrow(orderID);
 
         return ratingDAO
                 .selectRatingByUserIDAndOrderID(userID, orderID)
-                .map(ratingDTOMapper)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
-                                "Rating not found by userID {%d} and orderID {%d}".formatted(userID, orderID)
+                                "Rating not found by userID {%d} and orderID {%d}"
+                                        .formatted(userID, orderID)
                         )
                 );
     }
 
     @Override
-    public RatingDTO fetchRatingByOrderIdAndProductId(BigInteger productID, BigInteger orderID) {
+    public Rating fetchRatingByOrderIdAndProductId(BigInteger productID,
+                                                   BigInteger orderID) {
         checkIfProductExistsByIdOrThrow(productID);
         checkIfOrderExistsByIdOrThrow(orderID);
 
         return ratingDAO
                 .selectRatingByProductIDAndOrderID(productID, orderID)
-                .map(ratingDTOMapper)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
-                                "Rating not found by productID {%d} and orderID {%d}".formatted(productID, orderID)
+                                "Rating not found by productID {%d} and orderID {%d}"
+                                        .formatted(productID, orderID)
                         )
                 );
     }
 
-    private Rating selectRatingByOrderIdOrThrow(BigInteger orderID) {
-        return ratingDAO
-                .selectRatingByOrderID(orderID)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Rating not found by orderID {%d}".formatted(orderID)
-                ));
-    }
-
     @Override
-    public RatingDTO fetchRatingByID(RatingID ratingID) {
-        checkIfRatingExistsByIdOrThrow(ratingID);
-
+    public Rating fetchRatingByID(RatingID ratingID) {
         return ratingDAO
                 .selectRatingByID(ratingID)
-                .map(ratingDTOMapper)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
                                 "Rating not found by %s".formatted(ratingID)
@@ -157,22 +136,21 @@ public class RatingServiceImpl implements RatingService {
                 );
     }
 
-    private void checkIfRatingExistsByIdOrThrow(RatingID ratingID) {
-        var isExists = ratingDAO.existsRatingByID(ratingID);
-        if (!isExists) {
-            throw new ResourceNotFoundException(
-                    "Rating not found by %s".formatted(ratingID)
-            );
-        }
-    }
-
     @Override
-    public RatingDTO addRating(RatingRequest request) {
-        checkIfOrderDetailExistsByIdOrThrow(request.orderID(), request.productID());
+    public Rating addRating(RatingRequest request) {
+        checkIfOrderDetailExistsByIdOrThrow(
+                new OrderDetailID(
+                        request.orderID(),
+                        request.productID()
+                )
+        );
 
-        checkIfOrderBelongsToUserOrThrow(request.userID(), request.orderID());
+        checkIfOrderBelongsToUserOrThrow(
+                request.userID(),
+                request.orderID()
+        );
 
-        checkIfRatingNotExistsByIdOrThrow(
+        checkIfRatingNotExistByIdOrThrow(
                 new RatingID(
                         request.userID(),
                         request.orderID(),
@@ -180,12 +158,7 @@ public class RatingServiceImpl implements RatingService {
                 )
         );
 
-        var user = userDAO.selectUserByID(request.userID())
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "User not found by userID {%d}".formatted(request.userID())
-                        )
-                );
+        var user = userService.fetchUserByUserID(request.userID());
 
         var rating = new Rating(
                 request.userID(),
@@ -193,13 +166,11 @@ public class RatingServiceImpl implements RatingService {
                 request.productID(),
                 user,
                 request.rateAmount(),
-                request.comment(),
-                LocalDate.now()
+                request.comment()
         );
 
         return ratingDAO
                 .insertRating(rating)
-                .map(ratingDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to add rating"
@@ -207,31 +178,27 @@ public class RatingServiceImpl implements RatingService {
                 );
     }
 
-    private void checkIfOrderBelongsToUserOrThrow(BigInteger userID, BigInteger orderID) {
-        var user = userDAO
-                .selectUserByID(userID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "User not found by userID {%d}".formatted(userID)
-                        )
-                );
-
-        var isBelongsToUser = orderDAO.existsOrderByOrderIDAndUser(
+    private void checkIfOrderBelongsToUserOrThrow(
+            BigInteger userID,
+            BigInteger orderID
+    ) {
+        var user = userService.fetchUserByUserID(userID);
+        var isBelongsToUser = orderService.existsOrderByOrderIDAndUser(
                 orderID,
                 user
         );
+
         if (!isBelongsToUser) {
             throw new ResourceNotFoundException(
-                    "Order {%d} doesn't belong to this user {%d}".formatted(orderID, userID)
+                    "Order {%d} doesn't belong to this user {%d}"
+                            .formatted(orderID, userID)
             );
         }
     }
 
-    private void checkIfOrderDetailExistsByIdOrThrow(BigInteger orderID, BigInteger productID) {
-        var orderDetailID = new OrderDetailID(orderID, productID);
-        var isExists = orderDetailDAO.existsOrderDetailByID(
-                orderDetailID
-        );
+    private void checkIfOrderDetailExistsByIdOrThrow(OrderDetailID orderDetailID) {
+        var isExists = orderDetailService.existsOrderDetailByID(orderDetailID);
+
         if (!isExists) {
             throw new ResourceNotFoundException(
                     "OrderDetail not found by %s"
@@ -240,7 +207,7 @@ public class RatingServiceImpl implements RatingService {
         }
     }
 
-    private void checkIfRatingNotExistsByIdOrThrow(RatingID ratingID) {
+    private void checkIfRatingNotExistByIdOrThrow(RatingID ratingID) {
         var isExists = ratingDAO.existsRatingByID(ratingID);
         if (isExists) {
             throw new DuplicateResourceException(
@@ -250,7 +217,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public RatingDTO updateRating(RatingRequest request) {
+    public Rating updateRating(RatingRequest request) {
         var rating = selectRatingByIdOrThrow(
                 new RatingID(
                         request.userID(),
@@ -263,7 +230,6 @@ public class RatingServiceImpl implements RatingService {
 
         return ratingDAO
                 .updateRating(rating)
-                .map(ratingDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to update rating"
@@ -302,11 +268,19 @@ public class RatingServiceImpl implements RatingService {
         }
     }
 
-
     @Override
     public void deleteRatingByID(RatingID ratingID) {
         checkIfRatingExistsByIdOrThrow(ratingID);
 
         ratingDAO.deleteRatingByID(ratingID);
+    }
+
+    private void checkIfRatingExistsByIdOrThrow(RatingID ratingID) {
+        var isExists = ratingDAO.existsRatingByID(ratingID);
+        if (!isExists) {
+            throw new ResourceNotFoundException(
+                    "Rating not found by %s".formatted(ratingID)
+            );
+        }
     }
 }

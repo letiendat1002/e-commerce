@@ -6,7 +6,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
 
 const TableCategory = (props) => {
-  const { categoryList,setShowModalUpdateCategory,setDataCategory,setShowModalDelete,setDataDelete } = props;
+  const {
+    categoryList,
+    setShowModalUpdateCategory,
+    setDataCategory,
+    setShowModalDelete,
+    setDataDelete,
+  } = props;
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [categotyPerPage, setCategotyPerPage] = useState(5);
@@ -21,14 +27,14 @@ const TableCategory = (props) => {
   };
 
   const handleShowCategory = (x) => {
-    setDataCategory(x)
-    setShowModalUpdateCategory(true)
-  }
+    setDataCategory(x);
+    setShowModalUpdateCategory(true);
+  };
 
   const handleShowModalDelete = (x) => {
-    setDataDelete(x)
-    setShowModalDelete(true)
-  }
+    setDataDelete(x);
+    setShowModalDelete(true);
+  };
 
   return (
     <>
@@ -40,7 +46,11 @@ const TableCategory = (props) => {
           className='table_users '>
           <thead>
             <tr>
-              <th scope='col'>No</th>
+              <th
+                scope='col'
+                className='text-center'>
+                No
+              </th>
               <th
                 scope='col'
                 className='text-center'>
@@ -73,7 +83,11 @@ const TableCategory = (props) => {
               newData.map((x, idx) => {
                 return (
                   <tr key={idx}>
-                    <th scope='row'>{idx + 1}</th>
+                    <th
+                      scope='row'
+                      className='text-center'>
+                      {idx + 1}
+                    </th>
                     <td>{x.name.charAt(0).toUpperCase() + x.name.slice(1)}</td>
                     <td>{x.slug}</td>
                     <td>
@@ -88,7 +102,7 @@ const TableCategory = (props) => {
                       <button
                         className='btn btn-success mx-3'
                         onClick={() => handleShowCategory(x)}>
-                         <GrEdit />
+                        <GrEdit />
                       </button>
                       <button
                         className='btn btn-danger'
@@ -100,8 +114,6 @@ const TableCategory = (props) => {
                 );
               })
             )}
-
-
           </tbody>
         </Table>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -129,7 +141,6 @@ const TableCategory = (props) => {
         </div>
       </div>
 
-      
       {/* <PaginatedItems  />, */}
     </>
   );

@@ -10,12 +10,19 @@ public class OrderDTOMapper implements Function<Order, OrderDTO> {
     public OrderDTO apply(Order order) {
         return new OrderDTO(
                 order.getOrderID(),
-                order.getUser().getUserID(),
+                order.getUserID(),
                 order.getAdditionalPrice(),
                 order.getPaymentType(),
                 order.getStatus(),
                 order.getDateOrder(),
-                order.getAddress()
+                order.getAddress(),
+                order.isPreparing(),
+                order.getDatePreparing(),
+                order.isShipping(),
+                order.getDateShipping(),
+                order.isCompleted(),
+                order.getDateCompleted(),
+                order.getWorkerID()
         );
     }
 }

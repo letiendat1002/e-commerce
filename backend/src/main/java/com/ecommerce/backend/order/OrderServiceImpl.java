@@ -2,67 +2,48 @@ package com.ecommerce.backend.order;
 
 import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.orderdetail.OrderDetailService;
-import com.ecommerce.backend.product.ProductDAO;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
 import com.ecommerce.backend.user.User;
-import com.ecommerce.backend.user.UserDAO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderDAO orderDAO;
-    private final OrderDTOMapper orderDTOMapper;
-    private final UserDAO userDAO;
     private final OrderDetailService orderDetailService;
-    private final ProductDAO productDAO;
+    private final ApplicationContext context;
 
     @Override
-    public List<OrderDTO> fetchAllOrders() {
-        return orderDAO
-                .selectAllOrders()
-                .stream()
-                .map(orderDTOMapper)
-                .collect(Collectors.toList());
+    public List<Order> fetchAllOrders() {
+        return orderDAO.selectAllOrders();
     }
 
     @Override
-    public List<OrderDTO> fetchAllOrdersByUserID(BigInteger userID) {
-        var user = selectUserByIdOrThrow(userID);
-
-        return orderDAO
-                .selectAllOrdersByUser(user)
-                .stream()
-                .map(orderDTOMapper)
-                .collect(Collectors.toList());
-    }
-
-    private User selectUserByIdOrThrow(BigInteger userID) {
-        return userDAO
-                .selectUserByID(userID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "User not found by userID {%d}".formatted(userID)
-                        )
-                );
+    public List<Order> fetchAllOrdersByUserID(BigInteger userID) {
+        return orderDAO.selectAllOrdersByUserID(userID);
     }
 
     @Override
-    public OrderDTO fetchOrderByOrderID(BigInteger orderID) {
-        return orderDTOMapper
-                .apply(selectOrderByIdOrThrow(orderID));
+    public List<Order> fetchAllOrdersByOrderStatus(OrderStatus orderStatus) {
+        return orderDAO.selectAllOrdersByOrderStatus(orderStatus);
     }
 
-    private Order selectOrderByIdOrThrow(BigInteger orderID) {
+    @Override
+    public List<Order> fetchAllOrdersByWorkerID(BigInteger workerID) {
+        return orderDAO.selectAllOrdersByWorkerID(workerID);
+    }
+
+    @Override
+    public Order fetchOrderByOrderID(BigInteger orderID) {
         return orderDAO
                 .selectOrderByID(orderID)
                 .orElseThrow(
@@ -73,19 +54,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO addOrder(OrderAddRequest request) {
-        var user = selectUserByIdOrThrow(request.userID());
+    public Order addOrder(OrderAddRequest request) {
         var order = new Order(
-                user,
+                request.userID(),
                 request.additionalPrice(),
                 request.paymentType(),
-                LocalDate.now(),
                 request.address()
         );
 
         return orderDAO
                 .insertOrder(order)
-                .map(orderDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to add order"
@@ -94,41 +72,32 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO updateOrder(BigInteger orderID, OrderUpdateRequest request) {
-        var order = selectOrderByIdOrThrow(orderID);
+    @Transactional
+    public Order updateOrder(BigInteger orderID, OrderUpdateRequest request) {
+        var order = fetchOrderByOrderID(orderID);
+
         var beforeChangeStatus = order.getStatus();
-
         checkAndUpdateChangesOrThrow(request, order);
-
         var afterChangeStatus = order.getStatus();
 
-        if (beforeChangeStatus != OrderStatus.CANCELLED
-                && afterChangeStatus == OrderStatus.CANCELLED
-        ) {
+        var isBeforeStatusAbleToUpdateProductQuantity =
+                beforeChangeStatus == OrderStatus.PENDING ||
+                        beforeChangeStatus == OrderStatus.CONFIRMED ||
+                        beforeChangeStatus == OrderStatus.ON_SHIPPING;
+
+        var isAbleToUpdateProductQuantity =
+                isBeforeStatusAbleToUpdateProductQuantity &&
+                        afterChangeStatus == OrderStatus.CANCELLED;
+
+        if (isAbleToUpdateProductQuantity) {
             orderDetailService
-                    .fetchAllOrderDetailsByOrderID(orderID)
-                    .forEach(
-                            orderDetail -> {
-                                var product = productDAO.selectProductByID(
-                                        orderDetail.productID()
-                                ).orElseThrow(
-                                        () -> new ResourceNotFoundException(
-                                                "Product not found by productID {%d}".formatted(
-                                                        orderDetail.productID()
-                                                )
-                                        )
-                                );
-                                product.setQuantity(
-                                        product.getQuantity() + orderDetail.quantity()
-                                );
-                                productDAO.updateProduct(product);
-                            }
+                    .updateProductQuantityWhenOrderCancelled(
+                            orderID
                     );
         }
 
         return orderDAO
                 .updateOrder(order)
-                .map(orderDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to update order"
@@ -136,21 +105,27 @@ public class OrderServiceImpl implements OrderService {
                 );
     }
 
-    private void checkAndUpdateChangesOrThrow(OrderUpdateRequest request, Order order) {
+    private void checkAndUpdateChangesOrThrow(
+            OrderUpdateRequest request,
+            Order order
+    ) {
         var isChanged = false;
-
-        if (!request.paymentType().equals(order.getPaymentType())) {
-            order.setPaymentType(request.paymentType());
-            isChanged = true;
-        }
 
         if (!request.status().equals(order.getStatus())) {
             order.setStatus(request.status());
-            isChanged = true;
-        }
-
-        if (!request.address().equals(order.getAddress())) {
-            order.setAddress(request.address());
+            if (order.getStatus().equals(OrderStatus.CONFIRMED)) {
+                order.setPreparing(true);
+                order.setDatePreparing(LocalDate.now());
+            }
+            if (order.getStatus().equals(OrderStatus.ON_SHIPPING)) {
+                order.setShipping(true);
+                order.setDateShipping(LocalDate.now());
+            }
+            if (order.getStatus().equals(OrderStatus.COMPLETED)) {
+                order.setCompleted(true);
+                order.setDateCompleted(LocalDate.now());
+                order.setWorkerID(request.workerID());
+            }
             isChanged = true;
         }
 
@@ -164,23 +139,48 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void deleteOrder(BigInteger orderID) {
-        var order = selectOrderByIdOrThrow(orderID);
+        var order = fetchOrderByOrderID(orderID);
 
         var orderStatus = order.getStatus();
 
         if (orderStatus == OrderStatus.PENDING
                 || orderStatus == OrderStatus.CONFIRMED
+                || orderStatus == OrderStatus.ON_SHIPPING
         ) {
-            orderDetailService
-                    .fetchAllOrderDetailsByOrderID(orderID)
-                    .forEach(
-                            orderDetail -> orderDetailService.deleteOrderDetail(
-                                    orderDetail.orderID(),
-                                    orderDetail.productID()
-                            )
-                    );
+            orderDetailService.deleteAllOrderDetailsByOrderID(orderID);
         }
 
         orderDAO.deleteOrderByID(orderID);
+    }
+
+    @Override
+    public boolean existsOrderByID(BigInteger orderID) {
+        return orderDAO.existsOrderByID(orderID);
+    }
+
+    @Override
+    public boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user) {
+        return orderDAO.existsOrderByOrderIDAndUser(orderID, user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllOrdersByUserID(BigInteger userID) {
+        fetchAllOrdersByUserID(userID)
+                .forEach(
+                        order -> context
+                                .getBean(OrderService.class)
+                                .deleteOrder(order.getOrderID())
+                );
+    }
+
+    @Override
+    public int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month) {
+        return orderDAO.selectCountCompletedOrdersInMonthByWorkerID(workerID, month);
+    }
+
+    @Override
+    public int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year) {
+        return orderDAO.selectCountCompletedOrdersInYearByWorkerID(workerID, year);
     }
 }

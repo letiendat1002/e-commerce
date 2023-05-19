@@ -1,5 +1,7 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.shared.security.enums.UserRole;
+
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +27,9 @@ public interface UserDAO {
 
     Optional<User> updateUser(User update);
 
-    void enableUser(String email);
+    int enableUser(String email);
 
-    void updateUserPassword(String email, String randomPassword);
+    int updateUserPassword(String email, String randomPassword);
+
+    List<User> selectUsersByRole(UserRole role);
 }

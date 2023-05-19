@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { getOrderDetail } from '../../../../Redux/slice/orderDetailSlice'
 import { getAllProducts } from '../../../../Redux/slice/productSlice'
 import TableComponent from '../../../../components/Table'
+import formatProductPrice from '../../../../Helper/index'
 import { Image } from 'antd'
 import './ModelViewOrder.scss'
 const ModelViewOrder = () => {
@@ -58,7 +59,7 @@ const ModelViewOrder = () => {
         productName: <span>{productMatches.name}</span>,
         productImage: <Image src={require(`../../../../assets/images/${productMatches.image}`)} preview = {true} />,
         quantity: <span>{items.quantity}</span>,
-        sumcost: <span>{items.purchasePrice*items.quantity}</span>
+        sumcost: <span>{formatProductPrice(items.purchasePrice*items.quantity)}</span>
       })
     }
   })

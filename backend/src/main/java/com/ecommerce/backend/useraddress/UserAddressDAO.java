@@ -1,15 +1,13 @@
 package com.ecommerce.backend.useraddress;
 
-import com.ecommerce.backend.user.User;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
 public interface UserAddressDAO {
-    List<UserAddress> selectAllUserAddresss();
+    List<UserAddress> selectAllUserAddresses();
 
-    List<UserAddress> selectAllUserAddresssByUser(User user);
+    List<UserAddress> selectAllUserAddressesByUserID(BigInteger userID);
 
     Optional<UserAddress> selectUserAddressByID(BigInteger userAddressID);
 

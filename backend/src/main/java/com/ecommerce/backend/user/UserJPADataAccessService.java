@@ -1,6 +1,7 @@
 package com.ecommerce.backend.user;
 
 
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -64,12 +65,17 @@ public class UserJPADataAccessService implements UserDAO {
     }
 
     @Override
-    public void enableUser(String email) {
-        userRepository.enableUser(email);
+    public int enableUser(String email) {
+        return userRepository.enableUser(email);
     }
 
     @Override
-    public void updateUserPassword(String email, String randomPassword) {
-        userRepository.updateUserPassword(email, randomPassword);
+    public int updateUserPassword(String email, String randomPassword) {
+        return userRepository.updateUserPassword(email, randomPassword);
+    }
+
+    @Override
+    public List<User> selectUsersByRole(UserRole role) {
+        return userRepository.findAllByRole(role);
     }
 }

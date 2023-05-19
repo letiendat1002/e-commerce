@@ -1,5 +1,6 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,18 +20,27 @@ import java.util.List;
 @RestController
 public class OrderController {
     private final OrderService orderService;
+    private final OrderDTOMapper orderDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('order:read')")
+    @PreAuthorize("hasAuthority('order:read_all')")
     public OrderResponse getOrders(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
         List<OrderDTO> orderDTOList;
 
         if (userID == null) {
-            orderDTOList = orderService.fetchAllOrders();
+            orderDTOList = orderService
+                    .fetchAllOrders()
+                    .stream()
+                    .map(orderDTOMapper)
+                    .toList();
         } else {
-            orderDTOList = orderService.fetchAllOrdersByUserID(userID);
+            orderDTOList = orderService
+                    .fetchAllOrdersByUserID(userID)
+                    .stream()
+                    .map(orderDTOMapper)
+                    .toList();
         }
 
         return new OrderResponse(
@@ -39,12 +50,86 @@ public class OrderController {
         );
     }
 
+    @GetMapping("/status")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderResponse getOrdersByOrderStatus(
+            @RequestParam(value = "orderStatus") OrderStatus orderStatus
+    ) {
+        var orderDTOList = orderService
+                .fetchAllOrdersByOrderStatus(orderStatus)
+                .stream()
+                .map(orderDTOMapper)
+                .toList();
+
+        return new OrderResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDTOList
+        );
+    }
+
+    @GetMapping("/worker")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderResponse getOrdersByWorkerID(
+            @RequestParam(value = "workerID") BigInteger workerID
+    ) {
+        var orderDTOList = orderService
+                .fetchAllOrdersByWorkerID(workerID)
+                .stream()
+                .map(orderDTOMapper)
+                .toList();
+
+        return new OrderResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDTOList
+        );
+    }
+
+    @GetMapping("/statistic/worker/month")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderStatisticResponse getCountCompletedOrdersInMonthByWorkerID(
+            @RequestParam(value = "id") BigInteger id,
+            @RequestParam(value = "month") int month
+    ) {
+        var count = orderService.fetchCountCompletedOrdersInMonthByWorkerID(
+                id,
+                month
+        );
+
+        return new OrderStatisticResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                count
+        );
+    }
+
+    @GetMapping("/statistic/worker/year")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderStatisticResponse getCountCompletedOrdersInYearByWorkerID(
+            @RequestParam(value = "id") BigInteger id,
+            @RequestParam(value = "year") int year
+    ) {
+        var count = orderService.fetchCountCompletedOrdersInYearByWorkerID(
+                id,
+                year
+        );
+
+        return new OrderStatisticResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                count
+        );
+    }
+
     @GetMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:read')")
+    @PreAuthorize("hasAuthority('order:read_one')")
     public OrderResponse getOrderByOrderID(
             @PathVariable("orderID") BigInteger orderID
     ) {
-        var orderDTOList = List.of(orderService.fetchOrderByOrderID(orderID));
+        var orderDTOList = Collections.singletonList(
+                orderDTOMapper.apply(orderService.fetchOrderByOrderID(orderID))
+        );
 
         return new OrderResponse(
                 HttpStatus.OK.value(),
@@ -54,7 +139,7 @@ public class OrderController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('order:write')")
+    @PreAuthorize("hasAuthority('order:create')")
     public OrderResponse postOrder(
             @Validated @RequestBody OrderAddRequest request,
             BindingResult errors
@@ -63,7 +148,9 @@ public class OrderController {
             throw new RequestValidationException(errors);
         }
 
-        var orderDTOList = List.of(orderService.addOrder(request));
+        var orderDTOList = Collections.singletonList(
+                orderDTOMapper.apply(orderService.addOrder(request))
+        );
 
         return new OrderResponse(
                 HttpStatus.OK.value(),
@@ -72,21 +159,8 @@ public class OrderController {
         );
     }
 
-    @DeleteMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:write')")
-    public BaseResponse deleteOrderByOrderID(
-            @PathVariable("orderID") BigInteger orderID
-    ) {
-        orderService.deleteOrder(orderID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:write')")
+    @PreAuthorize("hasAuthority('order:update')")
     public OrderResponse putOrderByOrderID(
             @PathVariable("orderID") BigInteger orderID,
             @Validated @RequestBody OrderUpdateRequest request,
@@ -96,12 +170,27 @@ public class OrderController {
             throw new RequestValidationException(errors);
         }
 
-        var orderDTOList = List.of(orderService.updateOrder(orderID, request));
+        var orderDTOList = Collections.singletonList(
+                orderDTOMapper.apply(orderService.updateOrder(orderID, request))
+        );
 
         return new OrderResponse(
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 orderDTOList
+        );
+    }
+
+    @DeleteMapping("{orderID}")
+    @PreAuthorize("hasAuthority('order:delete')")
+    public BaseResponse deleteOrderByOrderID(
+            @PathVariable("orderID") BigInteger orderID
+    ) {
+        orderService.deleteOrder(orderID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

@@ -1,6 +1,5 @@
 package com.ecommerce.backend.useraddress;
 
-import com.ecommerce.backend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,13 +13,13 @@ public class UserAddressJPADataAccessService implements UserAddressDAO {
     private final UserAddressRepository userAddressRepository;
 
     @Override
-    public List<UserAddress> selectAllUserAddresss() {
+    public List<UserAddress> selectAllUserAddresses() {
         return userAddressRepository.findAll();
     }
 
     @Override
-    public List<UserAddress> selectAllUserAddresssByUser(User user) {
-        return userAddressRepository.findAllByUser(user);
+    public List<UserAddress> selectAllUserAddressesByUserID(BigInteger userID) {
+        return userAddressRepository.findAllByUserID(userID);
     }
 
     @Override

@@ -8,30 +8,31 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryDAO categoryDAO;
-    private final CategoryDTOMapper categoryDTOMapper;
 
     @Override
-    public List<CategoryDTO> fetchAllCategories() {
+    public List<Category> fetchAllCategories() {
+        return categoryDAO.selectAllCategories();
+    }
+
+    @Override
+    public Category fetchCategoryByID(BigInteger categoryID) {
         return categoryDAO
-                .selectAllCategories()
-                .stream()
-                .map(categoryDTOMapper)
-                .collect(Collectors.toList());
+                .selectCategoryByID(categoryID)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Category not found by categoryID {%d}"
+                                        .formatted(categoryID)
+                        )
+                );
     }
 
     @Override
-    public CategoryDTO fetchCategoryByID(BigInteger categoryID) {
-        return categoryDTOMapper.apply(selectCategoryByIdOrThrow(categoryID));
-    }
-
-    @Override
-    public CategoryDTO addCategory(CategoryRequest request) {
+    public Category addCategory(CategoryRequest request) {
         checkIfCategoryNotExistsBySlugOrThrow(request.slug());
 
         var category = new Category(
@@ -42,7 +43,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryDAO
                 .insertCategory(category)
-                .map(categoryDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to add category"
@@ -60,15 +60,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO updateCategory(BigInteger categoryID, CategoryRequest request) {
-        var category = selectCategoryByIdOrThrow(categoryID);
+    public Category updateCategory(BigInteger categoryID, CategoryRequest request) {
+        var category = fetchCategoryByID(categoryID);
 
         checkIfOtherCategoryNotExistsBySlugOrThrow(request.slug(), categoryID);
         checkAndUpdateChangesOrThrow(request, category);
 
         return categoryDAO
                 .updateCategory(category)
-                .map(categoryDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to update category"
@@ -76,7 +75,10 @@ public class CategoryServiceImpl implements CategoryService {
                 );
     }
 
-    private void checkAndUpdateChangesOrThrow(CategoryRequest request, Category category) {
+    private void checkAndUpdateChangesOrThrow(
+            CategoryRequest request,
+            Category category
+    ) {
         var isChanged = false;
 
         if (!request.name().equals(category.getName())
@@ -108,28 +110,25 @@ public class CategoryServiceImpl implements CategoryService {
             String slug,
             BigInteger categoryID
     ) {
-        var isExisted = categoryDAO.existsOtherCategoryBySlug(slug, categoryID);
+        var isExisted = categoryDAO
+                .existsOtherCategoryBySlug(slug, categoryID);
         if (isExisted) {
             throw new DuplicateResourceException(
-                    "Category with slug {%s} is already existed".formatted(slug)
+                    "Category with slug {%s} is already existed"
+                            .formatted(slug)
             );
         }
-    }
-
-    private Category selectCategoryByIdOrThrow(BigInteger categoryID) {
-        return categoryDAO
-                .selectCategoryByID(categoryID)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "Category not found by categoryID {%d}".formatted(categoryID)
-                        )
-                );
     }
 
     @Override
     public void deleteCategory(BigInteger categoryID) {
         checkIfCategoryExistsByIdOrThrow(categoryID);
         categoryDAO.deleteCategoryByID(categoryID);
+    }
+
+    @Override
+    public boolean existsCategoryByID(BigInteger categoryID) {
+        return categoryDAO.existsCategoryByID(categoryID);
     }
 
     private void checkIfCategoryExistsByIdOrThrow(BigInteger categoryID) {

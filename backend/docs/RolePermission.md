@@ -49,7 +49,7 @@
         - `order:write`
     - **Order Detail:**
         - `order_detail:read`
-        - `post:postOrderDetail`
+        - `order_detail:write`
     - **Rating:**
         - `rating:read`
         - `rating:write`
@@ -72,7 +72,7 @@
         - `order:write`
     - **Order Detail:**
         - `order_detail:read`
-        - `post:postOrderDetail`
+        - `order_detail:write`
     - **Rating:**
         - `rating:read`
         - `rating:write`

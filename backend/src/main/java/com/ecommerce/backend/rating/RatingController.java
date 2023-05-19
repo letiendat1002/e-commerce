@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 public class RatingController {
     private final RatingService ratingService;
+    private final RatingDTOMapper ratingDTOMapper;
 
     @GetMapping
     public RatingResponse getRatings(
@@ -45,48 +46,77 @@ public class RatingController {
         var onlyUserIdAndProductIdNotNull = userID != null && orderID == null && productID != null;
 
         if (allIdNull) {
-            return ratingService.fetchAllRatings();
+            return ratingService
+                    .fetchAllRatings()
+                    .stream()
+                    .map(ratingDTOMapper)
+                    .toList();
         }
 
         if (allIdNotNull) {
             return Collections.singletonList(
-                    ratingService.fetchRatingByID(
-                            new RatingID(userID, orderID, productID)
+                    ratingDTOMapper.apply(
+                            ratingService.fetchRatingByID(
+                                    new RatingID(userID, orderID, productID)
+                            )
                     )
             );
         }
 
         if (onlyUserIdNotNull) {
-            return ratingService.fetchRatingsByUserID(userID);
+            return ratingService
+                    .fetchRatingsByUserID(userID)
+                    .stream()
+                    .map(ratingDTOMapper)
+                    .toList();
         }
 
         if (onlyOrderIdNotNull) {
             return Collections.singletonList(
-                    ratingService.fetchRatingByOrderID(orderID)
+                    ratingDTOMapper.apply(
+                            ratingService.fetchRatingByOrderID(orderID)
+                    )
             );
         }
 
         if (onlyProductIdNotNull) {
-            return ratingService.fetchRatingsByProductID(productID);
+            return ratingService
+                    .fetchRatingsByProductID(productID)
+                    .stream()
+                    .map(ratingDTOMapper)
+                    .toList();
         }
 
         if (onlyUserIdAndOrderIdNotNull) {
             return Collections.singletonList(
-                    ratingService.fetchRatingByUserIdAndOrderId(userID, orderID)
+                    ratingDTOMapper.apply(
+                            ratingService
+                                    .fetchRatingByUserIdAndOrderId(userID, orderID)
+                    )
             );
         }
 
         if (onlyUserIdAndProductIdNotNull) {
-            return ratingService.fetchRatingsByUserIDAndProductID(userID, productID);
+            return ratingService
+                    .fetchRatingsByUserIDAndProductID(userID, productID)
+                    .stream()
+                    .map(ratingDTOMapper)
+                    .toList();
         }
 
         return Collections.singletonList(
-                ratingService.fetchRatingByOrderIdAndProductId(productID, orderID)
+                ratingDTOMapper.apply(
+                        ratingService
+                                .fetchRatingByOrderIdAndProductId(
+                                        productID,
+                                        orderID
+                                )
+                )
         );
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('rating:write')")
+    @PreAuthorize("hasAuthority('rating:create')")
     public RatingResponse postRating(
             @Validated @RequestBody RatingRequest request,
             BindingResult errors
@@ -96,7 +126,32 @@ public class RatingController {
         }
 
         var ratingDTOList = Collections.singletonList(
-                ratingService.addRating(request)
+                ratingDTOMapper.apply(
+                        ratingService.addRating(request)
+                )
+        );
+
+        return new RatingResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                ratingDTOList
+        );
+    }
+
+    @PutMapping
+    @PreAuthorize("hasAuthority('rating:update')")
+    public RatingResponse putRating(
+            @Validated @RequestBody RatingRequest request,
+            BindingResult errors
+    ) {
+        if (errors.hasErrors()) {
+            throw new RequestValidationException(errors);
+        }
+
+        var ratingDTOList = Collections.singletonList(
+                ratingDTOMapper.apply(
+                        ratingService.updateRating(request)
+                )
         );
 
         return new RatingResponse(
@@ -107,7 +162,7 @@ public class RatingController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('rating:write')")
+    @PreAuthorize("hasAuthority('rating:delete')")
     public BaseResponse deleteRating(
             @RequestParam(value = "userID") BigInteger userID,
             @RequestParam("orderID") BigInteger orderID,
@@ -118,27 +173,6 @@ public class RatingController {
         return new BaseResponse(
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL
-        );
-    }
-
-    @PutMapping
-    @PreAuthorize("hasAuthority('rating:write')")
-    public RatingResponse putRating(
-            @Validated @RequestBody RatingRequest request,
-            BindingResult errors
-    ) {
-        if (errors.hasErrors()) {
-            throw new RequestValidationException(errors);
-        }
-
-        var ratingDTOList = Collections.singletonList(
-                ratingService.updateRating(request)
-        );
-
-        return new RatingResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                ratingDTOList
         );
     }
 }

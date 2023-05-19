@@ -30,22 +30,27 @@ public class UserAddress {
     @Column(name = "UserAddressID")
     private BigInteger userAddressID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    @ToString.Exclude
-    private User user;
+    @Column(name = "UserID")
+    private BigInteger userID;
 
     @Column(name = "Address")
     private String address;
 
-    public UserAddress(BigInteger userAddressID, User user, String address) {
-        this.userAddressID = userAddressID;
-        this.user = user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UserID", insertable = false, updatable = false)
+    @ToString.Exclude
+    private User user;
+
+    public UserAddress(BigInteger userID, String address) {
+        this.userID = userID;
         this.address = address;
     }
 
-    public UserAddress(User user, String address) {
-        this.user = user;
+    public UserAddress(BigInteger userAddressID,
+                       BigInteger userID,
+                       String address) {
+        this.userAddressID = userAddressID;
+        this.userID = userID;
         this.address = address;
     }
 

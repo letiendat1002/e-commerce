@@ -1,5 +1,6 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.user.User;
 
 import java.math.BigInteger;
@@ -9,7 +10,11 @@ import java.util.Optional;
 public interface OrderDAO {
     List<Order> selectAllOrders();
 
-    List<Order> selectAllOrdersByUser(User user);
+    List<Order> selectAllOrdersByUserID(BigInteger userID);
+
+    List<Order> selectAllOrdersByOrderStatus(OrderStatus orderStatus);
+
+    List<Order> selectAllOrdersByWorkerID(BigInteger workerID);
 
     Optional<Order> selectOrderByID(BigInteger orderID);
 
@@ -22,4 +27,8 @@ public interface OrderDAO {
     boolean existsOrderByID(BigInteger orderID);
 
     boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user);
+
+    int selectCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month);
+
+    int selectCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year);
 }

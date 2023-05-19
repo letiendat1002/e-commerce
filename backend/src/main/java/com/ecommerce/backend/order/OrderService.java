@@ -1,18 +1,35 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
+import com.ecommerce.backend.user.User;
+
 import java.math.BigInteger;
 import java.util.List;
 
 public interface OrderService {
-    List<OrderDTO> fetchAllOrders();
+    List<Order> fetchAllOrders();
 
-    List<OrderDTO> fetchAllOrdersByUserID(BigInteger userID);
+    List<Order> fetchAllOrdersByUserID(BigInteger userID);
 
-    OrderDTO fetchOrderByOrderID(BigInteger orderID);
+    List<Order> fetchAllOrdersByOrderStatus(OrderStatus orderStatus);
 
-    OrderDTO addOrder(OrderAddRequest request);
+    List<Order> fetchAllOrdersByWorkerID(BigInteger workerID);
 
-    OrderDTO updateOrder(BigInteger orderID, OrderUpdateRequest request);
+    Order fetchOrderByOrderID(BigInteger orderID);
+
+    Order addOrder(OrderAddRequest request);
+
+    Order updateOrder(BigInteger orderID, OrderUpdateRequest request);
 
     void deleteOrder(BigInteger orderID);
+
+    boolean existsOrderByID(BigInteger orderID);
+
+    boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user);
+
+    void deleteAllOrdersByUserID(BigInteger userID);
+
+    int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month);
+
+    int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year);
 }

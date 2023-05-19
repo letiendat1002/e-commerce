@@ -1,7 +1,7 @@
 package com.ecommerce.backend.user;
 
 import com.ecommerce.backend.user.enums.Gender;
-import com.ecommerce.backend.user.enums.UserRole;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

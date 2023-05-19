@@ -1,8 +1,8 @@
 package com.ecommerce.backend.orderdetail;
 
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
-import com.ecommerce.backend.shared.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,9 +19,12 @@ import java.util.List;
 @RestController
 public class OrderDetailController {
     private final OrderDetailService orderDetailService;
+    private final OrderDetailDTOMapper orderDetailDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('order_detail:read')")
+    @PreAuthorize(
+            "hasAnyAuthority('order_detail:read_all', 'order_detail:read_one')"
+    )
     public OrderDetailResponse getOrderDetails(
             @RequestParam(value = "orderID", required = false) BigInteger orderID,
             @RequestParam(value = "productID", required = false) BigInteger productID
@@ -29,20 +32,34 @@ public class OrderDetailController {
         List<OrderDetailDTO> orderDetailDTOList;
 
         if (orderID == null && productID == null) {
-            orderDetailDTOList = orderDetailService.fetchAllOrderDetails();
+            orderDetailDTOList = orderDetailService
+                    .fetchAllOrderDetails()
+                    .stream()
+                    .map(orderDetailDTOMapper)
+                    .toList();
         } else if (orderID != null && productID == null) {
             orderDetailDTOList = orderDetailService
-                    .fetchAllOrderDetailsByOrderID(orderID);
+                    .fetchAllOrderDetailsByOrderID(orderID)
+                    .stream()
+                    .map(orderDetailDTOMapper)
+                    .toList();
         } else if (orderID == null) {
             orderDetailDTOList = orderDetailService
-                    .fetchAllOrderDetailsByProductID(productID);
+                    .fetchAllOrderDetailsByProductID(productID)
+                    .stream()
+                    .map(orderDetailDTOMapper)
+                    .toList();
         } else {
             orderDetailDTOList = Collections.singletonList(
-                    orderDetailService
-                            .fetchOrderDetailByOrderIDAndProductID(
-                                    orderID,
-                                    productID
-                            )
+                    orderDetailDTOMapper.apply(
+                            orderDetailService
+                                    .fetchOrderDetailByOrderIDAndProductID(
+                                            new OrderDetailID(
+                                                    orderID,
+                                                    productID
+                                            )
+                                    )
+                    )
             );
         }
 
@@ -54,9 +71,9 @@ public class OrderDetailController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('order_detail:write')")
+    @PreAuthorize("hasAuthority('order_detail:create')")
     public OrderDetailResponse postOrderDetail(
-            @Validated @RequestBody OrderDetailRequest request,
+            @Validated @RequestBody OrderDetailAddRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
@@ -64,7 +81,9 @@ public class OrderDetailController {
         }
 
         var orderDetailDTOList = Collections.singletonList(
-                orderDetailService.addOrderDetail(request)
+                orderDetailDTOMapper.apply(
+                        orderDetailService.addOrderDetail(request)
+                )
         );
 
         return new OrderDetailResponse(
@@ -74,24 +93,28 @@ public class OrderDetailController {
         );
     }
 
-    @DeleteMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public BaseResponse deleteOrderDetailByOrderID(
-            @RequestParam("orderID") BigInteger orderID,
-            @RequestParam("productID") BigInteger productID
+    @GetMapping("/refund")
+    @PreAuthorize("hasAuthority('order_detail:read_all')")
+    public OrderDetailResponse getOrderDetailsByStatus(
+            @RequestParam(value = "status") OrderDetailStatus status
     ) {
-        orderDetailService.deleteOrderDetail(orderID, productID);
+        var orderDetailDTOList = orderDetailService
+                .fetchOrderDetailsByStatus(status)
+                .stream()
+                .map(orderDetailDTOMapper)
+                .toList();
 
-        return new BaseResponse(
+        return new OrderDetailResponse(
                 HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
+                MessageStatus.SUCCESSFUL,
+                orderDetailDTOList
         );
     }
 
-    @PutMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public OrderDetailResponse updateOrderDetailByOrderID(
-            @Validated @RequestBody OrderDetailRequest request,
+    @PutMapping("/refund")
+    @PreAuthorize("hasAuthority('order_detail:update')")
+    public OrderDetailResponse putOrderDetailStatus(
+            @Validated @RequestBody OrderDetailUpdateRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
@@ -99,7 +122,9 @@ public class OrderDetailController {
         }
 
         var orderDetailDTOList = Collections.singletonList(
-                orderDetailService.updateOrderDetail(request)
+                orderDetailDTOMapper.apply(
+                        orderDetailService.updateOrderDetailStatus(request)
+                )
         );
 
         return new OrderDetailResponse(

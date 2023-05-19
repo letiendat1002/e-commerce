@@ -4,6 +4,7 @@ import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,45 +12,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
     private final UserDAO userDAO;
-    private final UserDTOMapper userDTOMapper;
     private final PasswordEncoder passwordEncoder;
     private final OrderService orderService;
 
     @Override
-    public List<UserDTO> fetchAllUsers() {
-        return userDAO.selectAllUsers()
-                .stream()
-                .map(userDTOMapper)
-                .collect(Collectors.toList());
+    public List<User> fetchAllUsers() {
+        return userDAO.selectAllUsers();
     }
 
     @Override
-    public UserDTO fetchUserByUserID(BigInteger userID) {
-        return userDTOMapper.apply(selectUserByUserIdOrThrow(userID));
+    public List<User> fetchUsersByRole(UserRole role) {
+        return userDAO.selectUsersByRole(role);
     }
 
     @Override
-    public UserDTO fetchUserByEmail(String email) {
-        return userDTOMapper.apply(selectUserByEmailOrThrow(email));
-    }
-
-    private User selectUserByEmailOrThrow(String email) {
-        return userDAO
-                .selectUserByEmail(email)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException(
-                                "User not found by email {%s}".formatted(email)
-                        )
-                );
-    }
-
-    private User selectUserByUserIdOrThrow(BigInteger userID) {
+    public User fetchUserByUserID(BigInteger userID) {
         return userDAO
                 .selectUserByID(userID)
                 .orElseThrow(
@@ -60,7 +42,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO addUser(UserRegistrationRequest request) {
+    public User fetchUserByEmail(String email) {
+        return userDAO
+                .selectUserByEmail(email)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "User not found by email {%s}".formatted(email)
+                        )
+                );
+    }
+
+    @Override
+    public User addUser(UserRegistrationRequest request) {
         checkIfUserNotExistsByEmailOrThrow(request.email());
         checkIfUserNotExistsByPhoneOrThrow(request.phone());
 
@@ -75,7 +68,6 @@ public class UserServiceImpl implements UserService {
 
         return userDAO
                 .insertUser(user)
-                .map(userDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to add user"
@@ -102,15 +94,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(BigInteger userID, UserUpdateRequest request) {
-        var user = selectUserByUserIdOrThrow(userID);
+    public User updateUser(BigInteger userID, UserUpdateRequest request) {
+        var user = fetchUserByUserID(userID);
 
         checkIfOtherUserExistsByPhoneOrThrow(request.phone(), userID);
         checkAndUpdateChangesOrThrow(request, user);
 
         return userDAO
                 .updateUser(user)
-                .map(userDTOMapper)
                 .orElseThrow(
                         () -> new FailedOperationException(
                                 "Failed to update user"
@@ -172,11 +163,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(BigInteger userID) {
         checkIfUserExistsByIdOrThrow(userID);
 
-        orderService
-                .fetchAllOrdersByUserID(userID)
-                .forEach(
-                        order -> orderService.deleteOrder(order.orderID())
-                );
+        orderService.deleteAllOrdersByUserID(userID);
 
         userDAO.deleteUserByID(userID);
     }
@@ -191,20 +178,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void enableUser(String username) {
-        userDAO.enableUser(username);
+    public void enableUser(String email) {
+        var isSuccess = userDAO.enableUser(email);
+        if (isSuccess == 0) {
+            throw new FailedOperationException(
+                    "Failed to enable user"
+            );
+        }
     }
 
     @Override
-    public UserDTO updateUserPassword(String email, String newPassword) {
+    public User updateUserPassword(String email, String newPassword) {
         checkIfUserExistsByEmailOrThrow(email);
 
-        userDAO.updateUserPassword(
+        var isSuccess = userDAO.updateUserPassword(
                 email,
                 passwordEncoder.encode(newPassword)
         );
 
-        return userDTOMapper.apply(selectUserByEmailOrThrow(email));
+        if (isSuccess == 0) {
+            throw new FailedOperationException(
+                    "Failed to update user password"
+            );
+        }
+
+        return fetchUserByEmail(email);
     }
 
     private void checkIfUserExistsByEmailOrThrow(String email) {
@@ -214,5 +212,10 @@ public class UserServiceImpl implements UserService {
                     "User not found by email {%s}".formatted(email)
             );
         }
+    }
+
+    @Override
+    public boolean existsUserByID(BigInteger userID) {
+        return userDAO.existsUserByID(userID);
     }
 }

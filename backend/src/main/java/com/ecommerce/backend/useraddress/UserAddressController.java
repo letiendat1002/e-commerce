@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,18 +20,27 @@ import java.util.List;
 @RestController
 public class UserAddressController {
     private final UserAddressService userAddressService;
+    private final UserAddressDTOMapper userAddressDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user_address:read')")
+    @PreAuthorize("hasAuthority('user_address:read_all')")
     public UserAddressResponse getUserAddresses(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
         List<UserAddressDTO> userAddressDTOList;
 
         if (userID == null) {
-            userAddressDTOList = userAddressService.fetchAllUserAddresses();
+            userAddressDTOList = userAddressService
+                    .fetchAllUserAddresses()
+                    .stream()
+                    .map(userAddressDTOMapper)
+                    .toList();
         } else {
-            userAddressDTOList = userAddressService.fetchAllUserAddressesByUserID(userID);
+            userAddressDTOList = userAddressService
+                    .fetchAllUserAddressesByUserID(userID)
+                    .stream()
+                    .map(userAddressDTOMapper)
+                    .toList();
         }
 
         return new UserAddressResponse(
@@ -41,11 +51,15 @@ public class UserAddressController {
     }
 
     @GetMapping("{userAddressID}")
-    @PreAuthorize("hasAuthority('user_address:read')")
+    @PreAuthorize("hasAuthority('user_address:read_one')")
     public UserAddressResponse getUserAddressByID(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
-        var userAddressDTOList = List.of(userAddressService.fetchUserAddressByID(userAddressID));
+        var userAddressDTOList = Collections.singletonList(
+                userAddressDTOMapper.apply(
+                        userAddressService.fetchUserAddressByID(userAddressID)
+                )
+        );
 
         return new UserAddressResponse(
                 HttpStatus.OK.value(),
@@ -55,16 +69,45 @@ public class UserAddressController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('user_address:write')")
+    @PreAuthorize("hasAuthority('user_address:create')")
     public UserAddressResponse postUserAddress(
-            @Validated @RequestBody UserAddressRequest request,
+            @Validated @RequestBody UserAddressAddRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
             throw new RequestValidationException(errors);
         }
 
-        var userAddressDTOList = List.of(userAddressService.addUserAddress(request));
+        var userAddressDTOList = Collections.singletonList(
+                userAddressDTOMapper.apply(
+                        userAddressService.addUserAddress(request)
+                )
+        );
+
+        return new UserAddressResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                userAddressDTOList
+        );
+    }
+
+    @PutMapping("{userAddressID}")
+    @PreAuthorize("hasAuthority('user_address:update')")
+    public UserAddressResponse putUserAddress(
+            @PathVariable("userAddressID") BigInteger userAddressID,
+            @Validated @RequestBody UserAddressUpdateRequest request,
+            BindingResult errors
+    ) {
+        if (errors.hasErrors()) {
+            throw new RequestValidationException(errors);
+        }
+
+        var userAddressDTOList = Collections.singletonList(
+                userAddressDTOMapper.apply(
+                        userAddressService
+                                .updateUserAddress(userAddressID, request)
+                )
+        );
 
         return new UserAddressResponse(
                 HttpStatus.OK.value(),
@@ -74,7 +117,7 @@ public class UserAddressController {
     }
 
     @DeleteMapping("{userAddressID}")
-    @PreAuthorize("hasAuthority('user_address:write')")
+    @PreAuthorize("hasAuthority('user_address:delete')")
     public BaseResponse deleteUserAddress(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
@@ -83,26 +126,6 @@ public class UserAddressController {
         return new BaseResponse(
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL
-        );
-    }
-
-    @PutMapping("{userAddressID}")
-    @PreAuthorize("hasAuthority('user_address:write')")
-    public UserAddressResponse putUserAddress(
-            @PathVariable("userAddressID") BigInteger userAddressID,
-            @Validated @RequestBody UserAddressRequest request,
-            BindingResult errors
-    ) {
-        if (errors.hasErrors()) {
-            throw new RequestValidationException(errors);
-        }
-
-        var userAddressDTOList = List.of(userAddressService.updateUserAddress(userAddressID, request));
-
-        return new UserAddressResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL,
-                userAddressDTOList
         );
     }
 }

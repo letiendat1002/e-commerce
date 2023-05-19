@@ -13,6 +13,13 @@ public record OrderDTO(
         OrderPaymentType paymentType,
         OrderStatus status,
         LocalDate dateOrder,
-        String address
+        String address,
+        boolean isPreparing,
+        LocalDate datePreparing,
+        boolean isShipping,
+        LocalDate dateShipping,
+        boolean isCompleted,
+        LocalDate dateCompleted,
+        BigInteger workerID
 ) {
 }

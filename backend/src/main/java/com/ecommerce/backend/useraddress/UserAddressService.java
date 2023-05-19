@@ -4,15 +4,15 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface UserAddressService {
-    List<UserAddressDTO> fetchAllUserAddresses();
+    List<UserAddress> fetchAllUserAddresses();
 
-    List<UserAddressDTO> fetchAllUserAddressesByUserID(BigInteger userID);
+    List<UserAddress> fetchAllUserAddressesByUserID(BigInteger userID);
 
-    UserAddressDTO fetchUserAddressByID(BigInteger userAddressID);
+    UserAddress fetchUserAddressByID(BigInteger userAddressID);
 
-    UserAddressDTO addUserAddress(UserAddressRequest request);
+    UserAddress addUserAddress(UserAddressAddRequest request);
 
-    UserAddressDTO updateUserAddress(BigInteger userAddressID, UserAddressRequest request);
+    UserAddress updateUserAddress(BigInteger userAddressID, UserAddressUpdateRequest request);
 
     void deleteUserAddress(BigInteger userAddressID);
 }

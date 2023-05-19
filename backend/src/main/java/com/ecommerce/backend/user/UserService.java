@@ -1,22 +1,28 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.shared.security.enums.UserRole;
+
 import java.math.BigInteger;
 import java.util.List;
 
 public interface UserService {
-    List<UserDTO> fetchAllUsers();
+    List<User> fetchAllUsers();
 
-    UserDTO fetchUserByUserID(BigInteger userID);
+    List<User> fetchUsersByRole(UserRole role);
 
-    UserDTO fetchUserByEmail(String email);
+    User fetchUserByUserID(BigInteger userID);
 
-    UserDTO addUser(UserRegistrationRequest request);
+    User fetchUserByEmail(String email);
 
-    UserDTO updateUser(BigInteger userID, UserUpdateRequest request);
+    User addUser(UserRegistrationRequest request);
+
+    User updateUser(BigInteger userID, UserUpdateRequest request);
 
     void deleteUser(BigInteger userID);
 
-    void enableUser(String username);
+    void enableUser(String email);
 
-    UserDTO updateUserPassword(String email, String newPassword);
+    User updateUserPassword(String email, String newPassword);
+
+    boolean existsUserByID(BigInteger userID);
 }

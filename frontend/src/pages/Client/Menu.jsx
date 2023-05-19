@@ -495,8 +495,15 @@ const Menu = ({ match, history }) => {
         for (var i = 0; i < filter.unitPrice.length; i++) {
           const startPrice = filter.unitPrice[i].match(/\d+/g).map(Number)[0];
           const endPrice = filter.unitPrice[i].match(/\d+/g).map(Number)[1];
-          if (e?.unitPrice > startPrice && e?.unitPrice <= endPrice) {
-            return temp;
+          if (e?.discount != null){
+            if ((e?.unitPrice - (e?.unitPrice * (e?.discount/100))) > startPrice && e?.unitPrice <= endPrice) {
+              return temp;
+            }
+          }
+          else{
+            if (e?.unitPrice > startPrice && e?.unitPrice <= endPrice) {
+              return temp;
+            }
           }
         }
       });
@@ -665,6 +672,15 @@ const Menu = ({ match, history }) => {
       }
     }
   }, [filterSelect, filterCheck]);
+
+  const AddToCartHandle = (products) => {
+    let productPrice = products.unitPrice
+    if (products.discount != null){
+    productPrice = products.unitPrice - (products.unitPrice * (products.discount / 100)) 
+    }
+    const updatedProduct = {...products, unitPrice: productPrice};
+    dispatch(addToCart(updatedProduct))
+  }
 
   return (
     <div
@@ -1195,15 +1211,23 @@ const Menu = ({ match, history }) => {
                                           <div className='child--contains--price'>
                                             <div>
                                               <span className='contains--price--discount'>
-                                                <del>22.000.000đ</del>
+                                                {
+                                                  (item.discount) ? (
+                                                    <del>{formatProductPrice(item.unitPrice)}</del>
+                                                  ) : (<del style={{color: "#f1f2f1"}}>{formatProductPrice(item.unitPrice)}</del>)
+                                                }
                                               </span>
                                               <h4 className='contains--price-unit'>
-                                                {formatProductPrice(item.unitPrice)}
+                                              {(item.discount) ? formatProductPrice((item.unitPrice - (item.unitPrice * (item.discount/100)))) : formatProductPrice(item.unitPrice)}
                                               </h4>
                                             </div>
-                                            <div className='contains--price-pecent'>
-                                              <p>1%</p>
-                                            </div>
+                                            {
+                                              (item.discount) ? (
+                                                <div className='contains--price-pecent'>
+                                                  <p>{item.discount}%</p>
+                                                </div>
+                                              ) : ("")
+                                            }
                                           </div>
                                         </div>
                                       </Link>
@@ -1218,7 +1242,7 @@ const Menu = ({ match, history }) => {
                                           className='button'>
                                           <button
                                             className='contains--action-addcart'
-                                            onClick={() => dispatch(addToCart(item))}>
+                                            onClick={() => AddToCartHandle(item)}>
                                             Giỏ Hàng
                                           </button>
                                         </Link>
@@ -1240,18 +1264,26 @@ const Menu = ({ match, history }) => {
                                         </div>
                                         <h3>{item.name}</h3>
                                         <div className='child--contains--price'>
-                                          <div>
-                                            <span className='contains--price--discount'>
-                                              <del>22.000.000đ</del>
-                                            </span>
-                                            <h4 className='contains--price-unit'>
-                                              {formatProductPrice(item.unitPrice)}
-                                            </h4>
+                                            <div>
+                                              <span className='contains--price--discount'>
+                                                {
+                                                  (item.discount) ? (
+                                                    <del>{formatProductPrice(item.unitPrice)}</del>
+                                                  ) : (<del style={{color: "#f1f2f1"}}>{formatProductPrice(item.unitPrice)}</del>)
+                                                }
+                                              </span>
+                                              <h4 className='contains--price-unit'>
+                                                {(item.discount) ? formatProductPrice((item.unitPrice - (item.unitPrice * (item.discount/100)))) : formatProductPrice(item.unitPrice)}
+                                              </h4>
+                                            </div>
+                                            {
+                                              (item.discount) ? (
+                                                <div className='contains--price-pecent'>
+                                                  <p>{item.discount}%</p>
+                                                </div>
+                                              ) : ("")
+                                            }
                                           </div>
-                                          <div className='contains--price-pecent'>
-                                            <p>1%</p>
-                                          </div>
-                                        </div>
                                       </Link>
                                       <div className='child--contains--action'>
                                         <Link
@@ -1264,7 +1296,7 @@ const Menu = ({ match, history }) => {
                                           className='button'>
                                           <button
                                             className='contains--action-addcart'
-                                            onClick={() => dispatch(addToCart(item))}>
+                                            onClick={() => AddToCartHandle(item)}>
                                             Giỏ Hàng
                                           </button>
                                         </Link>
