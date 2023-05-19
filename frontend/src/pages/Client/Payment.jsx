@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { GrFormNext } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import formatProductPrice from "../../Helper/index.js";
 import { orderPayment } from "../../Redux/slice/paymentSlice";
 import { getUserAddressForIDUser } from "../../Redux/slice/userAddressSlice";

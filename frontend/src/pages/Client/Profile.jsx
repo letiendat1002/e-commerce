@@ -67,7 +67,7 @@ const Profile = () => {
     const roles = ["CUSTOMER"]
     const handleChangeName = (e) => {
       setfullName(e.target.value)
-      if ((e.target.value).trim() == ""){
+      if ((e.target.value).trim() === ""){
         setErrorName("Bạn chưa nhập họ tên")
       } else{
         setErrorName()
@@ -85,10 +85,8 @@ const Profile = () => {
      
     const phoneRegex = /^(0[1-9]|84[1-9])(\d{8}|\d{9})$/;
     if (phoneRegex.test(inputValue)) {
-      setIsValid(true);
       setErrorPhone()
     } else {
-      setIsValid(false);
       setErrorPhone("Số điện thoại không hợp lệ")
     }
     }
