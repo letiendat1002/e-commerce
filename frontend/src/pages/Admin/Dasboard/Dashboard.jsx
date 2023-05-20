@@ -26,8 +26,10 @@ import { BsFillBagFill } from 'react-icons/bs';
 import { BsWallet } from 'react-icons/bs';
 import CardOutLiner from '../components/Card';
 import { Link } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import { RxAvatar } from 'react-icons/rx';
+import { Spin } from 'antd';
 import convertToUSD from '../../../Helper/convertUSD';
 import { getAllCategories } from '../../../Redux/slice/categorySlice';
 import { getAllOrder } from '../../../Redux/slice/paymentSlice';
@@ -358,7 +360,7 @@ const Dashboard = (props) => {
               <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#45cb85"}}>{t('dashboard.item_right1')}</div>
               <div className='item-right-content'>
-              <h5>{convertToUSD(revenueTotal)}</h5>
+              {(revenueTotal) ? (<h5>{convertToUSD(revenueTotal)}</h5>) : (<LoadingCircle />)}
                 <div className='item-right-icon'>
                   <MdAttachMoney />
                 </div>
@@ -374,7 +376,7 @@ const Dashboard = (props) => {
               <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#299cdb"}}>{t('dashboard.item_right2')}</div>
               <div className='item-right-content'>
-                <h5>{orderTotal}</h5>
+                {(orderTotal) ? (<h5>{orderTotal}</h5>) : (<LoadingCircle />)}
                 <div className='item-right-icon-bag'>
                   <BsFillBagFill />
                 </div>
@@ -390,7 +392,7 @@ const Dashboard = (props) => {
               <Link style={{color: "#000000"}} to = {"/admin/manage-user"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#ffbe0b"}}>{t('dashboard.item_right3')}</div>
               <div className='item-right-content'>
-                <h5>{Alluser}</h5>
+                {(Alluser) ? (<h5>{Alluser}</h5>) : (<LoadingCircle />)}
                 <div className='item-right-icon-avatar'>
                   <RxAvatar />
                 </div>
@@ -406,7 +408,7 @@ const Dashboard = (props) => {
               <Link style={{color: "#000000"}} to = {"/admin/manage-products"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#f06548"}}>{t('dashboard.item_right4')}</div>
               <div className='item-right-content'>
-                <h5>{product?.length}</h5>
+                {(product?.length > 0)  ? (<h5>{product?.length}</h5>) : (<LoadingCircle />)}
                 <div className='item-right-icon-wallet'>
                   <BsWallet />
                 </div>
@@ -556,6 +558,17 @@ const Dashboard = (props) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const LoadingCircle = () => {
+  return (
+    <LoadingOutlined
+      style={{
+        fontSize: 30  
+      }}
+      spin
+    />
   );
 };
 
