@@ -27,4 +27,10 @@ public interface UserService {
     boolean existsUserByID(BigInteger userID);
 
     boolean isUserEnabledByEmail(String username);
+
+    void unlockUser(BigInteger userID);
+
+    void lockUserPermanent(BigInteger userID);
+
+    void lockUserTemporary(BigInteger userID, UserLockRequest request);
 }
