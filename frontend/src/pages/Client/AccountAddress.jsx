@@ -1,17 +1,19 @@
-import { Pagination, Popconfirm } from 'antd'
-import React, { useEffect, useState } from 'react'
+import '../../assets/css/profile.scss'
+
 import { AiFillCloseCircle, AiFillDelete, AiOutlineRight } from 'react-icons/ai'
 import { BiCommentDetail, BiEdit, BiMap } from 'react-icons/bi'
+import { Pagination, Popconfirm } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { addAddress, deleteAddress, getUserAddressForIDUser, updateAddress } from '../../Redux/slice/userAddressSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
+import AddressImage from '../../assets/images/img-location.png'
+import Avatar from '../../assets/images/img-user.png'
+import { Link } from 'react-router-dom'
 import { MdNotificationsActive } from 'react-icons/md'
 import { RiAccountCircleLine } from 'react-icons/ri'
 import { TfiMenuAlt } from 'react-icons/tfi'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { addAddress, deleteAddress, getUserAddressForIDUser, updateAddress } from '../../Redux/slice/userAddressSlice'
-import '../../assets/css/profile.scss'
-import AddressImage from '../../assets/images/img-location.png'
-import Avatar from '../../assets/images/img-user.png'
 
 const AccountAddress = () => {
     const handleOpen = () => {
@@ -69,7 +71,7 @@ const AccountAddress = () => {
     const name = user[0].fullName
     const phone = user[0].phone
 
-    const addresses = useSelector(state => state.userAddress.data)
+    const addresses = useSelector(state => state.userAddress.data) || []
 
     const [address, setAddress] = useState('')
     const [error, setError] = useState('')

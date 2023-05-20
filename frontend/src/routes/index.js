@@ -1,34 +1,48 @@
-import { createBrowserRouter } from 'react-router-dom';
-import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
-import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin';
-import Login from '../layouts/login/Login';
-import Dashboard from '../pages/Admin/Dasboard/Dashboard';
-import ManageUser from '../pages/Admin/ManageUser/MangeUser';
 import AccountAddress from '../pages/Client/AccountAddress';
+import AccountComment from '../pages/Client/AccountComment';
 import AccountInfo from '../pages/Client/AccountInfo';
 import AccountOrder from '../pages/Client/AccountOrder';
 import Cart from '../pages/Client/Cart';
+import Dashboard from '../pages/Admin/Dasboard/Dashboard';
+import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
+import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin';
 import Home from '../pages/Client/Home';
+import Login from '../layouts/Login/Login';
+import ManageCategory from '../pages/Admin/ManageCategory/ManageCategory';
+import ManageOrders from '../pages/Admin/components/ManageOrders/ManageOrders';
+import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
+import ManageRefund from '../pages/Admin/components/ManagerRefund/ManagerRefund';
+import ManageUser from '../pages/Admin/ManageUser/MangeUser';
 import Menu from '../pages/Client/Menu';
+import ModalAddProduct from '../pages/Admin/components/ModalAddProduct/ModalAddProduct';
+import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
+import ModelViewOrder from '../pages/Admin/components/ModalViewOrder/ModelViewOrder';
+import ModelViewRefund from '../pages/Admin/components/ModelViewRefund/ModelViewRefund';
 import NotFound from '../pages/Client/NotFound/NotFound';
 import Payment from '../pages/Client/Payment';
 import ProductDetail from '../pages/Client/ProductDetail';
-import Profile from '../pages/Client/Profile';
-import AccountComment from '../pages/Client/AccountComment';
-// import Login from '../pages/Admin/components/Login/Login';
-import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
-import ManageCategory from '../pages/Admin/ManageCategory/ManageCategory';
-import ManageOrders from '../pages/Admin/components/ManageOrders/ManageOrders';
 import ProductDetails from '../pages/Admin/ProductDetails/ProductDetails';
-import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
-import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
-import ModelViewOrder from '../pages/Admin/components/ModalViewOrder/ModelViewOrder';
-import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
 import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
-import ManageRefund from '../pages/Admin/components/ManagerRefund/ManagerRefund';
-import ModelViewRefund from '../pages/Admin/components/ModelViewRefund/ModelViewRefund';
-import ModalAddProduct from '../pages/Admin/components/ModalAddProduct/ModalAddProduct';
+import Profile from '../pages/Client/Profile';
+import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
 import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin'
+import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
+import { createBrowserRouter } from 'react-router-dom';
+
+// import Login from '../pages/Admin/components/Login/Login';
+
+
+
+
+
+
+
+
+
+
+
+
+
 // import Prod
 
 
