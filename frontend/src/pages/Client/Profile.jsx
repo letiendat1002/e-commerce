@@ -46,8 +46,8 @@ const Profile = () => {
     }
   };
 
-  const userID = JSON.parse(localStorage.getItem("user"))[0].userID;
-  const dispatch = useDispatch();
+  const userID = JSON.parse(localStorage.getItem('user'))[0]?.userID || []
+  const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getUserForID(userID));
     dispatch(getUserID(userID));
@@ -55,7 +55,7 @@ const Profile = () => {
 
   const user = useSelector((state) => state.user.current);
 
-  const accountInfo = useSelector((state) => state.userAPI.data);
+  const accountInfo = useSelector(state => state.userAPI.data) || []
   const fullname = accountInfo[0]?.fullName;
   const phones = accountInfo[0]?.phone;
   // const name = fullname
