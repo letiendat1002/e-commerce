@@ -14,6 +14,7 @@ import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
 import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import './style.scss';
 import Logo from '../../components/Logo/Logo';
+import { isValidNumber } from 'libphonenumber-js';
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -156,6 +157,15 @@ const Login = () => {
         }
       })
   }
+
+  //Validation
+  const phoneNumberValidator = (_, value) => {
+    
+    if (value && !isValidNumber(value, 'VN')) {
+      return Promise.reject('Số điện thoại không hợp lệ');
+    }
+    return Promise.resolve();
+  };
 
   return (
     <div id='login'>
@@ -357,10 +367,7 @@ const Login = () => {
                   required: true,
                   message: 'Vui lòng nhập số điện thoại của bạn.',
                 },
-                {
-                  min: 10,
-                  message: 'Mật khẩu phải bao gồm ít nhất 10 số',
-                },
+                { validator: phoneNumberValidator },
               ]}>
               <Input
                 prefix={<LockIcon className='site-form-item-icon' />}
@@ -420,7 +427,7 @@ const Login = () => {
                       return Promise.resolve();
                     }
                     return Promise.reject(
-                      new Error('The two passwords that you entered do not match!')
+                      new Error('Mật khẩu nhập lại không chính xác')
                     );
                   },
                 }),
@@ -435,14 +442,15 @@ const Login = () => {
             </Form.Item>
             <Form.Item
               name='gender'
-              label='Gender'
+              label='Giới tính'
               rules={[
                 {
                   required: true,
+                  message: 'Vui lòng chọn giới tính của bạn.',
                 },
               ]}>
               <Select
-                placeholder='Select a gender above'
+                placeholder='Vui lòng chọn giới tính'
                 style={{
                   width: '100%',
                   margin: '5px 0',
@@ -450,15 +458,15 @@ const Login = () => {
                 options={[
                   {
                     value: 'MALE',
-                    label: 'MALE',
+                    label: 'NAM',
                   },
                   {
                     value: 'FEMALE',
-                    label: 'FEMALE',
+                    label: 'NỮ',
                   },
                   {
                     value: 'OTHER',
-                    label: 'OTHER',
+                    label: 'KHÁC',
                   },
                 ]}
               />
