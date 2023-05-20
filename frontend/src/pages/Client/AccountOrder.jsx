@@ -1,22 +1,25 @@
-import { Image, Pagination, Rate } from 'antd'
-import React, { useEffect, useState } from 'react'
+import '../../assets/css/profile.scss'
+
 import { AiFillCloseCircle, AiOutlineRight } from 'react-icons/ai'
 import { BiCommentDetail, BiMap } from 'react-icons/bi'
+import { Image, Pagination, Rate, Spin } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { getOrder, updateOrders } from '../../Redux/slice/paymentSlice'
+import { getOrderDetail, refundOrderID } from '../../Redux/slice/orderDetailSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
+import Avatar from '../../assets/images/img-user.png'
+import EmptyCart from '../../assets/images/empty-cart.png'
+import { Link } from 'react-router-dom'
 import { MdNotificationsActive } from 'react-icons/md'
 import { RiAccountCircleLine } from 'react-icons/ri'
+import TableComponent from '../../components/Table'
 import { TfiMenuAlt } from 'react-icons/tfi'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import formatProductPrice from '../../Helper'
-import { getOrderDetail, refundOrderID } from '../../Redux/slice/orderDetailSlice'
-import { getOrder, updateOrders } from '../../Redux/slice/paymentSlice'
 import { getAllProducts } from '../../Redux/slice/productSlice'
 import { postRating } from '../../Redux/slice/ratingSlice'
-import '../../assets/css/profile.scss'
-import EmptyCart from '../../assets/images/empty-cart.png'
-import Avatar from '../../assets/images/img-user.png'
-import TableComponent from '../../components/Table'
+import { toast } from 'react-toastify'
+
 const AccountOrder = () => {
     const [active, setActive] = useState(false);
     const dispatch = useDispatch()
@@ -168,13 +171,13 @@ const AccountOrder = () => {
         })
     }
 
-    const orderDetailForID = orderDetail.filter(item => item.orderID === viewID)
+    const orderDetailForID = orderDetail?.filter(item => item.orderID === viewID)
     const data = orderDetailForID.map((items) => {
-        const orders = order.filter(order => order.orderID === items.orderID)
+        const orders = order?.filter(order => order.orderID === items.orderID)
         const dateOrder = orders[0].dateOrder?.split('-')[orders[0].dateOrder?.split('-').length - 2]
         const dateCompleted = orders[0].dateCompleted?.split('-')[orders[0].dateCompleted?.split('-').length - 2] || null
         const status = orders[0]?.status
-        const productMatches = product.find((productItem) => {
+        const productMatches = product?.find((productItem) => {
             return items.productID === productItem.productID;
         });
         if (productMatches){
@@ -266,6 +269,11 @@ const AccountOrder = () => {
     const itemsPerPage = 9;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = currentPage * itemsPerPage - 1;
+
+
+    const productLoading = useSelector((state) => state.product.productLoading)
+    const orderLoading = useSelector((state) => state.order.loading);
+    const orderDetailLoading = useSelector((state) => state.orderDetail.loading)
     return (
     <>
         <div className="profile container-fluid">
@@ -458,39 +466,45 @@ const AccountOrder = () => {
                         <h3>Thông Tin Đơn Hàng</h3>
                         <div className="container--item--right--order">
                             {
-                                order.length > 0 ? (
-                                    <table>
-                                        <tr>
-                                            <th>Mã Đơn Hàng</th>
-                                            <th>Ngày Mua</th>
-                                            <th>Sản Phẩm</th>
-                                            <th>Tổng Tiền</th>
-                                            <th>Trạng Thái</th>
-                                        </tr>
-                                            {
-                                                order.map((item) => {
-                                                    return (
-                                                        <tr>
-                                                            <td><span>{item.id}</span></td>
-                                                            <td><span>{item.date}</span></td>
-                                                            <td><p>{item.product}</p></td>
-                                                            <td><span>{item.UnitPrice}</span></td>
-                                                            <td><span>{item.state}</span></td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                    </table>
-                                ) : (
-                                    <div className='right--container--notOrder'>
-                                        <img src={EmptyCart} alt="" />
-                                        <p>Không có đơn hàng nào trong giỏ hàng</p>
-                                        <Link to = {'/'}>
-                                        <button>
-                                            VỀ TRANG CHỦ
-                                        </button>
-                                        </Link>  
+                                (orderLoading && orderDetailLoading && productLoading) ? (
+                                    <div className="overLay">
+                                        <Spin />
                                     </div>
+                                ) : (
+                                    order.length > 0 ? (
+                                        <table>
+                                            <tr>
+                                                <th>Mã Đơn Hàng</th>
+                                                <th>Ngày Mua</th>
+                                                <th>Sản Phẩm</th>
+                                                <th>Tổng Tiền</th>
+                                                <th>Trạng Thái</th>
+                                            </tr>
+                                                {
+                                                    order.map((item) => {
+                                                        return (
+                                                            <tr>
+                                                                <td><span>{item.id}</span></td>
+                                                                <td><span>{item.date}</span></td>
+                                                                <td><p>{item.product}</p></td>
+                                                                <td><span>{item.UnitPrice}</span></td>
+                                                                <td><span>{item.state}</span></td>
+                                                            </tr>
+                                                        )
+                                                    })
+                                                }
+                                        </table>
+                                    ) : (
+                                        <div className='right--container--notOrder'>
+                                            <img src={EmptyCart} alt="" />
+                                            <p>Không có đơn hàng nào trong giỏ hàng</p>
+                                            <Link to = {'/'}>
+                                            <button>
+                                                VỀ TRANG CHỦ
+                                            </button>
+                                            </Link>  
+                                        </div>
+                                    )
                                 )
                             }
                         </div>

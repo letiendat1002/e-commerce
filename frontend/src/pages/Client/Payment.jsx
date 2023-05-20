@@ -1,19 +1,22 @@
-import { Image } from "antd";
-import React, { useEffect, useState } from "react";
-import { AiOutlineHome } from "react-icons/ai";
-import { GrFormNext } from "react-icons/gr";
-import { useDispatch, useSelector } from "react-redux";
-import { Link,  useNavigate } from "react-router-dom";
-import formatProductPrice from "../../Helper/index.js";
-import { orderPayment } from "../../Redux/slice/paymentSlice";
-import { getUserAddressForIDUser } from "../../Redux/slice/userAddressSlice";
 import "../../assets/css/payment.scss";
-import cod from "../../assets/images/cod.svg";
-import ImageNoPayment from "../../assets/images/img-no-result.png";
+
+import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { AiOutlineHome } from "react-icons/ai";
 import AutoSlice from "../../components/AutoSlide/AutoSlice";
-import { toast } from "react-toastify";
+import { GrFormNext } from "react-icons/gr";
+import { Image } from "antd";
+import ImageNoPayment from "../../assets/images/img-no-result.png";
+import cod from "../../assets/images/cod.svg";
+import formatProductPrice from "../../Helper/index.js";
+import { getUserAddressForIDUser } from "../../Redux/slice/userAddressSlice";
 import { orderDetail } from "../../Redux/slice/orderDetailSlice.js";
+import { orderPayment } from "../../Redux/slice/paymentSlice";
 import { removeFromToCart } from "../../Redux/slice/cartSlice.js";
+import { toast } from "react-toastify";
+
 const Payment = () => {
   const navigate = useNavigate();
   const menuCard = [
@@ -91,7 +94,6 @@ const Payment = () => {
       .then((response) => {
         const orderID = response.payload.data[0].orderID;
         if (response.payload.status === 200) {
-          // eslint-disable-next-line no-lone-blocks
           {
             productOrder.map((item) => {
               const productID = item.productID;
@@ -111,17 +113,17 @@ const Payment = () => {
             });
           }
           toast.success("Bạn đã đặt hàng thành công!");
-        } else {
+        } else{
           toast.error("Vui lòng nhập địa chỉ nhận hàng");
         }
       })
       .catch((error) => {
         // Handle error response
-        if (error.response && error.response.status === 400) {
-          toast.error("Vui lòng nhập địa chỉ");
-        }
+        toast.error("Vui lòng nhập địa chỉ");
       });
   };
+
+  // const orderLoading /= use
   return (
     <div className="container-fluid payment">
       <div className="payment__container col-lg-12 col-md-12 col-sm-12 col-12">

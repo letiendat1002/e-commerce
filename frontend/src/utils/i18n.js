@@ -1,6 +1,6 @@
+import LanguageDetector from 'i18next-browser-languagedetector';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
   // detect user language
@@ -35,8 +35,20 @@ i18n
             item_right1: 'EARNINGS',
             item_right2: 'ORDERS',
             item_right3: 'CUSTOMERS',
-            item_right4: 'BALANCE',
+            item_right4: 'PRODUCTS',
             item_right_footer: 'Since last week',
+            item_title1: 'Statistics Of Orders By Year',
+            item_title2: 'Statistics Of Orders By Quarter',
+            item_title3: 'Statistical Orders By Month',
+            item_title4: 'Display For Year',
+            item_title5: 'Display For Month',
+            item_title6: 'Display For Quater',
+            item_title7: 'Month',
+            item_title8: 'POTENTIAL CUSTOMERS',
+            item_title9: 'TIME',
+            item_title10: 'NAME',
+            item_title11: 'ORDERS',
+            item_title12: 'TOP',
           },
         },
       },
@@ -44,7 +56,7 @@ i18n
         translation: {
           // here we will place our translations...
           sidebar: {
-            title: 'Trang Quản Trị',
+            title: 'Admin',
             title2: 'Bảng Điều Khiển',
             title3: 'Tổng thể',
             title4: 'Sản Phẩm',
@@ -54,11 +66,23 @@ i18n
           },
           dashboard: {
             title1: 'Bảng Điều Khiển Phân Tích',
-            item_right1: 'Thu Nhập',
-            item_right2: 'Đơn Hàng',
-            item_right3: 'Khác Hàng',
-            item_right4: 'Chí Phí',
+            item_right1: 'DOANH THU',
+            item_right2: 'ĐƠN HÀNG',
+            item_right3: 'KHÁCH HÀNG',
+            item_right4: 'SẢN PHẨM',
             item_right_footer: 'Kể từ tuần trước',
+            item_title1: 'Thống kê ĐH theo từng năm',
+            item_title2: 'Thống kê đơn hàng theo từng qúy',
+            item_title3: 'Thống kê đơn hàng theo tháng',
+            item_title4: 'Hiển Thị Theo Năm',
+            item_title5: 'Hiển Thị Theo Tháng',
+            item_title6: 'Hiển Thị Theo Quý',
+            item_title7: 'Tháng',
+            item_title8: 'KHÁCH HÀNG TIỀM NĂNG',
+            item_title9: 'Thời gian',
+            item_title10: 'Họ Tên',
+            item_title11: 'Đơn Hàng',
+            item_title12: 'Vị Trí',
           },
         },
       },

@@ -1,37 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import './Dashboard.scss';
-import { useSelector , useDispatch} from "react-redux";
+
 import {
+  Area,
+  AreaChart,
+  Bar,
   BarChart,
   CartesianGrid,
-  Bar,
   Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Sector,
   Tooltip,
   XAxis,
   YAxis,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Sector,
-  Area,
-  AreaChart,
 } from 'recharts';
 import { IconName, MdAttachMoney } from 'react-icons/md';
-import { BsFillBagFill } from 'react-icons/bs';
-import { RxAvatar } from 'react-icons/rx';
-import { BsWallet } from 'react-icons/bs';
-import { useTranslation, Trans } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { dataChart, dataChart2, dataChart3 } from './data.js';
-import { getAllProducts } from '../../../Redux/slice/productSlice';
+import { useDispatch, useSelector } from "react-redux";
+
+import AlertCard from '../components/AlertCard/AlertCard';
+import { BsFillBagFill } from 'react-icons/bs';
+import { BsWallet } from 'react-icons/bs';
+import CardOutLiner from '../components/Card';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { RxAvatar } from 'react-icons/rx';
+import convertToUSD from '../../../Helper/convertUSD';
 import { getAllCategories } from '../../../Redux/slice/categorySlice';
+import { getAllOrder } from '../../../Redux/slice/paymentSlice';
+import { getAllProducts } from '../../../Redux/slice/productSlice';
 import { getAllUser } from '../../../Redux/slice/usersSlice';
 import { getOrderDetail } from '../../../Redux/slice/orderDetailSlice';
-import convertToUSD from '../../../Helper/convertUSD';
-import { getAllOrder } from '../../../Redux/slice/paymentSlice';
-import { Link } from 'react-router-dom';
-import AlertCard from '../components/AlertCard/AlertCard';
-import CardOutLiner from '../components/Card';
 
 export const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -185,7 +187,7 @@ const Dashboard = (props) => {
       name: "Tablet",
       cx: 300,
       cy: 120,
-      midAngle: 240,
+      midAngle: 220,
       innerRadius: 40,
       outerRadius: 60,
       startAngle: 180,
@@ -318,13 +320,14 @@ const Dashboard = (props) => {
       setOrderSort(orderSelect)
   }
 
-  const orderTop = orderSort?.sort((a,b) => a.count - b.count)
+  const orderTop = orderSort?.sort((a,b) => b.count - a.count)
   const [infoOrder, setInfoOrder] = useState([])
   const getAllInfo = () => {
     const allInfo = [];
+    const topCount = orderTop.slice(0, 10);
     for (let i = 0; i < orderTop.length; i++) {
-      const userId = orderTop[i].userId;
-      const orderCount = orderTop[i].count;
+      const userId = topCount[i].userId;
+      const orderCount = topCount[i].count;
       const users = user?.find(u => u.userID === userId);
       const step = allInfo.length + 1
       const now = new Date(); 
@@ -346,14 +349,14 @@ const Dashboard = (props) => {
     getAllInfo()
   }, [orderTop])
   return (
-    <div className='dashboard-container '>
-      <div className='dashboard-title'><h1 style={{padding: "1rem 10px"}}>Trang Chủ</h1></div>
+    <div className='dashboard-container'>
+      <div className='dashboard-title'><h2 style={{padding: "5px 10px"}}>{t('sidebar.title2')}</h2></div>
       <div className='container'>
         <div className='dashboard-content row'>
           <div className='content-left  col-lg-6 col-md-12 col-sm-12'>
             <div className='item-right'>
               <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
-              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#45cb85"}}>DOANH THU</div>
+              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#45cb85"}}>{t('dashboard.item_right1')}</div>
               <div className='item-right-content'>
               <h5>{convertToUSD(revenueTotal)}</h5>
                 <div className='item-right-icon'>
@@ -369,7 +372,7 @@ const Dashboard = (props) => {
             </div>
             <div className='item-right'>
               <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
-              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#299cdb"}}>ĐƠN HÀNG</div>
+              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#299cdb"}}>{t('dashboard.item_right2')}</div>
               <div className='item-right-content'>
                 <h5>{orderTotal}</h5>
                 <div className='item-right-icon-bag'>
@@ -385,7 +388,7 @@ const Dashboard = (props) => {
             </div>
             <div className='item-right'>
               <Link style={{color: "#000000"}} to = {"/admin/manage-user"}>
-              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#ffbe0b"}}>KHÁCH HÀNG</div>
+              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#ffbe0b"}}>{t('dashboard.item_right3')}</div>
               <div className='item-right-content'>
                 <h5>{Alluser}</h5>
                 <div className='item-right-icon-avatar'>
@@ -401,7 +404,7 @@ const Dashboard = (props) => {
             </div>
             <div className='item-right'>
               <Link style={{color: "#000000"}} to = {"/admin/manage-products"}>
-              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#f06548"}}>SẢN PHẨM</div>
+              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#f06548"}}>{t('dashboard.item_right4')}</div>
               <div className='item-right-content'>
                 <h5>{product?.length}</h5>
                 <div className='item-right-icon-wallet'>
@@ -416,29 +419,6 @@ const Dashboard = (props) => {
               </Link>
             </div>      
           </div>
-          {/* <div className='content-right col-lg-6 col-md-12 col-sm-12'> */}
-            {/* <ResponsiveContainer
-              width='100%'
-              height='100%'>
-              <BarChart
-                width={'100%'}
-                height={250}
-                data={dataChart}>
-                <CartesianGrid strokeDasharray='3 3' />
-                <XAxis dataKey='name' />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar
-                  dataKey={`Laptop ${laptop.length}`}
-                  fill='#8884d8'
-                />
-                <Bar
-                  dataKey='uv'
-                  fill='#82ca9d'
-                />
-              </BarChart>
-            </ResponsiveContainer> */}
             <CardOutLiner className=' content-right col-lg-6 col-md-12 col-sm-12' style = {{padding: "0!important"}}
               element={<AlertCard data = {infoOrder}/>}
             />
@@ -448,34 +428,34 @@ const Dashboard = (props) => {
 
       <div className='container'>
         <div className='dashboard-content-2 row'>
-        <div style={{display: "flex", justifyContent: "space-around"}} className='col-lg-7 sortChart'>
+        <div style={{display: "flex", justifyContent: "space-between"}} className='col-lg-7 sortChart'>
             {(sort == "nam") ? (
-              <h3 style={{padding: "1rem 0 0.5rem 0"}}>Thống kê ĐH theo từng năm</h3>
+              <h3 style={{padding: "2rem 0 0 0"}}>{t('dashboard.item_title1')}</h3>
             ): (sort == "quy") ? (
-              <h3 style={{padding: "1rem 0 0.5rem 0"}}>Thống kê đơn hàng theo từng qúy</h3>
+              <h3 style={{padding: "2rem 0 0 0"}}>{t('dashboard.item_title2')}</h3>
             ) : (
-              <h3 style={{padding: "1rem 0 0.5rem 0"}}>Thống kê đơn hàng theo tháng</h3>
+              <h3 style={{padding: "2rem 0 0 0"}}>{t('dashboard.item_title3')}</h3>
             )    
             }
             <select onChange={(e) => handleChageSort(e)}>
-              <option value="nam" >Hiển Thị Theo Năm</option>
-              <option value="thang" >Hiển Thị Theo Tháng</option>
-              <option value="quy" >Hiển Thị Theo Quý</option>
+              <option value="nam" >{t('dashboard.item_title4')}</option>
+              <option value="thang" >{t('dashboard.item_title5')}</option>
+              <option value="quy" >{t('dashboard.item_title6')}</option>
             </select>
             { (sort == "thang") ? (
                 <select onChange={(e) => setMonth(e.target.value)}>
-                  <option value="01">Tháng 1</option>
-                  <option value="02">Tháng 2</option>
-                  <option value="03">Tháng 3</option>
-                  <option value="04">Tháng 4</option>
-                  <option value="05">Tháng 5</option>
-                  <option value="06">Tháng 6</option>
-                  <option value="07">Tháng 7</option>
-                  <option value="08">Tháng 8</option>
-                  <option value="09">Tháng 9</option>
-                  <option value="10">Tháng 10</option>
-                  <option value="11">Tháng 11</option>
-                  <option value="12">Tháng 12</option>
+                  <option value="01">{t('dashboard.item_title7')} 1</option>
+                  <option value="02">{t('dashboard.item_title7')} 2</option>
+                  <option value="03">{t('dashboard.item_title7')} 3</option>
+                  <option value="04">{t('dashboard.item_title7')} 4</option>
+                  <option value="05">{t('dashboard.item_title7')} 5</option>
+                  <option value="07">{t('dashboard.item_title7')} 6</option>
+                  <option value="07">{t('dashboard.item_title7')} 7</option>
+                  <option value="08">{t('dashboard.item_title7')} 8</option>
+                  <option value="09">{t('dashboard.item_title7')} 9</option>
+                  <option value="10">{t('dashboard.item_title7')} 10</option>
+                  <option value="11">{t('dashboard.item_title7')} 11</option>
+                  <option value="12">{t('dashboard.item_title7')} 12</option>
                 </select>
               ) : (<div></div>)
             }
