@@ -29,6 +29,21 @@ import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/Pro
 import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
 import { createBrowserRouter } from 'react-router-dom';
 
+// import Login from '../pages/Admin/components/Login/Login';
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import Prod
 
 
 const router = createBrowserRouter([
