@@ -56,8 +56,8 @@ const Profile = () => {
   const user = useSelector((state) => state.user.current);
 
   const accountInfo = useSelector(state => state.userAPI.data) || []
-  const fullname = accountInfo[0]?.fullName;
-  const phones = accountInfo[0]?.phone;
+  const fullname = accountInfo[0]?.fullName
+  const phones = accountInfo[0]?.phone
   // const name = fullname
   const userPhone = accountInfo[0]?.phone;
   const [phone, setPhone] = useState("");
@@ -159,35 +159,39 @@ const Profile = () => {
   };
 
   const handleChangePassword = (e) => {
-    e.preventDefault();
-    const userAPI = user[0];
-    const email = userAPI.email;
-    const token = localStorage.getItem("access_token");
-    const oldPassword = oldPasswords;
-    const newPassword = newPasswords;
+    e.preventDefault()
+    const userAPI = user[0]
+    const email = userAPI.email
+    const token = localStorage.getItem('access_token')
+    const oldPassword = oldPasswords
+    const newPassword = newPasswords
 
     const data = {
-      email,
+      email, 
       token,
       oldPassword,
-      newPassword,
-    };
-    dispatch(changePassword(data)).then((res) => {
-      if (res.payload.status === 400) {
-        toast.error("Mật khẩu mới trùng với mật khẩu cũ");
-      } else if (res.payload.status === 200) {
-        toast.error("Thay đổi mật khẩu thành công!");
-        navigate("/login");
-        dispatch(logout());
-      } else if (res.payload.status === 401) {
-        toast.error("Mật khẩu hiện tại không chính xác!");
-        dispatch(getUserForID(userID));
-        dispatch(getUserID(userID));
+      newPassword
+    }
+    dispatch(changePassword(data))
+    .then((res) => {
+      if (res.payload.status === 400){
+        toast.error("Mật khẩu mới trùng với mật khẩu cũ")
       }
-    });
-    dispatch(getUserForID(userID));
-    dispatch(getUserID(userID));
-  };
+      else if (res.payload.status === 200){
+        toast.success("Thay đổi mật khẩu thành công!")
+        navigate('/login')
+        dispatch(logout())
+      }
+      else if (res.payload.status === 401){
+        toast.error("Mật khẩu hiện tại không chính xác!")
+        dispatch(getUserForID(userID))
+        dispatch(getUserID(userID))
+      }
+      dispatch(getUserForID(userID))
+      dispatch(getUserID(userID))
+    })
+    
+  }
 
   const handleOpenUpdateModel = () => {
     const overlay = document.querySelector(".change-passwordoverlay");
