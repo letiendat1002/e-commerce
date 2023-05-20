@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { AiFillCloseCircle, AiOutlineRight } from "react-icons/ai";
-import { BiCommentDetail, BiMap } from "react-icons/bi";
-import { MdMonochromePhotos, MdNotificationsActive } from "react-icons/md";
-import { RiAccountCircleLine } from "react-icons/ri";
-import { TfiMenuAlt } from "react-icons/tfi";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { getUserID, logout } from "../../Redux/slice/userSlice";
-import {
-  changePassword,
-  getUserForID,
-  updateUser,
-} from "../../Redux/slice/usersSlice";
-import "../../assets/css/profile.scss";
-import Avatar from "../../assets/images/img-user.png";
+import '../../assets/css/profile.scss';
+
+import { AiFillCloseCircle, AiOutlineRight } from 'react-icons/ai';
+import { BiCommentDetail, BiMap } from 'react-icons/bi';
+import { Link, useNavigate } from 'react-router-dom';
+import { MdMonochromePhotos, MdNotificationsActive } from 'react-icons/md';
+import React, { useEffect, useState } from 'react';
+import { changePassword, getUserForID, updateUser } from '../../Redux/slice/usersSlice';
+import { getUserID, logout } from '../../Redux/slice/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Avatar from '../../assets/images/img-user.png';
+import { RiAccountCircleLine } from 'react-icons/ri';
+import { TfiMenuAlt } from 'react-icons/tfi';
+import { toast } from 'react-toastify';
 
 const Profile = () => {
   const [active, setActive] = useState(false);
