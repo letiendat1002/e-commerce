@@ -523,16 +523,43 @@
 }
 
 .orderDetail-view{
-    max-height: 60%;
-    height: auto;
-    width: auto;
-    left: 30%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
     margin: 0 auto;
-    top: 20%;
-    max-width: 100%;
     position: fixed;
-    z-index: 100;
-    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    box-shadow: 0 0 0 3px #f1f2f1;
+    max-width: 100%;
+    // min-width: 60%;
+    // position: fixed;
+    z-index: 100!important;
+    border-radius: 16px;
+    .order_infor{
+        padding: 2rem 0;
+        h5{
+            font-size: 26px;
+            font-weight: 600;
+            color: #cb1e23;
+            padding-left: 1rem;
+        }
+    }
+    .order__ship{
+        min-width: 400px;
+        h5{
+            font-size: 26px;
+            font-weight: 600;
+            color: #cb1e23;
+            padding-bottom: 1rem;
+        }
+        // position: absolute;
+        // top: 0%;
+        padding: 2rem 3rem;
+    }
+    // overflow: hidden;
     tr{
         border: 2px solid #cb1e23!important;
         border-radius: 4px;
