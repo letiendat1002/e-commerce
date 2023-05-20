@@ -32,21 +32,21 @@
             }
         }
         ul{
-            padding: 0.5rem 10px;
+            padding: 0rem 10px 2rem 10px;
             position: absolute;
             min-width: 200px;
             height: auto;
             top: 0;
-            margin-left: -200px;
+            left: 0;
             border-radius: 5px;
             box-shadow: 0px 0px 3px 3px #d5d5d5;
             background-color: #fffefe;
             li{
                 padding: 5px 0;
                 text-align: center;
-                background-color: #fcd849;
+                background-color: #bc9508;
                 border-radius: 4px;
-                margin-top: 4px;
+                margin-top: 0px;
                 color: #ffffff;
                 font-size: 18px;
                 cursor: pointer;
@@ -170,3 +170,4 @@
         }
     }
 }
+
