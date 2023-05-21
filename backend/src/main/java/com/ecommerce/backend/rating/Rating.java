@@ -41,8 +41,15 @@ public class Rating {
     @ToString.Exclude
     private User user;
 
+    @Column(name = "RateAmount")
+    private Integer rateAmount;
 
-    @ToString.Exclude
+    @Column(name = "Comment")
+    private String comment;
+
+    @Column(name = "DateRating")
+    private LocalDate dateRating = LocalDate.now();
+
     @OneToOne
     @JoinColumns({
             @JoinColumn(
@@ -58,31 +65,21 @@ public class Rating {
                     updatable = false
             )
     })
+    @ToString.Exclude
     private OrderDetail orderDetail;
-
-    @Column(name = "RateAmount")
-    private Integer rateAmount;
-
-    @Column(name = "Comment")
-    private String comment;
-
-    @Column(name = "DateRating")
-    private LocalDate dateRating;
 
     public Rating(BigInteger userID,
                   BigInteger orderID,
                   BigInteger productID,
                   User user,
                   Integer rateAmount,
-                  String comment,
-                  LocalDate dateRating) {
+                  String comment) {
         this.userID = userID;
         this.orderID = orderID;
         this.productID = productID;
         this.user = user;
         this.rateAmount = rateAmount;
         this.comment = comment;
-        this.dateRating = dateRating;
     }
 
     @Override

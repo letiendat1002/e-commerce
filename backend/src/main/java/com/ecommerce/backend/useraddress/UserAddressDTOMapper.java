@@ -10,7 +10,7 @@ public class UserAddressDTOMapper implements Function<UserAddress, UserAddressDT
     public UserAddressDTO apply(UserAddress userAddress) {
         return new UserAddressDTO(
                 userAddress.getUserAddressID(),
-                userAddress.getUser().getUserID(),
+                userAddress.getUserID(),
                 userAddress.getAddress()
         );
     }

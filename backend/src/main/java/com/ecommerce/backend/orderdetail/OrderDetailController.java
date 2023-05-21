@@ -1,5 +1,6 @@
 package com.ecommerce.backend.orderdetail;
 
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,9 @@ public class OrderDetailController {
     private final OrderDetailDTOMapper orderDetailDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('order_detail:read')")
+    @PreAuthorize(
+            "hasAnyAuthority('order_detail:read_all', 'order_detail:read_one')"
+    )
     public OrderDetailResponse getOrderDetails(
             @RequestParam(value = "orderID", required = false) BigInteger orderID,
             @RequestParam(value = "productID", required = false) BigInteger productID
@@ -68,7 +71,7 @@ public class OrderDetailController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('order_detail:write')")
+    @PreAuthorize("hasAuthority('order_detail:create')")
     public OrderDetailResponse postOrderDetail(
             @Validated @RequestBody OrderDetailAddRequest request,
             BindingResult errors
@@ -91,10 +94,12 @@ public class OrderDetailController {
     }
 
     @GetMapping("/refund")
-    @PreAuthorize("hasAuthority('order_detail:read')")
-    public OrderDetailResponse getOnRefundOrderDetails() {
+    @PreAuthorize("hasAuthority('order_detail:read_all')")
+    public OrderDetailResponse getOrderDetailsByStatus(
+            @RequestParam(value = "status") OrderDetailStatus status
+    ) {
         var orderDetailDTOList = orderDetailService
-                .fetchAllOnRefundOrderDetails()
+                .fetchOrderDetailsByStatus(status)
                 .stream()
                 .map(orderDetailDTOMapper)
                 .toList();
@@ -107,8 +112,8 @@ public class OrderDetailController {
     }
 
     @PutMapping("/refund")
-    @PreAuthorize("hasAuthority('order_detail:write')")
-    public OrderDetailResponse putOnRefundOrderDetail(
+    @PreAuthorize("hasAuthority('order_detail:update')")
+    public OrderDetailResponse putOrderDetailStatus(
             @Validated @RequestBody OrderDetailUpdateRequest request,
             BindingResult errors
     ) {
@@ -118,7 +123,7 @@ public class OrderDetailController {
 
         var orderDetailDTOList = Collections.singletonList(
                 orderDetailDTOMapper.apply(
-                        orderDetailService.updateOrderDetail(request)
+                        orderDetailService.updateOrderDetailStatus(request)
                 )
         );
 

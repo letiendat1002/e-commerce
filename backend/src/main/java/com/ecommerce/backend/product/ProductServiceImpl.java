@@ -112,16 +112,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Product update) {
-        productDAO
-                .updateProduct(update)
-                .orElseThrow(
-                        () -> new FailedOperationException(
-                                "Failed to update product"
-                        ));
-    }
-
-    @Override
     public void updateProductQuantityByAmount(
             BigInteger productID,
             int amount
@@ -139,7 +129,12 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setQuantity(product.getQuantity() + amount);
 
-        updateProduct(product);
+        productDAO
+                .updateProduct(product)
+                .orElseThrow(
+                        () -> new FailedOperationException(
+                                "Failed to update product"
+                        ));
     }
 
     @Override
@@ -167,6 +162,18 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    private void checkIfOtherProductNotExistsBySlugOrThrow(
+            String slug,
+            BigInteger productID
+    ) {
+        var isExisted = productDAO.existsOtherProductBySlug(slug, productID);
+        if (isExisted) {
+            throw new DuplicateResourceException(
+                    "Product with slug {%s} is already existed".formatted(slug)
+            );
+        }
+    }
+
     private void checkAndUpdateChangesOrThrow(ProductRequest request,
                                               Product product) {
         var isChanged = false;
@@ -183,6 +190,19 @@ public class ProductServiceImpl implements ProductService {
         } else {
             var category = categoryService.fetchCategoryByID(request.categoryID());
             product.setCategory(category);
+            isChanged = true;
+        }
+
+        if (product.getDiscount() != null && request.discount() != null) {
+            if (!request.discount().equals(product.getDiscount())
+            ) {
+                product.setDiscount(request.discount());
+                isChanged = true;
+            }
+        } else if (product.getDiscount() == null && request.discount() == null) {
+            isChanged = false;
+        } else {
+            product.setDiscount(request.discount());
             isChanged = true;
         }
 
@@ -225,12 +245,6 @@ public class ProductServiceImpl implements ProductService {
         if (!request.unitPrice().equals(product.getUnitPrice())
         ) {
             product.setUnitPrice(request.unitPrice());
-            isChanged = true;
-        }
-
-        if (!request.discount().equals(product.getDiscount())
-        ) {
-            product.setDiscount(request.discount());
             isChanged = true;
         }
 
@@ -315,18 +329,6 @@ public class ProductServiceImpl implements ProductService {
         if (!isChanged) {
             throw new DuplicateResourceException(
                     "No data changes detected"
-            );
-        }
-    }
-
-    private void checkIfOtherProductNotExistsBySlugOrThrow(
-            String slug,
-            BigInteger productID
-    ) {
-        var isExisted = productDAO.existsOtherProductBySlug(slug, productID);
-        if (isExisted) {
-            throw new DuplicateResourceException(
-                    "Product with slug {%s} is already existed".formatted(slug)
             );
         }
     }

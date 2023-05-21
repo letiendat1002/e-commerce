@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import '../../assets/css/profile.scss';
+
 import { AiFillCloseCircle, AiOutlineRight } from 'react-icons/ai';
 import { BiCommentDetail, BiMap } from 'react-icons/bi';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdMonochromePhotos, MdNotificationsActive } from 'react-icons/md';
+import React, { useEffect, useState } from 'react';
+import { changePassword, getUserForID, updateUser } from '../../Redux/slice/usersSlice';
+import { getUserID, logout } from '../../Redux/slice/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Avatar from '../../assets/images/img-user.png';
 import { RiAccountCircleLine } from 'react-icons/ri';
 import { TfiMenuAlt } from 'react-icons/tfi';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getUserID, logout } from '../../Redux/slice/userSlice';
-import { changePassword, getUserForID, updateUser } from '../../Redux/slice/usersSlice';
-import '../../assets/css/profile.scss';
-import Avatar from '../../assets/images/img-user.png';
 
 const Profile = () => {
   const [active, setActive] = useState(false);
@@ -44,7 +46,7 @@ const Profile = () => {
     }
   };
 
-  const userID = JSON.parse(localStorage.getItem('user'))[0].userID
+  const userID = JSON.parse(localStorage.getItem('user'))[0]?.userID || []
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getUserForID(userID))
@@ -53,7 +55,7 @@ const Profile = () => {
 
   const user = useSelector(state => state.user.current)
 
-  const accountInfo = useSelector(state => state.userAPI.data)
+  const accountInfo = useSelector(state => state.userAPI.data) || []
   const fullname = accountInfo[0]?.fullName 
   const phones = accountInfo[0]?.phone
   // const name = fullname
@@ -61,15 +63,40 @@ const Profile = () => {
     const [phone, setPhone] = useState('')
     const [image, setImage] = useState((user[0]?.image == "") ?  ("string") : user[0]?.image)
     const [fullName, setfullName] = useState('')
+    const [errorName, setErrorName] = useState('')
+    const [errorPhone, setErrorPhone] = useState('')
     const gender = accountInfo[0]?.gender
     const roles = ["CUSTOMER"]
     const handleChangeName = (e) => {
       setfullName(e.target.value)
-    }
+      if ((e.target.value).trim() === ""){
+        setErrorName("Bạn chưa nhập họ tên")
+      } else{
+        setErrorName()
+      }
+     
 
-    const handleChangePhone = (e) => {
-      setPhone(e.target.value)
+      
     }
+    
+    const [isValid, setIsValid] = useState(true);
+    
+    const handleChangePhone = (e) => {
+      const inputValue = e.target.value;
+      setPhone(inputValue)
+     
+    const phoneRegex = /^(0[1-9]|84[1-9])(\d{8}|\d{9})$/;
+    if (phoneRegex.test(inputValue)) {
+      setErrorPhone()
+    } else {
+      setErrorPhone("Số điện thoại không hợp lệ")
+    }
+    }
+    
+
+
+
+    
 
     const handleUpdateAccount = (e) => {
       e.preventDefault()
@@ -105,7 +132,9 @@ const Profile = () => {
       }
       }
       )
+      
     }
+    
 
     const navigate = useNavigate()
 
@@ -131,7 +160,7 @@ const Profile = () => {
           toast.error("Mật khẩu mới trùng với mật khẩu cũ")
         }
         else if (res.payload.status === 200){
-          toast.error("Thay đổi mật khẩu thành công!")
+          toast.success("Thay đổi mật khẩu thành công!")
           navigate('/login')
           dispatch(logout())
         }
@@ -140,9 +169,10 @@ const Profile = () => {
           dispatch(getUserForID(userID))
           dispatch(getUserID(userID))
         }
+        dispatch(getUserForID(userID))
+        dispatch(getUserID(userID))
       })
-      dispatch(getUserForID(userID))
-      dispatch(getUserID(userID))
+      
     }
 
     const handleOpenUpdateModel = () => {
@@ -157,6 +187,9 @@ const Profile = () => {
         formUpdate.classList.add('d-none')
       }
     } 
+    
+      
+  
   return (
     <div className='profile container-fluid'>
       <div
@@ -253,8 +286,8 @@ const Profile = () => {
                   id=''
                   placeholder='Chọn ảnh'
                 />
-              </div>
-              <form
+              </div> 
+              <form 
                 className='right--container--profile'>
                 <div className='container--profile--item'>
                   <span>Họ và Tên</span>
@@ -263,9 +296,12 @@ const Profile = () => {
                     name='fullname'
                     placeholder='Vui lòng nhập họ và tên'
                     defaultValue={fullname}
-                    onChange={e => handleChangeName(e)}
+                    onChange={e => handleChangeName(e) }
+                    
+                    
                   />
                 </div>
+               {<div style= {{color:'red', marginTop:'-10px',marginLeft:'-330px'}} > {errorName} </div>}
                 <div className='container--profile--item'>
                   <span>Số điện thoại</span>
                   <input
@@ -274,8 +310,11 @@ const Profile = () => {
                     placeholder='Vui lòng nhập số điện thoại'
                     defaultValue={phones}
                     onChange={e => handleChangePhone(e)}
+                    
                   />
+                 
                 </div>
+                { (<div style= {{color:'red', marginTop:'-10px',marginLeft:'-290px'}} > {errorPhone} </div>)}
                 <div className='container--profile--item'>
                   <span>Email</span>
                   <input
@@ -296,7 +335,7 @@ const Profile = () => {
                     value='123456789'
                   />
                 </div>
-                <button onClick={handleUpdateAccount}>Lưu Thay Đổi</button>
+                <button  onClick={handleUpdateAccount} >Lưu Thay Đổi</button>
               </form>
             </div>
           </div>

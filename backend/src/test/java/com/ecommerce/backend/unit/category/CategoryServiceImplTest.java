@@ -1,6 +1,9 @@
-package com.ecommerce.backend.service;
+package com.ecommerce.backend.unit.category;
 
-import com.ecommerce.backend.category.*;
+import com.ecommerce.backend.category.Category;
+import com.ecommerce.backend.category.CategoryDAO;
+import com.ecommerce.backend.category.CategoryRequest;
+import com.ecommerce.backend.category.CategoryServiceImpl;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
@@ -20,15 +23,13 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
-
-    private final CategoryDTOMapper categoryDTOMapper = new CategoryDTOMapper();
     private CategoryServiceImpl categoryService;
     @Mock
     private CategoryDAO categoryDAO;
 
     @BeforeEach
     void setUp() {
-        categoryService = new CategoryServiceImpl(categoryDAO, categoryDTOMapper);
+        categoryService = new CategoryServiceImpl(categoryDAO);
     }
 
     @Test
@@ -50,15 +51,14 @@ class CategoryServiceImplTest {
         // When
         when(categoryDAO.selectCategoryByID(id)).thenReturn(Optional.of(category));
 
-        var expected = categoryDTOMapper.apply(category);
         var actual = categoryService.fetchCategoryByID(id);
 
         // Then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(category);
     }
 
     @Test
-    void givenID_whenFetchCategoryByID_butReturnEmptyOptional_thenThrowException() {
+    void whenFetchCategoryByID_butReturnEmptyOptional_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
 
@@ -73,12 +73,9 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void givenID_whenFetchCategoryByID_butIdNotFound_thenThrowException() {
+    void whenFetchCategoryByID_butIdNotFound_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(9_999_999);
-
-        // When
-        when(categoryDAO.selectCategoryByID(id)).thenThrow(ResourceNotFoundException.class);
 
         // Then
         assertThatThrownBy(() -> categoryService.fetchCategoryByID(id))
@@ -132,6 +129,8 @@ class CategoryServiceImplTest {
         // When
         when(categoryDAO.existsCategoryBySlug(request.slug()))
                 .thenReturn(false);
+        when(categoryDAO.insertCategory(any(Category.class)))
+                .thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(
@@ -140,7 +139,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void givenSlug_whenAddCategory_butExistsCategoryBySlug_thenThrowException() {
+    void whenAddCategory_butAlreadyExistsCategoryBySlug_thenThrowException() {
         // Given
         var slug = "string";
 
@@ -171,7 +170,6 @@ class CategoryServiceImplTest {
                 "test-image-update"
         );
 
-        // When
         var category = new Category(
                 id,
                 "string",
@@ -179,11 +177,13 @@ class CategoryServiceImplTest {
                 "string"
         );
 
+        // When
         when(categoryDAO.selectCategoryByID(id))
                 .thenReturn(Optional.of(category));
         when(categoryDAO.existsOtherCategoryBySlug(request.slug(), id))
                 .thenReturn(false);
         when(categoryDAO.updateCategory(category)).thenReturn(Optional.of(category));
+
         categoryService.updateCategory(id, request);
 
         // Then
@@ -197,6 +197,50 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    void whenUpdate_butIdNotFound_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(9_999_999);
+        var request = new CategoryRequest(
+                "test-update-category",
+                "test-update-category",
+                "test-image-update"
+        );
+
+        // Then
+        assertThatThrownBy(() -> categoryService.updateCategory(id, request))
+                .isInstanceOf(ResourceNotFoundException.class);
+        verify(categoryDAO, never()).updateCategory(any());
+    }
+
+    @Test
+    void whenUpdate_butExistsOtherCategoryBySlug_thenThrowException() {
+        // Given
+        var id = BigInteger.valueOf(1);
+        var request = new CategoryRequest(
+                "test-update-category",
+                "test-update-category",
+                "test-image-update"
+        );
+
+        var category = new Category(
+                id,
+                "string",
+                "string",
+                "string"
+        );
+
+        // When
+        when(categoryDAO.selectCategoryByID(id))
+                .thenReturn(Optional.of(category));
+        when(categoryDAO.existsOtherCategoryBySlug(request.slug(), id))
+                .thenReturn(true);
+
+        // Then
+        assertThatThrownBy(() -> categoryService.updateCategory(id, request))
+                .isInstanceOf(DuplicateResourceException.class);
+    }
+
+    @Test
     void whenUpdateFailed_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(1);
@@ -206,7 +250,6 @@ class CategoryServiceImplTest {
                 "test-image-update"
         );
 
-        // When
         var category = new Category(
                 id,
                 "string",
@@ -214,10 +257,13 @@ class CategoryServiceImplTest {
                 "string"
         );
 
+        // When
         when(categoryDAO.selectCategoryByID(id))
                 .thenReturn(Optional.of(category));
         when(categoryDAO.existsOtherCategoryBySlug(request.slug(), id))
                 .thenReturn(false);
+        when(categoryDAO.updateCategory(category))
+                .thenReturn(Optional.empty());
 
         // Then
         assertThatThrownBy(() -> categoryService.updateCategory(id, request))
@@ -225,7 +271,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void whenUpdate_butHasNoChanges_thenThrowException() {
+    void whenUpdate_butHasNoChange_thenThrowException() {
         var id = BigInteger.valueOf(1);
         var request = new CategoryRequest(
                 "string",
@@ -233,7 +279,6 @@ class CategoryServiceImplTest {
                 "string"
         );
 
-        // When
         var category = new Category(
                 id,
                 request.name(),
@@ -241,6 +286,7 @@ class CategoryServiceImplTest {
                 request.image()
         );
 
+        // When
         when(categoryDAO.selectCategoryByID(id))
                 .thenReturn(Optional.of(category));
         when(categoryDAO.existsOtherCategoryBySlug(request.slug(), id))
@@ -267,7 +313,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void givenId_whenDeleteCategory_butIdIsNotExist_thenThrowException() {
+    void whenDeleteCategory_butIdNotFound_thenThrowException() {
         // Given
         var id = BigInteger.valueOf(9_999_999);
 
@@ -280,5 +326,33 @@ class CategoryServiceImplTest {
         ).isInstanceOf(ResourceNotFoundException.class);
 
         verify(categoryDAO, never()).deleteCategoryByID(id);
+    }
+
+    @Test
+    void existsCategoryByID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(categoryDAO.existsCategoryByID(id)).thenReturn(true);
+        var result = categoryService.existsCategoryByID(id);
+
+        // Then
+        verify(categoryDAO).existsCategoryByID(id);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void notExistsCategoryByID() {
+        // Given
+        var id = BigInteger.valueOf(1);
+
+        // When
+        when(categoryDAO.existsCategoryByID(id)).thenReturn(false);
+        var result = categoryService.existsCategoryByID(id);
+
+        // Then
+        verify(categoryDAO).existsCategoryByID(id);
+        assertThat(result).isFalse();
     }
 }

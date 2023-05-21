@@ -3,7 +3,7 @@ package com.ecommerce.backend.shared.runner;
 import com.ecommerce.backend.user.User;
 import com.ecommerce.backend.user.UserRepository;
 import com.ecommerce.backend.user.enums.Gender;
-import com.ecommerce.backend.user.enums.UserRole;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

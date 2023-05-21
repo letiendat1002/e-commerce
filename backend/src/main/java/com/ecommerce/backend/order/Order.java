@@ -39,11 +39,6 @@ public class Order {
     @Column(name = "UserID")
     private BigInteger userID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID", insertable = false, updatable = false)
-    @ToString.Exclude
-    private User user;
-
     @Column(name = "AdditionalPrice")
     private BigInteger additionalPrice;
 
@@ -61,8 +56,31 @@ public class Order {
     @Column(name = "Address")
     private String address;
 
+    @Column(name = "IsPreparing")
+    private boolean isPreparing = false;
+
+    @Column(name = "DatePreparing")
+    private LocalDate datePreparing;
+
+    @Column(name = "IsShipping")
+    private boolean isShipping = false;
+
+    @Column(name = "DateShipping")
+    private LocalDate dateShipping;
+
+    @Column(name = "IsCompleted")
+    private boolean isCompleted = false;
+
     @Column(name = "DateCompleted")
     private LocalDate dateCompleted;
+
+    @Column(name = "WorkerID")
+    private BigInteger workerID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UserID", insertable = false, updatable = false)
+    @ToString.Exclude
+    private User user;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     @ToString.Exclude
@@ -109,11 +127,11 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(getAdditionalPrice(), order.getAdditionalPrice()) && getPaymentType() == order.getPaymentType() && Objects.equals(getDateOrder(), order.getDateOrder()) && Objects.equals(getAddress(), order.getAddress());
+        return Objects.equals(getUserID(), order.getUserID()) && Objects.equals(getAdditionalPrice(), order.getAdditionalPrice()) && getPaymentType() == order.getPaymentType() && getStatus() == order.getStatus() && Objects.equals(getDateOrder(), order.getDateOrder()) && Objects.equals(getAddress(), order.getAddress());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAdditionalPrice(), getPaymentType(), getDateOrder(), getAddress());
+        return Objects.hash(getUserID(), getAdditionalPrice(), getPaymentType(), getStatus(), getDateOrder(), getAddress());
     }
 }

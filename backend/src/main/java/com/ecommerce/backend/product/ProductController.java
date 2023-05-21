@@ -66,7 +66,7 @@ public class ProductController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('product:write')")
+    @PreAuthorize("hasAuthority('product:create')")
     public ProductResponse postProduct(
             @Validated @RequestBody ProductRequest request,
             BindingResult errors
@@ -88,21 +88,8 @@ public class ProductController {
         );
     }
 
-    @DeleteMapping("{productID}")
-    @PreAuthorize("hasAuthority('product:write')")
-    public BaseResponse deleteProduct(
-            @PathVariable("productID") BigInteger productID
-    ) {
-        productService.deleteProduct(productID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{productID}")
-    @PreAuthorize("hasAuthority('product:write')")
+    @PreAuthorize("hasAuthority('product:update')")
     public ProductResponse putProduct(
             @PathVariable("productID") BigInteger productID,
             @Validated @RequestBody ProductRequest request,
@@ -122,6 +109,19 @@ public class ProductController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 productDTOList
+        );
+    }
+
+    @DeleteMapping("{productID}")
+    @PreAuthorize("hasAuthority('product:delete')")
+    public BaseResponse deleteProduct(
+            @PathVariable("productID") BigInteger productID
+    ) {
+        productService.deleteProduct(productID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }
