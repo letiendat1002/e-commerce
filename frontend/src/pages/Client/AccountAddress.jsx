@@ -1,17 +1,19 @@
-import { Pagination, Popconfirm } from 'antd'
-import React, { useEffect, useState } from 'react'
+import '../../assets/css/profile.scss'
+
 import { AiFillCloseCircle, AiFillDelete, AiOutlineRight } from 'react-icons/ai'
 import { BiCommentDetail, BiEdit, BiMap } from 'react-icons/bi'
+import { Pagination, Popconfirm } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { addAddress, deleteAddress, getUserAddressForIDUser, updateAddress } from '../../Redux/slice/userAddressSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
+import AddressImage from '../../assets/images/img-location.png'
+import Avatar from '../../assets/images/img-user.png'
+import { Link } from 'react-router-dom'
 import { MdNotificationsActive } from 'react-icons/md'
 import { RiAccountCircleLine } from 'react-icons/ri'
 import { TfiMenuAlt } from 'react-icons/tfi'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { addAddress, deleteAddress, getUserAddressForIDUser, updateAddress } from '../../Redux/slice/userAddressSlice'
-import '../../assets/css/profile.scss'
-import AddressImage from '../../assets/images/img-location.png'
-import Avatar from '../../assets/images/img-user.png'
 
 const AccountAddress = () => {
     const handleOpen = () => {
@@ -69,9 +71,18 @@ const AccountAddress = () => {
     const name = user[0].fullName
     const phone = user[0].phone
 
-    const addresses = useSelector(state => state.userAddress.data)
+    const addresses = useSelector(state => state.userAddress.data) || []
 
     const [address, setAddress] = useState('')
+    const [error, setError] = useState('')
+    const handleChangeAddress = (e) => {
+        setAddress(e.target.value)
+        if (e.target.value === ''){
+            setError('Vui lòng nhập địa chỉ của bạn!')
+        }else{
+            setError()
+        }
+    }
     const handleAddAddress = (e) => {
         e.preventDefault()
         const data = {
@@ -385,7 +396,8 @@ const AccountAddress = () => {
                             <option value="Thành Phố Hồ Chí Minh">Thành Phố Hồ Chí Minh</option>
                             <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
                     </select>
-                    <input type="text" name='address' defaultValue={address} onChange={(e) => setAddress(e.target.value)} placeholder='Nhập địa chỉ' />< br/>
+                    <input  type="text" name='address' defaultValue={address} onChange={handleChangeAddress} placeholder='Nhập địa chỉ' />< br/>
+                    {<div style= {{color:'red', marginTop:'-10px'}} > {error} </div>}
                     <input type="checkbox" name="defaultAddress" id="" />
                     <span>Chọn làm địa chỉ mặc định</span>
                     <br/>

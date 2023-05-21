@@ -121,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
                 order.setShipping(true);
                 order.setDateShipping(LocalDate.now());
             }
-            if (order.getStatus().equals(OrderStatus.COMPLETED)) {
+            if (order.getStatus().equals(OrderStatus.SHIP_COMPLETED)) {
                 order.setCompleted(true);
                 order.setDateCompleted(LocalDate.now());
                 order.setWorkerID(request.workerID());

@@ -336,7 +336,7 @@ class OrderServiceImplTest {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
-                OrderStatus.COMPLETED,
+                OrderStatus.SHIP_COMPLETED,
                 id
         );
 
@@ -406,7 +406,7 @@ class OrderServiceImplTest {
         // Given
         var id = BigInteger.valueOf(1);
         var request = new OrderUpdateRequest(
-                OrderStatus.COMPLETED,
+                OrderStatus.SHIP_COMPLETED,
                 id
         );
 

@@ -1,19 +1,28 @@
-import { Button, Checkbox, Form, Input, Select } from 'antd';
-import React, { useState } from 'react';
-import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
-import { BsFacebook } from 'react-icons/bs';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { login, register } from '../../Redux/slice/userSlice';
-import { resetPassword } from '../../Redux/slice/usersSlice';
-// import Logo from '../../assets/images/Logo.svg';
-import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
-import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
-import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
-import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import './style.scss';
+
+import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
+import { Button, Checkbox, Form, Input, Select } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { login, register } from '../../Redux/slice/userSlice';
+
+import { BsFacebook } from 'react-icons/bs';
+import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
 import Logo from '../../components/Logo/Logo';
+import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
+import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
+import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
+import { resetPassword } from '../../Redux/slice/usersSlice';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+
+// import Logo from '../../assets/images/Logo.svg';
+
+
+
+
+
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -84,10 +93,12 @@ const Login = () => {
   };
 
   const handleLogin = (item) => {
-    if (item === 'login') {
+    const formItem = document.querySelector('.login__container--form');
+    const signinItem = document.querySelector('.register__container--form');
+    if (item == 'login') {
       formItem.classList.add('d-none');
       signinItem.classList.remove('d-none');
-    } else if (item === 'signin') {
+    } else if (item == 'signin') {
       formItem.classList.remove('d-none');
       signinItem.classList.add('d-none');
     }
