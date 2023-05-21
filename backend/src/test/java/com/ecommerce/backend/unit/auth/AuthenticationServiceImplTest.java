@@ -16,6 +16,7 @@ import com.ecommerce.backend.util.email.EmailSenderService;
 import com.ecommerce.backend.util.enums.MessageStatus;
 import com.ecommerce.backend.util.exception.DuplicateResourceException;
 import com.ecommerce.backend.util.exception.FailedOperationException;
+import com.ecommerce.backend.util.exception.InvalidArgumentException;
 import com.ecommerce.backend.util.exception.JwtAuthenticationException;
 import com.ecommerce.backend.util.security.jwt.JwtService;
 import com.ecommerce.backend.util.security.util.PasswordGenerator;
@@ -349,6 +350,45 @@ class AuthenticationServiceImplTest {
 
     @Test
     void sendRegisterActivation() {
-        // TODO: Handle this when FE implement activate page
+        // Given
+        var email = "test@example.com";
+        var user = new User();
+
+        // When
+        when(userService.fetchUserByEmail(email)).thenReturn(user);
+        authenticationService.sendRegisterActivation(email);
+
+        // Then
+        verify(userService).fetchUserByEmail(email);
+        verify(emailSenderService).sendEmail(any(CustomEmail.class));
+    }
+
+    @Test
+    void whenSendRegisterActivation_butEmailIsInvalid_thenThrowException() {
+        // Given
+        var email = "test invalid email";
+
+        // Then
+        assertThatThrownBy(() -> authenticationService.sendRegisterActivation(email))
+                .isInstanceOf(InvalidArgumentException.class);
+        verify(userService, never()).fetchUserByEmail(email);
+        verify(emailSenderService, never()).sendEmail(any());
+    }
+
+    @Test
+    void whenSendRegisterActivation_butUserIsAlreadyEnable_thenThrowException() {
+        // Given
+        var email = "test@example.com";
+        var user = new User();
+        user.setEnabled(true);
+
+        // When
+        when(userService.fetchUserByEmail(email)).thenReturn(user);
+
+        // Then
+        assertThatThrownBy(() -> authenticationService.sendRegisterActivation(email))
+                .isInstanceOf(FailedOperationException.class);
+        verify(userService).fetchUserByEmail(email);
+        verify(emailSenderService, never()).sendEmail(any());
     }
 }

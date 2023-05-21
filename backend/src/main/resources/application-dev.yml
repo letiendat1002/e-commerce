@@ -5,7 +5,8 @@ spring:
     password: root
 
 env-variable:
-  url: http://localhost:8080
+  fe-url: http://localhost:3000
+  be-url: http://localhost:8080
 
 logging:
   level:

@@ -126,44 +126,4 @@ public class UserController {
                 MessageStatus.SUCCESSFUL
         );
     }
-
-    @PutMapping("/lock/permanent/{userID}")
-    @PreAuthorize("hasAuthority('user:update')")
-    public BaseResponse lockUser(
-            @PathVariable("userID") BigInteger userID
-    ) {
-        userService.lockUserPermanent(userID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
-    @PutMapping("/lock/temporary/{userID}")
-    @PreAuthorize("hasAuthority('user:update')")
-    public BaseResponse lockUser(
-            @PathVariable("userID") BigInteger userID,
-            @Validated @RequestBody UserLockRequest request
-    ) {
-        userService.lockUserTemporary(userID, request);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
-    @PutMapping("/unlock/{userID}")
-    @PreAuthorize("hasAuthority('user:update')")
-    public BaseResponse unlockUser(
-            @PathVariable("userID") BigInteger userID
-    ) {
-        userService.unlockUser(userID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
 }

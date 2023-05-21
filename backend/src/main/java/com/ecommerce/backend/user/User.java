@@ -176,10 +176,9 @@ public class User implements UserDetails {
         return true;
     }
 
-    // TODO: Handle this when FE implement activate page
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     @Override

@@ -223,19 +223,4 @@ public class UserServiceImpl implements UserService {
     public boolean isUserEnabledByEmail(String username) {
         return userDAO.isUserEnabledByEmail(username);
     }
-
-    @Override
-    public void unlockUser(BigInteger userID) {
-
-    }
-
-    @Override
-    public void lockUserPermanent(BigInteger userID) {
-
-    }
-
-    @Override
-    public void lockUserTemporary(BigInteger userID, UserLockRequest request) {
-
-    }
 }

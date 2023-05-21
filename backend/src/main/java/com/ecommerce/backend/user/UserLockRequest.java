@@ -1,7 +1,9 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.user.enums.LockDurationType;
+
 public record UserLockRequest(
-        LockType lockType,
+        LockDurationType lockDurationType,
         int duration
 ) {
 }

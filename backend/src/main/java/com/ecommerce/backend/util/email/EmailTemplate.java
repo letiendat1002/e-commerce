@@ -6,27 +6,25 @@ public class EmailTemplate {
     public static final String SIGNATURE = "--\nKind regards,\nLinkking Team";
 
     public static String getRegistrationMessage(String name, String registrationUrl) {
-        return "Hello %s,\n\nThank you for registering account at %s. Before we can activate your account, one last step must be taken to complete your registration.\n\nTo confirm your registration, please visit this URL:\n\n%s\n\nThis link will expire in 15 minutes.\n\n%s"
+        return "Welcome %s,\n\nThank you for registering account at Linkking. To activate and secure your account, please confirm your email by visit URL below:\n\n%s\n\nThis link will expire in 15 minutes.\n\n%s"
                 .formatted(name,
-                        "Linkking",
                         registrationUrl,
                         SIGNATURE
                 );
     }
 
     public static String getResetPasswordMessage(String name, String password) {
-        var warning = "For security, you should change your password after logging in!";
-        return "Hello %s,\n\nWe received a request to reset the password for your %s account.\n\nPlease use the password below to login:\n\n%s\n\n%s\n\n%s"
-                .formatted(name,
-                        "Linkking",
+        var warning = "For security, you should change your password after logging in.";
+        return "Hello %s,\n\nWe received a request to reset the password for your Linkking account.\n\nPlease use the password below to login:\n\n%s\n\n%s\n\n%s"
+                .formatted(
+                        name,
                         password,
                         warning,
                         SIGNATURE
                 );
     }
 
-    // TODO: Handle this when FE implement activate page
     public static String createRegistrationUrl(String url, String token) {
-        return url + "/api/v1/auth/activate?token=" + token;
+        return url + "/email/verify/" + token;
     }
 }

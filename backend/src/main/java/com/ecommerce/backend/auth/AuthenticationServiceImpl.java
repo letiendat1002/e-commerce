@@ -56,7 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         var registrationUrl = EmailTemplate.createRegistrationUrl(
-                variableConstants.getUrl(),
+                variableConstants.getFeUrl(),
                 token
         );
 
@@ -129,7 +129,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public void resetPassword(String email) {
-        // TODO: Handle this when Forgot Password Page is implemented
         var randomPassword = passwordGenerator.generateRandomPassword();
 
         var user = userService.updateUserPassword(
@@ -196,7 +195,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         var registrationUrl = EmailTemplate.createRegistrationUrl(
-                variableConstants.getUrl(),
+                variableConstants.getFeUrl(),
                 token
         );
 
