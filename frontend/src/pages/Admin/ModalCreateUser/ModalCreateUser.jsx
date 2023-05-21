@@ -199,7 +199,8 @@ const ModalCreateUser = (props) => {
                   checked>
                   CUSTOMER
                 </option>
-                <option value='ADMIN'>ADMIN</option>
+                <option value='SHIPPER'>SHIPPER</option>
+                <option value='EMPLOYEE'>EMPLOYEE</option>
               </select>
             </div>
 

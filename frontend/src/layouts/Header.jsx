@@ -28,6 +28,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import '../../src/assets/images/Logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/slice/userSlice';
+import SearchBoxClient from '../components/SearchBoxClient/SearchBoxClient';
 const Header = () => {
   const [active, setActive] = useState(false);
 
@@ -233,16 +234,19 @@ const Header = () => {
           alt=''
         /> */}
         <Logo></Logo>
+
         <InputGroup className='input__form__search'>
-          <Form.Control
+          {/* <Form.Control
             as='input'
             aria-label='Nhập tên thiết bị cần tìm'
             placeholder='Nhập tên thiết bị cần tìm'
           />
           <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
-          </InputGroup.Text>
+          </InputGroup.Text> */}
+          <SearchBoxClient/>
         </InputGroup>
+
         <div className='nav-item account'>
           {user?.length>0 ? (
             <Link to={'/account/profile'}>

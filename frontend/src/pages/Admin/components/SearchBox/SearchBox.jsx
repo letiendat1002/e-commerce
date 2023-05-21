@@ -97,7 +97,8 @@ const SearchBox = (props) => {
       <ShowContext.Provider value={setShowResult}>
         <Tippy
           interactive
-          visible={showResult === true && searchValue !== ''&&loadingSearch===false}
+          placement='bottom'
+          visible={showResult === true && searchValue !== '' && loadingSearch === false}
           render={(attrs) => {
             return (
               <div
@@ -119,7 +120,7 @@ const SearchBox = (props) => {
                   </Popper>
                 ) : (
                   <Popper>
-                      <NotFoundProduct debouce={debouce} />
+                    <NotFoundProduct debouce={debouce} />
                   </Popper>
                 )}
               </div>

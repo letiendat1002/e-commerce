@@ -4,12 +4,10 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import ModalCreateUser from '../ModalCreateUser/ModalCreateUser';
 import './ManageUser.scss';
 import TableUser from '../components/TableUser/TableUser';
-import { getAllUser } from '../../../services/apiGetAllUser';
 import { getUsers, getUserWithPaginate } from '../../../services/apiServiceUser';
 import ModalUpdateUser from '../components/ModalUpdateUser/ModalUpdateUser';
 import ModalDeleteUser from '../components/ModalDeleteUser/ModalDeleteUser';
 import Pagination from '../components/Pagination/Pagination';
-// import Pagination from '../../../components/Pagination/Pagination';
 import ModalViewUser from '../components/ModalViewUser/ModalViewUser';
 import Loading from '../../../components/Loading/Loading';
 import { GrAddCircle, GrHome } from 'react-icons/gr';
@@ -47,11 +45,7 @@ const MangeUser = (props) => {
     }
   }, []);
 
-  const callApi = async () => {
-    const res = await getAllUser();
-    if (res.EC === 0) {
-    }
-  };
+
 
   const getAllUsers = async () => {
     setLoading(true);
@@ -134,7 +128,6 @@ const MangeUser = (props) => {
         <ModalCreateUser
           show={show}
           setShow={setShow}
-          callApi={callApi}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           getAllUsers={getAllUsers}
@@ -144,7 +137,6 @@ const MangeUser = (props) => {
           showUpdate={showModalUpdateUser}
           setShowModal={setShowModalUpdateUser}
           data1={data1}
-          callApi={callApi}
           resetUpdateData={resetUpdateData}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -156,7 +148,6 @@ const MangeUser = (props) => {
           setShowModalDeleteUser={setShowModalDeleteUser}
           dataDelete={dataDelete}
           getAllUsers={getAllUsers}
-          callApi={callApi}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
