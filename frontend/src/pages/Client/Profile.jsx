@@ -1,18 +1,22 @@
-import '../../assets/css/profile.scss';
+import "../../assets/css/profile.scss";
 
-import { AiFillCloseCircle, AiOutlineRight } from 'react-icons/ai';
-import { BiCommentDetail, BiMap } from 'react-icons/bi';
-import { Link, useNavigate } from 'react-router-dom';
-import { MdMonochromePhotos, MdNotificationsActive } from 'react-icons/md';
-import React, { useEffect, useState } from 'react';
-import { changePassword, getUserForID, updateUser } from '../../Redux/slice/usersSlice';
-import { getUserID, logout } from '../../Redux/slice/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { AiFillCloseCircle, AiOutlineRight } from "react-icons/ai";
+import { BiCommentDetail, BiMap } from "react-icons/bi";
+import { Link, useNavigate } from "react-router-dom";
+import { MdMonochromePhotos, MdNotificationsActive } from "react-icons/md";
+import React, { useEffect, useState } from "react";
+import {
+  changePassword,
+  getUserForID,
+  updateUser,
+} from "../../Redux/slice/usersSlice";
+import { getUserID, logout } from "../../Redux/slice/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-import Avatar from '../../assets/images/img-user.png';
-import { RiAccountCircleLine } from 'react-icons/ri';
-import { TfiMenuAlt } from 'react-icons/tfi';
-import { toast } from 'react-toastify';
+import Avatar from "../../assets/images/img-user.png";
+import { RiAccountCircleLine } from "react-icons/ri";
+import { TfiMenuAlt } from "react-icons/tfi";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const [active, setActive] = useState(false);
@@ -46,8 +50,8 @@ const Profile = () => {
     }
   };
 
-  const userID = JSON.parse(localStorage.getItem('user'))[0]?.userID || []
-  const dispatch = useDispatch()
+  const userID = JSON.parse(localStorage.getItem("user"))[0]?.userID || [];
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserForID(userID));
     dispatch(getUserID(userID));
@@ -55,9 +59,9 @@ const Profile = () => {
 
   const user = useSelector((state) => state.user.current);
 
-  const accountInfo = useSelector(state => state.userAPI.data) || []
-  const fullname = accountInfo[0]?.fullName
-  const phones = accountInfo[0]?.phone
+  const accountInfo = useSelector((state) => state.userAPI.data) || [];
+  const fullname = accountInfo[0]?.fullName;
+  const phones = accountInfo[0]?.phone;
   // const name = fullname
   const userPhone = accountInfo[0]?.phone;
   const [phone, setPhone] = useState("");
@@ -151,47 +155,43 @@ const Profile = () => {
       setErrorNewPassword("Bạn chưa nhập mật khẩu mới");
     } else if (inputValue === oldPasswords) {
       setErrorNewPassword("Mật khẩu mới trùng với mật khẩu cũ");
-    } else if (inputValue.length < 8) {
-      setErrorNewPassword("Mật khẩu phải tối thiểu 8 kí tự");
+    } else if (inputValue.length < 5) {
+      setErrorNewPassword("Mật khẩu phải tối thiểu 5 kí tự");
     } else {
       setErrorNewPassword();
     }
   };
 
   const handleChangePassword = (e) => {
-    e.preventDefault()
-    const userAPI = user[0]
-    const email = userAPI.email
-    const token = localStorage.getItem('access_token')
-    const oldPassword = oldPasswords
-    const newPassword = newPasswords
+    e.preventDefault();
+    const userAPI = user[0];
+    const email = userAPI.email;
+    const token = localStorage.getItem("access_token");
+    const oldPassword = oldPasswords;
+    const newPassword = newPasswords;
 
     const data = {
-      email, 
+      email,
       token,
       oldPassword,
-      newPassword
-    }
-    dispatch(changePassword(data))
-    .then((res) => {
-      if (res.payload.status === 400){
-        toast.error("Mật khẩu mới trùng với mật khẩu cũ")
+      newPassword,
+    };
+    dispatch(changePassword(data)).then((res) => {
+      if (res.payload.status === 400) {
+        toast.error("Mật khẩu mới trùng với mật khẩu cũ");
+      } else if (res.payload.status === 200) {
+        toast.success("Thay đổi mật khẩu thành công!");
+        navigate("/login");
+        dispatch(logout());
+      } else if (res.payload.status === 401) {
+        toast.error("Mật khẩu hiện tại không chính xác!");
+        dispatch(getUserForID(userID));
+        dispatch(getUserID(userID));
       }
-      else if (res.payload.status === 200){
-        toast.success("Thay đổi mật khẩu thành công!")
-        navigate('/login')
-        dispatch(logout())
-      }
-      else if (res.payload.status === 401){
-        toast.error("Mật khẩu hiện tại không chính xác!")
-        dispatch(getUserForID(userID))
-        dispatch(getUserID(userID))
-      }
-      dispatch(getUserForID(userID))
-      dispatch(getUserID(userID))
-    })
-    
-  }
+      dispatch(getUserForID(userID));
+      dispatch(getUserID(userID));
+    });
+  };
 
   const handleOpenUpdateModel = () => {
     const overlay = document.querySelector(".change-passwordoverlay");

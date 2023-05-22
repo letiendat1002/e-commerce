@@ -88,7 +88,8 @@ const MangeUser = (props) => {
         <div className='btn-add-new'>
         <button
               className='btn btn-primary'
-              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px' ,padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px"}}
               onClick={() => {
                 navigate('/admin');
               }}>
@@ -97,7 +98,9 @@ const MangeUser = (props) => {
             </button>
           <button
             className='btn btn-primary'
-            onClick={(e) => setShow(true)}>
+            onClick={(e) => setShow(true)}
+            style={{padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px"}}>
             <GrAddCircle/>
             Add New User
           </button>

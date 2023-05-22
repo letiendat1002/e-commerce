@@ -27,6 +27,7 @@ const TableUser = (props) => {
           style={{
             borderRadius: '6px',
             overflow: 'hidden',
+
           }}>
           <thead>
             <tr>
@@ -96,8 +97,8 @@ const TableUser = (props) => {
                       {x.fullName.length === 0 ? 'No data' : x.fullName}
                     </td>
                     <td>{checkAdmin ? x.roles[14].substr(5) : x.roles[0].substr(5)}</td>
-                    <td>
-                      <button
+                    <td >
+                    <div className="btn-block"><button
                         className='btn btn-info'
                         onClick={() => handleClickBtnView(x)}>
                         <GrFormView />
@@ -112,7 +113,8 @@ const TableUser = (props) => {
                         className='btn btn-danger'
                         onClick={() => handleClickBtnDelete(x)}>
                         <GrFormTrash />
-                      </button>
+                      </button></div>
+                      
                     </td>
                   </tr>
                 );
