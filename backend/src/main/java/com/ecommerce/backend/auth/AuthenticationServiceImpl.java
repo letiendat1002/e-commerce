@@ -54,7 +54,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        var registrationUrl = EmailTemplate.createRegistrationUrl(
+        var registrationUrl = EmailTemplate.createEmailVerificationUrl(
                 variableConstants.getFeUrl(),
                 token
         );
@@ -172,7 +172,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void sendRegisterActivation(String email) {
+    public void sendEmailVerification(String email) {
         if (!EmailPatternMatcher.patternMatches(email)) {
             throw new InvalidArgumentException(
                     "Email is not valid"
@@ -194,17 +194,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        var registrationUrl = EmailTemplate.createRegistrationUrl(
+        var emailVerificationUrl = EmailTemplate.createEmailVerificationUrl(
                 variableConstants.getFeUrl(),
                 token
         );
 
         sendEmail(
                 user.getEmail(),
-                EmailTemplate.REGISTRATION_SUBJECT,
-                EmailTemplate.getRegistrationMessage(
+                EmailTemplate.EMAIL_VERIFICATION_SUBJECT,
+                EmailTemplate.getEmailVerificationMessage(
                         user.getFullName(),
-                        registrationUrl
+                        emailVerificationUrl
                 )
         );
     }

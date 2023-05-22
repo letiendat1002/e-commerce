@@ -13,5 +13,5 @@ public interface AuthenticationService {
 
     void changePassword(AuthenticationChangePasswordRequest request);
 
-    void sendRegisterActivation(String email);
+    void sendEmailVerification(String email);
 }

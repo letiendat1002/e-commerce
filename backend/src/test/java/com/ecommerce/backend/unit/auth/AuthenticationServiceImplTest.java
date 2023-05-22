@@ -19,7 +19,6 @@ import com.ecommerce.backend.util.exception.FailedOperationException;
 import com.ecommerce.backend.util.exception.InvalidArgumentException;
 import com.ecommerce.backend.util.exception.JwtAuthenticationException;
 import com.ecommerce.backend.util.security.jwt.JwtService;
-import com.ecommerce.backend.util.security.util.PasswordGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -351,7 +350,7 @@ class AuthenticationServiceImplTest {
 
         // When
         when(userService.fetchUserByEmail(email)).thenReturn(user);
-        authenticationService.sendRegisterActivation(email);
+        authenticationService.sendEmailVerification(email);
 
         // Then
         verify(userService).fetchUserByEmail(email);
@@ -364,7 +363,7 @@ class AuthenticationServiceImplTest {
         var email = "test invalid email";
 
         // Then
-        assertThatThrownBy(() -> authenticationService.sendRegisterActivation(email))
+        assertThatThrownBy(() -> authenticationService.sendEmailVerification(email))
                 .isInstanceOf(InvalidArgumentException.class);
         verify(userService, never()).fetchUserByEmail(email);
         verify(emailSenderService, never()).sendEmail(any());
@@ -381,7 +380,7 @@ class AuthenticationServiceImplTest {
         when(userService.fetchUserByEmail(email)).thenReturn(user);
 
         // Then
-        assertThatThrownBy(() -> authenticationService.sendRegisterActivation(email))
+        assertThatThrownBy(() -> authenticationService.sendEmailVerification(email))
                 .isInstanceOf(FailedOperationException.class);
         verify(userService).fetchUserByEmail(email);
         verify(emailSenderService, never()).sendEmail(any());

@@ -1,5 +1,7 @@
 package com.ecommerce.backend.util.email;
 
+import com.ecommerce.backend.util.constants.VariableConstants;
+import jakarta.mail.internet.InternetAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -11,15 +13,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailSenderService {
     private final JavaMailSender mailSender;
+    private final VariableConstants variableConstants;
 
     @Async
     public void sendEmail(CustomEmail customEmail) throws MailException {
-        var mail = new SimpleMailMessage();
+        var message = new SimpleMailMessage();
 
-        mail.setTo(customEmail.email());
-        mail.setSubject(customEmail.subject());
-        mail.setText(customEmail.message());
+        message.setTo(customEmail.email());
+        message.setSubject(customEmail.subject());
+        message.setText(customEmail.message());
 
-        mailSender.send(mail);
+        mailSender.send(message);
     }
 }

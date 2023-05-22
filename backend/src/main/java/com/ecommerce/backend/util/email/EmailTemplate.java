@@ -3,11 +3,13 @@ package com.ecommerce.backend.util.email;
 public class EmailTemplate {
     public static final String REGISTRATION_SUBJECT = "Registration Confirmation";
     public static final String RESET_PASSWORD_SUBJECT = "Password Reset Request";
+    public static final String EMAIL_VERIFICATION_SUBJECT = "Email Verification For Linkking Account";
     public static final String SIGNATURE = "--\nKind regards,\nLinkking Team";
 
     public static String getRegistrationMessage(String name, String registrationUrl) {
         return "Welcome %s,\n\nThank you for registering account at Linkking. To activate and secure your account, please confirm your email by visit URL below:\n\n%s\n\nThis link will expire in 15 minutes.\n\n%s"
-                .formatted(name,
+                .formatted(
+                        name,
                         registrationUrl,
                         SIGNATURE
                 );
@@ -24,7 +26,17 @@ public class EmailTemplate {
                 );
     }
 
-    public static String createRegistrationUrl(String url, String token) {
+    public static String getEmailVerificationMessage(String name,
+                                                     String emailVerificationUrl) {
+        return "Hello %s,\n\nPlease verify your email by visit URL below:\n\n%s\n\nThis link will expire in 15 minutes.\n\n%s"
+                .formatted(
+                        name,
+                        emailVerificationUrl,
+                        SIGNATURE
+                );
+    }
+
+    public static String createEmailVerificationUrl(String url, String token) {
         return url + "/email/verify/" + token;
     }
 }

@@ -88,11 +88,11 @@ public class AuthenticationController {
         );
     }
 
-    @GetMapping("/resend/register-activation")
-    public BaseResponse resendRegisterActivation(
+    @GetMapping("/resend/email-verification")
+    public BaseResponse resendEmailVerification(
             @RequestParam("email") String email
     ) {
-        authenticationService.sendRegisterActivation(email);
+        authenticationService.sendEmailVerification(email);
 
         return new BaseResponse(
                 HttpStatus.OK.value(),
