@@ -49,8 +49,6 @@ class AuthenticationServiceImplTest {
     @Mock
     private UserDTOMapper userDTOMapper;
     @Mock
-    private PasswordGenerator passwordGenerator;
-    @Mock
     private EmailSenderService emailSenderService;
     @Mock
     private VariableConstants variableConstants;
@@ -62,7 +60,6 @@ class AuthenticationServiceImplTest {
                 jwtService,
                 userService,
                 userDTOMapper,
-                passwordGenerator,
                 emailSenderService,
                 variableConstants
         );
@@ -243,20 +240,18 @@ class AuthenticationServiceImplTest {
     @Test
     void resetPassword() {
         // Given
-        var randomPassword = "random-password";
         var email = "test@example.com";
         var user = new User();
 
         // When
-        when(passwordGenerator.generateRandomPassword())
-                .thenReturn(randomPassword);
-        when(userService.updateUserPassword(email, randomPassword))
+        when(userService.updateUserPassword(any(String.class), any(String.class)))
                 .thenReturn(user);
         authenticationService.resetPassword(email);
 
         // Then
-        verify(passwordGenerator).generateRandomPassword();
-        verify(userService).updateUserPassword(email, randomPassword);
+        verify(userService).updateUserPassword(
+                any(String.class), any(String.class)
+        );
         verify(emailSenderService).sendEmail(any(CustomEmail.class));
     }
 

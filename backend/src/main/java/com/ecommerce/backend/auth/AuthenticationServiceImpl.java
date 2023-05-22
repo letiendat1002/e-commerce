@@ -39,7 +39,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final UserService userService;
     private final UserDTOMapper userDTOMapper;
-    private final PasswordGenerator passwordGenerator;
     private final EmailSenderService emailSenderService;
     private final VariableConstants variableConstants;
 
@@ -129,6 +128,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public void resetPassword(String email) {
+        var passwordGenerator = new PasswordGenerator();
         var randomPassword = passwordGenerator.generateRandomPassword();
 
         var user = userService.updateUserPassword(
