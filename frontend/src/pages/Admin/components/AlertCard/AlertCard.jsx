@@ -1,7 +1,7 @@
 import './style.css';
 
 import React, { useState } from 'react';
-import { Space, Table } from 'antd';
+import { Skeleton, Space, Table } from 'antd';
 
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,7 @@ function AlertCard(props) {
     <Space className="alert-card-container">
       <div className="card-header" style={{color: "#f8540e", paddingBottom: "1rem!important", fontWeight: "bolder"}}><h4 style={{padding: "-1rem 0 1rem 0"}}>{t('dashboard.item_title8')}</h4></div>
       <div className="card-info" style={{marginTop: "1rem!important"}}>
-        <WarningTable data={AlertData} />   
+        {(AlertData) ? (<WarningTable data={AlertData} />) : (<Skeleton active paragraph={{ rows: 5 }}/>)}
       </div>
     </Space>
   );

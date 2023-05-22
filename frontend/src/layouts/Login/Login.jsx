@@ -1,20 +1,29 @@
-import { Button, Checkbox, Form, Input, Select } from 'antd';
-import React, { useState } from 'react';
-import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
-import { BsFacebook } from 'react-icons/bs';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { login, register } from '../../Redux/slice/userSlice';
-import { resetPassword } from '../../Redux/slice/usersSlice';
-// import Logo from '../../assets/images/Logo.svg';
-import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
-import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
-import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
-import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import './style.scss';
-import Logo from '../../components/Logo/Logo';
+
+import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
+import { Button, Checkbox, Form, Input, Select } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { login, register } from '../../Redux/slice/userSlice';
 import { isValidNumber } from 'libphonenumber-js';
+import { BsFacebook } from 'react-icons/bs';
+import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
+import Logo from '../../components/Logo/Logo';
+import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
+import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
+import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
+import { resetPassword } from '../../Redux/slice/usersSlice';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { set } from 'lodash';
+
+// import Logo from '../../assets/images/Logo.svg';
+
+
+
+
+
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -85,10 +94,12 @@ const Login = () => {
   };
 
   const handleLogin = (item) => {
-    if (item === 'login') {
+    const formItem = document.querySelector('.login__container--form');
+    const signinItem = document.querySelector('.register__container--form');
+    if (item == 'login') {
       formItem.classList.add('d-none');
       signinItem.classList.remove('d-none');
-    } else if (item === 'signin') {
+    } else if (item == 'signin') {
       formItem.classList.remove('d-none');
       signinItem.classList.add('d-none');
     }
@@ -125,6 +136,21 @@ const Login = () => {
   };
 
   const [emailReset, setEmailReset] = useState('')
+  const [errorEmailReset, setErrorEmailReset] = useState('')
+  const handleEmailReset = (e) => {
+    const inputEmail = e.target.value
+    setEmailReset(inputEmail )
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(inputEmail )){
+      setErrorEmailReset()
+    } else if (inputEmail === ''){
+      setErrorEmailReset('Bạn chưa nhập email')
+    }else
+    {
+      setErrorEmailReset('Email không hợp lệ!')
+    }
+
+  }
 
   const handleCloseResetForm = () => {
     const overlay = document.querySelector('.overlay')
@@ -159,13 +185,16 @@ const Login = () => {
   }
 
   //Validation
-  const phoneNumberValidator = (_, value) => {
-    
-    if (value && !isValidNumber(value, 'VN')) {
-      return Promise.reject('Số điện thoại không hợp lệ');
-    }
-    return Promise.resolve();
-  };
+  
+    const validatePhoneNumber = (_, value) => {
+      const phoneNumberRegex = /^(0|\+84)(\d{9})$/; // Regex pattern for Vietnamese phone numbers
+  
+      if (!value || phoneNumberRegex.test(value)) {
+        return Promise.resolve();
+      }
+  
+      return Promise.reject('Số điện thoại không hợp lệ!');
+    };
 
   return (
     <div id='login'>
@@ -342,7 +371,7 @@ const Login = () => {
                 },
                 {
                   min: 6,
-                  message: 'Họ và Tên ít nhất 12 ký tự',
+                  message: 'Họ và Tên ít nhất 6 ký tự',
                 },
               ]}>
               <Input
@@ -367,7 +396,7 @@ const Login = () => {
                   required: true,
                   message: 'Vui lòng nhập số điện thoại của bạn.',
                 },
-                { validator: phoneNumberValidator },
+                { validator:  validatePhoneNumber },
               ]}>
               <Input
                 prefix={<LockIcon className='site-form-item-icon' />}
@@ -393,7 +422,7 @@ const Login = () => {
                 },
                 {
                   min: 5,
-                  message: 'Mật khẩu phải bao gồm ít nhất 6 ký tự',
+                  message: 'Mật khẩu phải bao gồm ít nhất 5 ký tự',
                 },
               ]}>
               <Input.Password
@@ -514,9 +543,9 @@ const Login = () => {
               <p>Vui lòng nhập email nếu bạn muốn lấy password mới!</p>
               <form>
                 <span>Email</span><br />
-                <input onChange={(e) => setEmailReset(e.target.value)} type="text" placeholder='Vui lòng nhập email' /><br />
+                <input onChange={(e) => handleEmailReset(e)} type="text" placeholder='Vui lòng nhập email' /><br />
                 <span defaultValue={emailReset} style={{fontSize: "14px", color: "#e02f2f", textAlign: "center"}}
-                >Lưu ý địa chỉ Email không nhập @gmail hoặc @...</span>
+                >{errorEmailReset}</span>
                 <button onClick={(e) => handleResetPassword(e)}>
                   Reset Password
                 </button>

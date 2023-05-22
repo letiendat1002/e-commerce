@@ -69,7 +69,7 @@ const ModelViewOrder = () => {
       <TableComponent 
         columns={collumes}
         dataSource={data}
-        pageSize={8}
+        pageSize={2}
       />
     </div>
   )
