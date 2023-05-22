@@ -9,7 +9,7 @@ import { Button, Checkbox, Form, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { login, register } from "../../Redux/slice/userSlice";
-import { isValidNumber } from "libphonenumber-js";
+// import { isValidNumber } from "libphonenumber-js";
 import { BsFacebook } from "react-icons/bs";
 import { ReactComponent as LockIcon } from "../../assets/images/lock.svg";
 import Logo from "../../components/Logo/Logo";
