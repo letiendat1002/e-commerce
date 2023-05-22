@@ -233,6 +233,8 @@ const Header = () => {
           src={Logo}
           alt=''
         /> */}
+        {/* <div style={{flex:"0 0 10%",width:"10%"}}>
+        </div> */}
         <Logo></Logo>
 
         <InputGroup className='input__form__search'>
@@ -312,14 +314,15 @@ const Header = () => {
         <InputGroup
           className='input__form__search--tablet'
           style={{ width: '100%', padding: '0 0 3rem 0' }}>
-          <Form.Control
+          {/* <Form.Control
             as='input'
             aria-label='Nhập tên thiết bị cần tìm'
             placeholder='Nhập tên thiết bị cần tìm'
           />
           <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
-          </InputGroup.Text>
+          </InputGroup.Text> */}
+          <SearchBoxClient/>
         </InputGroup>
       </div>
       <div className='headerBottom container-fluid col-lg-12 col-md-12 col-sm-12 col-12'>

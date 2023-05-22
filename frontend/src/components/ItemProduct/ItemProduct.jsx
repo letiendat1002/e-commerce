@@ -7,8 +7,7 @@ import styles from './ItemProduct.module.scss';
 
 const cx = classNames.bind(styles);
 const ItemProduct = ({ x, key, setShowResult }) => {
-    const { avatar, quantity, name, productID, image, slug } = x;
-
+  const { avatar, quantity, name, productID, image, slug } = x;
 
   const handleRedirect = (e) => {
     e.preventDefault();
@@ -25,7 +24,9 @@ const ItemProduct = ({ x, key, setShowResult }) => {
         <div className={cx('top-item-search')}>
           <img
             className={cx('avatar')}
-            src={image ? require(`../../assets/images/${image}`) : 'https://via.placeholder.com/444'}
+            src={
+              image ? require(`../../assets/images/${image}`) : 'https://via.placeholder.com/444'
+            }
             // src={
             //   image
             //     ? require(`../../../../assets/images/${image}`)

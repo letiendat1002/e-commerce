@@ -4,6 +4,14 @@ input, [tabindex] {
   border: none;
 }
 
+#tippy-1{
+}
+
+// tippy-1
+[data-tippy-root]{
+  width: 100%;
+  
+}
 .search {
     height: var(--search-height);
     // background-color: rgba(22, 24, 35, 0.06);
@@ -49,7 +57,7 @@ input, [tabindex] {
   }
   
   .search-results {
-    width: 545px;
+    max-width: 100%;
   }
   
   .search-title{

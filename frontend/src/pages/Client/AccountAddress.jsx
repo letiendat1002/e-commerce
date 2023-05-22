@@ -483,7 +483,7 @@ const AccountAddress = () => {
           <div className='address'>
             <select
               name='city'
-              disabled
+              // disabled
               id=''>
               <option value='Chọn tỉnh/thành'>Chọn tỉnh/thành</option>
               <option value='Thành Phố Hồ Chí Minh'>Thành Phố Hồ Chí Minh</option>
@@ -491,7 +491,7 @@ const AccountAddress = () => {
             </select>
             <select
               name='province'
-              disabled
+              // disabled
               id=''>
               <option value='Chọn quận/huyện'>Chọn quận/huyện</option>
               <option value='Thành Phố Hồ Chí Minh'>Thành Phố Hồ Chí Minh</option>
@@ -500,7 +500,7 @@ const AccountAddress = () => {
           </div>
           <select
             name='stress'
-            disabled
+            // disabled
             id=''>
             <option value='Chọn Đường'>Chọn Đường</option>
             <option value='Thành Phố Hồ Chí Minh'>Thành Phố Hồ Chí Minh</option>

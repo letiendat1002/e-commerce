@@ -91,7 +91,10 @@ const SearchBoxClient = (props) => {
     <div style={{ width: '100%' }}>
       <Tippy
         interactive
-        placement='bottom-start'
+        placement='bottom'
+        // size="big"
+        maxWidth='100%'
+        width="100%"
         visible={showResult === true && searchValue !== '' && loadingSearch === false}
         render={(attrs) => {
           return (
