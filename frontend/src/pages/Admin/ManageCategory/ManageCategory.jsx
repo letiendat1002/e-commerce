@@ -54,20 +54,26 @@ const ManageCategory = (props) => {
   return (
     <>
       <div className={cx('manage-category-container')}>
-        <div className='title'>Manage Category</div>
+        <div className='title' style={{
+          fontSize: "30px",
+          fontWeight:"600",
+         
+        }}>Manage Category</div>
 
         <div className='products-content'>
           <div className={cx('btn-add-new')}>
             <button
               className='btn btn-primary'
-              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px',padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px" }}
               onClick={() => {
                 navigate('/admin');
               }}>
               <GrHome />
               Back Home
             </button>
-            <button className='btn btn-primary' onClick={handleAddCategory}>
+            <button className='btn btn-primary' onClick={handleAddCategory} style ={{padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px"}}>
               <GrAddCircle /> Add New Category
             </button>
           </div>

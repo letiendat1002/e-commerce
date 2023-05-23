@@ -64,13 +64,18 @@ const ManageProducts = (props) => {
   return (
     <>
       <div className={cx('manage-products-container')}>
-        <div className='title my-3'>Manage Products</div>
+        <div className='title my-3'
+        style={{ fontWeight: "600",
+    fontSize: " calc(1.3rem + .6vw)",}}
+        
+        >Manage Products</div>
 
         <div className='products-content'>
           <div className={cx('btn-add-new')}>
             <button
               className='btn btn-primary'
-              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px',padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px" }}
               onClick={() => {
                 navigate('/admin');
               }}>
@@ -80,7 +85,8 @@ const ManageProducts = (props) => {
 
             <button
               className='btn btn-success'
-              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px',padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px" }}
               onClick={() => {
                 navigate('/admin/add-product')
               }}
