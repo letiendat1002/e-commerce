@@ -30,6 +30,8 @@ const AccountAddress = () => {
   const [nameCity, setNameCity] = useState('');
   const [nameWard, setNameWard] = useState('');
 
+  const addresses = useSelector((state) => state.userAddress.data);
+
   const handleCallDistrict = (districts) => {
     axios
       .get(`https://provinces.open-api.vn/api/p/${districts}?depth=2`)
@@ -163,12 +165,12 @@ const AccountAddress = () => {
   const user = useSelector((state) => state.user.current);
   useEffect(() => {
     dispatch(getUserAddressForIDUser(userID));
-  }, []);
+  }, [dispatch,userID]);
 
   const name = user[0].fullName;
   const phone = user[0].phone;
 
-  const addresses = useSelector((state) => state.userAddress.data);
+  
 
   const [address, setAddress] = useState('');
 

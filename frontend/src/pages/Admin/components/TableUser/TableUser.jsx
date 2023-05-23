@@ -108,7 +108,7 @@ const TableUser = (props) => {
                       </button>
                       <button
                         className='btn btn-success mx-3'
-                        // disabled={checkAdmin}
+                        disabled={checkAdmin}
                         onClick={() => setShowModal(x, x.userID)}>
                         <GrEdit />
                       </button>

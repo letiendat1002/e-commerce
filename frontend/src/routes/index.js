@@ -175,10 +175,7 @@ const router = createBrowserRouter([
         path: 'add-product',
         element: <ModalAddProduct />,
       },
-      {
-        path: 'manage-address',
-        element: <ManageAddress />,
-      },
+     
     ],
   },
   // {

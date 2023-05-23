@@ -15,6 +15,7 @@ import useDebouce from '../../hooks/useDebounce';
 import apiFilterProducts from '../../../../services/apiFilterProducts';
 import apiService from '../../../../services/apiServiceProducts';
 import NotFoundProduct from '../NotFoundProduct/NotFoundProduct';
+import './SearchBox.scss'
 
 export const ShowContext = createContext();
 const cx = classNames.bind(styles);
@@ -93,17 +94,18 @@ const SearchBox = (props) => {
   }, []);
 
   return (
-    <div>
+    <div style={{width:'100%'}}>
       <ShowContext.Provider value={setShowResult}>
         <Tippy
           interactive
-          placement='bottom'
+          placement='bottom-end'
+        maxWidth='100%'
+        width="100%"
           visible={showResult === true && searchValue !== '' && loadingSearch === false}
           render={(attrs) => {
             return (
               <div
                 className={cx('search-results')}
-                tabIndex='-1'
                 {...attrs}>
                 {searchResult.length > 0 && searchValue.length !== '' ? (
                   <Popper setShowResult={setShowResult}>

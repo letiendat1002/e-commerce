@@ -12,12 +12,12 @@ const ModalViewUser = (props) => {
 
   const handleClose = () => {
     setShowModalViewUser(false);
-    setEmail('');
-    setRole('');
-    setUsername('');
-    setImage('');
-    setPassword('');
-    setPreviewImage('');
+    // setEmail('');
+    // setRole('');
+    // setUsername('');
+    // setImage('');
+    // setPassword('');
+    // setPreviewImage('');
   };
 
   const [email, setEmail] = useState('');

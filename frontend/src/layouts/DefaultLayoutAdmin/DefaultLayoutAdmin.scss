@@ -21,8 +21,9 @@
       flex: 0 0 5%;
       
       & .centerside{
-        flex: 0 0 60%;
-        
+        flex: 0 0 50%;
+        max-width: 50%;
+        position: relative;
       }
       & .leftside {
         flex: 0 0 30%;

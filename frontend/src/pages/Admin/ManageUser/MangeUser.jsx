@@ -119,7 +119,8 @@ const MangeUser = (props) => {
           /> */}
 
               <div className='pagination-center'>
-              <Pagination
+                <Pagination
+                  getAllUsers={getAllUsers}
               userPerPage={userPerPage}
               totalUsers={totalUsers}
               changePage={changePage}

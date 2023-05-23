@@ -28,12 +28,12 @@ const ProductItemSearch = ({ x, key, setShowResult }) => {
         <div className={cx('top-item-search')}>
           <img
             className={cx('avatar')}
-            src={avatar ? avatar : 'https://via.placeholder.com/444'}
-            // src={
-            //   image
-            //     ? require(`../../../../assets/images/${image}`)
-            //     : 'https://via.placeholder.com/444'
-            // }
+            // src={avatar ? avatar : 'https://via.placeholder.com/444'}
+            src={
+              image
+                ? require(`../../../../assets/images/${image}`)
+                : 'https://via.placeholder.com/444'
+            }
             alt='Avatar'
           />
           <h4 className={cx('name')}>
