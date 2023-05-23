@@ -12,6 +12,7 @@ const ManageAddress = (props) => {
   const [setListDistricts, setSetListDistricts] = useState([]);
   const [ward, setWard] = useState([]);
   const [idDistricts, setIdDistricts] = useState('');
+
   const handleCallDistrict = (districts) => {
     axios
       .get(`https://provinces.open-api.vn/api/p/${districts}?depth=2`)
@@ -65,18 +66,21 @@ const ManageAddress = (props) => {
   }, []);
 
   const handleChangeProvinces = (valueDistricts) => {
-    console.log(valueDistricts);
     setDistricts(valueDistricts);
   };
   const handleChange = (value) => {
     setIdDistricts(value);
   };
 
-  console.log(idDistricts);
+ 
 
   const handleChangeWard = (valueWard) => {
     console.log(valueWard);
   };
+
+  const handleSelectProvince = (value) => {
+    console.log(value)
+  }
 
   return (
     <div>
@@ -85,6 +89,7 @@ const ManageAddress = (props) => {
         style={{ width: 200 }}
         placeholder='Select a option'
         optionFilterProp='children'
+        onSelect={handleSelectProvince}
         onChange={handleChangeProvinces}
         filterOption={(input, option) =>
           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
