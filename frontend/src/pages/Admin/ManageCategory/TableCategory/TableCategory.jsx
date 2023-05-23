@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
 import { Link, useNavigate } from 'react-router-dom';
 import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
+import './TableCategory.scss'
 
 const TableCategory = (props) => {
   const {

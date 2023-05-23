@@ -25,6 +25,7 @@ const TableUser = (props) => {
           style={{
             borderRadius: '6px',
             overflow: 'hidden',
+
           }}>
           <thead>
             <tr>
@@ -116,6 +117,7 @@ const TableUser = (props) => {
                         onClick={() => handleClickBtnDelete(x)}>
                         <GrFormTrash />
                       </button>
+                      
                     </td>
                   </tr>
                 );
