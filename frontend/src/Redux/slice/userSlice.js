@@ -11,8 +11,6 @@ export const register = createAsyncThunk('user/register', async (payload) => {
 
 export const login = createAsyncThunk('user/login', async (payload) => {
   //call API to login
-
-  console.log(payload);
   const { email, password } = payload;
   const res = await authApi.login(email, password);
   //save data local storage

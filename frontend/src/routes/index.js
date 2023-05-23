@@ -4,8 +4,10 @@ import AccountInfo from '../pages/Client/AccountInfo';
 import AccountOrder from '../pages/Client/AccountOrder';
 import Cart from '../pages/Client/Cart';
 import Dashboard from '../pages/Admin/Dasboard/Dashboard';
+import DashboardShipper from '../pages/Shipper/Dasboard/DashboardShipper';
 import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
 import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin';
+import DefaultLayoutShipper from '../layouts/DefaultLayoutShipper/DefaultLayoutShipper';
 import Home from '../pages/Client/Home';
 import Login from '../layouts/Login/Login';
 import ManageCategory from '../pages/Admin/ManageCategory/ManageCategory';
@@ -13,6 +15,7 @@ import ManageOrders from '../pages/Admin/components/ManageOrders/ManageOrders';
 import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
 import ManageRefund from '../pages/Admin/components/ManagerRefund/ManagerRefund';
 import ManageUser from '../pages/Admin/ManageUser/MangeUser';
+import ManagerOrderShip from '../pages/Shipper/Component/ManagerOrderShip/ManagerOrderShip';
 import Menu from '../pages/Client/Menu';
 import ModalAddProduct from '../pages/Admin/components/ModalAddProduct/ModalAddProduct';
 import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
@@ -174,6 +177,24 @@ const router = createBrowserRouter([
       {
         path: 'add-product',
         element: <ModalAddProduct />,
+      },
+    ],
+  },
+  {
+    path: 'shipper',
+    element: (
+      <ProtectRoutes>
+        <DefaultLayoutShipper />
+      </ProtectRoutes>
+    ),
+    children: [
+      {
+        index: true,
+        element: <DashboardShipper />,
+      },
+      {
+        path: 'manage-order',
+        element: <ManagerOrderShip />,
       },
     ],
   },
