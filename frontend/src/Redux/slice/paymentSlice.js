@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+
 import axiosClient4 from "../api/axiosCustom"
 import { toast } from "react-toastify"
 
@@ -46,6 +47,17 @@ export const getOrder = createAsyncThunk('getOrder', async(body) => {
 export const getAllOrder = createAsyncThunk('getAllOrder', async(body) => {
     try {
         const response = await axiosClient4.get('orders')
+        return response.data
+    }
+    catch(error) {
+        console.log("error: ", error);
+        throw error
+    }
+})
+
+export const getOrderType = createAsyncThunk('getOrderType', async(body) => {
+    try {
+        const response = await axiosClient4.get(`orders/status?orderStatus=${body}`)
         return response.data
     }
     catch(error) {
@@ -114,6 +126,17 @@ export const orderSlice = createSlice({
             state.status = 200
         })
         builder.addCase(getAllOrder.rejected, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getOrderType.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getOrderType.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+            state.status = 200
+        })
+        builder.addCase(getOrderType.rejected, (state, action) => {
             state.loading = true
         })
         builder.addCase(deleteOrderForID.fulfilled, (state, action) => {
