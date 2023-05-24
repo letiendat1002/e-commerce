@@ -27,9 +27,9 @@ const createNewUser = (email, password, fullName, gender, phone, image) => {
 };
 
 //PUT user BE java
-const putUpdateUser = (userID, fullName, gender, phone, image) => {
+const putUpdateUser = (userID, fullName, gender, phone, image,role) => {
   const data = {
-    roles: ['CUSTOMER'],
+    roles: [role],
     fullName,
     gender,
     phone,

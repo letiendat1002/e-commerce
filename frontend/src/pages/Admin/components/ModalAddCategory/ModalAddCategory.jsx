@@ -48,7 +48,7 @@ const ModalAddCategory = (props) => {
         show={showModalAddCategory}
         onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Category</Modal.Title>
+          <Modal.Title>Add New Category</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

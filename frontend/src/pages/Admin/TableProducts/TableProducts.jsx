@@ -121,11 +121,12 @@ const TableProducts = (props) => {
                           src={require(`../../../assets/images/${x.image}`)}
                         />
                       </td>
-                      <td>{x.name}</td>
+                      <td>{x.slug}</td>
                       <td>{x.unitPrice}</td>
                       <td>{x.quantity}</td>
                       <td>{x.yearRelease}</td>
                       <td>
+                        <div className="btn-block">
                         <button
                           className='btn btn-info'
                           onClick={() => {
@@ -145,6 +146,7 @@ const TableProducts = (props) => {
                           onClick={() => handleDelete(x)}>
                           <GrFormTrash />
                         </button>
+                        </div>
                       </td>
                     </tr>
                   );
