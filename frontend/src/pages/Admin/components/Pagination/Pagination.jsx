@@ -11,12 +11,16 @@ const Pagination = ({
   currentPage,
   userPerPage,
   totalUsers,
+  getAllUsers,
   changePage,
 }) => {
   const handlePageClick = (event) => {
     changePage(+event.selected + 1);
   };
 
+  // useEffect(() => {
+  //   getAllUsers()
+  // }, []);
   const pageCount2 = Math.ceil(totalUsers / userPerPage);
 
   return (

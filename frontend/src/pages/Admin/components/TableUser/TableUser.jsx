@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from 'react-bootstrap/Table';
-import { getAllUser } from '../../../../services/apiGetAllUser';
 import Pagination from '../Pagination/Pagination';
 import Loading from '../../../../components/Loading/Loading';
 
@@ -10,11 +9,10 @@ import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
 import { Image } from 'antd';
 
 const TableUser = (props) => {
-  const { data, setShowModal, handleClickBtnDelete, callApiWithPaginate, handleClickBtnView } =
-    props;
+  const { data, setShowModal, handleClickBtnDelete, handleClickBtnView } = props;
 
   const [loading, setLoading] = useState(true);
-  // const [image, setImage] = useState('');
+
 
   return (
     <>
@@ -75,8 +73,11 @@ const TableUser = (props) => {
             ) : (
               data &&
               data.length > 0 &&
-              data.map((x, idx) => {
-                const checkAdmin = x.roles.includes('ROLE_ADMIN');
+                data.map((x, idx) => {
+                const checkAdmin = x.roles.includes('ROLE_ADMIN')
+                const checkEmployee = x.roles.includes('ROLE_EMPLOYEE')
+                const checkShipper = x.roles.includes('ROLE_SHIPPER')
+                const checkCustomer = x.roles.includes('ROLE_CUSTOMER')
                 return (
                   <tr key={idx}>
                     <th
@@ -96,9 +97,11 @@ const TableUser = (props) => {
                     <td style={{ color: x.fullName.length === 0 ? 'red' : 'black' }}>
                       {x.fullName.length === 0 ? 'No data' : x.fullName}
                     </td>
-                    <td>{checkAdmin ? x.roles[14].substr(5) : x.roles[0].substr(5)}</td>
-                    <td >
-                    <div className="btn-block"><button
+
+                    <td>{checkAdmin ? "ADMIN" : checkEmployee ? "EMPLOYEE" : checkShipper ? "SHIPPER":checkCustomer?"CUSTOMER":"NO ROLE"}</td>
+
+                    <td>
+                      <button
                         className='btn btn-info'
                         onClick={() => handleClickBtnView(x)}>
                         <GrFormView />
@@ -113,7 +116,7 @@ const TableUser = (props) => {
                         className='btn btn-danger'
                         onClick={() => handleClickBtnDelete(x)}>
                         <GrFormTrash />
-                      </button></div>
+                      </button>
                       
                     </td>
                   </tr>
@@ -133,8 +136,6 @@ const TableUser = (props) => {
           </tbody>
         </Table>
       </div>
-
-      {/* <PaginatedItems  />, */}
     </>
   );
 };

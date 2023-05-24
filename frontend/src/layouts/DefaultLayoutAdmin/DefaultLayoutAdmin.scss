@@ -3,14 +3,14 @@
   height: 100vh!important;
   .admin-sidebar {
     .pro-sidebar {
-      height: 100vh;
+      height: 1350px;
     }
   }
 
   .admin-content {
     width: 100%;
-    height: 100vh!important;
-    overflow: hidden;
+    // height: 100vh!important;
+    // overflow: hidden;
     .admin-header {
       height: 60px;
       border-bottom: 1px solid #ccc;
@@ -21,8 +21,9 @@
       flex: 0 0 5%;
       
       & .centerside{
-        flex: 0 0 60%;
-        
+        flex: 0 0 50%;
+        max-width: 50%;
+        position: relative;
       }
       & .leftside {
         flex: 0 0 30%;
