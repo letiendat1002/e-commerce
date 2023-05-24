@@ -14,6 +14,7 @@ import { getAllProducts } from '../../../../Redux/slice/productSlice';
 import { getAllUser } from '../../../../Redux/slice/usersSlice';
 import EmptyCart from '../../../../assets/images/empty-cart.png';
 import './style.scss';
+import convertDate from '../../../../Helper/convertDate';
 
 const ManageRefund = (props) => {
 
@@ -83,7 +84,7 @@ const ManageRefund = (props) => {
                 <td>{order?.orderID}</td>
                 <td>{order?.fullName}</td>
                 <td>{formatProductPrice(order.total)}</td>
-                <td>{order.dateOrder}</td>
+                <td>{convertDate(order.dateOrder)}</td>
                 <td><Link to = {`${order.orderID}`}><button style={{padding: "4px 20px", backgroundColor: "#e6b112",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xem</button></Link></td>
               </tr>
             ))

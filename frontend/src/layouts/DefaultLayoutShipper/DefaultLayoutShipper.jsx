@@ -1,5 +1,5 @@
 import 'react-toastify/dist/ReactToastify.css';
-import './DefaultLayoutAdmin.scss'
+import './DefaultLayoutShipper.scss';
 
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,10 +11,10 @@ import HeaderAdmin from '../../pages/Admin/HeaderAdmin/HeaderAdmin';
 import { Outlet } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import SearchBox from '../../pages/Admin/components/SearchBox/SearchBox';
-import Sidebar from '../../pages/Admin/Sidebar';
+import Sidebar from '../../pages/Shipper/Sidebar';
 import apiService from '../../services/apiServiceProducts';
 
-const DefaultLayoutAdmin = (props) => {
+const DefaultLayoutShipper = (props) => {
   const [collapsed, setCollapsed] = useState(true);
   const [display, setdisplay] = useState('');
   const dispatch = useDispatch();
@@ -85,6 +85,6 @@ const DefaultLayoutAdmin = (props) => {
   );
 };
 
-DefaultLayoutAdmin.propTypes = {};
+DefaultLayoutShipper.propTypes = {};
 
-export default DefaultLayoutAdmin;
+export default DefaultLayoutShipper;

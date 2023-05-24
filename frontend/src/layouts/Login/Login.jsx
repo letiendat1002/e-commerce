@@ -79,11 +79,16 @@ const Login = () => {
           `[${JSON.stringify(res.payload.data[0])}]`
         );
         toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
-        const checkedAdmin = res?.payload?.data[0].roles.includes("ROLE_ADMIN");
+        const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
+        const checkedShipper = res?.payload?.data[0].roles.includes('ROLE_SHIPPER');
         if (checkedAdmin) {
-          navigate("/admin");
-        } else {
-          navigate("/");
+          navigate('/admin');
+        } 
+        else if (checkedShipper){
+          navigate('/shipper')
+        }
+        else {
+          navigate('/');
         }
       } else if (res.payload.status === 401) {
         toast.error("Email hoặc mật khẩu không hợp lệ!");

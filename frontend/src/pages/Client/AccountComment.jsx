@@ -15,6 +15,7 @@ import { RiAccountCircleLine } from 'react-icons/ri'
 import { TfiMenuAlt } from 'react-icons/tfi'
 import { getAllProducts } from '../../Redux/slice/productSlice'
 import { toast } from 'react-toastify'
+import convertDate from '../../Helper/convertDate'
 
 const AccountComment = () => {
     const [active, setActive] = useState(false);
@@ -203,7 +204,7 @@ const AccountComment = () => {
                                                             <td><img style={{maxHeight: "100px", maxWidth :"100px"}} src={require(`../../assets/images/${productMatches.image}`)} alt="" srcset="" /></td>
                                                             <td>{<Rate disabled value={item.rateAmount}/>}</td>
                                                             <td>{item.comment}</td>
-                                                            <td>{item.dateRating}</td>
+                                                            <td>{convertDate(item.dateRating)}</td>
                                                             <td>
                                                                 <i onClick={() => handleRating(productMatches, item)} style={{color: "#e6b112",
                                                                 fontSize: "25px", fontWeight: "600", padding: "0 1rem"
