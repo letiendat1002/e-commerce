@@ -19,6 +19,7 @@ import { postRating } from '../../Redux/slice/ratingSlice'
 import EmptyCart from '../../assets/images/empty-cart.png'
 import Avatar from '../../assets/images/img-user.png'
 import TableComponent from '../../components/Table'
+import convertDate from '../../Helper/convertDate'
 
 const AccountOrder = () => {
     const [active, setActive] = useState(false);
@@ -175,6 +176,15 @@ const AccountOrder = () => {
 
     const ratingItem = product?.filter(item => item.productID ==productRating)
 
+    const handleCloseRating = () => {
+        const ratingForms = document.querySelector('.rating-container')
+        const overlay = document.querySelector('.overlay')
+        const table = document.querySelector('.orderDetail-view')
+        ratingForms.classList.add('d-none')
+        overlay.classList.add('d-none')
+        table.classList.add('d-none')
+    }
+
     const handleRefund = (product, idOrder) => {
         const data = {
             orderID: idOrder, 
@@ -199,7 +209,7 @@ const AccountOrder = () => {
     }
 
     const orderDetailForID = orderDetail?.filter(item => item.orderID === viewID)
-    const data = orderDetailForID.map((items) => {
+    const data = orderDetailForID?.map((items) => {
         const orders = order?.filter(order => order.orderID === items.orderID)
         const dateOrder = orders[0]?.dateOrder?.split('-')[orders[0].dateOrder?.split('-').length - 2]
         const dateCompleted = orders[0]?.dateCompleted?.split('-')[orders[0]?.dateCompleted?.split('-').length - 2] || null
@@ -284,15 +294,6 @@ const AccountOrder = () => {
         setOrder(orders)
         setCurrentPage(1)
         setActiveType(1)
-    }
-
-    const handleCloseRating = () => {
-        const ratingForms = document.querySelector('.rating-container')
-        const overlay = document.querySelector('.overlay')
-        const table = document.querySelector('.orderDetail-view')
-        ratingForms.classList.add('d-none')
-        overlay.classList.add('d-none')
-        table.classList.add('d-none')
     }
 
     const handleRatingProduct = (e) => {
@@ -419,7 +420,7 @@ const AccountOrder = () => {
                                                         return (
                                                             <tr key={item?.orderID}>
                                                                 <td><span>{item?.orderID}</span></td>
-                                                                <td><span>{item?.dateOrder}</span></td>
+                                                                <td><span>{convertDate(item?.dateOrder)}</span></td>
                                                                 <td><p>{formatProductPrice(total)}</p></td>
                                                                 <td><span>
                                                                     {item.status === "PENDING"
@@ -499,7 +500,7 @@ const AccountOrder = () => {
                                                 (
                                                     [{
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`,
                                                         status: 'finish'
                                                     }, 
                                                     {
@@ -510,12 +511,12 @@ const AccountOrder = () => {
                                                 ) : (shipping[0]?.dateOrder && shipping[0]?.dateShipping == null && shipping[0]?.datePreparing != null && shipping[0]?.dateCompleted == null) ? (
                                                     [{
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                         status: 'finish'
                                                     }, 
                                                     {
                                                         title: "Đã giải quyết",
-                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${shipping[0]?.datePreparing}`,
+                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${convertDate(shipping[0]?.datePreparing)}`,
                                                         status: 'finish',
                                                         icon: <BiPackage />
                                                     }, 
@@ -527,18 +528,18 @@ const AccountOrder = () => {
                                                 ) : (shipping[0]?.dateOrder && shipping[0]?.dateShipping != null && shipping[0]?.datePreparing != null && shipping[0]?.dateCompleted == null) ? (
                                                     [{
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                         status: 'finish'
                                                     }, 
                                                     {
                                                         title: "Đã giải quyết",
-                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${shipping[0]?.datePreparing}`,
+                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${convertDate(shipping[0]?.datePreparing)}`,
                                                         status: 'finish',
                                                         icon: <BiPackage />
                                                     }, 
                                                     {
                                                         title: "Đã được vận chuyển",
-                                                        description: `Đơn hàng đã được vận chuyển vào ngày ${shipping[0]?.dateShipping}`,
+                                                        description: `Đơn hàng đã được vận chuyển vào ngày ${convertDate(shipping[0]?.dateShipping)}`,
                                                         status: 'finish',
                                                         icon: <AiFillCar color='#1677ff'/>
                                                     },
@@ -550,7 +551,7 @@ const AccountOrder = () => {
                                                 ) : (
                                                     [{
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                         status: 'finish'
                                                     }, 
                                                     {
@@ -563,7 +564,7 @@ const AccountOrder = () => {
                                                 [
                                                     {
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                         status: 'finish'
                                                     }, 
                                                     {
@@ -583,12 +584,12 @@ const AccountOrder = () => {
                                                 [
                                                     {
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                         status: 'finish'
                                                     }, 
                                                     {
                                                         title: "Đã giải quyết",
-                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${shipping[0]?.datePreparing}`,
+                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${convertDate(shipping[0]?.datePreparing)}`,
                                                         status: 'finish',
                                                         icon: <BiPackage />
                                                     }, 
@@ -609,18 +610,18 @@ const AccountOrder = () => {
                                                 [
                                                     {
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                         status: 'finish'
                                                     }, 
                                                     {
                                                         title: "Đã giải quyết",
-                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${shipping[0]?.datePreparing}`,
+                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${convertDate(shipping[0]?.datePreparing)}`,
                                                         status: 'finish',
                                                         icon: <BiPackage />
                                                     }, 
                                                     {
                                                         title: "Đã được vận chuyển",
-                                                        description: `Đơn hàng đã được vận chuyển vào ngày ${shipping[0]?.dateShipping}`,
+                                                        description: `Đơn hàng đã được vận chuyển vào ngày ${convertDate(shipping[0]?.dateShipping)}`,
                                                         status: 'finish',
                                                         icon: <AiFillCar color='#1677ff'/>
                                                     },
@@ -641,30 +642,30 @@ const AccountOrder = () => {
                                                 [
                                                     {
                                                         title: "Đã đặt hàng",
-                                                        description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                        description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                         status: 'finish'
                                                     }, 
                                                     {
                                                         title: "Đã giải quyết",
-                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${shipping[0]?.datePreparing}`,
+                                                        description: `Đơn hàng đã được chuẩn bị vào ngày ${convertDate(shipping[0]?.datePreparing)}`,
                                                         status: 'finish',
                                                         icon: <BiPackage />
                                                     }, 
                                                     {
                                                         title: "Đã được vận chuyển",
-                                                        description: `Đơn hàng đã được vận chuyển vào ngày ${shipping[0]?.dateShipping}`,
+                                                        description: `Đơn hàng đã được vận chuyển vào ngày ${convertDate(shipping[0]?.dateShipping)}`,
                                                         status: 'finish',
                                                         icon: <AiFillCar color='#1677ff'/>
                                                     },
                                                     {
                                                         title: "Đã giao hàng",
-                                                        description: `Đơn hàng đã được giao vào ngày ${shipping[0]?.dateCompleted}`,
+                                                        description: `Đơn hàng đã được giao vào ngày ${convertDate(shipping[0]?.dateCompleted)}`,
                                                         status: 'finish',
                                                         icon: <AiOutlineFileDone color='#blue'/>
                                                     },
                                                     {
                                                         title: "Hoàn Tất",
-                                                        description: `Đơn hàng đã được giao hoàn tất vào ngày ${shipping[0]?.dateCompleted}`,
+                                                        description: `Đơn hàng đã được giao hoàn tất vào ngày ${convertDate(shipping[0]?.dateCompleted)}`,
                                                         status: 'finish', 
                                                         icon: <AiFillCheckCircle color = "#blue"/>
                                                     }
@@ -673,30 +674,30 @@ const AccountOrder = () => {
                                                     [
                                                         {
                                                             title: "Đã đặt hàng",
-                                                            description: `Đơn hàng đã được đặt vào ngày ${shipping[0]?.dateOrder}`, 
+                                                            description: `Đơn hàng đã được đặt vào ngày ${convertDate(shipping[0]?.dateOrder)}`, 
                                                             status: 'finish'
                                                         }, 
                                                         {
                                                             title: "Đã giải quyết",
-                                                            description: `Đơn hàng đã được chuẩn bị vào ngày ${shipping[0]?.datePreparing}`,
+                                                            description: `Đơn hàng đã được chuẩn bị vào ngày ${convertDate(shipping[0]?.datePreparing)}`,
                                                             status: 'finish',
                                                             icon: <BiPackage />
                                                         }, 
                                                         {
                                                             title: "Đã được vận chuyển",
-                                                            description: `Đơn hàng đã được vận chuyển vào ngày ${shipping[0]?.dateShipping}`,
+                                                            description: `Đơn hàng đã được vận chuyển vào ngày ${convertDate(shipping[0]?.dateShipping)}`,
                                                             status: 'finish',
                                                             icon: <AiFillCar color='#1677ff'/>
                                                         },
                                                         {
                                                             title: "Đã giao hàng",
-                                                            description: `Đơn hàng đã được giao vào ngày ${shipping[0]?.dateCompleted}`,
+                                                            description: `Đơn hàng đã được giao vào ngày ${convertDate(shipping[0]?.dateCompleted)}`,
                                                             status: 'finish',
                                                             icon: <AiOutlineFileDone color='#blue'/>
                                                         },
                                                         {
                                                             title: "Hoàn Tất",
-                                                            description: `Đơn hàng đã được giao hoàn tất vào ngày ${shipping[0]?.dateCompleted}`,
+                                                            description: `Đơn hàng đã được giao hoàn tất vào ngày ${convertDate(shipping[0]?.dateCompleted)}`,
                                                             status: 'finish', 
                                                             icon: <AiFillCheckCircle color = "#blue"/>
                                                         }
@@ -794,7 +795,7 @@ const AccountOrder = () => {
                                                                 return (
                                                                     <tr>
                                                                         <td><span>{item.id}</span></td>
-                                                                        <td><span>{item.date}</span></td>
+                                                                        <td><span>{convertDate(item.date)}</span></td>
                                                                         <td><p>{item.product}</p></td>
                                                                         <td><span>{item.UnitPrice}</span></td>
                                                                         <td><span>{item.state}</span></td>

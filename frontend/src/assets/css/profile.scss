@@ -819,6 +819,14 @@
     }
 }
 
+.container--item--right--order .ant-pagination{
+    position: absolute;
+    text-align: right;
+    width: 100%;
+}
+.container--item--right--order .ant-select-single{
+    display: none;
+}
 // RESPONSIVE IN SMALL MOBILE
 @media screen and (max-width: 600px) {
     .hidden{

@@ -77,9 +77,14 @@ const Login = () => {
         localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`)
         toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
         const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
+        const checkedShipper = res?.payload?.data[0].roles.includes('ROLE_SHIPPER');
         if (checkedAdmin) {
           navigate('/admin');
-        } else {
+        } 
+        else if (checkedShipper){
+          navigate('/shipper')
+        }
+        else {
           navigate('/');
         }
       }

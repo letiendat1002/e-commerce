@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import authApi from '../api/auth';
+
 import STORAGE_KEYS from '../../constant/storage-keys';
+import authApi from '../api/auth';
 import axiosClient4 from '../api/axiosCustom';
 
 export const register = createAsyncThunk('user/register', async (payload) => {
