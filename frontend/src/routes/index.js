@@ -32,6 +32,7 @@ import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/Pro
 import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
 import LoginAdmin from '../pages/Admin/Login/LoginAdmin.jsx';
 import { createBrowserRouter } from 'react-router-dom';
+import ManageAddress from '../pages/Admin/components/ManageAddress/ManageAddress';
 
 // import Login from '../pages/Admin/components/Login/Login';
 
@@ -48,7 +49,6 @@ import { createBrowserRouter } from 'react-router-dom';
 
 
 // import Prod
-
 
 const router = createBrowserRouter([
   {

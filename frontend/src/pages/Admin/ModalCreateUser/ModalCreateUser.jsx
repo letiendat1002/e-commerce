@@ -54,6 +54,10 @@ const ModalCreateUser = (props) => {
   //   return String(password).toLowerCase().match('^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$');
   // };
 
+  const validatePhone = (phone) => {
+    return String(phone).toLowerCase().match(/[0-9]{10}/);
+  };
+
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -65,19 +69,21 @@ const ModalCreateUser = (props) => {
   const handleCreateUser = async () => {
     const isValidate = validateEmail(email);
     if (!isValidate) {
-      // alert("Error")
       toast.error('Invalid Email');
       return;
     }
 
-    // const validatePw = validatePassword(password);
-    // if (!validatePw) {
-
-    if (!password) {
-      toast.error('Invalid password & Password < 5 char');
+    const isValidatePhone = validatePhone(phone);
+    if (isValidatePhone) {
+      toast.error('Invalid PhoneNumber');
+      return;
     }
-    if (+password.length <= 5) {
-      toast.error('Invalid password & Password < 5 char');
+
+    // if (!password) {
+    //   toast.error('Invalid password & Password < 5 char');
+    // }
+    if (+password.length <= 4) {
+      toast.error('Invalid password & Password length must >= 5 char');
       return;
     }
 
@@ -86,13 +92,9 @@ const ModalCreateUser = (props) => {
       toast.success(data.message);
       getAllUsers();
       handleClose();
-      // await callApi();
-      // setCurrentPage(1);
-      // await callApiWithPaginate(1);
     }
-    const FR = new FileReader();
 
-    console.log(FR.readAsDataURL(image));
+    console.log(data);
 
     if (data && data.status !== 200) {
       toast.error(data.message);
@@ -119,7 +121,9 @@ const ModalCreateUser = (props) => {
           <Modal.Title>Add new user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className='row '>
+          <form
+            className='row needs-validation '
+            novalidate>
             <div className='col-md-6'>
               <label
                 htmlFor='inputEmail4'
@@ -133,7 +137,9 @@ const ModalCreateUser = (props) => {
                 value={email}
                 placeholder='Enter your email'
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
+              <div class='valid-feedback'>Valid Email!</div>
             </div>
 
             <div className='col-md-6'>
@@ -149,7 +155,11 @@ const ModalCreateUser = (props) => {
                 value={password}
                 placeholder='Enter your password'
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
+              <div class="valid-feedback">
+      Looks good!
+    </div>
             </div>
 
             <div className='col-md-6 my-2'>
@@ -164,6 +174,7 @@ const ModalCreateUser = (props) => {
                 id='inputUsername'
                 placeholder='Enter your fullname'
                 value={username}
+                required
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -199,7 +210,8 @@ const ModalCreateUser = (props) => {
                   checked>
                   CUSTOMER
                 </option>
-                <option value='ADMIN'>ADMIN</option>
+                <option value='SHIPPER'>SHIPPER</option>
+                <option value='EMPLOYEE'>EMPLOYEE</option>
               </select>
             </div>
 
@@ -258,7 +270,7 @@ const ModalCreateUser = (props) => {
             // onClick={handleCloseModal}
             onClick={handleCreateUser}
             // onClick={handleClose}
-            style={{ display: 'flex', alignItems: 'center', gap:'5px' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             Create User <GrCheckmark />
           </Button>
         </Modal.Footer>

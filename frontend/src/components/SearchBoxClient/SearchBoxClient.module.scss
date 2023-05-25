@@ -4,16 +4,17 @@ input, [tabindex] {
   border: none;
 }
 
-[data-tippy-root]{
-  // width: 100%;
-  // transform: translate3d(134.45455px, 63.6364px, 0px);
-  // display: flex;
-  // justify-content: center;
+#tippy-1{
 }
 
+// tippy-1
+[data-tippy-root]{
+  width: 100%;
+}
 .search {
     height: var(--search-height);
-    background-color: rgba(22, 24, 35, 0.06);
+    // background-color: rgba(22, 24, 35, 0.06);
+    background-color: #fff;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -51,11 +52,11 @@ input, [tabindex] {
     }
   }
   input:not(:placeholder-shown) ~ .search-btn {
-    color: rgba(22, 24, 35, 0.75);
+    // color: rgba(22, 24, 35, 0.75);
   }
   
   .search-results {
-    // width: 700px;
+    width: 100%;
   }
   
   .search-title{
@@ -68,8 +69,9 @@ input, [tabindex] {
   .clear,
   .loading {
     position: absolute;
-    right: 53px;
+    right: 60px;
     cursor: pointer;
+    background-color: #fff;
   }
   
   .clear {
@@ -92,18 +94,18 @@ input, [tabindex] {
   .search-btn {
     width: 52px;
     height: 100%;
-    background-color: transparent;
+    background-color: #e02f2f;
     border: none;
     outline: none;
-    border-bottom-right-radius: 92px;
-    border-top-right-radius: 92px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
     cursor: pointer;
     transition: 0.5s all;
     padding: 11px 16px 11px 12px;
-    color: rgba(22, 24, 35, 0.34);
+    color: white;
   
-    &:hover {
-      background-color: rgba(22, 24, 35, 0.03);
-    }
+    // &:hover {
+    //   background-color: rgba(22, 24, 35, 0.03);
+    // }
   }
   

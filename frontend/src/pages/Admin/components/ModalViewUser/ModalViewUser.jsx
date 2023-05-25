@@ -12,12 +12,12 @@ const ModalViewUser = (props) => {
 
   const handleClose = () => {
     setShowModalViewUser(false);
-    setEmail('');
-    setRole('');
-    setUsername('');
-    setImage('');
-    setPassword('');
-    setPreviewImage('');
+    // setEmail('');
+    // setRole('');
+    // setUsername('');
+    // setImage('');
+    // setPassword('');
+    // setPreviewImage('');
   };
 
   const [email, setEmail] = useState('');
@@ -41,9 +41,23 @@ const ModalViewUser = (props) => {
   // }
   useEffect(() => {
     if (!_.isEmpty(data1)) {
+      if (!_.isEmpty(data1)) {
+        if (data1.roles.includes('ROLE_ADMIN')) {
+          setRole('ADMIN');
+        }
+        if (data1.roles.includes('ROLE_EMPLOYEE')) {
+          setRole('EMPLOYEE');
+        }
+        if (data1.roles.includes('ROLE_SHIPPER')) {
+          setRole('SHIPPER');
+        }
+        if (data1.roles.includes('ROLE_CUSTOMER')) {
+          setRole('CUSTOMER');
+        }
+      }
+
       setEmail(data1.email);
       setUsername(data1.fullName);
-      setRole(data1?.roles[0]);
       setPhone(data1?.phone);
       setGender(data1?.gender);
       setImage('');
@@ -108,8 +122,8 @@ const ModalViewUser = (props) => {
                 className='form-select'
                 value={role}
                 disabled>
-                <option value={checkAdmin ? 'ADMIN' : role}>
-                  {checkAdmin ? 'ADMIN' : role.substr(5)}
+                <option >
+                  {role}
                 </option>
                 {/* <option value='ADMIN'>ROLE_ADMIN</option> */}
               </select>
@@ -155,7 +169,7 @@ const ModalViewUser = (props) => {
               </label>
             </div> */}
 
-            <div className='col-12 img-preview text-center my-3' >
+            <div className='col-12 img-preview text-center my-3'>
               {previewImage ? (
                 <img
                   src={previewImage}
