@@ -9,6 +9,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import EmptyCart from '../../../../assets/images/empty-cart.png';
 import { Link } from 'react-router-dom'
 import { MdAdd } from 'react-icons/md'
+import convertDate from '../../../../Helper/convertDate'
 import formatProductPrice from '../../../../Helper'
 import { getAllProducts } from '../../../../Redux/slice/productSlice'
 import { getOrderDetail } from '../../../../Redux/slice/orderDetailSlice'
@@ -21,29 +22,27 @@ const ManagerOrderShip = (props) => {
       dispatch(getOrderDetail())
       dispatch(getOrderType("ON_SHIPPING"))
     }, [])
+
+    const [activeType, setActiveType] = useState(1)
   
     const userID = JSON.parse(localStorage.getItem('user'))[0]?.userID || 0
-    const orders = useSelector(state => state.order.data) || []
+    const order = useSelector(state => state.order.data) || []
     const orderDetailed = useSelector(state => state.orderDetail.data.data) || []
   
-    const [order, setOrder] = useState([])
+    // const [order, setOrder] = useState(orders)
       
     const [currentPage, setCurrentPage] = useState(1);
-    useEffect(() => {
-        setOrder(orders)
-    }, [orders])
-    const [activeType, setActiveType] = useState(1)
+    // useEffect(() => {
+    //     setOrder(orders)
+    // }, [orders])
     
     const handleShowOrder = (type, number) => {
         if (type === "Tất Cả"){
             dispatch(getOrderType("ON_SHIPPING"))
-            // setOrder(orders)
             setCurrentPage(1)
             setActiveType(number)
         }
         else {
-            // const orderType = orders?.filter((item) => item.status === type)
-            // setOrder(orderType)
             dispatch(getOrderType(type))
             setCurrentPage(1)
             setActiveType(number)
@@ -82,25 +81,10 @@ const ManagerOrderShip = (props) => {
         }
         dispatch(getOrderType("ON_SHIPPING"))
       })
-      setOrder(orders)
+      // setOrder(orders)
       setCurrentPage(1)
       setActiveType(1)
     }
-  
-    // const handleDeleteOrder = (orderID) => {
-    //   dispatch(deleteOrderForID(orderID))
-    //   .then((res) => {
-    //     if (res.payload.status === 200){
-    //       toast.success("Xóa đơn hàng thành công!")
-    //     }
-    //     else {
-    //       toast.error("Xóa đơn hàng thất bại")
-    //     }
-    //     dispatch(getAllOrder())
-    //   })
-    // }
-  
-    // const [currentPage, setCurrentPage] = useState(1);
   
     const handlePageChange = (page) => {
       setCurrentPage(page);
@@ -152,20 +136,16 @@ const ManagerOrderShip = (props) => {
       }
     }
 
-    // const total = order?.filter((item) => item.workerID == userID)?.length || 0
+    const total = order?.filter((item) => item.workerID == userID)?.length || 0
   
-
-    const orderLoading = useSelector((state) => state.order.loading);
-    console.log(order.length)
+    const orderLoading = useSelector((state) => state.order.loading) 
     return (
     <div>
     {
-        (order.length < 0 || orderLoading) ? (
-            <Skeleton active/>
-        ) : (
+        (orderLoading == false) ? (
             <div className="manager__order">
-            <h3>Manager Orders</h3>
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <h3 style={{color: "#f92626", padding: "1rem 2rem", fontWeight: "bolder"}}>QUẢN LÝ ĐƠN HÀNG</h3>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <Link onClick={() => handlePopup()} to = {""}><button style={{padding: "8px 20px", backgroundColor: "transparent", color: "#ffffff", fontSize: "18px",
               borderRadius: "5px"
             }}>
@@ -194,7 +174,7 @@ const ManagerOrderShip = (props) => {
               </tr>
                 {
                   (order.length > 0 && activeType == 1) ? (
-                    order?.slice(startIndex, endIndex + 1).map((item) => {
+                    order.slice(startIndex, endIndex + 1).map((item) => {
                       const orderDetails = orderDetailed?.filter((detail) => detail.orderID === item.orderID);
                       const total = orderDetails.reduce((acc, curr) => acc + curr.quantity * curr.purchasePrice, 0);
                         return (
@@ -202,7 +182,7 @@ const ManagerOrderShip = (props) => {
                             <td><span>{item.orderID}</span></td>
                             <td><span>{item.userID}</span></td>
                             <td><span>{formatProductPrice(total)}</span></td>
-                            <td><span>{item.dateOrder}</span></td>
+                            <td><span>{convertDate(item.dateOrder)}</span></td>
                             <td><span>{item.status === "PENDING"
                                     ? "Chờ xác nhận"
                                     : item.status === "CONFIRMED"
@@ -221,20 +201,9 @@ const ManagerOrderShip = (props) => {
                                             <li onClick={() => handleUpdate(item, "SHIP_COMPLETED")}>
                                                 COMPLETED
                                             </li>
-                                            <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
-                                                CANCELLED
-                                            </li>
                                         </ul>
                                     ) : ("")
                                 }
-                                {/* <ul className={`statuslist-${item.orderID} d-none`}>
-                                    <li onClick={() => handleUpdate(item, "SHIP_COMPLETED")}>
-                                        COMPLETED
-                                    </li>
-                                    <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
-                                        CANCELLED
-                                    </li>
-                                </ul> */}
                                 </button>
                             </div>
                             </td>
@@ -249,7 +218,7 @@ const ManagerOrderShip = (props) => {
                             <td><span>{item.orderID}</span></td>
                             <td><span>{item.userID}</span></td>
                             <td><span>{formatProductPrice(total)}</span></td>
-                            <td><span>{item.dateOrder}</span></td>
+                            <td><span>{convertDate(item.dateOrder)}</span></td>
                             <td><span>{item.status === "PENDING"
                                     ? "Chờ xác nhận"
                                     : item.status === "CONFIRMED"
@@ -267,9 +236,6 @@ const ManagerOrderShip = (props) => {
                                         <ul className={`statuslist-${item.orderID} d-none`}>
                                             <li onClick={() => handleUpdate(item, "SHIP_COMPLETED")}>
                                                 COMPLETED
-                                            </li>
-                                            <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
-                                                CANCELLED
                                             </li>
                                         </ul>
                                     ) : ("")
@@ -301,7 +267,7 @@ const ManagerOrderShip = (props) => {
             <Pagination
               current={currentPage}
               pageSize={itemsPerPage}
-              total={(activeType ===  1) ? (order.length) : (order?.filter((item) => item.workerID === userID)?.length)}
+              // total={(activeType ===  1) ? (order.length) : (order?.filter((item) => item.workerID === userID)?.length)}
               onChange={handlePageChange}
             />
             {/* <div className="overlay addOrder-overlay d-none"></div>
@@ -344,9 +310,12 @@ const ManagerOrderShip = (props) => {
                 </div>
               </div>
             </div> */}
-          </div>
+            </div>
+        ) : (
+          <Skeleton active/>
         )
-    }</div>
+    }
+    </div>
     )
 }
 

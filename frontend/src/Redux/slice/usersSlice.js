@@ -7,7 +7,7 @@ const initialState = {
     message: ""
 }
 
-export const getUserForID = createAsyncThunk('user/getuserID', async (data) => {
+export const getUserForID = createAsyncThunk('user/getuserForID', async (data) => {
     try {
           const response = await axiosClient4.get(`users/${data}`)
           return response.data

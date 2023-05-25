@@ -4,7 +4,7 @@ import AccountInfo from '../pages/Client/AccountInfo';
 import AccountOrder from '../pages/Client/AccountOrder';
 import Cart from '../pages/Client/Cart';
 import Dashboard from '../pages/Admin/Dasboard/Dashboard';
-import DashboardShipper from '../pages/Shipper/Dasboard/DashboardShipper';
+import DashboardShipper from '../pages/Shipper/DasboardShipper/DashboardShipper';
 import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
 import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin';
 import DefaultLayoutShipper from '../layouts/DefaultLayoutShipper/DefaultLayoutShipper';
@@ -18,7 +18,7 @@ import ManageUser from '../pages/Admin/ManageUser/MangeUser';
 import ManagerOrderShip from '../pages/Shipper/Component/ManagerOrderShip/ManagerOrderShip';
 import Menu from '../pages/Client/Menu';
 import ModalAddProduct from '../pages/Admin/components/ModalAddProduct/ModalAddProduct';
-import ModelUpdateOrder from '../pages/Admin/components/ModelUpdateOrder/ModelUpdateOrder';
+import ModalViewOrderShipper from '../pages/Shipper/Component/ModalViewOrderShipper/ModalViewOrderShipper';
 import ModelViewOrder from '../pages/Admin/components/ModalViewOrder/ModelViewOrder';
 import ModelViewRefund from '../pages/Admin/components/ModelViewRefund/ModelViewRefund';
 import NotFound from '../pages/Client/NotFound/NotFound';
@@ -28,8 +28,9 @@ import ProductDetails from '../pages/Admin/ProductDetails/ProductDetails';
 import ProductFromCategory from '../pages/Admin/components/ProductFromCategory/ProductFromCategory';
 import Profile from '../pages/Client/Profile';
 import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
-import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin'
+import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin';
 import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
+import LoginAdmin from '../pages/Admin/Login/LoginAdmin.jsx';
 import { createBrowserRouter } from 'react-router-dom';
 
 // import Login from '../pages/Admin/components/Login/Login';
@@ -120,6 +121,8 @@ const router = createBrowserRouter([
         <DefaultLayoutAdmin />
       </ProtectRoutes>
     ),
+
+    
     children: [
       {
         index: true,
@@ -129,6 +132,7 @@ const router = createBrowserRouter([
         path: 'manage-user',
         element: <ManageUser />,
       },
+
       {
         path: 'manage-products',
         element: <ManageProducts />,
@@ -178,8 +182,16 @@ const router = createBrowserRouter([
         path: 'add-product',
         element: <ModalAddProduct />,
       },
+      
     ],
+    path: 'admin/login',
+    element: (
+     
+        <LoginAdmin />
+      
+    ),
   },
+ 
   {
     path: 'shipper',
     element: (
@@ -195,6 +207,10 @@ const router = createBrowserRouter([
       {
         path: 'manage-order',
         element: <ManagerOrderShip />,
+      },
+      {
+        path: 'manage-order/:orderID',
+        element: <ModalViewOrderShipper />,
       },
     ],
   },

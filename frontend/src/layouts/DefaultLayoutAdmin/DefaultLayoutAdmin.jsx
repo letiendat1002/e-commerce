@@ -1,16 +1,18 @@
+import 'react-toastify/dist/ReactToastify.css';
+import './DefaultLayoutAdmin.scss'
+
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Outlet } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import 'react-toastify/dist/ReactToastify.css';
-import apiService from '../../services/apiServiceProducts';
-import Sidebar from '../../pages/Admin/Sidebar';
-import HeaderAdmin from '../../pages/Admin/HeaderAdmin/HeaderAdmin';
+
+import { FaBars } from 'react-icons/fa';
 import FormFilterProducts from '../../pages/Admin/components/FormFilterProducts/FormFilterProducts';
-import './DefaultLayoutAdmin.scss';
+import HeaderAdmin from '../../pages/Admin/HeaderAdmin/HeaderAdmin';
+import { Outlet } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import SearchBox from '../../pages/Admin/components/SearchBox/SearchBox';
+import Sidebar from '../../pages/Admin/Sidebar';
+import apiService from '../../services/apiServiceProducts';
 
 const DefaultLayoutAdmin = (props) => {
   const [collapsed, setCollapsed] = useState(true);
