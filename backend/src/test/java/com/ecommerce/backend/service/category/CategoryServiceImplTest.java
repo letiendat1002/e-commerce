@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.category;
+package com.ecommerce.backend.service.category;
 
 import com.ecommerce.backend.category.Category;
 import com.ecommerce.backend.category.CategoryDAO;

@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.order;
+package com.ecommerce.backend.service.order;
 
 import com.ecommerce.backend.order.*;
 import com.ecommerce.backend.order.enums.OrderPaymentType;
@@ -569,5 +569,20 @@ class OrderServiceImplTest {
         verify(orderDAO).selectOrderByID(id);
         verify(orderDetailService).deleteAllOrderDetailsByOrderID(id);
         verify(orderDAO).deleteOrderByID(id);
+    }
+
+    @Test
+    void fetchOrderCountByWorkerID() {
+        // Given
+        var workerID = BigInteger.ONE;
+        var count = 2;
+
+        // When
+        when(orderDAO.selectOrderCountByWorkerID(workerID)).thenReturn(count);
+        var result = orderService.fetchOrderCountByWorkerID(workerID);
+
+        // Then
+        verify(orderDAO).selectOrderCountByWorkerID(workerID);
+        assertThat(result).isEqualTo(count);
     }
 }
