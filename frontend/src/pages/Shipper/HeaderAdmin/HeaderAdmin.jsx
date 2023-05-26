@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import Language from '../components/Lang/Language';
 import './HeaderAdmin.scss';
-import { logout } from '../../../Redux/slice/userSlice';
+
 import { GrLogout, GrUser } from 'react-icons/gr';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Language from '../components/Lang/Language';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Navbar from 'react-bootstrap/Navbar';
+import PropTypes from 'prop-types';
+import { logout } from '../../../Redux/slice/userSlice';
 
 const HeaderAdmin = (props) => {
   const navigate = useNavigate();
@@ -22,16 +24,13 @@ const HeaderAdmin = (props) => {
 
   // const { user } = dataLocal;
 
-  // console.log(username, fullName, isAuthenticated);
-  const handleLogin = () => {
-    navigate('/admin/login');
-  };
+  // console.log(username, fullName, isAuthenticated)
 
   const handleLogOut = () => {
     // dispatch(logoutAction());
-    // console.log('Logout');
-    // dispatch(logout());
-    navigate('/admin/login');
+    console.log('Logout');
+    dispatch(logout());
+    navigate('/login');
     // document.location.href="/admin/login"
   };
 

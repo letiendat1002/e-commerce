@@ -191,7 +191,7 @@ const Login = () => {
   //Validation
 
   const validatePhoneNumber = (_, value) => {
-    const phoneNumberRegex = /^(0|\+84)(\d{9})$/; // Regex pattern for Vietnamese phone numbers
+    const phoneNumberRegex = /^(0|\+84)(\d{9})$/;
 
     if (!value || phoneNumberRegex.test(value)) {
       return Promise.resolve();

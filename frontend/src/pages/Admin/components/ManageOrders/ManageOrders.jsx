@@ -16,6 +16,7 @@ import formatProductPrice from '../../../../Helper';
 import { getAllProducts } from '../../../../Redux/slice/productSlice';
 import { getAllUser } from '../../../../Redux/slice/usersSlice';
 import { toast } from 'react-toastify';
+import convertDate from '../../../../Helper/convertDate';
 
 const ManageOrders = (props) => {
 
@@ -248,7 +249,7 @@ const ManageOrders = (props) => {
                       <td><span>{item.orderID}</span></td>
                       <td><span>{userMatches.fullName}</span></td>
                       <td><span>{formatProductPrice(total)}</span></td>
-                      <td><span>{item.dateOrder}</span></td>
+                      <td><span>{convertDate(item.dateOrder)}</span></td>
                       <td><span>{item.status === "PENDING"
                               ? "Chờ xác nhận"
                               : item.status === "CONFIRMED"
