@@ -54,18 +54,14 @@ public class UserController {
     }
 
     @GetMapping("/shipper/asc")
-    @PreAuthorize("hasAuthority('user:read_all')")
-    public UserResponse getShippersWithOrderCountASC() {
-        var userDTOList = userService
-                .fetchShippersWithOrderCountASC()
-                .stream()
-                .map(userDTOMapper)
-                .toList();
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
+    public UserShipperResponse getShippersWithOrderCountASC() {
+        var shipperList = userService.fetchShippersWithOrderCountASC();
 
-        return new UserResponse(
+        return new UserShipperResponse(
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
-                userDTOList
+                shipperList
         );
     }
 

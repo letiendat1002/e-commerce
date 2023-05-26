@@ -530,29 +530,27 @@ class UserServiceImplTest {
     @Test
     void fetchShippersWithOrderCountASC() {
         // Given
-        var shipper1 = new User();
-        shipper1.setUserID(BigInteger.ONE);
-        var shipper2 = new User();
-        shipper2.setUserID(BigInteger.TWO);
-        var shipperList = new ArrayList<User>();
-        shipperList.add(shipper1);
-        shipperList.add(shipper2);
+        var shipperId1 = BigInteger.ONE;
+        var shipperId2 = BigInteger.TWO;
+        var shipperList = new ArrayList<BigInteger>();
+        shipperList.add(shipperId1);
+        shipperList.add(shipperId2);
 
         // When
-        when(userDAO.selectUsersByRole(UserRole.SHIPPER)).thenReturn(shipperList);
-        when(orderService.fetchOrderCountByWorkerID(shipper1.getUserID()))
+        when(userDAO.selectUserIDsByRole(UserRole.SHIPPER)).thenReturn(shipperList);
+        when(orderService.fetchOrderCountByWorkerID(shipperId1))
                 .thenReturn(2);
-        when(orderService.fetchOrderCountByWorkerID(shipper2.getUserID()))
+        when(orderService.fetchOrderCountByWorkerID(shipperId2))
                 .thenReturn(1);
         var result = userService.fetchShippersWithOrderCountASC();
 
         // Then
-        verify(userDAO).selectUsersByRole(UserRole.SHIPPER);
-        verify(orderService).fetchOrderCountByWorkerID(shipper1.getUserID());
-        verify(orderService).fetchOrderCountByWorkerID(shipper2.getUserID());
+        verify(userDAO).selectUserIDsByRole(UserRole.SHIPPER);
+        verify(orderService).fetchOrderCountByWorkerID(shipperId1);
+        verify(orderService).fetchOrderCountByWorkerID(shipperId2);
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(0).getUserID()).isEqualTo(shipper2.getUserID());
-        assertThat(result.get(1).getUserID()).isEqualTo(shipper1.getUserID());
+        assertThat(result.get(0)).isEqualTo(shipperId2);
+        assertThat(result.get(1)).isEqualTo(shipperId1);
     }
 }
