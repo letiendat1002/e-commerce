@@ -120,11 +120,11 @@ public class OrderServiceImpl implements OrderService {
             if (order.getStatus().equals(OrderStatus.ON_SHIPPING)) {
                 order.setShipping(true);
                 order.setDateShipping(LocalDate.now());
+                order.setWorkerID(request.workerID());
             }
             if (order.getStatus().equals(OrderStatus.SHIP_COMPLETED)) {
                 order.setCompleted(true);
                 order.setDateCompleted(LocalDate.now());
-                order.setWorkerID(request.workerID());
             }
             isChanged = true;
         }
@@ -175,12 +175,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month) {
-        return orderDAO.selectCountCompletedOrdersInMonthByWorkerID(workerID, month);
+    public int fetchCompletedOrderCountInMonthByWorkerID(BigInteger workerID, int month) {
+        return orderDAO.selectCompletedOrderCountInMonthByWorkerID(workerID, month);
     }
 
     @Override
-    public int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year) {
-        return orderDAO.selectCountCompletedOrdersInYearByWorkerID(workerID, year);
+    public int fetchCompletedOrderCountInYearByWorkerID(BigInteger workerID, int year) {
+        return orderDAO.selectCompletedOrderCountInYearByWorkerID(workerID, year);
+    }
+
+    @Override
+    public int fetchOrderCountByWorkerID(BigInteger workerID) {
+        return orderDAO.selectOrderCountByWorkerID(workerID);
     }
 }

@@ -53,6 +53,22 @@ public class UserController {
         );
     }
 
+    @GetMapping("/shipper/asc")
+    @PreAuthorize("hasAuthority('user:read_all')")
+    public UserResponse getShippersWithOrderCountASC() {
+        var userDTOList = userService
+                .fetchShippersWithOrderCountASC()
+                .stream()
+                .map(userDTOMapper)
+                .toList();
+
+        return new UserResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                userDTOList
+        );
+    }
+
     @GetMapping("/role")
     @PreAuthorize("hasAuthority('user:read_all')")
     public UserResponse getUsersByRole(

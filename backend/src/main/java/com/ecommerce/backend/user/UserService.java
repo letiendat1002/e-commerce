@@ -10,6 +10,8 @@ public interface UserService {
 
     List<User> fetchUsersByRole(UserRole role);
 
+    List<User> fetchShippersWithOrderCountASC();
+
     User fetchUserByUserID(BigInteger userID);
 
     User fetchUserByEmail(String email);
