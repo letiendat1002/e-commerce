@@ -79,16 +79,11 @@ const Login = () => {
           `[${JSON.stringify(res.payload.data[0])}]`
         );
         toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
-        const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
-        const checkedShipper = res?.payload?.data[0].roles.includes('ROLE_SHIPPER');
+        const checkedAdmin = res?.payload?.data[0].roles.includes("ROLE_ADMIN");
         if (checkedAdmin) {
-          navigate('/admin');
-        } 
-        else if (checkedShipper){
-          navigate('/shipper')
-        }
-        else {
-          navigate('/');
+          navigate("/admin");
+        } else {
+          navigate("/");
         }
       } else if (res.payload.status === 401) {
         toast.error("Email hoặc mật khẩu không hợp lệ!");
@@ -196,7 +191,7 @@ const Login = () => {
   //Validation
 
   const validatePhoneNumber = (_, value) => {
-    const phoneNumberRegex = /^(0|\+84)(\d{9})$/; // Regex pattern for Vietnamese phone numbers
+    const phoneNumberRegex = /^(0|\+84)(\d{9})$/;
 
     if (!value || phoneNumberRegex.test(value)) {
       return Promise.resolve();
