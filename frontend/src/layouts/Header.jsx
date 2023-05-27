@@ -28,6 +28,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import '../../src/assets/images/Logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/slice/userSlice';
+import SearchBoxClient from '../components/SearchBoxClient/SearchBoxClient';
 const Header = () => {
   const [active, setActive] = useState(false);
 
@@ -232,17 +233,22 @@ const Header = () => {
           src={Logo}
           alt=''
         /> */}
+        {/* <div style={{flex:"0 0 10%",width:"10%"}}>
+        </div> */}
         <Logo></Logo>
+
         <InputGroup className='input__form__search'>
-          <Form.Control
+          {/* <Form.Control
             as='input'
             aria-label='Nhập tên thiết bị cần tìm'
             placeholder='Nhập tên thiết bị cần tìm'
           />
           <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
-          </InputGroup.Text>
+          </InputGroup.Text> */}
+          <SearchBoxClient/>
         </InputGroup>
+
         <div className='nav-item account'>
           {user?.length>0 ? (
             <Link to={'/account/profile'}>
@@ -308,14 +314,15 @@ const Header = () => {
         <InputGroup
           className='input__form__search--tablet'
           style={{ width: '100%', padding: '0 0 3rem 0' }}>
-          <Form.Control
+          {/* <Form.Control
             as='input'
             aria-label='Nhập tên thiết bị cần tìm'
             placeholder='Nhập tên thiết bị cần tìm'
           />
           <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
-          </InputGroup.Text>
+          </InputGroup.Text> */}
+          <SearchBoxClient/>
         </InputGroup>
       </div>
       <div className='headerBottom container-fluid col-lg-12 col-md-12 col-sm-12 col-12'>

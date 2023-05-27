@@ -30,7 +30,9 @@ import Profile from '../pages/Client/Profile';
 import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
 import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin';
 import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
+import LoginAdmin from '../pages/Admin/Login/LoginAdmin.jsx';
 import { createBrowserRouter } from 'react-router-dom';
+import ManageAddress from '../pages/Admin/components/ManageAddress/ManageAddress';
 
 // import Login from '../pages/Admin/components/Login/Login';
 
@@ -47,7 +49,6 @@ import { createBrowserRouter } from 'react-router-dom';
 
 
 // import Prod
-
 
 const router = createBrowserRouter([
   {
@@ -120,6 +121,8 @@ const router = createBrowserRouter([
         <DefaultLayoutAdmin />
       </ProtectRoutes>
     ),
+
+    
     children: [
       {
         index: true,
@@ -129,6 +132,7 @@ const router = createBrowserRouter([
         path: 'manage-user',
         element: <ManageUser />,
       },
+
       {
         path: 'manage-products',
         element: <ManageProducts />,
@@ -178,8 +182,16 @@ const router = createBrowserRouter([
         path: 'add-product',
         element: <ModalAddProduct />,
       },
+      
     ],
+    path: 'admin/login',
+    element: (
+     
+        <LoginAdmin />
+      
+    ),
   },
+ 
   {
     path: 'shipper',
     element: (

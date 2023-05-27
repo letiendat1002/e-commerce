@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.order;
+package com.ecommerce.backend.service.order;
 
 import com.ecommerce.backend.order.*;
 import com.ecommerce.backend.order.enums.OrderPaymentType;
@@ -131,14 +131,14 @@ class OrderServiceImplTest {
         var count = 100;
 
         // When
-        when(orderDAO.selectCountCompletedOrdersInMonthByWorkerID(id, month))
+        when(orderDAO.selectCompletedOrderCountInMonthByWorkerID(id, month))
                 .thenReturn(count);
 
         var actual = orderService
-                .fetchCountCompletedOrdersInMonthByWorkerID(id, month);
+                .fetchCompletedOrderCountInMonthByWorkerID(id, month);
 
         // Then
-        verify(orderDAO).selectCountCompletedOrdersInMonthByWorkerID(id, month);
+        verify(orderDAO).selectCompletedOrderCountInMonthByWorkerID(id, month);
         assertThat(actual).isEqualTo(count);
     }
 
@@ -150,14 +150,14 @@ class OrderServiceImplTest {
         var count = 100;
 
         // When
-        when(orderDAO.selectCountCompletedOrdersInYearByWorkerID(id, year))
+        when(orderDAO.selectCompletedOrderCountInYearByWorkerID(id, year))
                 .thenReturn(count);
 
         var actual = orderService
-                .fetchCountCompletedOrdersInYearByWorkerID(id, year);
+                .fetchCompletedOrderCountInYearByWorkerID(id, year);
 
         // Then
-        verify(orderDAO).selectCountCompletedOrdersInYearByWorkerID(id, year);
+        verify(orderDAO).selectCompletedOrderCountInYearByWorkerID(id, year);
         assertThat(actual).isEqualTo(count);
     }
 
@@ -328,7 +328,7 @@ class OrderServiceImplTest {
         assertThat(capturedOrder.getDateShipping()).isEqualTo(LocalDate.now());
         assertThat(capturedOrder.isCompleted()).isFalse();
         assertThat(capturedOrder.getDateCompleted()).isNull();
-        assertThat(capturedOrder.getWorkerID()).isNull();
+        assertThat(capturedOrder.getWorkerID()).isEqualTo(id);
     }
 
     @Test
@@ -364,7 +364,7 @@ class OrderServiceImplTest {
         assertThat(capturedOrder.getStatus()).isEqualTo(request.status());
         assertThat(capturedOrder.isCompleted()).isTrue();
         assertThat(capturedOrder.getDateCompleted()).isEqualTo(LocalDate.now());
-        assertThat(capturedOrder.getWorkerID()).isEqualTo(id);
+        assertThat(capturedOrder.getWorkerID()).isNull();
     }
 
     @Test
@@ -569,5 +569,20 @@ class OrderServiceImplTest {
         verify(orderDAO).selectOrderByID(id);
         verify(orderDetailService).deleteAllOrderDetailsByOrderID(id);
         verify(orderDAO).deleteOrderByID(id);
+    }
+
+    @Test
+    void fetchOrderCountByWorkerID() {
+        // Given
+        var workerID = BigInteger.ONE;
+        var count = 2;
+
+        // When
+        when(orderDAO.selectOrderCountByWorkerID(workerID)).thenReturn(count);
+        var result = orderService.fetchOrderCountByWorkerID(workerID);
+
+        // Then
+        verify(orderDAO).selectOrderCountByWorkerID(workerID);
+        assertThat(result).isEqualTo(count);
     }
 }

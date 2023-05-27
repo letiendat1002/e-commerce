@@ -8,11 +8,13 @@ import Col from 'react-bootstrap/Col';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import classNames from 'classnames/bind';
+import { CiCircleRemove } from 'react-icons/ci';
+import { Select } from 'antd';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import apiService from '../../../../services/apiServiceProducts';
 import styles from './ModalAddProduct.module.scss';
-import { Select } from 'antd';
-import { CiCircleRemove } from 'react-icons/ci';
 
 let cx = classNames.bind(styles);
 const ModalAddProduct = (props) => {
@@ -340,6 +342,24 @@ const ModalAddProduct = (props) => {
                   value={description || ''}
                   onChange={(e) => handleOnChange({ description: e.target.value })}
                 />
+                {/* <CKEditor
+                    editor={ ClassicEditor }
+                    data="<p>Hello from CKEditor 5!</p>"
+                    onReady={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log( 'Editor is ready to use!', editor );
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        console.log( { event, editor, data } );
+                    } }
+                    onBlur={ ( event, editor ) => {
+                        console.log( 'Blur.', editor );
+                    } }
+                    onFocus={ ( event, editor ) => {
+                        console.log( 'Focus.', editor );
+                    } }
+                /> */}
               </Form.Group>
 
               <Row>
