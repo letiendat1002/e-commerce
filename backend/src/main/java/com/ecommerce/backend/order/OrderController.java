@@ -92,7 +92,7 @@ public class OrderController {
             @RequestParam(value = "id") BigInteger id,
             @RequestParam(value = "month") int month
     ) {
-        var count = orderService.fetchCountCompletedOrdersInMonthByWorkerID(
+        var count = orderService.fetchCompletedOrderCountInMonthByWorkerID(
                 id,
                 month
         );
@@ -110,7 +110,7 @@ public class OrderController {
             @RequestParam(value = "id") BigInteger id,
             @RequestParam(value = "year") int year
     ) {
-        var count = orderService.fetchCountCompletedOrdersInYearByWorkerID(
+        var count = orderService.fetchCompletedOrderCountInYearByWorkerID(
                 id,
                 year
         );

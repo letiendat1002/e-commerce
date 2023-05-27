@@ -53,6 +53,18 @@ public class UserController {
         );
     }
 
+    @GetMapping("/shipper/asc")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
+    public UserShipperResponse getShippersWithOrderCountASC() {
+        var shipperList = userService.fetchShippersWithOrderCountASC();
+
+        return new UserShipperResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                shipperList
+        );
+    }
+
     @GetMapping("/role")
     @PreAuthorize("hasAuthority('user:read_all')")
     public UserResponse getUsersByRole(

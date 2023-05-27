@@ -15,6 +15,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, BigInteger> {
     List<User> findAllByRole(UserRole role);
 
+    @Query("SELECT a.userID FROM User a WHERE a.role = ?1")
+    List<BigInteger> findAllUserIDsByRole(UserRole role);
+
     boolean existsByEmail(String email);
 
     boolean existsByPhone(String phone);

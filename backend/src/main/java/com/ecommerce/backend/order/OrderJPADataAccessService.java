@@ -65,12 +65,17 @@ public class OrderJPADataAccessService implements OrderDAO {
     }
 
     @Override
-    public int selectCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month) {
+    public int selectCompletedOrderCountInMonthByWorkerID(BigInteger workerID, int month) {
         return orderRepository.countCompletedOrdersInMonthByWorkerID(workerID, month);
     }
 
     @Override
-    public int selectCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year) {
+    public int selectCompletedOrderCountInYearByWorkerID(BigInteger workerID, int year) {
         return orderRepository.countCompletedOrdersInYearByWorkerID(workerID, year);
+    }
+
+    @Override
+    public int selectOrderCountByWorkerID(BigInteger workerID) {
+        return orderRepository.countOrdersByWorkerID(workerID);
     }
 }

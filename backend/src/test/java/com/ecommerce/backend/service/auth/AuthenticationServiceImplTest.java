@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.auth;
+package com.ecommerce.backend.service.auth;
 
 import com.ecommerce.backend.auth.AuthenticationAuthenticateResponse;
 import com.ecommerce.backend.auth.AuthenticationChangePasswordRequest;
