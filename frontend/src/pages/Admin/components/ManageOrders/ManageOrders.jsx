@@ -12,11 +12,11 @@ import EmptyCart from '../../../../assets/images/empty-cart.png';
 import { GrFormSubtract } from 'react-icons/gr';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
+import convertDate from '../../../../Helper/convertDate';
 import formatProductPrice from '../../../../Helper';
 import { getAllProducts } from '../../../../Redux/slice/productSlice';
 import { getAllUser } from '../../../../Redux/slice/usersSlice';
 import { toast } from 'react-toastify';
-import convertDate from '../../../../Helper/convertDate';
 
 const ManageOrders = (props) => {
 
@@ -257,11 +257,11 @@ const ManageOrders = (props) => {
                               : item.status === "ON_SHIPPING"
                               ? "Đang giao hàng"
                               : item.status === "SHIP_COMPLETED"
-                              ? "Đã giao hàng"
+                              ? "Đã giao hàng" : item.status === "USER_RECEIVED" ? "Đã Nhận Hàng"
                               : "Đã hủy"}</span></td>
                       <td><div style={{display: "flex", justifyContent: "space-evenly"}}>
                         <Link to = {`${item.orderID}`}><button style={{padding: "4px 20px", backgroundColor: "#e6b112",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xem</button></Link>
-                        <button onClick={() => popup(item)} style={{padding: "4px 22px", backgroundColor: (item.status == "CANCELLED") ? "#686766"  : "#54d717",fontSize: "18px",  color: "#ffffff", borderRadius: "5px", position: "relative"}}>Sửa
+                        <button onClick={() => popup(item)} style={{padding: "4px 22px", backgroundColor: (item.status === "CANCELLED" || item.status === "USER_RECEIVED") ? "#686766"  : "#54d717",fontSize: "18px",  color: "#ffffff", borderRadius: "5px", position: "relative"}}>Sửa
                           {
                             (item.status === "PENDING") ? (
                               <ul className={`statuslist-${item.orderID} d-none`}>
@@ -314,7 +314,10 @@ const ManageOrders = (props) => {
                   </tr>
                 )}})
             )  : (<tr>
-              ""
+              <td colspan="6">
+                                <img src={EmptyCart} alt="" />
+                                <h3>Đơn hàng hiện tại đang trống</h3>
+                              </td>
             </tr>)
           }
       </table>

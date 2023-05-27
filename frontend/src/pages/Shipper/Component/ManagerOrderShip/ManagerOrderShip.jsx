@@ -136,13 +136,13 @@ const ManagerOrderShip = (props) => {
       }
     }
 
-    const total = order?.filter((item) => item.workerID == userID)?.length || 0
+    // const total = order?.filter((item) => item.workerID == userID)?.length || 0
   
-    const orderLoading = useSelector((state) => state.order.loading) 
+    const orderStatus = useSelector((state) => state.order.status) 
     return (
     <div>
     {
-        (orderLoading == false) ? (
+        (orderStatus === "successForType") ? (
             <div className="manager__order">
             <h3 style={{color: "#f92626", padding: "1rem 2rem", fontWeight: "bolder"}}>QUẢN LÝ ĐƠN HÀNG</h3>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -156,11 +156,11 @@ const ManagerOrderShip = (props) => {
                 fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff"
                 }} onClick={() => handleShowOrder("ON_SHIPPING",1)}>Đang Giao</button>
               <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 2) ? '#03a213' : '#686766',
-                fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff"
+                fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff", borderTopRightRadius: '6px'
                 }} onClick={() => handleShowOrder("SHIP_COMPLETED", 2)}>Đã Giao</button>
-              <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 3) ? '#03a213' : '#686766',
+              {/* <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 3) ? '#03a213' : '#686766',
                 fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderTopRightRadius: '6px'
-                }}onClick={() => handleShowOrder("CANCELLED", 3)}>ĐH Đã Hủy</button>
+                }}onClick={() => handleShowOrder("CANCELLED", 3)}>ĐH Đã Hủy</button> */}
               </div>
             </div>
             <table>

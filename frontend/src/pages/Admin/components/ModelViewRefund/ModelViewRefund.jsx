@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { getOrderDetail, refundOrderID } from '../../../../Redux/slice/orderDetailSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
+import EmptyCart from '../../../../assets/images/empty-cart.png'
 import TableComponent from '../../../../components/Table'
 import formatProductPrice from '../../../../Helper/index'
 import { getAllOrder } from '../../../../Redux/slice/paymentSlice'
@@ -81,12 +82,22 @@ const ModelViewRefund = () => {
           if (productMatches && items.status == "ON_REFUND"){
             return (
               <tr>
-                <td>{items.orderID}</td>
-                <td>{productMatches.name}</td>
+                <td><span>{items.orderID}</span></td>
+                <td><span style={{maxWidth: "300px"}}>{productMatches.name}</span></td>
                 <td><Image style={{maxHeight: "150px", maxWidth: "150px"}} src={require(`../../../../assets/images/${productMatches.image}`)} preview = {true} /></td>
                 <td>{formatProductPrice(items.purchasePrice)}</td>
                 <td>{formatProductPrice(items.purchasePrice*items.quantity)}</td>
                 <td><button onClick={() => handleRefund(items, productMatches)} style={{padding: "4px 20px", backgroundColor: "#e6b112",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xác nhận</button></td>
+              </tr>
+            )
+          }
+          else {
+            return (
+              <tr>
+                <td colspan="6">
+                  <img src={EmptyCart} alt="" />
+                  <h3>Đơn hàng trống</h3>
+                </td>
               </tr>
             )
           }

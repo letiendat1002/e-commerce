@@ -337,7 +337,7 @@ const DashboardShipper = (props) => {
         <div className='dashboard-content row'>
           <div className='content-left  col-lg-6 col-md-12 col-sm-12'>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
+              <Link style={{color: "#000000"}} to = {"/shipper"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#45cb85"}}>TÀI KHOẢN</div>
               <div className='item-right-content'>
               <h5>1</h5>
@@ -353,7 +353,7 @@ const DashboardShipper = (props) => {
               </Link>
             </div>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
+              <Link style={{color: "#000000"}} to = {"/shipper"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#299cdb"}}>ĐƠN HÀNG</div>
               <div className='item-right-content'>
               {(AllOrder.length > 0) ? (<h5>{AllOrder?.length}</h5>) : (<LoadingCircle />)}
@@ -369,7 +369,7 @@ const DashboardShipper = (props) => {
               </Link>
             </div>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-user"}>
+              <Link style={{color: "#000000"}} to = {"/shipper"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#ffbe0b"}}>ĐÃ GIAO</div>
               <div className='item-right-content'>
               {(AllOrder.length > 0) ? (<h5>{AllOrder?.filter((item) => item.status == "SHIP_COMPLETED").length}</h5>) : (<LoadingCircle />)}
@@ -385,7 +385,7 @@ const DashboardShipper = (props) => {
               </Link>
             </div>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-products"}>
+              <Link style={{color: "#000000"}} to = {"/shipper"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#f06548"}}>{t('dashboard.item_right4')}</div>
               <div className='item-right-content'>
                 {(product?.length > 0)  ? (<h5>{product?.length}</h5>) : (<LoadingCircle />)}
