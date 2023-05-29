@@ -146,10 +146,11 @@ export const orderSlice = createSlice({
         builder.addCase(getAllOrder.fulfilled, (state, action) => {
             state.loading = false
             state.data = action.payload
-            state.status = 200
+             state.status = "successAll"
         })
         builder.addCase(getAllOrder.rejected, (state, action) => {
             state.loading = true
+             state.status = "FailedForType"
         })
         builder.addCase(getOrderType.pending, (state, action) => {
             state.loading = true
@@ -157,10 +158,11 @@ export const orderSlice = createSlice({
         builder.addCase(getOrderType.fulfilled, (state, action) => {
             state.loading = false
             state.data = action.payload
-            state.status = 200
+            state.status = "successForType"
         })
         builder.addCase(getOrderType.rejected, (state, action) => {
             state.loading = true
+            state.status  = "failedForType"
         })
         builder.addCase(deleteOrderForID.fulfilled, (state, action) => {
             state.loading = false
@@ -185,9 +187,11 @@ export const orderSlice = createSlice({
         builder.addCase(getOrderWorker.fulfilled, (state, action) => {
             state.loading = false
             state.data = action.payload
+             state.status = "successForWorker"
         })
         builder.addCase(getOrderWorker.rejected, (state, action) => {
             state.loading = true
+             state.status = "failedForWorker"
         })
         builder.addCase(getOrderWorker.pending, (state, action) => {
             state.loading = true

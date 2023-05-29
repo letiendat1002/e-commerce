@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.product;
+package com.ecommerce.backend.service.product;
 
 import com.ecommerce.backend.category.Category;
 import com.ecommerce.backend.category.CategoryService;

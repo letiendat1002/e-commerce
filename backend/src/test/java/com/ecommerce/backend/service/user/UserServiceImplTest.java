@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.user;
+package com.ecommerce.backend.service.user;
 
 import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -524,5 +525,32 @@ class UserServiceImplTest {
         // Then
         verify(userDAO).existsUserByID(id);
         assertThat(result).isFalse();
+    }
+
+    @Test
+    void fetchShippersWithOrderCountASC() {
+        // Given
+        var shipperId1 = BigInteger.ONE;
+        var shipperId2 = BigInteger.TWO;
+        var shipperList = new ArrayList<BigInteger>();
+        shipperList.add(shipperId1);
+        shipperList.add(shipperId2);
+
+        // When
+        when(userDAO.selectUserIDsByRole(UserRole.SHIPPER)).thenReturn(shipperList);
+        when(orderService.fetchOrderCountByWorkerID(shipperId1))
+                .thenReturn(2);
+        when(orderService.fetchOrderCountByWorkerID(shipperId2))
+                .thenReturn(1);
+        var result = userService.fetchShippersWithOrderCountASC();
+
+        // Then
+        verify(userDAO).selectUserIDsByRole(UserRole.SHIPPER);
+        verify(orderService).fetchOrderCountByWorkerID(shipperId1);
+        verify(orderService).fetchOrderCountByWorkerID(shipperId2);
+
+        assertThat(result).hasSize(2);
+        assertThat(result.get(0)).isEqualTo(shipperId2);
+        assertThat(result.get(1)).isEqualTo(shipperId1);
     }
 }

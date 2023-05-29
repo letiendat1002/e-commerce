@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import './LoginAdmin.scss';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
 import { Form, Input, Checkbox, Button } from 'antd';
 import { ReactComponent as MailIcon } from '../../../assets/images/mail.svg';
 import { ReactComponent as LockIcon } from '../../../assets/images/lock.svg';
 
 import image from '../../../assets/images/technology-in-the-workplace.png';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { login, register } from '../../../Redux/slice/userSlice';
-import { toast } from 'react-toastify';
+import { login, logout, register } from '../../../Redux/slice/userSlice';
+import './LoginAdmin.scss';
 
 const LoginAdmin = () => {
   const dispatch = useDispatch();
@@ -31,13 +30,12 @@ const LoginAdmin = () => {
           localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`);
           navigate('/admin');
           toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
-        } else if (checkedShipper) {
-          localStorage.setItem('access_token', res.payload.token);
-          localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`);
-          navigate('/shipper');
-          toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
         } else {
+          console.log('Shipperr');
           toast.error('Access Dennid !');
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user');
+          dispatch(logout());
           form.resetFields();
           navigate('/admin/login');
         }
@@ -60,6 +58,11 @@ const LoginAdmin = () => {
   return (
     <div>
       <div className='login-admin'>
+        <ToastContainer
+          autoClose={1000}
+          closeOnClick
+          pauseOnHover={true}
+        />
         <div className='login'>
           <div className='left'>
             <div

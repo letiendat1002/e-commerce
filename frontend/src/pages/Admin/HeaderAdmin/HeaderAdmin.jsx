@@ -30,8 +30,8 @@ const HeaderAdmin = (props) => {
   const handleLogOut = () => {
     // dispatch(logoutAction());
     // console.log('Logout');
-    // dispatch(logout());
-    navigate('/admin/login');
+    dispatch(logout());
+    navigate('/login');
     // document.location.href="/admin/login"
   };
 

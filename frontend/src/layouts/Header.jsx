@@ -34,7 +34,7 @@ const Header = () => {
 
   const dispatch = useDispatch();
 
-  const {current:user} = useSelector(state => state.user)
+  const { current: user } = useSelector((state) => state.user);
   const cart = useSelector((state) => state.allCart);
   const cartItems = cart.cart;
 
@@ -74,8 +74,8 @@ const Header = () => {
   };
 
   const handleLogut = () => {
-     dispatch(logout())
-  }
+    dispatch(logout());
+  };
 
   return (
     <div
@@ -96,7 +96,9 @@ const Header = () => {
               onClick={() => handleCloseMenu()}>
               <div className='tablet--item--child'>
                 {/* <img src={Logo}></img> */}
-                <Logo />
+                <Link to='/'>
+                  <Logo />
+                </Link>
               </div>
               <i
                 className='closeIcon'
@@ -246,30 +248,32 @@ const Header = () => {
           <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
           </InputGroup.Text> */}
-          <SearchBoxClient/>
+          <SearchBoxClient />
         </InputGroup>
 
         <div className='nav-item account'>
-          {user?.length>0 ? (
+          {user?.length > 0 ? (
             <Link to={'/account/profile'}>
               <span>
                 <FaRegUserCircle />
               </span>
               {user[0].fullName.split(' ')[user[0].fullName.split(' ').length - 1]}
-              <ul className="account--profile">
-                <Link to={"/account/profile"}>
+              <ul className='account--profile'>
+                <Link to={'/account/profile'}>
                   <li>
                     <RiAccountCircleLine />
                     <span>Tài khoản của tôi</span>
                   </li>
                 </Link>
-                <Link to={"/account/order"}>
+                <Link to={'/account/order'}>
                   <li>
-                    <TfiMenuAlt/>
+                    <TfiMenuAlt />
                     <span>Đơn hàng của tôi</span>
                   </li>
                 </Link>
-                <Link to={""} onClick={handleLogut}>
+                <Link
+                  to={''}
+                  onClick={handleLogut}>
                   <li>
                     <AiOutlineLogout />
                     <span>Đăng Xuất</span>
@@ -322,7 +326,7 @@ const Header = () => {
           <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
             <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
           </InputGroup.Text> */}
-          <SearchBoxClient/>
+          <SearchBoxClient />
         </InputGroup>
       </div>
       <div className='headerBottom container-fluid col-lg-12 col-md-12 col-sm-12 col-12'>

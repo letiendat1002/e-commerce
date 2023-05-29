@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.useraddress;
+package com.ecommerce.backend.service.useraddress;
 
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;

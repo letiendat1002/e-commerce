@@ -29,7 +29,9 @@ public interface OrderService {
 
     void deleteAllOrdersByUserID(BigInteger userID);
 
-    int fetchCountCompletedOrdersInMonthByWorkerID(BigInteger workerID, int month);
+    int fetchCompletedOrderCountInMonthByWorkerID(BigInteger workerID, int month);
 
-    int fetchCountCompletedOrdersInYearByWorkerID(BigInteger workerID, int year);
+    int fetchCompletedOrderCountInYearByWorkerID(BigInteger workerID, int year);
+
+    int fetchOrderCountByWorkerID(BigInteger workerID);
 }

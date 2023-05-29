@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.rating;
+package com.ecommerce.backend.service.rating;
 
 import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.orderdetail.OrderDetailID;

@@ -1,4 +1,4 @@
-package com.ecommerce.backend.unit.orderdetail;
+package com.ecommerce.backend.service.orderdetail;
 
 import com.ecommerce.backend.orderdetail.*;
 import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;

@@ -1,15 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit';
-// import authSignInSlice  from "../layouts/login/AuthSignInSlice";
-import cartReducer from './slice/cartSlice';
-import userReducer from './slice/userSlice';
-import productReducer from './slice/productSlice'
-import categoriesReducer from './slice/categorySlice'
-import addressReducer from './slice/userAddressSlice'
-import orderReducer from './slice/paymentSlice'
-import orderDetailReducer from './slice/orderDetailSlice';
 import UserAPIReducer from './slice/usersSlice';
+import addressReducer from './slice/userAddressSlice'
 import cartAdminReducer from './slice/cartAdminSlice';
+import cartReducer from './slice/cartSlice';
+import categoriesReducer from './slice/categorySlice'
+import { configureStore } from '@reduxjs/toolkit';
+import orderDetailReducer from './slice/orderDetailSlice';
+import orderReducer from './slice/paymentSlice'
+import productReducer from './slice/productSlice'
 import ratingReducer from './slice/ratingSlice'
+import shipperReducer from './slice/shipperSlice'
+import userReducer from './slice/userSlice';
+
+// import authSignInSlice  from "../layouts/login/AuthSignInSlice";
+
 const store = configureStore({
   reducer: {
     allCart: cartReducer,
@@ -22,6 +25,7 @@ const store = configureStore({
     orderDetail: orderDetailReducer, 
     userAPI: UserAPIReducer, 
     rating: ratingReducer,
+    shipper: shipperReducer,
   },
   // authSlice: authSignInSlice,
 });

@@ -23,5 +23,8 @@ public interface OrderRepository extends JpaRepository<Order, BigInteger> {
     @Query("SELECT COUNT(o) FROM Order o WHERE o.workerID = ?1 AND YEAR(o.dateCompleted) = ?2")
     int countCompletedOrdersInYearByWorkerID(BigInteger workerID, int year);
 
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.workerID = ?1")
+    int countOrdersByWorkerID(BigInteger workerID);
+
     boolean existsByOrderIDAndUser(BigInteger orderID, User user);
 }

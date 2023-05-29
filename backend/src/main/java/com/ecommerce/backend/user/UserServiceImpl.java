@@ -31,6 +31,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<BigInteger> fetchShippersWithOrderCountASC() {
+        var shippers = userDAO.selectUserIDsByRole(UserRole.SHIPPER);
+        shippers.sort((a, b) -> {
+            var aOrderCount = orderService.fetchOrderCountByWorkerID(a);
+            var bOrderCount = orderService.fetchOrderCountByWorkerID(b);
+            return aOrderCount - bOrderCount;
+        });
+        return shippers;
+    }
+
+    @Override
     public User fetchUserByUserID(BigInteger userID) {
         return userDAO
                 .selectUserByID(userID)
