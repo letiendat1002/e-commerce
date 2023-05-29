@@ -36,18 +36,6 @@ import { createBrowserRouter } from 'react-router-dom';
 
 // import Login from '../pages/Admin/components/Login/Login';
 
-
-
-
-
-
-
-
-
-
-
-
-
 // import Prod
 
 const router = createBrowserRouter([
@@ -115,6 +103,14 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: 'admin/login',
+    element: (
+      <ProtectRoutesLogin>
+        <LoginAdmin />
+      </ProtectRoutesLogin>
+    ),
+  },
+  {
     path: 'admin',
     element: (
       <ProtectRoutes>
@@ -122,7 +118,6 @@ const router = createBrowserRouter([
       </ProtectRoutes>
     ),
 
-    
     children: [
       {
         index: true,
@@ -182,16 +177,15 @@ const router = createBrowserRouter([
         path: 'add-product',
         element: <ModalAddProduct />,
       },
-      
     ],
     // path: 'admin/login',
     // element: (
-     
+
     //     <LoginAdmin />
-      
+
     // ),
   },
- 
+
   {
     path: 'shipper',
     element: (
