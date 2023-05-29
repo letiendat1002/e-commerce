@@ -2,7 +2,7 @@ import './ManagerOrderShip.scss'
 
 import { Image, Pagination, Popconfirm, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { getAllOrder, getOrderType, updateOrders } from '../../../../Redux/slice/paymentSlice'
+import { getAllOrder, getOrderType, getOrderWorker, updateOrders } from '../../../../Redux/slice/paymentSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AiFillDelete } from 'react-icons/ai'
@@ -17,33 +17,37 @@ import { toast } from 'react-toastify'
 
 const ManagerOrderShip = (props) => {
     const dispatch = useDispatch()
-
-    useEffect(() => {
-      dispatch(getOrderDetail())
-      dispatch(getOrderType("ON_SHIPPING"))
-    }, [])
-
-    const [activeType, setActiveType] = useState(1)
+    const [activeType, setActiveType] = useState(3)
   
     const userID = JSON.parse(localStorage.getItem('user'))[0]?.userID || 0
-    const order = useSelector(state => state.order.data) || []
-    const orderDetailed = useSelector(state => state.orderDetail.data.data) || []
   
-    // const [order, setOrder] = useState(orders)
-      
+    useEffect(() => {
+      dispatch(getOrderDetail())
+      dispatch(getOrderWorker(userID))
+    }, [])
+
+    const order = useSelector(state => state.order.data.data) || []
+    const orderDetailed = useSelector(state => state.orderDetail.data.data) || []
+    const [orderWorker, setOrderWorker] = useState([])
+    useEffect(() => {
+        setOrderWorker(order)
+    }, [order])
     const [currentPage, setCurrentPage] = useState(1);
-    // useEffect(() => {
-    //     setOrder(orders)
-    // }, [orders])
-    
     const handleShowOrder = (type, number) => {
-        if (type === "Tất Cả"){
-            dispatch(getOrderType("ON_SHIPPING"))
+        if (type === "Tất cả"){
+          setOrderWorker(order)
+          setCurrentPage(1)
+          setActiveType(3)
+        }
+        else if (type === "ON_SHIPPING"){
+            const orderType = order.filter(item => item.status === "ON_SHIPPING")
+            setOrderWorker(orderType)
             setCurrentPage(1)
             setActiveType(number)
         }
-        else {
-            dispatch(getOrderType(type))
+        else if (type === "SHIP_COMPLETED"){
+            const orderType = order.filter((item) => item.status === "SHIP_COMPLETED" || item.status == "USER_RECEIVED")
+            setOrderWorker(orderType)
             setCurrentPage(1)
             setActiveType(number)
         }
@@ -79,11 +83,11 @@ const ManagerOrderShip = (props) => {
         else{
           toast.error("Cập nhật đơn hàng thất bại!")
         }
-        dispatch(getOrderType("ON_SHIPPING"))
+        dispatch(getOrderWorker(userID))
       })
       // setOrder(orders)
       setCurrentPage(1)
-      setActiveType(1)
+      setActiveType(3)
     }
   
     const handlePageChange = (page) => {
@@ -104,9 +108,6 @@ const ManagerOrderShip = (props) => {
     const startIndexProduct = (currentPageProduct - 1) * itemsPerPageProduct;
     const endIndexProduct = currentPageProduct * itemsPerPageProduct - 1;
   
-    // const handleAddItemTocart = (item) => {
-    //   dispatch(addToCartAdmin(item))
-    // }
   
     const [currentPageCartAdmin, setCurrentPageCartAdmin] = useState(1);
   
@@ -142,7 +143,7 @@ const ManagerOrderShip = (props) => {
     return (
     <div>
     {
-        (orderStatus === "successForType") ? (
+        (orderStatus === "successForWorker") ? (
             <div className="manager__order">
             <h3 style={{color: "#f92626", padding: "1rem 2rem", fontWeight: "bolder"}}>QUẢN LÝ ĐƠN HÀNG</h3>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -152,15 +153,15 @@ const ManagerOrderShip = (props) => {
               Add New Orders
             </button></Link>
             <div style={{display: 'flex'}}>
-              <button style={{width: 'auto', minWidth: "150px", borderTopLeftRadius: '6px', backgroundColor: (activeType == 1) ? '#03a213' : '#686766',
+              <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 3) ? '#03a213' : '#686766',
+                fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderTopLeftRadius: '6px',borderRight: "2px solid #ffffff"
+                }}onClick={() => handleShowOrder("Tất cả", 3)}>Tất Cả</button>
+              <button style={{width: 'auto', minWidth: "150px",  backgroundColor: (activeType == 1) ? '#03a213' : '#686766',
                 fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff"
                 }} onClick={() => handleShowOrder("ON_SHIPPING",1)}>Đang Giao</button>
               <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 2) ? '#03a213' : '#686766',
                 fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff", borderTopRightRadius: '6px'
                 }} onClick={() => handleShowOrder("SHIP_COMPLETED", 2)}>Đã Giao</button>
-              {/* <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 3) ? '#03a213' : '#686766',
-                fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderTopRightRadius: '6px'
-                }}onClick={() => handleShowOrder("CANCELLED", 3)}>ĐH Đã Hủy</button> */}
               </div>
             </div>
             <table>
@@ -173,8 +174,8 @@ const ManagerOrderShip = (props) => {
                 <th>Hoạt động</th>
               </tr>
                 {
-                  (order.length > 0 && activeType == 1) ? (
-                    order.slice(startIndex, endIndex + 1).map((item) => {
+                  (orderWorker.length > 0 && activeType == 1) ? (
+                    orderWorker.slice(startIndex, endIndex + 1).map((item) => {
                       const orderDetails = orderDetailed?.filter((detail) => detail.orderID === item.orderID);
                       const total = orderDetails.reduce((acc, curr) => acc + curr.quantity * curr.purchasePrice, 0);
                         return (
@@ -209,8 +210,8 @@ const ManagerOrderShip = (props) => {
                             </td>
                         </tr>
                       )})
-                  )  : (order.length > 0 && order?.filter((item) => item.workerID == userID)?.length > 0) ?  (
-                    order?.filter((child) => child.workerID == userID)?.slice(startIndex, endIndex + 1).map((item) => {
+                  )  : (orderWorker.length > 0 && orderWorker?.filter((item) => item.workerID == userID)?.length > 0) ?  (
+                    orderWorker?.filter((child) => child.workerID == userID)?.slice(startIndex, endIndex + 1).map((item) => {
                         const orderDetails = orderDetailed?.filter((detail) => detail.orderID === item.orderID);
                         const total = orderDetails.reduce((acc, curr) => acc + curr.quantity * curr.purchasePrice, 0);
                         return (
@@ -225,12 +226,11 @@ const ManagerOrderShip = (props) => {
                                     ? "Chờ giao hàng"
                                     : item.status === "ON_SHIPPING"
                                     ? "Đang giao hàng"
-                                    : item.status === "SHIP_COMPLETED"
-                                    ? "Đã giao hàng"
-                                    : "Đã hủy"}</span></td>
+                                    : (item.status === "SHIP_COMPLETED" || item.status === "USER_RECEIVED" || item.status === "CANCELLED")
+                                    ? "Đã giao hàng" : ""}</span></td>
                             <td><div style={{display: "flex", justifyContent: "space-evenly"}}>
                                 <Link to = {`${item.orderID}`}><button style={{padding: "4px 20px", backgroundColor: "#e6b112",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xem</button></Link>  
-                                <button onClick={() => popup(item)} style={{padding: "4px 22px", backgroundColor: (item.status == "CANCELLED" || item.status == "SHIP_COMPLETED") ? "#686766"  : "#54d717",fontSize: "18px",  color: "#ffffff", borderRadius: "5px", position: "relative"}}>Sửa
+                                <button onClick={() => popup(item)} style={{padding: "4px 22px", backgroundColor: (item.status == "CANCELLED" || item.status == "SHIP_COMPLETED" || item.status == "USER_RECEIVED") ? "#686766"  : "#54d717",fontSize: "18px",  color: "#ffffff", borderRadius: "5px", position: "relative"}}>Sửa
                                 {
                                     (item.status == "ON_SHIPPING") ? (
                                         <ul className={`statuslist-${item.orderID} d-none`}>
@@ -252,7 +252,7 @@ const ManagerOrderShip = (props) => {
                             </div>
                             </td>
                         </tr>
-                    )})) : ((order?.filter((item) => item.workerID == userID)?.length == 0 && activeType != 1)) ? 
+                    )})) : ((orderWorker?.filter((item) => item.workerID == userID)?.length == 0 && activeType != 1)) ? 
                     (<td colspan="6">
                         <img src={EmptyCart} alt="" />
                         <h3>Đơn hàng trống</h3>
@@ -267,7 +267,7 @@ const ManagerOrderShip = (props) => {
             <Pagination
               current={currentPage}
               pageSize={itemsPerPage}
-              // total={(activeType ===  1) ? (order.length) : (order?.filter((item) => item.workerID === userID)?.length)}
+              total={orderWorker.length}
               onChange={handlePageChange}
             />
             {/* <div className="overlay addOrder-overlay d-none"></div>

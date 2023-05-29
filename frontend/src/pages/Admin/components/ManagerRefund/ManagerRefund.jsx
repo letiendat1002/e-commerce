@@ -81,7 +81,7 @@ const ManageRefund = (props) => {
       <tbody>
         {
           (groupedOrders.length > 0) ? (
-            groupedOrders?.map(order => (
+            groupedOrders.slice(startIndex, endIndex + 1)?.map(order => (
               <tr key={order.orderID}>
                 <td>{order?.orderID}</td>
                 <td>{order?.fullName}</td>

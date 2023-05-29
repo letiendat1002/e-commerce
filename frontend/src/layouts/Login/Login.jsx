@@ -9,7 +9,7 @@ import { Button, Checkbox, Form, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { login, register } from "../../Redux/slice/userSlice";
-// import { isValidNumber } from "libphonenumber-js";
+
 import { BsFacebook } from "react-icons/bs";
 import { ReactComponent as LockIcon } from "../../assets/images/lock.svg";
 import Logo from "../../components/Logo/Logo";
@@ -17,9 +17,21 @@ import { ReactComponent as MailIcon } from "../../assets/images/mail.svg";
 import { ReactComponent as RequiredIcon } from "../../assets/images/Required.svg";
 import { ReactComponent as UserIcon } from "../../assets/images/user.svg";
 import { resetPassword } from "../../Redux/slice/usersSlice";
+import { set } from "lodash";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { set } from "lodash";
+
+// import { isValidNumber } from "libphonenumber-js";
+
+
+
+
+
+
+
+
+
+
 
 // import Logo from '../../assets/images/Logo.svg';
 
@@ -179,11 +191,7 @@ const Login = () => {
         toast.success("Yêu cầu reset mật khẩu thành công!");
         handleCloseResetForm();
       } else if (res.payload.status == 404) {
-        if (
-          res.payload.message == `User not found by email {${email}@gmail.com}`
-        ) {
           toast.error("Email không tồn tại với tài khoản nào!");
-        }
       }
     });
   };

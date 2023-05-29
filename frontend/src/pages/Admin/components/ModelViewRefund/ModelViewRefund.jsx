@@ -91,16 +91,6 @@ const ModelViewRefund = () => {
               </tr>
             )
           }
-          else {
-            return (
-              <tr>
-                <td colspan="6">
-                  <img src={EmptyCart} alt="" />
-                  <h3>Đơn hàng trống</h3>
-                </td>
-              </tr>
-            )
-          }
         }))
       }
       </tbody>

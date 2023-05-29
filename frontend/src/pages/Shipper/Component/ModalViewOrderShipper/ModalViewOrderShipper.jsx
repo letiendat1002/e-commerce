@@ -11,6 +11,7 @@ import { getAllProducts } from '../../../../Redux/slice/productSlice';
 import { getUserForID } from '../../../../Redux/slice/usersSlice';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom'
+import EmptyCart from '../../../../assets/images/empty-cart.png'
 
 const ModalViewOrderShipper = () => {
     const slug = useParams();
@@ -24,15 +25,12 @@ const ModalViewOrderShipper = () => {
         dispatch(getAllProducts())
       }, [])
 
-    const order = useSelector(state => state.order.data)
-    const userID = order[0]
+    const order = useSelector(state => state.order.data) || []
 
     const orderLoading = useSelector((state) => state.order.loading)
     useEffect(() => {
-        if(!orderLoading){
-            dispatch(getUserForID(userID.userID))
-        }
-    }, [orderLoading])
+        dispatch(getUserForID(order[0]?.userID))
+    }, [order])
 
     const orderDetail = useSelector(state => state.orderDetail.data.data) || [];
     const product = useSelector(state => state.product.data) || []
@@ -81,6 +79,16 @@ const ModalViewOrderShipper = () => {
                                         </tr>
                                     )
                                 }
+                                // else {
+                                //     return (
+                                //         <tr>
+                                //             <td colspan="6">
+                                //                 <img src={EmptyCart} alt="" />
+                                //                 <h3>Đơn hàng không có sản phẩm nào</h3>
+                                //             </td>
+                                //         </tr>
+                                //     )
+                                // }
                             })
                         }
                     </table>

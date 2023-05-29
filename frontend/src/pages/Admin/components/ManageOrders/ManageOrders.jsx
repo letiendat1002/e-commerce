@@ -1,11 +1,12 @@
 import './ManagerOrder.scss';
 
-import { AiFillCloseCircle, AiFillDelete } from 'react-icons/ai';
-import { Image, Pagination, Popconfirm } from 'antd';
+import { AiFillCloseCircle, AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
+import { Image, Input, Pagination, Popconfirm } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { addToCartAdmin, decreamentFromCartAdmin, increamentFromCartAdmin, removeFromToCartAdmin } from '../../../../Redux/slice/cartAdminSlice';
 import { deleteOrderForID, getAllOrder, orderPayment, updateOrders } from '../../../../Redux/slice/paymentSlice';
 import { getOrderDetail, orderDetail } from '../../../../Redux/slice/orderDetailSlice';
+import { getShipper, getShipperSort } from '../../../../Redux/slice/shipperSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 import EmptyCart from '../../../../assets/images/empty-cart.png';
@@ -27,11 +28,18 @@ const ManageOrders = (props) => {
     dispatch(getAllUser())
     dispatch(getOrderDetail())
     dispatch(getAllProducts())
+    dispatch(getShipperSort())
   }, [])
 
   const user = useSelector(state => state.userAPI.data)
   const orders = useSelector(state => state.order.data) || []
   const orderDetailed = useSelector(state => state.orderDetail.data.data) || []
+  const shipper = useSelector((state) => state.shipper.data) || []  
+  const [shipperAccend, setShipperAccend] = useState([shipper]);
+
+  useEffect(() => {
+    setShipperAccend(shipper)
+  }, [shipper])
 
   const [order, setOrder] = useState([])
     
@@ -41,7 +49,12 @@ const ManageOrders = (props) => {
   }, [orders])
   const [activeType, setActiveType] = useState(1)
   
+  const [showShipper, setShowShipper]= useState(false);
+  const [idShipper, setIdShipper] = useState(shipperAccend?.[0])
+  const [nameShipper, setNameShipper] = useState("")  
   const handleShowOrder = (type, number) => {
+      const ulItem = document.querySelector('ul.list-shipper')
+      ulItem.classList.add('d-none')
       if (type === "Tất Cả"){
           setOrder(orders)
           setCurrentPage(1)
@@ -56,8 +69,6 @@ const ManageOrders = (props) => {
   }
 
   const product = useSelector(state => state.product.data) || []
-  const userLoading = useSelector(state => state.userAPI.loading)
-  const orderLoading = useSelector(state => state.order.loading)
 
   const popup = (item) =>{
     const ul = document.querySelector(`.statuslist-${item.orderID}`)
@@ -68,6 +79,7 @@ const ManageOrders = (props) => {
       ul.classList.add('d-none')
     }
   }
+
 
   const handleUpdate = (item, state) => {
     const ul = document.querySelector(`.statuslist-${item.orderID}`)
@@ -196,15 +208,84 @@ const ManageOrders = (props) => {
       }
     })
   }
+
+  
+  const handleFocus = () => {
+    const ulItem = document.querySelector('ul.list-shipper')
+    ulItem.classList.remove('d-none')
+  }
+
+  const handleClosePopup = () => {
+    const ulItem = document.querySelector('ul.list-shipper')
+    ulItem.classList.add('d-none')
+  }
+  const handleShowItem = (item, name) => {
+    const ulItem = document.querySelector('ul.list-shipper')
+    ulItem.classList.add('d-none')
+    setIdShipper(item)
+    setNameShipper(name)
+  }
+
+  const handleSearchShipper = (e) => {
+    const name = e.target.value.toLowerCase()
+    setNameShipper(name)
+    const shipperListid = user.filter((item) => item.fullName.toLowerCase().includes(name))
+    const ShipperList = shipperListid.filter((item) => item.roles.includes("ROLE_SHIPPER"))
+    const ShipperID = ShipperList.map((item) => item.userID)
+    setShipperAccend(ShipperID.length > 0 ? ShipperID : shipper)
+  }
+
+  const handleUpdateOnShipping = (item, state) => {
+    const ul = document.querySelector(`.statuslist-${item.orderID}`)
+    ul.classList.add('d-none')
+    const orderID = item.orderID
+    const states = state
+    const data = {
+      status: states,
+      workerID: idShipper
+    }
+    dispatch(updateOrders({orderID, data}))
+    .then((res) => {
+      if (res.payload.status === 200){
+        toast.success("Cập nhật đơn hàng thành công!")
+      }
+      else{
+        toast.error("Cập nhật đơn hàng thất bại!")
+      }
+      dispatch(getAllOrder())
+    })
+    setOrder(orders)
+    setCurrentPage(1)
+    setActiveType(1)
+  }
   return (
     <div className="manager__order">
       <h3>Manager Orders</h3>
       <div style={{display: 'flex', justifyContent: 'space-between'}}>
         <Link onClick={() => handlePopup()} to = {""}><button style={{padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
           borderRadius: "5px"
-        }}>
+        }} onClick={() => handleClosePopup()}>
           Add New Orders
         </button></Link>
+        <div className="manager__orderShipper">
+            <Input value={nameShipper} placeholder = "Tìm kiếm theo tên shipper" prefix = {<AiOutlineSearch fontSize={"20px"}/>}
+              onFocus={handleFocus} onChange={(e) => handleSearchShipper(e)}
+            />
+            <ul className={'list-shipper d-none'}>
+              {
+                  (shipperAccend)?.map((item, idx) => {
+                    const shiperMatches = user.find((user) => {
+                      return item === user.userID
+                    })
+                    if (shiperMatches){
+                      return (
+                        <li onClick={() => handleShowItem(item, shiperMatches.fullName)}><p>{`${item} - ${shiperMatches.fullName}`}</p></li>
+                      )
+                    }
+                  })
+              }
+            </ul>
+        </div>
         <div style={{display: 'flex'}}>
           <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 1) ? '#03a213' : '#686766',
             fontSize: "18px", fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderTopLeftRadius: '6px', borderRight: "2px solid #ffffff"
@@ -226,7 +307,7 @@ const ManageOrders = (props) => {
             }}onClick={() => handleShowOrder("CANCELLED", 6)}>ĐH Đã Hủy</button>
           </div>
       </div>
-      <table>
+      <table onClick={() => handleClosePopup()}>
         <tr>
           <th>STT</th>
           <th>Họ Tên</th>
@@ -274,7 +355,7 @@ const ManageOrders = (props) => {
                               </ul>
                             ) : (item.status === "CONFIRMED") ? (
                               <ul className={`statuslist-${item.orderID} d-none`}>
-                                <li onClick={() => handleUpdate(item, "ON_SHIPPING")}>
+                                <li onClick={() => handleUpdateOnShipping(item, "ON_SHIPPING")}>
                                   SHIPPING
                                 </li>
                                 <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
