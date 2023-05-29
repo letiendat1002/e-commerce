@@ -1,18 +1,27 @@
 import './Dashboard.scss';
 
+import { AiFillCar, AiFillCheckCircle } from 'react-icons/ai';
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Sector,
+  XAxis,
+  YAxis
+} from 'recharts';
 import { BsFillBagFill, BsWallet } from 'react-icons/bs';
 import React, { useEffect, useState } from 'react';
 import { getAllOrder, getOrderWorker } from '../../../Redux/slice/paymentSlice';
 import { useDispatch, useSelector } from "react-redux";
 
-import { AiFillCheckCircle } from 'react-icons/ai';
+import AlertCard from '../../Admin/components/AlertCard/AlertCard'
+import CardOutLiner from '../../Admin/components/Card'
 import { Link } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
 import { MdAttachMoney } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
-import {
-  Sector
-} from 'recharts';
+import { Tooltip } from 'antd';
 import convertToUSD from '../../../Helper/convertUSD';
 import { getAllCategories } from '../../../Redux/slice/categorySlice';
 import { getAllProducts } from '../../../Redux/slice/productSlice';
@@ -203,133 +212,133 @@ const DashboardShipper = (props) => {
   let [quy, setQuy] = useState('01')
   let [month, setMonth] = useState(1)
 
-//   const orderForMonth = () => {
-//     const dates = [];
+  const orderForMonth = () => {
+    const dates = [];
   
-//     for (let i = 0; i < AllOrder.length; i++) {
-//       const date = AllOrder[i].dateOrder?.split('-')[AllOrder[i].dateOrder?.split('-').length - 2];
+    for (let i = 0; i < AllOrder.length; i++) {
+      const date = AllOrder[i].dateOrder?.split('-')[AllOrder[i].dateOrder?.split('-').length - 2];
       
-//       if (!dates.some(d => d.date === date)) {
-//         const count = AllOrder?.filter(o => o.dateOrder?.split('-')[o.dateOrder?.split('-').length - 2] == date).length;
-//         dates.push({ date, count });
-//       }
-//     }
+      if (!dates.some(d => d.date === date)) {
+        const count = AllOrder?.filter(o => o.dateOrder?.split('-')[o.dateOrder?.split('-').length - 2] == date).length;
+        dates.push({ date, count });
+      }
+    }
   
-//     setMonthOrder(dates);
-//   } 
+    setMonthOrder(dates);
+  } 
 
 
-//   const ordersForQuarter = () => {
-//     const quarters = [];
+  const ordersForQuarter = () => {
+    const quarters = [];
     
-//     for (let i = 0; i < AllOrder.length; i++) {
-//       const orderDate = new Date(AllOrder[i].dateOrder);
-//       const quarter = Math.floor((orderDate.getMonth() + 3) / 3);
+    for (let i = 0; i < AllOrder.length; i++) {
+      const orderDate = new Date(AllOrder[i].dateOrder);
+      const quarter = Math.floor((orderDate.getMonth() + 3) / 3);
     
-//       if (!quarters.some(q => q.quarter === quarter)) {
-//         const count = AllOrder?.filter(o => {
-//           const oDate = new Date(o.dateOrder);
-//           const oQuarter = Math.floor((oDate.getMonth() + 3) / 3);
-//           return oQuarter === quarter;
-//         }).length;
+      if (!quarters.some(q => q.quarter === quarter)) {
+        const count = AllOrder?.filter(o => {
+          const oDate = new Date(o.dateOrder);
+          const oQuarter = Math.floor((oDate.getMonth() + 3) / 3);
+          return oQuarter === quarter;
+        }).length;
         
-//         quarters.push({ quarter, count });
-//       }
-//     }
+        quarters.push({ quarter, count });
+      }
+    }
     
-//     setQuyOrder(quarters);
-//   }
+    setQuyOrder(quarters);
+  }
 
-//   const orderDateSame = () => {
-//   const ordersByDate = {};
+  const orderDateSame = () => {
+  const ordersByDate = {};
 
-//   for (let i = 0; i < AllOrder.length; i++) {
-//     const orderDate = new Date(AllOrder[i].dateOrder);
+  for (let i = 0; i < AllOrder.length; i++) {
+    const orderDate = new Date(AllOrder[i].dateOrder);
     
-//     if (orderDate.getMonth() === month - 1) {
-//       const date = orderDate.getDate();
-//       const orderId = AllOrder[i].orderId;
-//       const orderValue = AllOrder[i].orderValue;
+    if (orderDate.getMonth() === month - 1) {
+      const date = orderDate.getDate();
+      const orderId = AllOrder[i].orderId;
+      const orderValue = AllOrder[i].orderValue;
       
-//       if (!ordersByDate[date]) {
-//         ordersByDate[date] = { orderCount: 1, orderValue: orderValue };
-//       } else {
-//         ordersByDate[date].orderCount++;
-//         ordersByDate[date].orderValue += orderValue;
-//       }
-//     }
-//   }
+      if (!ordersByDate[date]) {
+        ordersByDate[date] = { orderCount: 1, orderValue: orderValue };
+      } else {
+        ordersByDate[date].orderCount++;
+        ordersByDate[date].orderValue += orderValue;
+      }
+    }
+  }
 
-//   const dates = Object.keys(ordersByDate).map(date => {
-//     return { date: `${date}/${month}`, count: ordersByDate[date].orderCount, value: ordersByDate[date].orderValue };
-//   });
+  const dates = Object.keys(ordersByDate).map(date => {
+    return { date: `${date}/${month}`, count: ordersByDate[date].orderCount, value: ordersByDate[date].orderValue };
+  });
 
-//   setDateOrder(dates);
-// }
+  setDateOrder(dates);
+}
   
-//   useEffect(() => {
-//     orderForMonth()
-//   }, [AllOrder]);
+  useEffect(() => {
+    orderForMonth()
+  }, [AllOrder]);
 
-//   useEffect(() => {
-//     orderDateSame();
-//   }, [month])
+  useEffect(() => {
+    orderDateSame();
+  }, [month])
 
-//   useEffect(() => {
-//     ordersForQuarter()
-//   }, [AllOrder, quy])
+  useEffect(() => {
+    ordersForQuarter()
+  }, [AllOrder, quy])
 
-//   const dataChart3 = dateOrder
-//   const dataChartMonth = monthOrder
-//   const dataChartQuater = quyOrder
-//   const handleChageSort = (e) => {
-//     setSort(e.target.value)
-//     setMonth('01')
-//     setQuy('01')
-//   }
+  const dataChart3 = dateOrder
+  const dataChartMonth = monthOrder
+  const dataChartQuater = quyOrder
+  const handleChageSort = (e) => {
+    setSort(e.target.value)
+    setMonth('01')
+    setQuy('01')
+  }
 
-//   const [orderSort, setOrderSort] = useState([])
+  const [orderSort, setOrderSort] = useState([])
 
-  // const getTenOrderTop = () => {
-  //     const orderSelect = [];
-  //     for(let i = 0; i < AllOrder.length; i++){
-  //       const userId = AllOrder[i].userID
-  //       if (!orderSelect.some(d => d.userId === userId)) {
-  //         const count = AllOrder?.filter(o => o.userID == userId).length;
-  //         orderSelect.push({ userId, count });
-  //       }
-  //     }
-  //     setOrderSort(orderSelect)
-  // }
+  const getTenOrderTop = () => {
+      const orderSelect = [];
+      for(let i = 0; i < AllOrder.length; i++){
+        const userId = AllOrder[i].userID
+        if (!orderSelect.some(d => d.userId === userId)) {
+          const count = AllOrder?.filter(o => o.userID == userId).length;
+          orderSelect.push({ userId, count });
+        }
+      }
+      setOrderSort(orderSelect)
+  }
 
-  // const orderTop = orderSort?.sort((a,b) => b.count - a.count)
-  // const [infoOrder, setInfoOrder] = useState([])
-  // const getAllInfo = () => {
-  //   const allInfo = [];
-  //   const topCount = orderTop.slice(0, 10);
-  //   for (let i = 0; i < orderTop.length; i++) {
-  //     const userId = topCount[i].userId;
-  //     const orderCount = topCount[i].count;
-  //     const users = user?.find(u => u.userID === userId);
-  //     const step = allInfo.length + 1
-  //     const now = new Date(); 
-  //     const time = now.toLocaleTimeString();
-  //     const date = now.toLocaleDateString();
-  //     if (user) {
-  //       const fullName = users?.fullName;
-  //       allInfo.push({ fullName, count: orderCount, step, time, date });
-  //     }
-  //   }
-  //   setInfoOrder(allInfo);
-  // }
+  const orderTop = orderSort?.sort((a,b) => b.count - a.count)
+  const [infoOrder, setInfoOrder] = useState([])
+  const getAllInfo = () => {
+    const allInfo = [];
+    const topCount = orderTop.slice(0, 10);
+    for (let i = 0; i < orderTop.length; i++) {
+      const userId = topCount[i].userId;
+      const orderCount = topCount[i].count;
+      const users = user?.find(u => u.userID === userId);
+      const step = allInfo.length + 1
+      const now = new Date(); 
+      const time = now.toLocaleTimeString();
+      const date = now.toLocaleDateString();
+      if (user) {
+        const fullName = userId;
+        allInfo.push({ fullName, count: orderCount, step, time, date });
+      }
+    }
+    setInfoOrder(allInfo);
+  }
 
-  // useEffect(() => {
-  //   getTenOrderTop()
-  // }, [AllOrder])
+  useEffect(() => {
+    getTenOrderTop()
+  }, [AllOrder])
 
-  // useEffect(() => {
-  //   getAllInfo()
-  // }, [orderTop])
+  useEffect(() => {
+    getAllInfo()
+  }, [orderTop])
   return (
     <div className='dashboard-container'>
       <div className='dashboard-title'><h2 style={{padding: "5px 10px"}}>SHIPPER</h2></div>
@@ -337,7 +346,7 @@ const DashboardShipper = (props) => {
         <div className='dashboard-content row'>
           <div className='content-left  col-lg-6 col-md-12 col-sm-12'>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
+              <Link style={{color: "#000000"}} to = {"/shipper"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#45cb85"}}>TÀI KHOẢN</div>
               <div className='item-right-content'>
               <h5>1</h5>
@@ -347,13 +356,13 @@ const DashboardShipper = (props) => {
               </div>
               <div className='item-right-footer'>
                 <h6>
-                  {t('dashboard.item_right_footer')} <span className='span-up'>+14%</span>
+                  <span className='span-up'>Tổng số lượng tài khoản</span>
                 </h6>
               </div>
               </Link>
             </div>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-orders"}>
+              <Link style={{color: "#000000"}} to = {"/shipper/manage-order"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#299cdb"}}>ĐƠN HÀNG</div>
               <div className='item-right-content'>
               {(AllOrder.length > 0) ? (<h5>{AllOrder?.length}</h5>) : (<LoadingCircle />)}
@@ -363,54 +372,54 @@ const DashboardShipper = (props) => {
               </div>
               <div className='item-right-footer'>
                 <h6>
-                  {t('dashboard.item_right_footer')} <span className='span-down'>-5%</span>
+                  <span className='span-down'>Tổng tất cả đơn hàng</span>
                 </h6>
               </div>
               </Link>
             </div>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-user"}>
+              <Link style={{color: "#000000"}} to = {"/shipper/manage-order"}>
               <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#ffbe0b"}}>ĐÃ GIAO</div>
               <div className='item-right-content'>
-              {(AllOrder.length > 0) ? (<h5>{AllOrder?.filter((item) => item.status == "SHIP_COMPLETED").length}</h5>) : (<LoadingCircle />)}
+              {(AllOrder.length > 0) ? (<h5>{AllOrder?.filter((item) => item.status == "SHIP_COMPLETED" || item.status === "USER_RECEIVED" || item.status === "CANCELLED").length}</h5>) : (<LoadingCircle />)}
                 <div className='item-right-icon-avatar'>
                   <AiFillCheckCircle />
                 </div>
               </div>
               <div className='item-right-footer'>
                 <h6>
-                  {t('dashboard.item_right_footer')} <span className='span-up'>+0%</span>
+                  <span className='span-up'>Tổng số đơn hàng đã giao</span>
                 </h6>
               </div>
               </Link>
             </div>
             <div className='item-right'>
-              <Link style={{color: "#000000"}} to = {"/admin/manage-products"}>
-              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#f06548"}}>{t('dashboard.item_right4')}</div>
+              <Link style={{color: "#000000"}} to = {"/shipper/manage-order"}>
+              <div className='item-right-title' style={{fontSize: "20px", fontWeight: '600', color: "#f06548"}}>ĐANG GIAO</div>
               <div className='item-right-content'>
-                {(product?.length > 0)  ? (<h5>{product?.length}</h5>) : (<LoadingCircle />)}
+                {(product?.length > 0)  ? (<h5>{AllOrder?.filter(item => item.status == "ON_SHIPPING").length}</h5>) : (<LoadingCircle />)}
                 <div className='item-right-icon-wallet'>
-                  <BsWallet />
+                  <AiFillCar />
                 </div>
               </div>
               <div className='item-right-footer'>
                 <h6>
-                  {t('dashboard.item_right_footer')} <span className='span-down'>-4%</span>
+                  <span className='span-down'>Tổng số đơn hàng đang giao</span>
                 </h6>
               </div>
               </Link>
             </div>      
           </div>
-            {/* <CardOutLiner className=' content-right col-lg-6 col-md-12 col-sm-12' style = {{padding: "0!important"}}
+            <CardOutLiner className=' content-right col-lg-6 col-md-12 col-sm-12' style = {{padding: "0!important"}}
               element={<AlertCard data = {infoOrder}/>}
-            /> */}
+            />
           {/* </div> */}
         </div>
       </div>
 
-      {/* <div className='container'>
+      <div className='container'>
         <div className='dashboard-content-2 row'>
-        <div style={{display: "flex", justifyContent: "space-between"}} className='col-lg-7 sortChart'>
+        <div style={{display: "flex", justifyContent: "space-between"}} className='col-lg-12 sortChart'>
             {(sort == "nam") ? (
               <h3 style={{padding: "2rem 0 0 0"}}>{t('dashboard.item_title1')}</h3>
             ): (sort == "quy") ? (
@@ -419,6 +428,7 @@ const DashboardShipper = (props) => {
               <h3 style={{padding: "2rem 0 0 0"}}>{t('dashboard.item_title3')}</h3>
             )    
             }
+            <div>
             <select onChange={(e) => handleChageSort(e)}>
               <option value="nam" >{t('dashboard.item_title4')}</option>
               <option value="thang" >{t('dashboard.item_title5')}</option>
@@ -441,8 +451,9 @@ const DashboardShipper = (props) => {
                 </select>
               ) : (<div></div>)
             }
+            </div>
           </div>
-          <div className='content-left-2 col-lg-7 col-md-12 col-sm-12'>
+          <div className='content-left-2 col-lg-12 col-md-12 col-sm-12'>
             <ResponsiveContainer
               width='100%'
               height='100%'>
@@ -512,31 +523,10 @@ const DashboardShipper = (props) => {
                 </AreaChart>
                 )
               }
-             
-            </ResponsiveContainer>
-          </div>
-          <div className='content-right-2 col-lg-5 col-md-12 col-sm-12'> 
-            <ResponsiveContainer
-              width='100%'
-              height='100%'>
-              <PieChart>
-                <Pie
-                  activeIndex={activeIndex.activeIndex}
-                  activeShape={renderActiveShape}
-                  data = {data}
-                  cx='50%'
-                  cy='50%'
-                  innerRadius={60}
-                  outerRadius={80}
-                  fill='#8884d8'
-                  dataKey='value'
-                  onMouseEnter={onPieEnter}
-                />
-              </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

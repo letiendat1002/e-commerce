@@ -1,20 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import classNames from 'classnames/bind';
-import { CiCircleRemove } from 'react-icons/ci';
-import { Select } from 'antd';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+import Button from 'react-bootstrap/Button';
+import { CiCircleRemove } from 'react-icons/ci';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import PropTypes from 'prop-types';
+import Row from 'react-bootstrap/Row';
+import { Select } from 'antd';
 import apiService from '../../../../services/apiServiceProducts';
+import classNames from 'classnames/bind';
 import styles from './ModalAddProduct.module.scss';
+import { toast } from 'react-toastify';
 
 let cx = classNames.bind(styles);
 const ModalAddProduct = (props) => {

@@ -10,6 +10,8 @@ import DefaultLayoutAdmin from '../layouts/DefaultLayoutAdmin/DefaultLayoutAdmin
 import DefaultLayoutShipper from '../layouts/DefaultLayoutShipper/DefaultLayoutShipper';
 import Home from '../pages/Client/Home';
 import Login from '../layouts/Login/Login';
+import LoginAdmin from '../pages/Admin/Login/LoginAdmin.jsx';
+import ManageAddress from '../pages/Admin/components/ManageAddress/ManageAddress';
 import ManageCategory from '../pages/Admin/ManageCategory/ManageCategory';
 import ManageOrders from '../pages/Admin/components/ManageOrders/ManageOrders';
 import ManageProducts from '../pages/Admin/ManageProducts/ManageProducts';
@@ -30,9 +32,7 @@ import Profile from '../pages/Client/Profile';
 import ProtectRoutes from '../pages/Admin/components/ProtectRoutes/ProtectRoutes';
 import ProtectRoutesLogin from '../pages/Admin/components/ProtectRoutesLogin/ProtectRoutesLogin';
 import UpdateProduct from '../pages/Admin/UpdateProduct/UpdateProduct';
-import LoginAdmin from '../pages/Admin/Login/LoginAdmin.jsx';
 import { createBrowserRouter } from 'react-router-dom';
-import ManageAddress from '../pages/Admin/components/ManageAddress/ManageAddress';
 
 // import Login from '../pages/Admin/components/Login/Login';
 
@@ -184,12 +184,12 @@ const router = createBrowserRouter([
       },
       
     ],
-    path: 'admin/login',
-    element: (
+    // path: 'admin/login',
+    // element: (
      
-        <LoginAdmin />
+    //     <LoginAdmin />
       
-    ),
+    // ),
   },
  
   {

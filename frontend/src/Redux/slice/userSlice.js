@@ -60,7 +60,7 @@ const userSlice = createSlice({
     },
     [getUserID.fulfilled]: (state, action) => {
       state.current = action.payload;
-    }
+    },
   },
 });
 

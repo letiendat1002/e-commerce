@@ -62,7 +62,7 @@ const Sidebar = (props) => {
         toggled={toggled}
         breakPoint={breakPoint ? 'md' : ''}
         onToggle={handleToggleSidebar}>
-        <Link to='/admin'>
+        <Link to='/shipper'>
           <SidebarHeader>
             <div
               style={{
