@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+
 import axiosClient4 from "../api/axiosCustom"
-import { toast } from "react-toastify"
 
 const initialState = { 
     loading: true,
@@ -33,6 +33,18 @@ export const getOrderDetail = createAsyncThunk('getOrderDetail', async(data) => 
 export const refundOrderID = createAsyncThunk('refundOrderID', async(data) => {
     try {
         const response = await axiosClient4.put('orderdetails/refund', data)
+        return response
+    }
+    catch(error){
+        console.log("error: ", error)
+        throw error
+    }
+})
+
+
+export const getAllRefund = createAsyncThunk('getAllRefund', async(data) => {
+    try {
+        const response = await axiosClient4.get(`orderdetails/refund?status=ON_REFUND`, data)
         return response
     }
     catch(error){
@@ -78,6 +90,18 @@ export const orderDetailSlice = createSlice({
         })
         builder.addCase(refundOrderID.rejected, (state, action) => {
             state.loading = true
+        })
+        builder.addCase(getAllRefund.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllRefund.fulfilled, (state, action) => {
+            state.loading = false
+            state.data = action.payload
+            state.status = "getAllrefundSuccess"
+        })
+        builder.addCase(getAllRefund.rejected, (state, action) => {
+            state.loading = true
+            state.status = "getAllrefundFailed"
         })
     }
 })

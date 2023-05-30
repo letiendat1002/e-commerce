@@ -256,7 +256,7 @@ const Profile = () => {
                 <i>
                   <MdNotificationsActive />
                 </i>
-                <span>Thông báo của tôi</span>
+                <span>Danh sách hoàn trả</span>
               </div>
             </Link>
             <Link to={"/account/address"}>

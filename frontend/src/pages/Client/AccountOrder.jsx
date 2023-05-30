@@ -1,25 +1,25 @@
 import '../../assets/css/profile.scss'
 
-import { Image, Pagination, Rate, Skeleton, Spin, Steps } from 'antd'
-import React, { useEffect, useState } from 'react'
 import { AiFillCar, AiFillCheckCircle, AiFillCloseCircle, AiOutlineFileDone, AiOutlineRight } from 'react-icons/ai'
 import { BiCommentDetail, BiMap, BiPackage } from 'react-icons/bi'
-import { useDispatch, useSelector } from 'react-redux'
-import { getOrderDetail, refundOrderID } from '../../Redux/slice/orderDetailSlice'
+import { Image, Pagination, Rate, Skeleton, Spin, Steps } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { getOrder, updateOrders } from '../../Redux/slice/paymentSlice'
+import { getOrderDetail, refundOrderID } from '../../Redux/slice/orderDetailSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
+import Avatar from '../../assets/images/img-user.png'
+import EmptyCart from '../../assets/images/empty-cart.png'
+import { Link } from 'react-router-dom'
 import { MdNotificationsActive } from 'react-icons/md'
 import { RiAccountCircleLine } from 'react-icons/ri'
+import TableComponent from '../../components/Table'
 import { TfiMenuAlt } from 'react-icons/tfi'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import convertDate from '../../Helper/convertDate'
 import formatProductPrice from '../../Helper'
 import { getAllProducts } from '../../Redux/slice/productSlice'
 import { postRating } from '../../Redux/slice/ratingSlice'
-import EmptyCart from '../../assets/images/empty-cart.png'
-import Avatar from '../../assets/images/img-user.png'
-import TableComponent from '../../components/Table'
-import convertDate from '../../Helper/convertDate'
+import { toast } from 'react-toastify'
 
 const AccountOrder = () => {
     const [active, setActive] = useState(false);
@@ -364,7 +364,7 @@ const AccountOrder = () => {
                                 </div></Link>
                                 <Link to={'/account/infor'}><div className="item__left--item">
                                     <i><MdNotificationsActive/></i>
-                                    <span>Thông báo của tôi</span>
+                                    <span>Danh sách hoàn trả</span>
                                 </div></Link>
                                 <Link to={'/account/address'}><div className="item__left--item">
                                     <i><BiMap/></i>
