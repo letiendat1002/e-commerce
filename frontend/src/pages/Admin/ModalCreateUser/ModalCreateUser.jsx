@@ -59,6 +59,11 @@ const ModalCreateUser = (props) => {
     return phoneNumberRegex.test("084"+phone)
   };
 
+  const validateFullname = (fullname) => {
+    const fullNameRegex = /^[\p{L}\s]+$/u;
+    return fullNameRegex.test(fullname)
+  };
+
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -70,22 +75,28 @@ const ModalCreateUser = (props) => {
   const handleCreateUser = async () => {
     const isValidate = validateEmail(email);
     if (!isValidate) {
-      toast.error('Invalid Email');
+      toast.error('Invalid Email !');
       return;
     }
+
+
+    const isValidateFullName = validateFullname(username)
+    console.log(isValidateFullName)
+    if (!isValidateFullName) {
+      toast.error('Invalid Fullname !');
+      return;
+    }
+    
+    if (+password.length <= 4) {
+      toast.error('Invalid password & Password length must >= 5 char');
+      return;
+    }
+
 
     const isValidatePhone = validatePhone(phone);
     console.log(isValidatePhone)
     if (!isValidatePhone) {
       toast.error('Invalid PhoneNumber');
-      return;
-    }
-
-    // if (!password) {
-    //   toast.error('Invalid password & Password < 5 char');
-    // }
-    if (+password.length <= 4) {
-      toast.error('Invalid password & Password length must >= 5 char');
       return;
     }
 
