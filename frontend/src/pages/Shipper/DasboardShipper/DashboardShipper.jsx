@@ -429,7 +429,7 @@ const DashboardShipper = (props) => {
             )    
             }
             <div>
-            <select onChange={(e) => handleChageSort(e)}>
+            <select onChange={(e) => handleChageSort(e)} style={{marginRight: "1rem"}}>
               <option value="nam" >{t('dashboard.item_title4')}</option>
               <option value="thang" >{t('dashboard.item_title5')}</option>
               <option value="quy" >{t('dashboard.item_title6')}</option>

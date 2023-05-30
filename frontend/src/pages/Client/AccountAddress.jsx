@@ -1,24 +1,26 @@
-import { Pagination, Popconfirm, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
+import '../../assets/css/profile.scss';
+
 import { AiFillCloseCircle, AiFillDelete, AiOutlineRight } from 'react-icons/ai';
 import { BiCommentDetail, BiEdit, BiMap } from 'react-icons/bi';
-import { MdNotificationsActive } from 'react-icons/md';
-import { RiAccountCircleLine } from 'react-icons/ri';
-import { TfiMenuAlt } from 'react-icons/tfi';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Pagination, Popconfirm, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
 import {
   addAddress,
   deleteAddress,
   getUserAddressForIDUser,
   updateAddress,
 } from '../../Redux/slice/userAddressSlice';
-import '../../assets/css/profile.scss';
+import { useDispatch, useSelector } from 'react-redux';
+
 import AddressImage from '../../assets/images/img-location.png';
 import Avatar from '../../assets/images/img-user.png';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { MdNotificationsActive } from 'react-icons/md';
 import { Option } from 'antd/es/mentions';
+import { RiAccountCircleLine } from 'react-icons/ri';
+import { TfiMenuAlt } from 'react-icons/tfi';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const AccountAddress = () => {
   const [provinces, setProvinces] = useState([]);
@@ -359,7 +361,7 @@ const AccountAddress = () => {
                   <i>
                     <MdNotificationsActive />
                   </i>
-                  <span>Thông báo của tôi</span>
+                  <span>Danh sách hoàn trả</span>
                 </div>
               </Link>
               <Link to={'/account/address'}>
@@ -485,7 +487,7 @@ const AccountAddress = () => {
                     <i>
                       <MdNotificationsActive />
                     </i>
-                    <span>Thông báo của tôi</span>
+                    <span>Danh sách hoàn trả</span>
                   </div>
                   <i style={{ backgroundColor: '#ffffff', fontSize: '22px' }}>
                     <AiOutlineRight />

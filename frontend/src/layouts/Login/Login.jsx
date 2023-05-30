@@ -308,7 +308,7 @@ const Login = () => {
               </Link>
             </div>
           </Form>
-          <div className='login__left--difference'>
+          {/* <div className='login__left--difference'>
             <h5>Đăng nhập bằng cách khác</h5>
             <div className='left__difference--icon'>
               <i className='facebook'>
@@ -321,7 +321,7 @@ const Login = () => {
                 <AiFillGoogleCircle />
               </i>
             </div>
-          </div>
+          </div> */}
         </div>
         <div
           className='register__container--form d-none'

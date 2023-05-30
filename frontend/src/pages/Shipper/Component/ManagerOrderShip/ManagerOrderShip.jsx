@@ -145,8 +145,7 @@ const ManagerOrderShip = (props) => {
     {
         (orderStatus === "successForWorker") ? (
             <div className="manager__order">
-            <h3 style={{color: "#f92626", padding: "1rem 2rem", fontWeight: "bolder"}}>QUẢN LÝ ĐƠN HÀNG</h3>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+    <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <Link onClick={() => handlePopup()} to = {""}><button style={{padding: "8px 20px", backgroundColor: "transparent", color: "#ffffff", fontSize: "18px",
               borderRadius: "5px"
             }}>
@@ -163,7 +162,8 @@ const ManagerOrderShip = (props) => {
                 fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff", borderTopRightRadius: '6px'
                 }} onClick={() => handleShowOrder("SHIP_COMPLETED", 2)}>Đã Giao</button>
               </div>
-            </div>
+            </div>         <h3 style={{color: "#f92626", padding: "1rem 2rem", fontWeight: "bolder"}}>QUẢN LÝ ĐƠN HÀNG</h3>
+           
             <table>
               <tr>
                 <th>STT</th>

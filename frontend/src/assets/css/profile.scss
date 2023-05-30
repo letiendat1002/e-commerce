@@ -340,7 +340,7 @@
       .container--item--right--order {
         background-color: #f1f1f1;
         border-radius: 10px;
-        padding: 1rem;
+        padding: 1rem 10px 0 10px;
         text-align: center;
         margin: 0 auto;
         position: relative;
@@ -381,8 +381,6 @@
           }
           ul.ant-pagination{
             position: absolute!important;
-            top: 100%!important;
-            right: 0%!important;
             width: auto;
             display: flex;
             border: none;

@@ -13,9 +13,9 @@ import { Link } from 'react-router-dom'
 import { MdNotificationsActive } from 'react-icons/md'
 import { RiAccountCircleLine } from 'react-icons/ri'
 import { TfiMenuAlt } from 'react-icons/tfi'
+import convertDate from '../../Helper/convertDate'
 import { getAllProducts } from '../../Redux/slice/productSlice'
 import { toast } from 'react-toastify'
-import convertDate from '../../Helper/convertDate'
 
 const AccountComment = () => {
     const [active, setActive] = useState(false);
@@ -167,7 +167,7 @@ const AccountComment = () => {
                         </div></Link>
                         <Link to={'/account/infor'}><div className="item__left--item">
                             <i><MdNotificationsActive/></i>
-                            <span>Thông báo của tôi</span>
+                            <span>Danh sách hoàn trả</span>
                         </div></Link>
                         <Link to={'/account/address'}><div className="item__left--item">
                             <i><BiMap/></i>
