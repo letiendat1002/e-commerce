@@ -202,6 +202,7 @@ const AccountOrder = () => {
             }
             dispatch(getOrder(userID))
             dispatch(getOrderDetail())
+            handleCloseRating()
         })
         setOrder(orders)
         setCurrentPage(1)

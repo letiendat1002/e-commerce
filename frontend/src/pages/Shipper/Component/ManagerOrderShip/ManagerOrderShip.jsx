@@ -146,11 +146,12 @@ const ManagerOrderShip = (props) => {
         (orderStatus === "successForWorker") ? (
             <div className="manager__order">
     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <Link onClick={() => handlePopup()} to = {""}><button style={{padding: "8px 20px", backgroundColor: "transparent", color: "#ffffff", fontSize: "18px",
+            {/* <Link onClick={() => handlePopup()} to = {""}><button style={{padding: "8px 20px", backgroundColor: "transparent", color: "#ffffff", fontSize: "18px",
               borderRadius: "5px"
             }}>
               Add New Orders
-            </button></Link>
+            </button></Link> */}
+            <h3 style={{color: "#f92626", padding: "1rem 2rem", fontWeight: "bolder"}}>QUẢN LÝ ĐƠN HÀNG</h3>
             <div style={{display: 'flex'}}>
               <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 3) ? '#03a213' : '#686766',
                 fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderTopLeftRadius: '6px',borderRight: "2px solid #ffffff"
@@ -162,8 +163,7 @@ const ManagerOrderShip = (props) => {
                 fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff", borderTopRightRadius: '6px'
                 }} onClick={() => handleShowOrder("SHIP_COMPLETED", 2)}>Đã Giao</button>
               </div>
-            </div>         <h3 style={{color: "#f92626", padding: "1rem 2rem", fontWeight: "bolder"}}>QUẢN LÝ ĐƠN HÀNG</h3>
-           
+            </div>
             <table>
               <tr>
                 <th>STT</th>
@@ -175,7 +175,7 @@ const ManagerOrderShip = (props) => {
               </tr>
                 {
                   (orderWorker.length > 0 && activeType == 1) ? (
-                    orderWorker.slice(startIndex, endIndex + 1).map((item) => {
+                    orderWorker.sort((a, b) => b.orderID - a.orderID).slice(startIndex, endIndex + 1).map((item) => {
                       const orderDetails = orderDetailed?.filter((detail) => detail.orderID === item.orderID);
                       const total = orderDetails.reduce((acc, curr) => acc + curr.quantity * curr.purchasePrice, 0);
                         return (
@@ -211,7 +211,7 @@ const ManagerOrderShip = (props) => {
                         </tr>
                       )})
                   )  : (orderWorker.length > 0 && orderWorker?.filter((item) => item.workerID == userID)?.length > 0) ?  (
-                    orderWorker?.filter((child) => child.workerID == userID)?.slice(startIndex, endIndex + 1).map((item) => {
+                    orderWorker?.filter((child) => child.workerID == userID)?.sort((a, b) => b.orderID - a.orderID)?.slice(startIndex, endIndex + 1).map((item) => {
                         const orderDetails = orderDetailed?.filter((detail) => detail.orderID === item.orderID);
                         const total = orderDetails.reduce((acc, curr) => acc + curr.quantity * curr.purchasePrice, 0);
                         return (

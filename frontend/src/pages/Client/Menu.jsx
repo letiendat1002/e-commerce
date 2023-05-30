@@ -681,7 +681,6 @@ const Menu = ({ match, history }) => {
     const updatedProduct = {...products, unitPrice: productPrice};
     dispatch(addToCart(updatedProduct))
   }
-
   return (
     <div
       className='container-fluid col-lg-12 col-md-12 col-sm-12 col-12 col-xs-12'
@@ -1306,7 +1305,15 @@ const Menu = ({ match, history }) => {
                                 }
                               })
                             ) : (
-                              <></>
+                              <div className='not-found-item'>
+                              <img
+                                src={NotFoundItem}
+                                alt=''
+                              />
+                              <p>Rất tiếc chúng tôi không tìm thấy kết quả theo yêu cầu của bạn.</p>
+                              <span>Vui lòng thử lại .</span>
+                              {/* <img className='temp' src={NotFoundItem2} alt="" /> */}
+                            </div>
                             )
                           ) : (
                             <div className='not-found-item'>

@@ -29,7 +29,9 @@ const ModalViewOrderShipper = () => {
 
     const orderLoading = useSelector((state) => state.order.loading)
     useEffect(() => {
-        dispatch(getUserForID(order[0]?.userID))
+        if(order.length > 0){
+            dispatch(getUserForID(order[0]?.userID))
+        }
     }, [order])
 
     const orderDetail = useSelector(state => state.orderDetail.data.data) || [];

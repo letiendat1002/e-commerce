@@ -66,7 +66,7 @@ const ManageRefund = (props) => {
       matchingOrder.total += total;
     } else {
       const orderOFUser = order?.find(order => order.orderID === orderID);
-      const userMatches = user?.find(user => user.userID === orderOFUser.userID);
+      const userMatches = user?.find(user => user?.userID === orderOFUser?.userID);
       accumulator.push({
         orderID,
         fullName: userMatches?.fullName,
