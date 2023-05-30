@@ -55,7 +55,8 @@ const ModalCreateUser = (props) => {
   // };
 
   const validatePhone = (phone) => {
-    return String(phone).toLowerCase().match(/[0-9]{10}/);
+    const phoneNumberRegex = /^(0|\+84)(\d{12})$/;
+    return phoneNumberRegex.test("084"+phone)
   };
 
   const toBase64 = (file) =>
@@ -74,7 +75,8 @@ const ModalCreateUser = (props) => {
     }
 
     const isValidatePhone = validatePhone(phone);
-    if (isValidatePhone) {
+    console.log(isValidatePhone)
+    if (!isValidatePhone) {
       toast.error('Invalid PhoneNumber');
       return;
     }
@@ -157,9 +159,7 @@ const ModalCreateUser = (props) => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <div class="valid-feedback">
-      Looks good!
-    </div>
+              <div class='valid-feedback'>Looks good!</div>
             </div>
 
             <div className='col-md-6 my-2'>

@@ -93,6 +93,11 @@ const ModalUpdateUser = (props) => {
       );
   };
 
+  const validatePhone = (phone) => {
+    const phoneNumberRegex = /^(0|\+84)(\d{12})$/;
+    return phoneNumberRegex.test("084"+phone)
+  };
+
   const { userID } = data1;
 
   const handleCreateUser = async () => {
@@ -100,6 +105,13 @@ const ModalUpdateUser = (props) => {
     if (!isValidate) {
       // alert("Error")
       toast.error('Invalid Email');
+      return;
+    }
+
+    const isValidatePhone = validatePhone(phone);
+    console.log(isValidatePhone)
+    if (!isValidatePhone) {
+      toast.error('Invalid PhoneNumber');
       return;
     }
 
