@@ -4,6 +4,7 @@ import com.ecommerce.backend.order.OrderService;
 import com.ecommerce.backend.shared.exception.DuplicateResourceException;
 import com.ecommerce.backend.shared.exception.FailedOperationException;
 import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> fetchAllUsers() {
         return userDAO.selectAllUsers();
+    }
+
+    @Override
+    public List<User> fetchUsersByRole(UserRole role) {
+        return userDAO.selectUsersByRole(role);
+    }
+
+    @Override
+    public List<BigInteger> fetchShippersWithOrderCountASC() {
+        var shippers = userDAO.selectUserIDsByRole(UserRole.SHIPPER);
+        shippers.sort((a, b) -> {
+            var aOrderCount = orderService.fetchOrderCountByWorkerID(a);
+            var bOrderCount = orderService.fetchOrderCountByWorkerID(b);
+            return aOrderCount - bOrderCount;
+        });
+        return shippers;
     }
 
     @Override

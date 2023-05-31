@@ -1,5 +1,6 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
@@ -22,7 +23,7 @@ public class OrderController {
     private final OrderDTOMapper orderDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('order:read')")
+    @PreAuthorize("hasAuthority('order:read_all')")
     public OrderResponse getOrders(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
@@ -49,8 +50,80 @@ public class OrderController {
         );
     }
 
+    @GetMapping("/status")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderResponse getOrdersByOrderStatus(
+            @RequestParam(value = "orderStatus") OrderStatus orderStatus
+    ) {
+        var orderDTOList = orderService
+                .fetchAllOrdersByOrderStatus(orderStatus)
+                .stream()
+                .map(orderDTOMapper)
+                .toList();
+
+        return new OrderResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDTOList
+        );
+    }
+
+    @GetMapping("/worker")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderResponse getOrdersByWorkerID(
+            @RequestParam(value = "workerID") BigInteger workerID
+    ) {
+        var orderDTOList = orderService
+                .fetchAllOrdersByWorkerID(workerID)
+                .stream()
+                .map(orderDTOMapper)
+                .toList();
+
+        return new OrderResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                orderDTOList
+        );
+    }
+
+    @GetMapping("/statistic/worker/month")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderStatisticResponse getCountCompletedOrdersInMonthByWorkerID(
+            @RequestParam(value = "id") BigInteger id,
+            @RequestParam(value = "month") int month
+    ) {
+        var count = orderService.fetchCompletedOrderCountInMonthByWorkerID(
+                id,
+                month
+        );
+
+        return new OrderStatisticResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                count
+        );
+    }
+
+    @GetMapping("/statistic/worker/year")
+    @PreAuthorize("hasAuthority('order:read_all')")
+    public OrderStatisticResponse getCountCompletedOrdersInYearByWorkerID(
+            @RequestParam(value = "id") BigInteger id,
+            @RequestParam(value = "year") int year
+    ) {
+        var count = orderService.fetchCompletedOrderCountInYearByWorkerID(
+                id,
+                year
+        );
+
+        return new OrderStatisticResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                count
+        );
+    }
+
     @GetMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:read')")
+    @PreAuthorize("hasAuthority('order:read_one')")
     public OrderResponse getOrderByOrderID(
             @PathVariable("orderID") BigInteger orderID
     ) {
@@ -66,7 +139,7 @@ public class OrderController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('order:write')")
+    @PreAuthorize("hasAuthority('order:create')")
     public OrderResponse postOrder(
             @Validated @RequestBody OrderAddRequest request,
             BindingResult errors
@@ -86,21 +159,8 @@ public class OrderController {
         );
     }
 
-    @DeleteMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:write')")
-    public BaseResponse deleteOrderByOrderID(
-            @PathVariable("orderID") BigInteger orderID
-    ) {
-        orderService.deleteOrder(orderID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{orderID}")
-    @PreAuthorize("hasAuthority('order:write')")
+    @PreAuthorize("hasAuthority('order:update')")
     public OrderResponse putOrderByOrderID(
             @PathVariable("orderID") BigInteger orderID,
             @Validated @RequestBody OrderUpdateRequest request,
@@ -118,6 +178,19 @@ public class OrderController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 orderDTOList
+        );
+    }
+
+    @DeleteMapping("{orderID}")
+    @PreAuthorize("hasAuthority('order:delete')")
+    public BaseResponse deleteOrderByOrderID(
+            @PathVariable("orderID") BigInteger orderID
+    ) {
+        orderService.deleteOrder(orderID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

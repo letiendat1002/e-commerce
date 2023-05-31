@@ -1,19 +1,26 @@
-import { Button, Checkbox, Form, Input, Select } from 'antd';
-import React, { useState } from 'react';
-import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
-import { BsFacebook } from 'react-icons/bs';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { login, register } from '../../Redux/slice/userSlice';
-import { resetPassword } from '../../Redux/slice/usersSlice';
-// import Logo from '../../assets/images/Logo.svg';
-import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
-import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
-import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
-import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import './style.scss';
+
+import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
+import { Button, Checkbox, Form, Input, Select } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { login, register } from '../../Redux/slice/userSlice';
+
+import { BsFacebook } from 'react-icons/bs';
+import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
 import Logo from '../../components/Logo/Logo';
+import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
+import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
+import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
+import { resetPassword } from '../../Redux/slice/usersSlice';
+import { set } from 'lodash';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+
+// import { isValidNumber } from "libphonenumber-js";
+
+// import Logo from '../../assets/images/Logo.svg';
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -64,30 +71,33 @@ const Login = () => {
     const res = await dispatch(login({ email, password }));
     if (res) {
       if (res.payload.status === 200) {
-        localStorage.setItem('access_token', res.payload.token)
-        localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`)
+        localStorage.setItem('access_token', res.payload.token);
+        localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`);
         toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
         const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
-        if (checkedAdmin) {
-          navigate('/admin');
+        const checkedShipper = res?.payload?.data[0].roles.includes('ROLE_SHIPPER');
+
+        if (checkedShipper) {
+          navigate('/shipper');
         } else {
           navigate('/');
         }
-      }
-      else if (res.payload.status === 401){
-        toast.error('Email hoặc mật khẩu không hợp lệ!')
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('user')
+      } else if (res.payload.status === 401) {
+        toast.error('Email hoặc mật khẩu không hợp lệ!');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
       }
       form.resetFields();
     }
   };
 
   const handleLogin = (item) => {
-    if (item === 'login') {
+    const formItem = document.querySelector('.login__container--form');
+    const signinItem = document.querySelector('.register__container--form');
+    if (item == 'login') {
       formItem.classList.add('d-none');
       signinItem.classList.remove('d-none');
-    } else if (item === 'signin') {
+    } else if (item == 'signin') {
       formItem.classList.remove('d-none');
       signinItem.classList.add('d-none');
     }
@@ -112,10 +122,9 @@ const Login = () => {
     }
 
     if (res.payload.status === 400) {
-      if (res.payload.message == `Phone {${res.meta.arg.phone}} is already taken`){
+      if (res.payload.message == `Phone {${res.meta.arg.phone}} is already taken`) {
         toast.error(`Số điện thoại đăng ký đã tồn tại!`);
-      }
-      else if (res.payload.message == `Email {${res.meta.arg.email}} is already taken`){
+      } else if (res.payload.message == `Email {${res.meta.arg.email}} is already taken`) {
         toast.error(`Tài khoản đăng ký đã tồn tại!`);
       }
     }
@@ -123,49 +132,85 @@ const Login = () => {
     // document.location.href = '/';
   };
 
-  const [emailReset, setEmailReset] = useState('')
+  const [emailReset, setEmailReset] = useState('');
+  const [errorEmailReset, setErrorEmailReset] = useState('');
+  const handleEmailReset = (e) => {
+    const inputEmail = e.target.value;
+    setEmailReset(inputEmail);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailRegex.test(inputEmail)) {
+      setErrorEmailReset();
+    } else if (inputEmail === '') {
+      setErrorEmailReset('Bạn chưa nhập email');
+    } else {
+      setErrorEmailReset('Email không hợp lệ!');
+    }
+  };
 
   const handleCloseResetForm = () => {
-    const overlay = document.querySelector('.overlay')
-    const forgetForm = document.querySelector('.forgetpassword')
-    if (overlay.classList.contains('d-none') && forgetForm.classList.contains('d-none')){
-      overlay.classList.remove('d-none')
-      forgetForm.classList.remove('d-none')
-      setEmailReset('')
+    const overlay = document.querySelector('.overlay');
+    const forgetForm = document.querySelector('.forgetpassword');
+    if (overlay.classList.contains('d-none') && forgetForm.classList.contains('d-none')) {
+      overlay.classList.remove('d-none');
+      forgetForm.classList.remove('d-none');
+      setEmailReset('');
+    } else {
+      overlay.classList.add('d-none');
+      forgetForm.classList.add('d-none');
+      setEmailReset('');
     }
-    else{
-      overlay.classList.add('d-none')
-      forgetForm.classList.add('d-none')
-      setEmailReset('')
-    }
-  }
+  };
 
   const handleResetPassword = (e) => {
-      e.preventDefault()
-      const email = emailReset
-      dispatch(resetPassword(email))
-      .then((res) => {
-        if (res.payload.status == 200){
-          toast.success("Yêu cầu reset mật khẩu thành công!")
-          handleCloseResetForm()
-        }
-        else if (res.payload.status == 404){
-          if (res.payload.message == `User not found by email {${email}@gmail.com}`){
-            toast.error("Email không tồn tại với tài khoản nào!")
-          }
-        }
-      })
-  }
+    e.preventDefault();
+    const email = emailReset;
+    dispatch(resetPassword(email)).then((res) => {
+      if (res.payload.status == 200) {
+        toast.success('Yêu cầu reset mật khẩu thành công!');
+        handleCloseResetForm();
+      } else if (res.payload.status == 404) {
+        toast.error('Email không tồn tại với tài khoản nào!');
+      }
+    });
+  };
+
+  //Validation
+
+  const validatePhoneNumber = (_, value) => {
+    const phoneNumberRegex = /^(0|\+84)(\d{9})$/;
+
+    if (!value || phoneNumberRegex.test(value)) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject('Số điện thoại không hợp lệ!');
+  };
 
   return (
     <div id='login'>
       <div className='login__container'>
-        <div className='login__container--form' style={{padding: "1rem 2rem"}}>
-        <div style={{margin: "0 auto", display: "flex", justifyContent :"center", alignItems :"center"}}>
-        <Logo style = {{margin: "0 auto", padding: "1rem 0", display: "flex", justifyContent: "center", alignItems: "center"}}/>
-        </div>
+        <div
+          className='login__container--form'
+          style={{ padding: '1rem 2rem' }}>
+          <div
+            style={{
+              margin: '0 auto',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Logo
+              style={{
+                margin: '0 auto',
+                padding: '1rem 0',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
+          </div>
           <Form
-          style={{padding: "1rem 0"}}
+            style={{ padding: '1rem 0' }}
             layout='vertical'
             form={form}
             validateMessages={validateMessages}
@@ -225,7 +270,7 @@ const Login = () => {
                 style={inputText}
               />
             </Form.Item>
-            <div className='login__left--contains' >
+            <div className='login__left--contains'>
               <Form.Item
                 // name='remember'
                 valuePropName='checked'>
@@ -263,7 +308,7 @@ const Login = () => {
               </Link>
             </div>
           </Form>
-          <div className='login__left--difference'>
+          {/* <div className='login__left--difference'>
             <h5>Đăng nhập bằng cách khác</h5>
             <div className='left__difference--icon'>
               <i className='facebook'>
@@ -276,15 +321,31 @@ const Login = () => {
                 <AiFillGoogleCircle />
               </i>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className='register__container--form d-none' style={{padding: "1rem 2rem"}}>
+        <div
+          className='register__container--form d-none'
+          style={{ padding: '1rem 2rem' }}>
           {/* <img
             src={Logo}
             alt=''
           /> */}
-          <div style={{margin: "0 auto", display: "flex", justifyContent :"center", alignItems :"center"}}>
-          <Logo style = {{margin: "0 auto!important", padding: "1rem 0", display: "flex", justifyContent: "center!important", alignItems: "center!important"}}/>
+          <div
+            style={{
+              margin: '0 auto',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Logo
+              style={{
+                margin: '0 auto!important',
+                padding: '1rem 0',
+                display: 'flex',
+                justifyContent: 'center!important',
+                alignItems: 'center!important',
+              }}
+            />
           </div>
           <Form
             layout='vertical'
@@ -332,7 +393,7 @@ const Login = () => {
                 },
                 {
                   min: 6,
-                  message: 'Họ và Tên ít nhất 12 ký tự',
+                  message: 'Họ và Tên ít nhất 6 ký tự',
                 },
               ]}>
               <Input
@@ -357,10 +418,7 @@ const Login = () => {
                   required: true,
                   message: 'Vui lòng nhập số điện thoại của bạn.',
                 },
-                {
-                  min: 10,
-                  message: 'Mật khẩu phải bao gồm ít nhất 10 số',
-                },
+                { validator: validatePhoneNumber },
               ]}>
               <Input
                 prefix={<LockIcon className='site-form-item-icon' />}
@@ -386,7 +444,7 @@ const Login = () => {
                 },
                 {
                   min: 5,
-                  message: 'Mật khẩu phải bao gồm ít nhất 6 ký tự',
+                  message: 'Mật khẩu phải bao gồm ít nhất 5 ký tự',
                 },
               ]}>
               <Input.Password
@@ -419,9 +477,7 @@ const Login = () => {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(
-                      new Error('The two passwords that you entered do not match!')
-                    );
+                    return Promise.reject(new Error('Mật khẩu nhập lại không chính xác'));
                   },
                 }),
               ]}>
@@ -435,14 +491,15 @@ const Login = () => {
             </Form.Item>
             <Form.Item
               name='gender'
-              label='Gender'
+              label='Giới tính'
               rules={[
                 {
                   required: true,
+                  message: 'Vui lòng chọn giới tính của bạn.',
                 },
               ]}>
               <Select
-                placeholder='Select a gender above'
+                placeholder='Vui lòng chọn giới tính'
                 style={{
                   width: '100%',
                   margin: '5px 0',
@@ -450,15 +507,15 @@ const Login = () => {
                 options={[
                   {
                     value: 'MALE',
-                    label: 'MALE',
+                    label: 'NAM',
                   },
                   {
                     value: 'FEMALE',
-                    label: 'FEMALE',
+                    label: 'NỮ',
                   },
                   {
                     value: 'OTHER',
-                    label: 'OTHER',
+                    label: 'KHÁC',
                   },
                 ]}
               />
@@ -496,25 +553,46 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <div onClick={() => handleCloseResetForm()} className="overlay d-none"></div>
-      <div className="forgetpassword d-none">
-            <div className="forgetPassword">
-              <div style={{display: "flex", justifyContent: "space-between", padding: "0 1rem"}}>
-                <h3>Lấy mật khẩu</h3>
-                <AiFillCloseCircle style={{fontSize: "20px"}} onClick={() => handleCloseResetForm()}/>
-              </div>
-              <p>Vui lòng nhập email nếu bạn muốn lấy password mới!</p>
-              <form>
-                <span>Email</span><br />
-                <input onChange={(e) => setEmailReset(e.target.value)} type="text" placeholder='Vui lòng nhập email' /><br />
-                <span defaultValue={emailReset} style={{fontSize: "14px", color: "#e02f2f", textAlign: "center"}}
-                >Lưu ý địa chỉ Email không nhập @gmail hoặc @...</span>
-                <button onClick={(e) => handleResetPassword(e)}>
-                  Reset Password
-                </button>
-              </form>
-            </div>
+      <div
+        onClick={() => handleCloseResetForm()}
+        className='overlay d-none'></div>
+      <div className='forgetpassword d-none'>
+        <div className='forgetPassword'>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '0 1rem',
+            }}>
+            <h3>Lấy mật khẩu</h3>
+            <AiFillCloseCircle
+              style={{ fontSize: '20px' }}
+              onClick={() => handleCloseResetForm()}
+            />
           </div>
+          <p>Vui lòng nhập email nếu bạn muốn lấy password mới!</p>
+          <form>
+            <span>Email</span>
+            <br />
+            <input
+              onChange={(e) => handleEmailReset(e)}
+              type='text'
+              placeholder='Vui lòng nhập email'
+            />
+            <br />
+            <span
+              defaultValue={emailReset}
+              style={{
+                fontSize: '14px',
+                color: '#e02f2f',
+                textAlign: 'center',
+              }}>
+              {errorEmailReset}
+            </span>
+            <button onClick={(e) => handleResetPassword(e)}>Reset Password</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

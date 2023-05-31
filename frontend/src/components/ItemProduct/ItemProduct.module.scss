@@ -1,0 +1,49 @@
+.wrapper-items {
+    display: flex;
+    padding:0 15px;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    &:hover {
+      background-color: rgba(22, 24, 35, 0.06);
+    }
+  }
+  
+  img.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 10%;
+    object-fit: cover;
+    margin: 2rem 1rem;
+  }
+  
+  .info {
+  }
+  .name {
+    font-size: 1.2rem;
+  }
+  .check {
+    margin-left: 8px;
+    font-size: 1.2rem;
+    color: rgb(32, 213, 236);
+  }
+  .username {
+    // color: aqua !important;
+  }
+  
+  .link-product{
+    text-decoration: none !important;
+    color: black;
+    
+    .top-item-search{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    &:hover{
+      color: black;
+      opacity: 0.5;
+    }
+  }
+  

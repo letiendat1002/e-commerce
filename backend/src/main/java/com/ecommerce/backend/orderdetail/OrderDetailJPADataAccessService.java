@@ -54,7 +54,7 @@ public class OrderDetailJPADataAccessService implements OrderDetailDAO {
     }
 
     @Override
-    public List<OrderDetail> selectAllOnRefundOrderDetails() {
-        return orderDetailRepository.findAllByStatus(OrderDetailStatus.ON_REFUND);
+    public List<OrderDetail> selectOrderDetailsByStatus(OrderDetailStatus status) {
+        return orderDetailRepository.findAllByStatus(status);
     }
 }

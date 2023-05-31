@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Table from 'react-bootstrap/Table';
-import ReactPaginate from 'react-paginate';
-import { Link, useNavigate } from 'react-router-dom';
+import './TableCategory.scss'
+
 import { GrEdit, GrFormTrash, GrFormView } from 'react-icons/gr';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+
+import PropTypes from 'prop-types';
+import ReactPaginate from 'react-paginate';
+import Table from 'react-bootstrap/Table';
 
 const TableCategory = (props) => {
   const {
@@ -43,7 +46,7 @@ const TableCategory = (props) => {
           striped
           bordered
           hover
-          className='table_users '>
+          className='table_users'>
           <thead>
             <tr>
               <th

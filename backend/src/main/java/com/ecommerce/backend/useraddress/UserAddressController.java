@@ -23,7 +23,7 @@ public class UserAddressController {
     private final UserAddressDTOMapper userAddressDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user_address:read')")
+    @PreAuthorize("hasAuthority('user_address:read_all')")
     public UserAddressResponse getUserAddresses(
             @RequestParam(value = "userID", required = false) BigInteger userID
     ) {
@@ -51,7 +51,7 @@ public class UserAddressController {
     }
 
     @GetMapping("{userAddressID}")
-    @PreAuthorize("hasAuthority('user_address:read')")
+    @PreAuthorize("hasAuthority('user_address:read_one')")
     public UserAddressResponse getUserAddressByID(
             @PathVariable("userAddressID") BigInteger userAddressID
     ) {
@@ -69,9 +69,9 @@ public class UserAddressController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('user_address:write')")
+    @PreAuthorize("hasAuthority('user_address:create')")
     public UserAddressResponse postUserAddress(
-            @Validated @RequestBody UserAddressRequest request,
+            @Validated @RequestBody UserAddressAddRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
@@ -91,24 +91,11 @@ public class UserAddressController {
         );
     }
 
-    @DeleteMapping("{userAddressID}")
-    @PreAuthorize("hasAuthority('user_address:write')")
-    public BaseResponse deleteUserAddress(
-            @PathVariable("userAddressID") BigInteger userAddressID
-    ) {
-        userAddressService.deleteUserAddress(userAddressID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{userAddressID}")
-    @PreAuthorize("hasAuthority('user_address:write')")
+    @PreAuthorize("hasAuthority('user_address:update')")
     public UserAddressResponse putUserAddress(
             @PathVariable("userAddressID") BigInteger userAddressID,
-            @Validated @RequestBody UserAddressRequest request,
+            @Validated @RequestBody UserAddressUpdateRequest request,
             BindingResult errors
     ) {
         if (errors.hasErrors()) {
@@ -126,6 +113,19 @@ public class UserAddressController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 userAddressDTOList
+        );
+    }
+
+    @DeleteMapping("{userAddressID}")
+    @PreAuthorize("hasAuthority('user_address:delete')")
+    public BaseResponse deleteUserAddress(
+            @PathVariable("userAddressID") BigInteger userAddressID
+    ) {
+        userAddressService.deleteUserAddress(userAddressID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

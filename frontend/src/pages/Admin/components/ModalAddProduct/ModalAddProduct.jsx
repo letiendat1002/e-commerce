@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import classNames from 'classnames/bind';
 
-import apiService from '../../../../services/apiServiceProducts';
-import styles from './ModalAddProduct.module.scss';
-import { Select } from 'antd';
+import Button from 'react-bootstrap/Button';
 import { CiCircleRemove } from 'react-icons/ci';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import PropTypes from 'prop-types';
+import Row from 'react-bootstrap/Row';
+import { Select } from 'antd';
+import apiService from '../../../../services/apiServiceProducts';
+import classNames from 'classnames/bind';
+import styles from './ModalAddProduct.module.scss';
+import { toast } from 'react-toastify';
 
 let cx = classNames.bind(styles);
 const ModalAddProduct = (props) => {
@@ -340,6 +340,24 @@ const ModalAddProduct = (props) => {
                   value={description || ''}
                   onChange={(e) => handleOnChange({ description: e.target.value })}
                 />
+                {/* <CKEditor
+                    editor={ ClassicEditor }
+                    data="<p>Hello from CKEditor 5!</p>"
+                    onReady={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log( 'Editor is ready to use!', editor );
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        console.log( { event, editor, data } );
+                    } }
+                    onBlur={ ( event, editor ) => {
+                        console.log( 'Blur.', editor );
+                    } }
+                    onFocus={ ( event, editor ) => {
+                        console.log( 'Focus.', editor );
+                    } }
+                /> */}
               </Form.Group>
 
               <Row>

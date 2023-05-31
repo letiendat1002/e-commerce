@@ -16,7 +16,13 @@ public class OrderDTOMapper implements Function<Order, OrderDTO> {
                 order.getStatus(),
                 order.getDateOrder(),
                 order.getAddress(),
-                order.getDateCompleted()
+                order.isPreparing(),
+                order.getDatePreparing(),
+                order.isShipping(),
+                order.getDateShipping(),
+                order.isCompleted(),
+                order.getDateCompleted(),
+                order.getWorkerID()
         );
     }
 }

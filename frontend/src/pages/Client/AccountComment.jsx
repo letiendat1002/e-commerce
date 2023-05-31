@@ -1,18 +1,22 @@
-import { Pagination, Popconfirm, Rate } from 'antd'
-import React, { useEffect, useState } from 'react'
+import '../../assets/css/profile.scss'
+
 import { AiFillCloseCircle, AiFillDelete, AiFillEdit } from 'react-icons/ai'
 import { BiCommentDetail, BiMap } from 'react-icons/bi'
+import { Pagination, Popconfirm, Rate } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { deleteRating, getRatingForUser, updateRating } from '../../Redux/slice/ratingSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
+import Avatar from '../../assets/images/img-user.png'
+import EmptyCart from '../../assets/images/empty-cart.png'
+import { Link } from 'react-router-dom'
 import { MdNotificationsActive } from 'react-icons/md'
 import { RiAccountCircleLine } from 'react-icons/ri'
 import { TfiMenuAlt } from 'react-icons/tfi'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import convertDate from '../../Helper/convertDate'
 import { getAllProducts } from '../../Redux/slice/productSlice'
-import { deleteRating, getRatingForUser, updateRating } from '../../Redux/slice/ratingSlice'
-import '../../assets/css/profile.scss'
-import EmptyCart from '../../assets/images/empty-cart.png'
-import Avatar from '../../assets/images/img-user.png'
+import { toast } from 'react-toastify'
+
 const AccountComment = () => {
     const [active, setActive] = useState(false);
     const dispatch = useDispatch()
@@ -55,7 +59,7 @@ const AccountComment = () => {
         setFullNames(user[0].userID)
         const overlay = document.querySelector('.overlay')
         const formUpdate = document.querySelector('.rating-container')
-        if (overlay.classList.contains('d-none') && formUpdate.classList.contains('d-none')){
+        if (overlay.classList.contains('d-none') || formUpdate.classList.contains('d-none')){
             overlay.classList.remove('d-none')
             formUpdate.classList.remove('d-none')
         }
@@ -163,7 +167,7 @@ const AccountComment = () => {
                         </div></Link>
                         <Link to={'/account/infor'}><div className="item__left--item">
                             <i><MdNotificationsActive/></i>
-                            <span>Thông báo của tôi</span>
+                            <span>Danh sách hoàn trả</span>
                         </div></Link>
                         <Link to={'/account/address'}><div className="item__left--item">
                             <i><BiMap/></i>
@@ -200,7 +204,7 @@ const AccountComment = () => {
                                                             <td><img style={{maxHeight: "100px", maxWidth :"100px"}} src={require(`../../assets/images/${productMatches.image}`)} alt="" srcset="" /></td>
                                                             <td>{<Rate disabled value={item.rateAmount}/>}</td>
                                                             <td>{item.comment}</td>
-                                                            <td>{item.dateRating}</td>
+                                                            <td>{convertDate(item.dateRating)}</td>
                                                             <td>
                                                                 <i onClick={() => handleRating(productMatches, item)} style={{color: "#e6b112",
                                                                 fontSize: "25px", fontWeight: "600", padding: "0 1rem"

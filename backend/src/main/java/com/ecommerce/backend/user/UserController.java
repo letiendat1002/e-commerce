@@ -3,6 +3,7 @@ package com.ecommerce.backend.user;
 import com.ecommerce.backend.shared.enums.MessageStatus;
 import com.ecommerce.backend.shared.exception.RequestValidationException;
 import com.ecommerce.backend.shared.response.BaseResponse;
+import com.ecommerce.backend.shared.security.enums.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +22,7 @@ public class UserController {
     private final UserDTOMapper userDTOMapper;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('user:read_all')")
     public UserResponse getUsers() {
         var userDTOList = userService
                 .fetchAllUsers()
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("{userID}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('user:read_one')")
     public UserResponse getUserByUserID(
             @PathVariable("userID") BigInteger userID
     ) {
@@ -52,8 +53,38 @@ public class UserController {
         );
     }
 
+    @GetMapping("/shipper/asc")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE')")
+    public UserShipperResponse getShippersWithOrderCountASC() {
+        var shipperList = userService.fetchShippersWithOrderCountASC();
+
+        return new UserShipperResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                shipperList
+        );
+    }
+
+    @GetMapping("/role")
+    @PreAuthorize("hasAuthority('user:read_all')")
+    public UserResponse getUsersByRole(
+            @RequestParam(value = "role") UserRole role
+    ) {
+        var userDTOList = userService
+                .fetchUsersByRole(role)
+                .stream()
+                .map(userDTOMapper)
+                .toList();
+
+        return new UserResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL,
+                userDTOList
+        );
+    }
+
     @PostMapping
-    @PreAuthorize("hasAuthority('user:write')")
+    @PreAuthorize("hasAuthority('user:create')")
     public UserResponse postUser(
             @Validated @RequestBody UserRegistrationRequest request,
             BindingResult errors
@@ -73,21 +104,8 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("{userID}")
-    @PreAuthorize("hasAuthority('user:write')")
-    public BaseResponse deleteUser(
-            @PathVariable("userID") BigInteger userID
-    ) {
-        userService.deleteUser(userID);
-
-        return new BaseResponse(
-                HttpStatus.OK.value(),
-                MessageStatus.SUCCESSFUL
-        );
-    }
-
     @PutMapping("{userID}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('user:update')")
     public UserResponse putUser(
             @PathVariable("userID") BigInteger userID,
             @Validated @RequestBody UserUpdateRequest request,
@@ -105,6 +123,19 @@ public class UserController {
                 HttpStatus.OK.value(),
                 MessageStatus.SUCCESSFUL,
                 userDTOList
+        );
+    }
+
+    @DeleteMapping("{userID}")
+    @PreAuthorize("hasAuthority('user:delete')")
+    public BaseResponse deleteUser(
+            @PathVariable("userID") BigInteger userID
+    ) {
+        userService.deleteUser(userID);
+
+        return new BaseResponse(
+                HttpStatus.OK.value(),
+                MessageStatus.SUCCESSFUL
         );
     }
 }

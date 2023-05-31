@@ -29,9 +29,9 @@ const HeaderAdmin = (props) => {
 
   const handleLogOut = () => {
     // dispatch(logoutAction());
-    console.log('Logout');
+    // console.log('Logout');
     dispatch(logout());
-    navigate('/login');
+    navigate('/');
     // document.location.href="/admin/login"
   };
 
@@ -39,15 +39,22 @@ const HeaderAdmin = (props) => {
     <>
       <Language />
 
-      <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <GrUser />
         <NavDropdown
           title={email}
           id='basic-nav-dropdown'>
-          <NavDropdown.Item onClick={() => {
-            navigate('/account/profile')
-          }}>Profile</NavDropdown.Item>
-          <NavDropdown.Item onClick={handleLogOut} style={{display:'flex',alignItems:'center',gap:'5px'}}>Logout <GrLogout/></NavDropdown.Item>
+          <NavDropdown.Item
+            onClick={() => {
+              navigate('/account/profile');
+            }}>
+            Profile
+          </NavDropdown.Item>
+          <NavDropdown.Item
+            onClick={handleLogOut}
+            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            Logout <GrLogout />
+          </NavDropdown.Item>
         </NavDropdown>
       </div>
     </>

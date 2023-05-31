@@ -1,5 +1,6 @@
 package com.ecommerce.backend.order;
 
+import com.ecommerce.backend.order.enums.OrderStatus;
 import com.ecommerce.backend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,8 +20,18 @@ public class OrderJPADataAccessService implements OrderDAO {
     }
 
     @Override
-    public List<Order> selectAllOrdersByUser(BigInteger userID) {
+    public List<Order> selectAllOrdersByUserID(BigInteger userID) {
         return orderRepository.findAllByUserID(userID);
+    }
+
+    @Override
+    public List<Order> selectAllOrdersByOrderStatus(OrderStatus orderStatus) {
+        return orderRepository.findAllByStatus(orderStatus);
+    }
+
+    @Override
+    public List<Order> selectAllOrdersByWorkerID(BigInteger workerID) {
+        return orderRepository.findAllByWorkerID(workerID);
     }
 
     @Override
@@ -51,5 +62,20 @@ public class OrderJPADataAccessService implements OrderDAO {
     @Override
     public boolean existsOrderByOrderIDAndUser(BigInteger orderID, User user) {
         return orderRepository.existsByOrderIDAndUser(orderID, user);
+    }
+
+    @Override
+    public int selectCompletedOrderCountInMonthByWorkerID(BigInteger workerID, int month) {
+        return orderRepository.countCompletedOrdersInMonthByWorkerID(workerID, month);
+    }
+
+    @Override
+    public int selectCompletedOrderCountInYearByWorkerID(BigInteger workerID, int year) {
+        return orderRepository.countCompletedOrdersInYearByWorkerID(workerID, year);
+    }
+
+    @Override
+    public int selectOrderCountByWorkerID(BigInteger workerID) {
+        return orderRepository.countOrdersByWorkerID(workerID);
     }
 }

@@ -1,10 +1,16 @@
 package com.ecommerce.backend.user;
 
+import com.ecommerce.backend.shared.security.enums.UserRole;
+
 import java.math.BigInteger;
 import java.util.List;
 
 public interface UserService {
     List<User> fetchAllUsers();
+
+    List<User> fetchUsersByRole(UserRole role);
+
+    List<BigInteger> fetchShippersWithOrderCountASC();
 
     User fetchUserByUserID(BigInteger userID);
 

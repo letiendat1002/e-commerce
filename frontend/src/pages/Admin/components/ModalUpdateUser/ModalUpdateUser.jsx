@@ -12,20 +12,16 @@ import { GrCheckmark } from 'react-icons/gr';
 const ModalUpdateUser = (props) => {
   const {
     setShowModal,
-    callApi,
     showUpdate,
     data1,
     resetUpdateData,
-    setCurrentPage,
-    callApiWithPaginate,
-    currentPage,
     getAllUsers,
   } = props;
 
   const handleClose = () => {
     setShowModal(false);
     setEmail('');
-    setRole('CUSTOMER');
+    setRole('');
     setUsername('');
     setImage('');
     setPassword('');
@@ -44,9 +40,21 @@ const ModalUpdateUser = (props) => {
 
   useEffect(() => {
     if (!_.isEmpty(data1)) {
+
+      if (data1.roles.includes('ROLE_ADMIN')) {
+        setRole("ADMIN");        
+      }
+      if (data1.roles.includes('ROLE_EMPLOYEE')) {
+        setRole("EMPLOYEE");        
+      }
+      if (data1.roles.includes('ROLE_SHIPPER')) {
+        setRole("SHIPPER");        
+      }
+      if (data1.roles.includes('ROLE_CUSTOMER')) {
+        setRole("CUSTOMER");        
+      }
       setEmail(data1.email);
       setUsername(data1.fullName);
-      setRole(data1.roles[0]);
       setPhone(data1.phone);
       setGender(data1.gender);
       setImage('');
@@ -85,6 +93,11 @@ const ModalUpdateUser = (props) => {
       );
   };
 
+  const validatePhone = (phone) => {
+    const phoneNumberRegex = /^(0|\+84)(\d{12})$/;
+    return phoneNumberRegex.test("084"+phone)
+  };
+
   const { userID } = data1;
 
   const handleCreateUser = async () => {
@@ -95,11 +108,18 @@ const ModalUpdateUser = (props) => {
       return;
     }
 
+    const isValidatePhone = validatePhone(phone);
+    console.log(isValidatePhone)
+    if (!isValidatePhone) {
+      toast.error('Invalid PhoneNumber');
+      return;
+    }
+
     // if (!password) {
     //   toast.error('Invalid password');
     // }
 
-    let data = await putUpdateUser(userID, username, gender, phone, image);
+    let data = await putUpdateUser(userID, username, gender, phone, image,role);
     console.log(data);
     if (data && data.status === 200) {
       toast.success(data.message);
@@ -112,7 +132,6 @@ const ModalUpdateUser = (props) => {
     }
   };
 
-  console.log(image);
 
   return (
     <div>
@@ -197,11 +216,12 @@ const ModalUpdateUser = (props) => {
               <select
                 id='inputRole'
                 className='form-select'
-                disabled
+                // disabled
                 value={role}
                 onChange={(e) => setRole(e.target.value)}>
                 <option value='CUSTOMER'>CUSTOMER</option>
-                <option value='ADMIN'>ADMIN</option>
+                <option value='EMPLOYEE'>EMPLOYEE</option>
+                <option value='SHIPPER'>SHIPPER</option>
               </select>
             </div>
 

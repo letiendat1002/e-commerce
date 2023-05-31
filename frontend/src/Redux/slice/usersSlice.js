@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import axiosClient4 from "../api/axiosCustom";
 
 const initialState = {
@@ -7,7 +8,7 @@ const initialState = {
     message: ""
 }
 
-export const getUserForID = createAsyncThunk('user/getuserID', async (data) => {
+export const getUserForID = createAsyncThunk('user/getuserForID', async (data) => {
     try {
           const response = await axiosClient4.get(`users/${data}`)
           return response.data
@@ -53,7 +54,7 @@ export const updateUser = createAsyncThunk('user/updateUSer', async({userID, dat
 
 export const resetPassword = createAsyncThunk('user/reserPassword', async(email) => {
     try {
-        const response = await axiosClient4.post(`auth/resetPassword?email=${email}%40gmail.com`)
+        const response = await axiosClient4.post(`auth/resetPassword?email=${email}`)
         return response
     }
     catch(error) {

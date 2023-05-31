@@ -1,5 +1,6 @@
 package com.ecommerce.backend.auth;
 
+import com.ecommerce.backend.auth.enums.ActivateStatus;
 import com.ecommerce.backend.shared.constants.VariableConstants;
 import com.ecommerce.backend.shared.email.CustomEmail;
 import com.ecommerce.backend.shared.email.EmailSenderService;
@@ -117,10 +118,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var username = jwtService.extractUsername(token);
         var user = userService.fetchUserByEmail(username);
         if (!user.isEnabled()) {
-            return "User already activated. You can close this tab";
+            return ActivateStatus.ALREADY_ACTIVATED.message();
         }
         userService.enableUser(username);
-        return "User activated successfully. You can close this tab";
+        return ActivateStatus.ACTIVATED.message();
     }
 
     @Override
@@ -128,7 +129,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void resetPassword(String email) {
         var randomPassword = passwordGenerator.generateRandomPassword();
 
-        var userDTO = userService.updateUserPassword(
+        var user = userService.updateUserPassword(
                 email,
                 randomPassword
         );
@@ -137,7 +138,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 email,
                 EmailTemplate.RESET_PASSWORD_SUBJECT,
                 EmailTemplate.getResetPasswordMessage(
-                        userDTO.getFullName(),
+                        user.getFullName(),
                         randomPassword
                 )
         );
@@ -145,6 +146,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void changePassword(AuthenticationChangePasswordRequest request) {
+        if (request.oldPassword().equals(request.newPassword())) {
+            throw new DuplicateResourceException(
+                    "New password cannot be same as old password"
+            );
+        }
+
         var username = jwtService.extractUsername(request.token());
         if (!request.email().equals(username)) {
             throw new JwtAuthenticationException(
@@ -154,17 +161,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.email(),
+                        username,
                         request.oldPassword()
                 )
         );
 
-        if (request.oldPassword().equals(request.newPassword())) {
-            throw new DuplicateResourceException(
-                    "New password cannot be same as old password"
-            );
-        }
-
-        userService.updateUserPassword(request.email(), request.newPassword());
+        userService.updateUserPassword(username, request.newPassword());
     }
 }

@@ -4,6 +4,13 @@ input, [tabindex] {
   border: none;
 }
 
+[data-tippy-root]{
+  // width: 100%;
+  // transform: translate3d(134.45455px, 63.6364px, 0px);
+  // display: flex;
+  // justify-content: center;
+}
+
 .search {
     height: var(--search-height);
     background-color: rgba(22, 24, 35, 0.06);
@@ -48,7 +55,7 @@ input, [tabindex] {
   }
   
   .search-results {
-    width: 700px;
+    // width: 700px;
   }
   
   .search-title{

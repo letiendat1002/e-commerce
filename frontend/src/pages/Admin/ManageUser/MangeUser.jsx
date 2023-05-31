@@ -4,12 +4,10 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import ModalCreateUser from '../ModalCreateUser/ModalCreateUser';
 import './ManageUser.scss';
 import TableUser from '../components/TableUser/TableUser';
-import { getAllUser } from '../../../services/apiGetAllUser';
 import { getUsers, getUserWithPaginate } from '../../../services/apiServiceUser';
 import ModalUpdateUser from '../components/ModalUpdateUser/ModalUpdateUser';
 import ModalDeleteUser from '../components/ModalDeleteUser/ModalDeleteUser';
 import Pagination from '../components/Pagination/Pagination';
-// import Pagination from '../../../components/Pagination/Pagination';
 import ModalViewUser from '../components/ModalViewUser/ModalViewUser';
 import Loading from '../../../components/Loading/Loading';
 import { GrAddCircle, GrHome } from 'react-icons/gr';
@@ -47,11 +45,7 @@ const MangeUser = (props) => {
     }
   }, []);
 
-  const callApi = async () => {
-    const res = await getAllUser();
-    if (res.EC === 0) {
-    }
-  };
+
 
   const getAllUsers = async () => {
     setLoading(true);
@@ -88,7 +82,8 @@ const MangeUser = (props) => {
         <div className='btn-add-new'>
         <button
               className='btn btn-primary'
-              style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '5px' ,padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px"}}
               onClick={() => {
                 navigate('/admin');
               }}>
@@ -97,7 +92,9 @@ const MangeUser = (props) => {
             </button>
           <button
             className='btn btn-primary'
-            onClick={(e) => setShow(true)}>
+            onClick={(e) => setShow(true)}
+            style={{padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+        borderRadius: "5px"}}>
             <GrAddCircle/>
             Add New User
           </button>
@@ -122,7 +119,8 @@ const MangeUser = (props) => {
           /> */}
 
               <div className='pagination-center'>
-              <Pagination
+                <Pagination
+                  getAllUsers={getAllUsers}
               userPerPage={userPerPage}
               totalUsers={totalUsers}
               changePage={changePage}
@@ -134,7 +132,6 @@ const MangeUser = (props) => {
         <ModalCreateUser
           show={show}
           setShow={setShow}
-          callApi={callApi}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           getAllUsers={getAllUsers}
@@ -144,7 +141,6 @@ const MangeUser = (props) => {
           showUpdate={showModalUpdateUser}
           setShowModal={setShowModalUpdateUser}
           data1={data1}
-          callApi={callApi}
           resetUpdateData={resetUpdateData}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -156,7 +152,6 @@ const MangeUser = (props) => {
           setShowModalDeleteUser={setShowModalDeleteUser}
           dataDelete={dataDelete}
           getAllUsers={getAllUsers}
-          callApi={callApi}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />

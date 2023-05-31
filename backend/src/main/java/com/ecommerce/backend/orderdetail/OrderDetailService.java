@@ -1,5 +1,7 @@
 package com.ecommerce.backend.orderdetail;
 
+import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
+
 import java.math.BigInteger;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public interface OrderDetailService {
 
     void deleteAllOrderDetailsByOrderID(BigInteger orderID);
 
-    List<OrderDetail> fetchAllOnRefundOrderDetails();
+    List<OrderDetail> fetchOrderDetailsByStatus(OrderDetailStatus status);
 
-    OrderDetail updateOrderDetail(OrderDetailUpdateRequest request);
+    OrderDetail updateOrderDetailStatus(OrderDetailUpdateRequest request);
 }

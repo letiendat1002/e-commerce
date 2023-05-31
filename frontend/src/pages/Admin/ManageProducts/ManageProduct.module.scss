@@ -1,5 +1,5 @@
 .manage-products-container {
-    padding: 10px 30px;
+    padding: 10px;
   .btn-add-new {
     display: flex;
     justify-content: space-between;
@@ -13,4 +13,8 @@
     flex-direction: column;
     align-items: center;
   }
+}
+.title {
+    font-weight: 600;
+    font-size: calc(1.3rem + .6vw);
 }

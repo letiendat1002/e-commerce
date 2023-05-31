@@ -1,19 +1,23 @@
-import { Image, Pagination, Popconfirm } from 'antd';
+import './ManagerOrder.scss';
+
+import { AiFillCloseCircle, AiFillDelete, AiOutlineSearch } from 'react-icons/ai';
+import { Image, Input, Pagination, Popconfirm } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { AiFillCloseCircle, AiFillDelete } from 'react-icons/ai';
-import { GrFormSubtract } from 'react-icons/gr';
-import { MdAdd } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import formatProductPrice from '../../../../Helper';
 import { addToCartAdmin, decreamentFromCartAdmin, increamentFromCartAdmin, removeFromToCartAdmin } from '../../../../Redux/slice/cartAdminSlice';
-import { getOrderDetail, orderDetail } from '../../../../Redux/slice/orderDetailSlice';
 import { deleteOrderForID, getAllOrder, orderPayment, updateOrders } from '../../../../Redux/slice/paymentSlice';
+import { getOrderDetail, orderDetail } from '../../../../Redux/slice/orderDetailSlice';
+import { getShipper, getShipperSort } from '../../../../Redux/slice/shipperSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
+import EmptyCart from '../../../../assets/images/empty-cart.png';
+import { GrFormSubtract } from 'react-icons/gr';
+import { Link } from 'react-router-dom';
+import { MdAdd } from 'react-icons/md';
+import convertDate from '../../../../Helper/convertDate';
+import formatProductPrice from '../../../../Helper';
 import { getAllProducts } from '../../../../Redux/slice/productSlice';
 import { getAllUser } from '../../../../Redux/slice/usersSlice';
-import EmptyCart from '../../../../assets/images/empty-cart.png';
-import './ManagerOrder.scss';
+import { toast } from 'react-toastify';
 
 const ManageOrders = (props) => {
 
@@ -24,15 +28,47 @@ const ManageOrders = (props) => {
     dispatch(getAllUser())
     dispatch(getOrderDetail())
     dispatch(getAllProducts())
+    dispatch(getShipperSort())
   }, [])
 
   const user = useSelector(state => state.userAPI.data)
-  const order = useSelector(state => state.order.data) || []
+  const orders = useSelector(state => state.order.data) || []
   const orderDetailed = useSelector(state => state.orderDetail.data.data) || []
+  const shipper = useSelector((state) => state.shipper.data) || []  
+  const [shipperAccend, setShipperAccend] = useState([shipper]);
+
+  useEffect(() => {
+    setShipperAccend(shipper)
+  }, [shipper])
+
+  const [order, setOrder] = useState([])
+    
+  const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+      setOrder(orders)
+  }, [orders])
+  const [activeType, setActiveType] = useState(1)
+  
+  const [showShipper, setShowShipper]= useState(false);
+  const [idShipper, setIdShipper] = useState(shipperAccend?.[0])
+  const [nameShipper, setNameShipper] = useState("")  
+  const handleShowOrder = (type, number) => {
+      const ulItem = document.querySelector('ul.list-shipper')
+      ulItem.classList.add('d-none')
+      if (type === "Tất Cả"){
+          setOrder(orders)
+          setCurrentPage(1)
+          setActiveType(number)
+      }
+      else {
+          const orderType = orders?.filter((item) => item.status === type)
+          setOrder(orderType)
+          setCurrentPage(1)
+          setActiveType(number)
+      }
+  }
 
   const product = useSelector(state => state.product.data) || []
-  const userLoading = useSelector(state => state.userAPI.loading)
-  const orderLoading = useSelector(state => state.order.loading)
 
   const popup = (item) =>{
     const ul = document.querySelector(`.statuslist-${item.orderID}`)
@@ -44,15 +80,17 @@ const ManageOrders = (props) => {
     }
   }
 
+
   const handleUpdate = (item, state) => {
     const ul = document.querySelector(`.statuslist-${item.orderID}`)
     ul.classList.add('d-none')
     const orderID = item.orderID
     const states = state
+    const userAdmin = user.filter((item) => item.phone == phone)
+    const userID = userAdmin[0].userID
     const data = {
-      paymentType: "COD",
       status: states,
-      address: item.address
+      workerID: userID
     }
     dispatch(updateOrders({orderID, data}))
     .then((res) => {
@@ -64,6 +102,9 @@ const ManageOrders = (props) => {
       }
       dispatch(getAllOrder())
     })
+    setOrder(orders)
+    setCurrentPage(1)
+    setActiveType(1)
   }
 
   const handleDeleteOrder = (orderID) => {
@@ -79,7 +120,7 @@ const ManageOrders = (props) => {
     })
   }
 
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -167,15 +208,106 @@ const ManageOrders = (props) => {
       }
     })
   }
+
+  
+  const handleFocus = () => {
+    const ulItem = document.querySelector('ul.list-shipper')
+    ulItem.classList.remove('d-none')
+  }
+
+  const handleClosePopup = () => {
+    const ulItem = document.querySelector('ul.list-shipper')
+    ulItem.classList.add('d-none')
+  }
+  const handleShowItem = (item, name) => {
+    const ulItem = document.querySelector('ul.list-shipper')
+    ulItem.classList.add('d-none')
+    setIdShipper(item)
+    setNameShipper(name)
+  }
+
+  const handleSearchShipper = (e) => {
+    const name = e.target.value.toLowerCase()
+    setNameShipper(name)
+    const shipperListid = user.filter((item) => item.fullName.toLowerCase().includes(name))
+    const ShipperList = shipperListid.filter((item) => item.roles.includes("ROLE_SHIPPER"))
+    const ShipperID = ShipperList.map((item) => item.userID)
+    setShipperAccend(ShipperID.length > 0 ? ShipperID : shipper)
+  }
+
+  const handleUpdateOnShipping = (item, state) => {
+    const ul = document.querySelector(`.statuslist-${item.orderID}`)
+    ul.classList.add('d-none')
+    const orderID = item.orderID
+    const states = state
+    const data = {
+      status: states,
+      workerID: idShipper
+    }
+    dispatch(updateOrders({orderID, data}))
+    .then((res) => {
+      if (res.payload.status === 200){
+        toast.success("Cập nhật đơn hàng thành công!")
+      }
+      else{
+        toast.error("Cập nhật đơn hàng thất bại!")
+      }
+      dispatch(getAllOrder())
+    })
+    setOrder(orders)
+    setCurrentPage(1)
+    setActiveType(1)
+  }
   return (
     <div className="manager__order">
       <h3>Manager Orders</h3>
-      <Link onClick={() => handlePopup()} to = {""}><button style={{padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
-        borderRadius: "5px"
-      }}>
-        Add New Orders
-      </button></Link>
-      <table>
+      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <Link onClick={() => handlePopup()} to = {""}><button style={{padding: "8px 20px", backgroundColor: "#0a3b97", color: "#ffffff", fontSize: "18px",
+          borderRadius: "5px"
+        }} onClick={() => handleClosePopup()}>
+          Add New Orders
+        </button></Link>
+        <div className="manager__orderShipper">
+            <Input value={nameShipper} placeholder = "Tìm kiếm theo tên shipper" prefix = {<AiOutlineSearch fontSize={"20px"}/>}
+              onFocus={handleFocus} onChange={(e) => handleSearchShipper(e)}
+            />
+            <ul className={'list-shipper d-none'}>
+              {
+                  (shipperAccend)?.map((item, idx) => {
+                    const shiperMatches = user.find((user) => {
+                      return item === user.userID
+                    })
+                    if (shiperMatches){
+                      return (
+                        <li onClick={() => handleShowItem(item, shiperMatches.fullName)}><p>{`${item} - ${shiperMatches.fullName}`}</p></li>
+                      )
+                    }
+                  })
+              }
+            </ul>
+        </div>
+        <div style={{display: 'flex'}}>
+          <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 1) ? '#03a213' : '#686766',
+            fontSize: "18px", fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderTopLeftRadius: '6px', borderRight: "2px solid #ffffff"
+            }} onClick={() => handleShowOrder("Tất Cả", 1)}>Tất Cả</button>
+          <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 2) ? '#03a213' : '#686766',
+            fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff"
+            }} onClick={() => handleShowOrder("PENDING", 2)}>Chờ Xác Nhận</button>
+          <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 3) ? '#03a213' : '#686766',
+            fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff"
+            }} onClick={() => handleShowOrder("CONFIRMED",3)}>Chờ Giao Hàng</button>
+          <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 4) ? '#03a213' : '#686766',
+            fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff"
+            }} onClick={() => handleShowOrder("ON_SHIPPING",4)}>Đang Giao</button>
+          <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 5) ? '#03a213' : '#686766',
+            fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderRight: "2px solid #ffffff"
+            }} onClick={() => handleShowOrder("SHIP_COMPLETED", 5)}>Đã Giao</button>
+          <button style={{width: 'auto', minWidth: "150px", backgroundColor: (activeType == 6) ? '#03a213' : '#686766',
+            fontSize: "18px",fontWeight: "600", color: '#ffffff', padding: "10px 1rem", borderTopRightRadius: '6px'
+            }}onClick={() => handleShowOrder("CANCELLED", 6)}>ĐH Đã Hủy</button>
+          </div>
+      </div>
+      <table onClick={() => handleClosePopup()}>
         <tr>
           <th>STT</th>
           <th>Họ Tên</th>
@@ -198,32 +330,57 @@ const ManageOrders = (props) => {
                       <td><span>{item.orderID}</span></td>
                       <td><span>{userMatches.fullName}</span></td>
                       <td><span>{formatProductPrice(total)}</span></td>
-                      <td><span>{item.dateOrder}</span></td>
+                      <td><span>{convertDate(item.dateOrder)}</span></td>
                       <td><span>{item.status === "PENDING"
                               ? "Chờ xác nhận"
                               : item.status === "CONFIRMED"
+                              ? "Chờ giao hàng"
+                              : item.status === "ON_SHIPPING"
                               ? "Đang giao hàng"
-                              : item.status === "COMPLETED"
-                              ? "Đã giao hàng"
+                              : item.status === "SHIP_COMPLETED"
+                              ? "Đã giao hàng" : item.status === "USER_RECEIVED" ? "Đã Nhận Hàng"
                               : "Đã hủy"}</span></td>
                       <td><div style={{display: "flex", justifyContent: "space-evenly"}}>
                         <Link to = {`${item.orderID}`}><button style={{padding: "4px 20px", backgroundColor: "#e6b112",fontSize: "18px",  color: "#ffffff", borderRadius: "5px"}}>Xem</button></Link>
-                        <button onClick={() => popup(item)} style={{padding: "4px 22px", backgroundColor: "#54d717",fontSize: "18px",  color: "#ffffff", borderRadius: "5px", position: "relative"}}>Sửa
+                        <button onClick={() => popup(item)} style={{padding: "4px 22px", backgroundColor: (item.status === "CANCELLED" || item.status === "USER_RECEIVED") ? "#686766"  : "#54d717",fontSize: "18px",  color: "#ffffff", borderRadius: "5px", position: "relative"}}>Sửa
+                          {
+                            (item.status === "PENDING") ? (
+                              <ul className={`statuslist-${item.orderID} d-none`}>
+                                <li onClick={() => handleUpdate(item, "CONFIRMED")}>
+                                  CONFIRMED
+                                </li>
+                                <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
+                                  CANCELLED
+                                </li>
+                              </ul>
+                            ) : (item.status === "CONFIRMED") ? (
+                              <ul className={`statuslist-${item.orderID} d-none`}>
+                                <li onClick={() => handleUpdateOnShipping(item, "ON_SHIPPING")}>
+                                  SHIPPING
+                                </li>
+                                <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
+                                  CANCELLED
+                                </li>
+                              </ul>
+                            ) : (item.status === "ON_SHIPPING") ? (
+                              <ul className={`statuslist-${item.orderID} d-none`}>
+                                <li onClick={() => handleUpdate(item, "SHIP_COMPLETED")}>
+                                  COMPLETED
+                                </li>
+                                <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
+                                  CANCELLED
+                                </li>
+                              </ul>
+                            ) : (item.status === "SHIP_COMPLETED") ? (
+                              <ul className={`statuslist-${item.orderID} d-none`}>
+                                <li style={{backgroundColor: "#f92626"}} onClick={() => handleUpdate(item, "CANCELLED")}>
+                                  CANCELLED
+                                </li>
+                              </ul>
+                            ) : ("")
+                          }
                         </button>
-                        <ul className={`statuslist-${item.orderID} d-none`}>
-                            <li onClick={() => handleUpdate(item, "PENDING")}>
-                              PENDING
-                            </li>
-                            <li onClick={() => handleUpdate(item, "CONFIRMED")}>
-                              CONFIRMED
-                            </li>
-                            <li onClick={() => handleUpdate(item, "COMPLETED")}>
-                              COMPLETED
-                            </li>
-                            <li onClick={() => handleUpdate(item, "CANCELLED")}>
-                              CANCELLED
-                            </li>
-                          </ul>
+                        
                         <Popconfirm 
                           title="Xóa đơn hàng"
                           description="Bạn có chắc muốn xóa đơn hàng?"
@@ -238,7 +395,10 @@ const ManageOrders = (props) => {
                   </tr>
                 )}})
             )  : (<tr>
-              ""
+              <td colspan="6">
+                                <img src={EmptyCart} alt="" />
+                                <h3>Đơn hàng hiện tại đang trống</h3>
+                              </td>
             </tr>)
           }
       </table>

@@ -67,7 +67,7 @@ public class AuthenticationController {
     }
 
     @PutMapping("/changePassword")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_EMPLOYEE', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('auth:change_password')")
     public BaseResponse changePassword(
             @Validated @RequestBody AuthenticationChangePasswordRequest request,
             BindingResult errors
