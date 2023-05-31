@@ -1,0 +1,8 @@
+.dropdown-header-admin {
+  & a {
+    font-size: 16px !important;
+  }
+  .dropdown-toggle::after {
+    display: none !important;
+  }
+}
