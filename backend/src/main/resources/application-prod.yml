@@ -12,4 +12,4 @@ spring:
       ddl-auto: none
 
 env-variable:
-  url: http://localhost:5000
+  url: https://e-commerce-production-0d6c.up.railway.app
