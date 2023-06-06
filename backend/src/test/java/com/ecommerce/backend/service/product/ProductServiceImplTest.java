@@ -48,6 +48,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    // TODO: refactor this test
     void fetchAllProductsByCategoryID() {
         // Given
         var id = BigInteger.valueOf(1);
@@ -86,6 +87,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    // TODO: refactor product hold category id only
     void fetchProductByProductID() {
         // Given
         var id = BigInteger.valueOf(1);
