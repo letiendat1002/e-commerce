@@ -3,6 +3,10 @@ spring:
     url: jdbc:mysql://localhost:3333/myecommerce
     username: root
     password: root
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
 env-variable:
   url: http://localhost:8080

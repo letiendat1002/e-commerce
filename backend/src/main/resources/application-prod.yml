@@ -1,0 +1,15 @@
+server:
+  port: 5000
+
+spring:
+  datasource:
+    url: jdbc:mysql://containers-us-west-195.railway.app:6254/myecommerce
+    username: root
+    password: 7VP7XGaoGdd30qvSYf3T
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+
+env-variable:
+  url: https://e-commerce-production-0d6c.up.railway.app

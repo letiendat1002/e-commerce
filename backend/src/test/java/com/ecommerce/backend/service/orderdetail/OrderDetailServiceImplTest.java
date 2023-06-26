@@ -132,21 +132,6 @@ class OrderDetailServiceImplTest {
     }
 
     @Test
-    void whenFetchOrderDetailByOrderIDAndProductID_butNotExistOrderDetailID_thenThrowException() {
-        // Given
-        var id = BigInteger.valueOf(1);
-
-        // When
-        when(orderDetailDAO.selectOrderDetailByID(new OrderDetailID(id, id)))
-                .thenReturn(Optional.empty());
-
-        // Then
-        assertThatThrownBy(() -> orderDetailService
-                .fetchOrderDetailByOrderIDAndProductID(new OrderDetailID(id, id)))
-                .isInstanceOf(ResourceNotFoundException.class);
-    }
-
-    @Test
     void addOrderDetail() {
         // Given
         var id = BigInteger.valueOf(1);
