@@ -10,7 +10,6 @@ spring:
     web-application-type: servlet
   jpa:
     hibernate:
-      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -22,7 +21,6 @@ spring:
         order_updates: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
-    show-sql: true
     open-in-view: true
   mail:
     host: smtp.gmail.com
@@ -41,7 +39,7 @@ spring:
           starttls:
             enable: true
   profiles:
-    active: dev
+    active: prod
 
 springdoc:
   api-docs:
