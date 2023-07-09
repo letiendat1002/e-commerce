@@ -30,7 +30,7 @@
     "js-cookie": "^3.0.1",
     "libphonenumber-js": "^1.10.30",
     "lodash": "^4.17.21",
-    "node-sass": "^7.0.3",
+    "node-sass": "^9.0.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
