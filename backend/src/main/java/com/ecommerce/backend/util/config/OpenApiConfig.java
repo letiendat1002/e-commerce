@@ -23,8 +23,8 @@ import org.springframework.context.annotation.Configuration;
                         url = "http://localhost:8080"
                 ),
                 @Server(
-                        description = "Railway Server",
-                        url = "https://e-commerce-production-0d6c.up.railway.app"
+                        description = "Production Server",
+                        url = "https://5i5iavxp88.execute-api.ap-southeast-1.amazonaws.com/prod"
                 )
         }
 )
