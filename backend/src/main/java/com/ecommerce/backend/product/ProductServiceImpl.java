@@ -1,9 +1,9 @@
 package com.ecommerce.backend.product;
 
 import com.ecommerce.backend.category.CategoryService;
-import com.ecommerce.backend.shared.exception.DuplicateResourceException;
-import com.ecommerce.backend.shared.exception.FailedOperationException;
-import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import com.ecommerce.backend.util.exception.DuplicateResourceException;
+import com.ecommerce.backend.util.exception.FailedOperationException;
+import com.ecommerce.backend.util.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
