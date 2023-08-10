@@ -1,8 +1,8 @@
 package com.ecommerce.backend.auth;
 
-import com.ecommerce.backend.shared.enums.MessageStatus;
-import com.ecommerce.backend.shared.exception.RequestValidationException;
-import com.ecommerce.backend.shared.response.BaseResponse;
+import com.ecommerce.backend.util.enums.MessageStatus;
+import com.ecommerce.backend.util.exception.RequestValidationException;
+import com.ecommerce.backend.util.response.BaseResponse;
 import com.ecommerce.backend.user.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

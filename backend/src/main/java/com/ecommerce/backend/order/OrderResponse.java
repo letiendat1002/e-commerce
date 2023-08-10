@@ -1,7 +1,7 @@
 package com.ecommerce.backend.order;
 
-import com.ecommerce.backend.shared.enums.MessageStatus;
-import com.ecommerce.backend.shared.response.BaseResponse;
+import com.ecommerce.backend.util.enums.MessageStatus;
+import com.ecommerce.backend.util.response.BaseResponse;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,8 @@
 package com.ecommerce.backend.orderdetail;
 
 import com.ecommerce.backend.orderdetail.enums.OrderDetailStatus;
-import com.ecommerce.backend.shared.enums.MessageStatus;
-import com.ecommerce.backend.shared.exception.RequestValidationException;
+import com.ecommerce.backend.util.enums.MessageStatus;
+import com.ecommerce.backend.util.exception.RequestValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

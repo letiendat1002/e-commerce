@@ -1,8 +1,8 @@
 package com.ecommerce.backend.service.useraddress;
 
-import com.ecommerce.backend.shared.exception.DuplicateResourceException;
-import com.ecommerce.backend.shared.exception.FailedOperationException;
-import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
+import com.ecommerce.backend.util.exception.DuplicateResourceException;
+import com.ecommerce.backend.util.exception.FailedOperationException;
+import com.ecommerce.backend.util.exception.ResourceNotFoundException;
 import com.ecommerce.backend.user.UserService;
 import com.ecommerce.backend.useraddress.*;
 import org.junit.jupiter.api.BeforeEach;
