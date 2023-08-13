@@ -42,7 +42,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final VariableConstants variableConstants;
 
     @Override
-    @Transactional
     public void register(UserRegistrationRequest request) {
         var user = userService.addUser(request);
 

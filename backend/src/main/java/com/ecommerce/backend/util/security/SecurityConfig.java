@@ -36,9 +36,12 @@ public class SecurityConfig {
                         "/swagger-ui.html",
                         "/api-docs",
                         "/api-docs/**",
-                        "/index",
+                        "/index.html",
                         "/css/**",
-                        "/js/**"
+                        "/js/**",
+                        "/*.js",
+                        "/*.css",
+                        "/favicon.ico"
                 )
                 .permitAll()
                 .requestMatchers(
@@ -48,8 +51,7 @@ public class SecurityConfig {
                         "/api/v*/products/**",
                         "/api/v*/categories/**",
                         "/api/v*/ratings",
-                        "/api/v*/auth/activate",
-                        "/api/v*/auth/resetPassword"
+                        "/api/v*/auth/**"
                 )
                 .permitAll()
                 .requestMatchers(
