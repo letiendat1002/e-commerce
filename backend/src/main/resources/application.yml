@@ -26,13 +26,16 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: linkking.noreply@gmail.com
-    password: ilryekzxotqsxici
+    password: xbgrrehedwtspcmt
     properties:
       mail:
         smtp:
+          ssl:
+            trust: "*"
           auth: true
           starttls:
             enable: true
+            required: true
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
