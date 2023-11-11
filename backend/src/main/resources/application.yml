@@ -26,7 +26,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: linkking.noreply@gmail.com
-    password: xbgrrehedwtspcmt
+    password: jxjoujkhfxjatuvw
     properties:
       mail:
         smtp:
