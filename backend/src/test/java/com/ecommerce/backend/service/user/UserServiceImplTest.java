@@ -1,10 +1,10 @@
 package com.ecommerce.backend.service.user;
 
 import com.ecommerce.backend.order.OrderService;
-import com.ecommerce.backend.shared.exception.DuplicateResourceException;
-import com.ecommerce.backend.shared.exception.FailedOperationException;
-import com.ecommerce.backend.shared.exception.ResourceNotFoundException;
-import com.ecommerce.backend.shared.security.enums.UserRole;
+import com.ecommerce.backend.util.exception.DuplicateResourceException;
+import com.ecommerce.backend.util.exception.FailedOperationException;
+import com.ecommerce.backend.util.exception.ResourceNotFoundException;
+import com.ecommerce.backend.util.security.enums.UserRole;
 import com.ecommerce.backend.user.*;
 import com.ecommerce.backend.user.enums.Gender;
 import org.junit.jupiter.api.BeforeEach;
