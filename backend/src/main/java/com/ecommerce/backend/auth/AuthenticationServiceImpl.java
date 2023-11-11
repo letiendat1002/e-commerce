@@ -1,16 +1,16 @@
 package com.ecommerce.backend.auth;
 
 import com.ecommerce.backend.auth.enums.ActivateStatus;
-import com.ecommerce.backend.shared.constants.VariableConstants;
-import com.ecommerce.backend.shared.email.CustomEmail;
-import com.ecommerce.backend.shared.email.EmailSenderService;
-import com.ecommerce.backend.shared.email.EmailTemplate;
-import com.ecommerce.backend.shared.enums.MessageStatus;
-import com.ecommerce.backend.shared.exception.DuplicateResourceException;
-import com.ecommerce.backend.shared.exception.FailedOperationException;
-import com.ecommerce.backend.shared.exception.JwtAuthenticationException;
-import com.ecommerce.backend.shared.security.jwt.JwtService;
-import com.ecommerce.backend.shared.util.PasswordGenerator;
+import com.ecommerce.backend.util.constants.VariableConstants;
+import com.ecommerce.backend.util.email.CustomEmail;
+import com.ecommerce.backend.util.email.EmailSenderService;
+import com.ecommerce.backend.util.email.EmailTemplate;
+import com.ecommerce.backend.util.enums.MessageStatus;
+import com.ecommerce.backend.util.exception.DuplicateResourceException;
+import com.ecommerce.backend.util.exception.FailedOperationException;
+import com.ecommerce.backend.util.exception.JwtAuthenticationException;
+import com.ecommerce.backend.util.security.jwt.JwtService;
+import com.ecommerce.backend.util.security.PasswordGenerator;
 import com.ecommerce.backend.user.UserDTOMapper;
 import com.ecommerce.backend.user.UserRegistrationRequest;
 import com.ecommerce.backend.user.UserService;
@@ -42,7 +42,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final VariableConstants variableConstants;
 
     @Override
-    @Transactional
     public void register(UserRegistrationRequest request) {
         var user = userService.addUser(request);
 

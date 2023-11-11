@@ -1,7 +1,7 @@
 package com.ecommerce.backend.auth;
 
-import com.ecommerce.backend.shared.enums.MessageStatus;
-import com.ecommerce.backend.shared.response.BaseResponse;
+import com.ecommerce.backend.util.enums.MessageStatus;
+import com.ecommerce.backend.util.response.BaseResponse;
 import com.ecommerce.backend.user.UserDTO;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

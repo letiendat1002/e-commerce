@@ -3,13 +3,11 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://containers-us-west-189.railway.app:5634/myecommerce
-    username: root
-    password: V3qmgscU56BxS0MK852y
+    url: jdbc:mysql://linkking-dbs.cb1wgmdgrbe9.ap-southeast-1.rds.amazonaws.com:3306/myecommerce
+    username: admin
+    password: jL4rsxLNFnh9bCJhfMIn
   jpa:
     show-sql: false
     hibernate:
       ddl-auto: none
-
-env-variable:
-  url: https://e-commerce-production-022c.up.railway.app
+  url: https://5i5iavxp88.execute-api.ap-southeast-1.amazonaws.com/prod
