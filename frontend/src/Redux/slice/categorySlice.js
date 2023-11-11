@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+
 import axios from "axios"
+import axiosClient4 from "../api/axiosCustom";
 
 const initialState = {
     categoryLoading: true, 
@@ -9,8 +11,8 @@ const initialState = {
 
 export const getAllCategories = createAsyncThunk('getAllCategories', async() => {
     try {
-        const response = await axios.get('/api/v1/categories')
-        return response.data
+        const response = await axiosClient4.get('/categories')
+        return response
       } catch (error) {
         console.log('error: ', error)
         throw error

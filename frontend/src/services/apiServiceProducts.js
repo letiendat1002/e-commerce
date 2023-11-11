@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { STATIC_HOST_2 } from '../constant/common';
 import { STATIC_HOST } from '../constant/common';
+import { STATIC_HOST_2 } from '../constant/common';
+import axios from 'axios';
 import axiosClient from '../API/axiosClient';
 import axiosClient4 from '../API/axiosCustom';
 
@@ -8,7 +8,7 @@ const SCHEMA = 'products';
 
 const productApi = {
   async getAllCategory() {
-    const categoryListFilter = await axios.get(`http://localhost:8080/api/v1/categories`);
+    const categoryListFilter = await axios.get(`https://5i5iavxp88.execute-api.ap-southeast-1.amazonaws.com/prod/api/v1/categories`);
     // console.log(productListFilter)
     return categoryListFilter;
   },

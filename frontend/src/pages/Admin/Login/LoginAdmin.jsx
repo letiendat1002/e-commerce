@@ -1,27 +1,32 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import { Form, Input, Checkbox, Button } from 'antd';
-import { ReactComponent as MailIcon } from '../../../assets/images/mail.svg';
-import { ReactComponent as LockIcon } from '../../../assets/images/lock.svg';
-
-import image from '../../../assets/images/technology-in-the-workplace.png';
-import { login, logout, register } from '../../../Redux/slice/userSlice';
 import './LoginAdmin.scss';
+
+import { Button, Checkbox, Form, Input } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import { login, logout, register } from '../../../Redux/slice/userSlice';
+
+import { LoadingOutlined } from '@ant-design/icons';
+import { ReactComponent as LockIcon } from '../../../assets/images/lock.svg';
+import { ReactComponent as MailIcon } from '../../../assets/images/mail.svg';
+import image from '../../../assets/images/technology-in-the-workplace.png';
+import { useDispatch } from 'react-redux';
 
 const LoginAdmin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [form] = Form.useForm();
   //Login
   const onFinish = async (values) => {
+    setLoading(true)
     const { email, password } = values;
     const res = await dispatch(login({ email, password }));
     if (res) {
       if (res.payload.status === 200) {
+        setLoading(false);
         const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
         const checkedShipper = res?.payload?.data[0].roles.includes('ROLE_SHIPPER');
 
@@ -29,9 +34,7 @@ const LoginAdmin = () => {
           localStorage.setItem('access_token', res.payload.token);
           localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`);
           navigate('/admin');
-          toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
         } else {
-          console.log('Shipperr');
           toast.error('Access Dennid !');
           localStorage.removeItem('access_token');
           localStorage.removeItem('user');
@@ -40,6 +43,7 @@ const LoginAdmin = () => {
           navigate('/admin/login');
         }
       } else if (res.payload.status === 401) {
+        setLoading(false);
         toast.error('Email hoặc mật khẩu không hợp lệ!');
         localStorage.removeItem('access_token');
         localStorage.removeItem('user');
@@ -47,6 +51,8 @@ const LoginAdmin = () => {
       form.resetFields();
     }
   };
+
+  console.log(loading)
   //Validation
   const validateMessages = {
     types: {
@@ -147,7 +153,7 @@ const LoginAdmin = () => {
                     marginTop: '-10px',
                     paddingBottom: '10px',
                   }}>
-                  <span>Đăng nhập</span>
+                  {(loading) ? <LoadingCircle /> : <span>Đăng nhập</span>}
                 </Button>
               </div>
             </Form>
@@ -163,6 +169,17 @@ const LoginAdmin = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const LoadingCircle = () => {
+  return (
+    <LoadingOutlined
+      style={{
+        fontSize: 30  
+      }}
+      spin
+    />
   );
 };
 

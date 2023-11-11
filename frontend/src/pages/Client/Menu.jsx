@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Col } from 'react-bootstrap';
-import { AiFillFilter } from 'react-icons/ai';
-import { HiSelector } from 'react-icons/hi';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
-import Slider from 'react-slick';
-import formatProductPrice from '../../Helper';
 import '../../assets/css/home.scss';
 import '../../assets/css/menu.scss';
+
+import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import { Link, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { AiFillFilter } from 'react-icons/ai';
 import Catagory from '../../assets/data/catagory';
+import { Col } from 'react-bootstrap';
+import { HiSelector } from 'react-icons/hi';
 import Item1 from '../../assets/images/item1.png';
 import Item2 from '../../assets/images/item2.png';
 import Item3 from '../../assets/images/item3.png';
@@ -16,15 +17,25 @@ import Item4 from '../../assets/images/item4.png';
 import Item5 from '../../assets/images/item5.jpeg';
 import Item6 from '../../assets/images/item6.png';
 import Item7 from '../../assets/images/item7.png';
-// import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
-import { Skeleton } from 'antd';
-import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
+import Logo from '../../assets/images/Logo.svg';
 import { MdOutlineRemove } from 'react-icons/md';
+import NotFoundItem from '../../assets/images/noti-search.png';
+import { Skeleton } from 'antd';
+import Slider from 'react-slick';
 import { addToCart } from '../../Redux/slice/cartSlice';
+import formatProductPrice from '../../Helper';
 import { getAllCategories } from '../../Redux/slice/categorySlice';
 import { getAllProducts } from '../../Redux/slice/productSlice';
-import Logo from '../../assets/images/Logo.svg';
-import NotFoundItem from '../../assets/images/noti-search.png';
+
+// import { addToCart, descreaseToCart, increaseToCart } from '../../Redux/Actions/cartAction';
+
+
+
+
+
+
+
+
 const slides = [Item1, Item2, Item3, Item4, Item5, Item6, Item7];
 
 const Menu = ({ match, history }) => {
@@ -1237,7 +1248,7 @@ const Menu = ({ match, history }) => {
                                           <button className='contains--action--buy'>Mua Hàng</button>
                                         </Link>
                                         <Link
-                                          to={`/cart`}
+                                          
                                           className='button'>
                                           <button
                                             className='contains--action-addcart'
@@ -1291,7 +1302,7 @@ const Menu = ({ match, history }) => {
                                           <button className='contains--action--buy'>Mua Hàng</button>
                                         </Link>
                                         <Link
-                                          to={`/cart`}
+                                          
                                           className='button'>
                                           <button
                                             className='contains--action-addcart'
