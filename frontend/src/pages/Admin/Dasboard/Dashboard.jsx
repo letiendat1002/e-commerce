@@ -313,9 +313,9 @@ const Dashboard = (props) => {
   const getTenOrderTop = () => {
       const orderSelect = [];
       for(let i = 0; i < AllOrder.length; i++){
-        const userId = AllOrder[i].userID
-        if (!orderSelect.some(d => d.userId === userId)) {
-          const count = AllOrder?.filter(o => o.userID == userId).length;
+        const userId = AllOrder[i]?.userID
+        if (!orderSelect.some(d => d?.userId === userId)) {
+          const count = AllOrder?.filter(o => o?.userID == userId)?.length;
           orderSelect.push({ userId, count });
         }
       }
@@ -328,11 +328,11 @@ const Dashboard = (props) => {
     const allInfo = [];
     const topCount = orderTop.slice(0, 10);
     for (let i = 0; i < orderTop.length; i++) {
-      const userId = topCount[i].userId;
-      const orderCount = topCount[i].count;
-      const users = user?.find(u => u.userID === userId);
+      const userId = topCount[i]?.userId;
+      const orderCount = topCount[i]?.count;
+      const users = user?.find(u => u?.userID === userId);
       const step = allInfo.length + 1
-      const now = new Date(); 
+      const now = new Date();   
       const time = now.toLocaleTimeString();
       const date = now.toLocaleDateString();
       if (user) {

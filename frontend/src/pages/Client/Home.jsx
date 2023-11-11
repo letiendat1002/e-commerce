@@ -296,7 +296,7 @@ const Home = () => {
                                                             </div></div></Link>
                                                             <div className="child--contain--action">
                                                                 <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                                <Link className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                                             </div>
                                                     </div>
                                                     )
@@ -353,7 +353,7 @@ const Home = () => {
                                                             </div></div></Link>
                                                     <div className="child--contain--action">
                                                         <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                        <Link to = {`/cart`} className = "button"><button className='contains--action-addcart'>Giỏ Hàng</button></Link>
+                                                        <Link className = "button"><button className='contains--action-addcart'>Giỏ Hàng</button></Link>
                                                     </div>
                                             </div>
                                             )
@@ -411,7 +411,7 @@ const Home = () => {
                                                     </div></Link>
                                                     <div className="child--contain--action">
                                                         <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                        <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                        <Link className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                                     </div>
                                             </div>
                                             )
@@ -461,7 +461,7 @@ const Home = () => {
                                                 </Link>
                                                 <div className="child--contain--action">
                                                     <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                    <Link  className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                                 </div>
                                             </div>
                                         )
@@ -513,7 +513,7 @@ const Home = () => {
                                                 </Link>
                                                 <div className="child--contain--action">
                                                     <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                    <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                    <Link  className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                                 </div>
                                             </div>
                                         )
@@ -566,7 +566,7 @@ const Home = () => {
                                             </Link>
                                             <div className="child--contain--action">
                                                 <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                <Link  className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )
@@ -619,7 +619,7 @@ const Home = () => {
                                             </Link>
                                             <div className="child--contain--action">
                                                 <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                <Link  className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )
@@ -669,7 +669,7 @@ const Home = () => {
                                             </Link>
                                             <div className="child--contain--action">
                                                 <Link to = {`/${item.slug}`} className = "button"><button className='contains--action--buy'>Mua Hàng</button></Link>
-                                                <Link to = {`/cart`} className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
+                                                <Link  className = "button"><button className='contains--action-addcart' onClick={() => AddToCartHandle(item)}>Giỏ Hàng</button></Link>
                                             </div>
                                         </div>
                                     )

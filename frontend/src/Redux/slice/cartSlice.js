@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import { toast } from 'react-toastify';
 
 let dataCart= JSON.parse(localStorage.getItem('cartItem'))
@@ -14,9 +15,12 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const itemIndex = state.cart.findIndex((item) => item.productID === action.payload.productID);
-      if (itemIndex >= 0) {
+      if (itemIndex === 0 && itemIndex <=1) {
         state.cart[itemIndex].cartQuantity += 1;
         toast.success(`${action.payload.name.slice(0, 20)} đã được thêm vào giỏ hàng`);
+      }
+      else if (itemIndex >= 1) {
+        state.cart[itemIndex].cartQuantity += 1;
       } else {
         const tempProduct = { ...action.payload, cartQuantity: 1 };
         state.cart.push(tempProduct);
@@ -33,12 +37,19 @@ export const cartSlice = createSlice({
       toast.warning(`${action.payload.name.slice(0, 20)} đã xóa hết trong giỏ hàng`);
       localStorage.setItem('cartItem', JSON.stringify(state.cart));
     },
+    removeFromToCarts: (state, action) => {
+      const nextCartItems = state.cart.filter(
+        (cartItem) => cartItem.productID !== action.payload.productID
+      );
+      state.cart = nextCartItems;
+      // toast.warning(`${action.payload.name.slice(0, 20)} đã xóa hết trong giỏ hàng`);
+      localStorage.setItem('cartItem', JSON.stringify(state.cart));
+    },
     decreamentFromCart: (state, action) => {
       const itemIndex = state.cart.findIndex((item) => item.productID === action.payload.productID);
 
       if (state.cart[itemIndex].cartQuantity > 1) {
         state.cart[itemIndex].cartQuantity -= 1;
-        toast.warn(`Bạn đã xóa 1 sản phẩm ${action.payload.name.slice(0, 20)} vào giỏ hàng`);
       } else if (state.cart[itemIndex].cartQuantity === 1) {
         const nextCartItems = state.cart.filter(
           (cartItem) => cartItem.productID !== action.payload.productID
@@ -53,8 +64,7 @@ export const cartSlice = createSlice({
 
       if (state.cart[itemIndex].cartQuantity >= 1) {
         state.cart[itemIndex].cartQuantity += 1;
-        toast.success(`Bạn đã thêm 1 sản phẩm ${action.payload.name.slice(0, 20)} vào giỏ hàng`);
-      } else {
+       } else {
         const tempProduct = { ...action.payload, cartQuantity: 1 };
         state.cart.push(tempProduct);
         toast.success(`${action.payload.name.slice(0, 20)} đã được thêm vào giỏ hàng`);
@@ -64,7 +74,7 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromToCart, decreamentFromCart, increamentFromCart } =
+export const { addToCart, removeFromToCart, removeFromToCarts, decreamentFromCart, increamentFromCart } =
   cartSlice.actions;
 
 export default cartSlice.reducer;

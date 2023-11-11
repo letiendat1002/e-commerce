@@ -22,8 +22,8 @@ const TableCategory = (props) => {
 
   const lastIdx = currentPage * categotyPerPage;
   const firstIdx = lastIdx - categotyPerPage;
-  const newData = categoryList.slice(firstIdx, lastIdx);
-  const totalPage = Math.ceil(categoryList.length / categotyPerPage);
+  const newData = categoryList?.slice(firstIdx, lastIdx);
+  const totalPage = Math?.ceil(categoryList?.length / categotyPerPage);
 
   const handlePageClick = (e) => {
     setCurrentPage(+e.selected + 1);

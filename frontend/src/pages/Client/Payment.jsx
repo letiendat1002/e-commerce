@@ -2,6 +2,7 @@ import "../../assets/css/payment.scss";
 
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { removeFromToCart, removeFromToCarts } from "../../Redux/slice/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AiOutlineHome } from "react-icons/ai";
@@ -14,7 +15,6 @@ import formatProductPrice from "../../Helper/index.js";
 import { getUserAddressForIDUser } from "../../Redux/slice/userAddressSlice";
 import { orderDetail } from "../../Redux/slice/orderDetailSlice.js";
 import { orderPayment } from "../../Redux/slice/paymentSlice";
-import { removeFromToCart } from "../../Redux/slice/cartSlice.js";
 import { toast } from "react-toastify";
 
 const Payment = () => {
@@ -104,7 +104,7 @@ const Payment = () => {
               ).then((res) => {
                 if (res.payload.status == 200) {
                   localStorage.removeItem("cartItem");
-                  dispatch(removeFromToCart(item));
+                  dispatch(removeFromToCarts(item));
                   navigate("/account/order");
                 } else {
                   toast.error("Đặt hàng thất bại");

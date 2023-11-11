@@ -1,19 +1,18 @@
 import './style.scss';
 
-import { AiFillCloseCircle, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai';
 import { Button, Checkbox, Form, Input, Select } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { login, register } from '../../Redux/slice/userSlice';
 
-import { BsFacebook } from 'react-icons/bs';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { LoadingOutlined } from '@ant-design/icons';
 import { ReactComponent as LockIcon } from '../../assets/images/lock.svg';
 import Logo from '../../components/Logo/Logo';
 import { ReactComponent as MailIcon } from '../../assets/images/mail.svg';
 import { ReactComponent as RequiredIcon } from '../../assets/images/Required.svg';
 import { ReactComponent as UserIcon } from '../../assets/images/user.svg';
 import { resetPassword } from '../../Redux/slice/usersSlice';
-import { set } from 'lodash';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 
@@ -24,6 +23,8 @@ import { useDispatch } from 'react-redux';
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [loadingSignIn, setLoadingSignIn] = useState(false);
   const [remember, setRemember] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -67,16 +68,17 @@ const Login = () => {
 
     //login
     const { email, password } = values;
+    setLoading(true)
 
     const res = await dispatch(login({ email, password }));
     if (res) {
       if (res.payload.status === 200) {
         localStorage.setItem('access_token', res.payload.token);
         localStorage.setItem('user', `[${JSON.stringify(res.payload.data[0])}]`);
-        toast.success(`Wellcom back ${res?.payload?.data[0].email} `);
+        toast.success(`Welcom back ${res?.payload?.data[0].email} `);
         const checkedAdmin = res?.payload?.data[0].roles.includes('ROLE_ADMIN');
         const checkedShipper = res?.payload?.data[0].roles.includes('ROLE_SHIPPER');
-
+        setLoading(false);
         if (checkedShipper) {
           navigate('/shipper');
         } else {
@@ -86,6 +88,7 @@ const Login = () => {
         toast.error('Email hoặc mật khẩu không hợp lệ!');
         localStorage.removeItem('access_token');
         localStorage.removeItem('user');
+        setLoading(false)
       }
       form.resetFields();
     }
@@ -97,11 +100,13 @@ const Login = () => {
     if (item == 'login') {
       formItem.classList.add('d-none');
       signinItem.classList.remove('d-none');
-    } else if (item == 'signin') {
+    } else if (item == 'signin' && loadingSignIn === false) {
       formItem.classList.remove('d-none');
       signinItem.classList.add('d-none');
     }
   };
+
+  console.log(loadingSignIn)
 
   const handleRegister = async (values) => {
     const { fullName, gender, password, email } = values;
@@ -114,14 +119,18 @@ const Login = () => {
       email,
     };
 
+    setLoadingSignIn(true);
     const res = await dispatch(register(data));
+    console.log(res)
 
     if (res?.payload.status === 200) {
+      setLoadingSignIn(false);
       toast.success(`Đăng ký tài khoản thành công`);
       handleLogin('signin');
     }
 
     if (res.payload.status === 400) {
+      setLoadingSignIn(false);
       if (res.payload.message == `Phone {${res.meta.arg.phone}} is already taken`) {
         toast.error(`Số điện thoại đăng ký đã tồn tại!`);
       } else if (res.payload.message == `Email {${res.meta.arg.email}} is already taken`) {
@@ -297,7 +306,7 @@ const Login = () => {
               </div>
             </div>
             <Button htmlType='submit'>
-              <span>Đăng nhập</span>
+              {(loading) ? <LoadingCircle /> : <span>Đăng Nhập</span>}
             </Button>
             <div className='login__left--account'>
               <span>Bạn chưa có tài khoản?</span>
@@ -537,8 +546,9 @@ const Login = () => {
             </div>
             <Button
               htmlType='submit'
-              onClick={() => handleLogin('signin')}>
-              <span>Đăng ký</span>
+              // onClick={() => handleLogin('signin')}
+              >
+              {(loadingSignIn) ? <LoadingCircle /> : <span>Đăng ký</span>}
             </Button>
           </Form>
           <div
@@ -594,6 +604,17 @@ const Login = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const LoadingCircle = () => {
+  return (
+    <LoadingOutlined
+      style={{
+        fontSize: 30  
+      }}
+      spin
+    />
   );
 };
 

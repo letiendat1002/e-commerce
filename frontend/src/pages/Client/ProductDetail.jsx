@@ -354,19 +354,19 @@ const ProductDetail = ({match, history}) => {
                       <span className="divider"></span>
                       <div className="product-btn-group">
                       
-                      <div className="button buy-now" >
+                      {/* <a className="button buy-now" > */}
                         {
                           Products.map((products ,idx) => {
                             if (products.slug === slug){
                               return (
-                                <Link to= {"/cart"} onClick= {() => AddToCartHandle(products)}  key={idx}>
+                                <Link className="button buy-now" to= {"/cart"} onClick= {() => AddToCartHandle(products)}  key={idx}>
                                   <i className="bx bxs-zap"></i> Mua Ngay
                                 </Link>        
                               )
                             }
                           })
                         }
-                        </div>
+                        {/* </a> */}
                       
                       
                         <div className="button add-cart">
