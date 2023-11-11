@@ -278,6 +278,7 @@ ul.catagory li.catagory-item:hover {
     position: fixed;
     top: 0;
     z-index: 10;
+    padding: 1rem 0;
     box-shadow: 0px 0px 2px 1px #a7a6a6;
   }
   .nav__table--item {
@@ -547,6 +548,10 @@ ul.catagory li.catagory-item:hover {
     scroll-snap-type: y mandatory;
     overflow-y: scroll;
   }
+
+  .tablet--item--child p.user-name{
+    padding-top: 14px; 
+  }
   .menu__tablet--item--child:first-child {
     // background-color: #e02f2f;
     padding: 0;
@@ -617,7 +622,7 @@ ul.catagory li.catagory-item:hover {
       font-weight: 600;
       color: #e02f2f;
       span {
-        margin-right: 5px;
+        // margin-right: 5px;
         // color: #e02f2f;
       }
     }

@@ -15,6 +15,7 @@ import Products from "../../assets/data/product.js";
 import SlideAntd from '../../components/SlideAntd'
 import Slider from "react-slick";
 import { addToCart } from "../../Redux/slice/cartSlice.js";
+import convertDate from "../../Helper/convertDate";
 import formatProductPrice from "../../Helper/index.js";
 import { getAllCategories } from "../../Redux/slice/categorySlice.js";
 import { getAllProducts } from "../../Redux/slice/productSlice.js";
@@ -391,7 +392,7 @@ const ProductDetail = ({match, history}) => {
                   </div>
                   <div className="container--slider">
                     <div className="rating--title">
-                      <h5>{average}</h5>
+                      <h5>{average.toFixed(1)}</h5>
                       <Rate disabled style={{marginTop: "-5px", paddingRight: "10px"}} value={average}/>
                       <span style={{fontSize: "18px", marginRight: "1rem"}}>{rating.length} đánh giá</span>
                     </div>
@@ -430,7 +431,7 @@ const ProductDetail = ({match, history}) => {
                             <h5 style={{fontWeight: "600"}}>{item.userFullName}</h5>
                             <Rate disabled value={item.rateAmount}/>
                             <p>{item.comment}</p>
-                            <span style={{fontSize :" 16px", color: "#9c9c9c"}}>{item.dateRating}</span>
+                            <span style={{fontSize :" 16px", color: "#9c9c9c"}}>{convertDate(item.dateRating)}</span>
                         </div>
                       )
                     })

@@ -335,6 +335,9 @@ a.button{
 
 // RESPONSIVE IN SMALL MOBILE
 @media screen and (max-width: 600px) {
+    .navbar{
+        padding: 0.5rem 2rem;
+    }
     .item--child--contains{
         padding: 0rem 0 0 0!important;
     }
@@ -409,6 +412,7 @@ a.button{
     .item--child--contains{
         h3{
             font-size: 18px;
+            height: 48px;
         }
     }
 
@@ -419,7 +423,7 @@ a.button{
     }
 
     .home .home__contain{
-        padding: 2rem 0!important;
+        padding: 0rem 0 2rem 0!important;
     }
 }
 

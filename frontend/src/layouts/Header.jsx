@@ -1,34 +1,58 @@
-import React, { useState } from 'react';
-// import Logo from '../assets/images/Logo.svg';
-import Logo from '../components/Logo/Logo';
 import '../assets/css/Header.scss';
 import '../assets/css/config.scss';
-import { Form, InputGroup, NavItem } from 'react-bootstrap';
-import { GiSmartphone } from 'react-icons/gi';
+import '../../src/assets/images/Logo.svg';
+
 import {
-  AiOutlineLaptop,
-  AiOutlineShoppingCart,
-  AiOutlineSearch,
-  AiOutlineQuestionCircle,
   AiOutlineApple,
   AiOutlineHome,
+  AiOutlineLaptop,
   AiOutlineLogout,
+  AiOutlineQuestionCircle,
+  AiOutlineSearch,
+  AiOutlineShoppingCart,
 } from 'react-icons/ai';
-import { IoIosTabletLandscape } from 'react-icons/io';
-import { FaRegUserCircle } from 'react-icons/fa';
+import { Form, InputGroup, NavItem } from 'react-bootstrap';
+import React, { useState } from 'react';
 import { RiAccountCircleLine, RiComputerLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
-import { BiHeadphone } from 'react-icons/bi';
-import { BsSim } from 'react-icons/bs';
-import { MdOutlineRefresh } from 'react-icons/md';
-import { TfiMenuAlt } from 'react-icons/tfi';
-import { AiOutlineMenu } from 'react-icons/ai';
-import { BsCartFill } from 'react-icons/bs';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import '../../src/assets/images/Logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../Redux/slice/userSlice';
+
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { AiOutlineMenu } from 'react-icons/ai';
+import { BiHeadphone } from 'react-icons/bi';
+import { BsCartFill } from 'react-icons/bs';
+import { BsSim } from 'react-icons/bs';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { GiSmartphone } from 'react-icons/gi';
+import { IoIosTabletLandscape } from 'react-icons/io';
+import { Link } from 'react-router-dom';
+import Logo from '../components/Logo/Logo';
+import { MdOutlineRefresh } from 'react-icons/md';
 import SearchBoxClient from '../components/SearchBoxClient/SearchBoxClient';
+import { TfiMenuAlt } from 'react-icons/tfi';
+import { logout } from '../Redux/slice/userSlice';
+
+// import Logo from '../assets/images/Logo.svg';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const Header = () => {
   const [active, setActive] = useState(false);
 
@@ -105,6 +129,23 @@ const Header = () => {
                 onClick={() => handleCloseMenu()}>
                 <AiFillCloseCircle onClick={() => handleCloseMenu()} />
               </i>
+            </Link>
+            <Link
+              to={'/account/profile'}
+              className='menu__tablet--item--child'
+              onClick={() => handleCloseMenu()}>
+              <div className='tablet--item--child'>
+                <span style={{paddingTop: '10px'}}>
+                  <FaRegUserCircle />
+                </span>
+                {user?.length > 0 ? (
+                <p className='user-name' style={{fontWeight: "600"}}>{user[0].fullName.split(' ')[user[0].fullName.split(' ').length - 1]}</p>
+            ) : (
+            <Link to={'/login'}>
+              <p style={{fontWeight: "600"}}>Tài Khoản của tôi</p>
+            </Link>
+          )}
+              </div>
             </Link>
             <div className='menu__tablet--item--child'>
               <Link
@@ -215,39 +256,27 @@ const Header = () => {
                 <p>SIM & THẺ</p>
               </div>
             </Link>
-            <Link
-              to={'/login'}
-              className='menu__tablet--item--child'
-              onClick={() => handleCloseMenu()}>
-              <div className='tablet--item--child'>
-                <span>
-                  <FaRegUserCircle />
-                </span>
-                <p>Tài Khoản</p>
-              </div>
-            </Link>
+            {user?.length > 0 ? (
+              <Link
+                to={''}
+                className='menu__tablet--item--child'
+                onClick={handleLogut}>
+                <div className='tablet--item--child'>
+                  <span>
+                    <AiOutlineLogout />
+                  </span>
+                  <p>Đăng Xuất</p>
+                </div>
+              </Link>
+            ) : ("")}
           </div>
           <div
             className='menu__tablet--overlay d-none'
             onClick={() => handleCloseMenu()}></div>
         </div>
-        {/* <img
-          src={Logo}
-          alt=''
-        /> */}
-        {/* <div style={{flex:"0 0 10%",width:"10%"}}>
-        </div> */}
         <Logo></Logo>
-
+        
         <InputGroup className='input__form__search'>
-          {/* <Form.Control
-            as='input'
-            aria-label='Nhập tên thiết bị cần tìm'
-            placeholder='Nhập tên thiết bị cần tìm'
-          />
-          <InputGroup.Text style={{ backgroundColor: '#e02f2f', border: 'none', outline: 'none' }}>
-            <AiOutlineSearch style={{ color: '#fff', fontSize: '25px', fontWeight: '600' }} />
-          </InputGroup.Text> */}
           <SearchBoxClient />
         </InputGroup>
 
