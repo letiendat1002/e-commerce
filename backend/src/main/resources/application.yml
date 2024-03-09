@@ -6,9 +6,7 @@ server:
     enabled: true
   compression:
     enabled: true
-    mime-types: text/javascript, application/javascript
-  servlet:
-    context-path: /prod
+    mime-types: text/javascript, application/javascript, text/css, application/json, application/xml, text/html, text/xml, text/plain
 
 spring:
   main:

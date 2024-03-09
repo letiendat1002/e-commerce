@@ -9,7 +9,7 @@
 
 ### Get started
 
-Run the application and open **SwaggerUI** at http://localhost:8080/prod/swagger-ui/index.html
+Run the application and open **SwaggerUI** at http://localhost:8080
 
 Use the **above link** to test and get detail information about APIs in this project **without to install Postman**.
 
