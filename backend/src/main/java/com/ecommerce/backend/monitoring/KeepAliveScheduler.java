@@ -7,6 +7,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
+
 @RequiredArgsConstructor
 @Component
 @Log4j2
@@ -21,7 +23,7 @@ public class KeepAliveScheduler {
         log.info("Keep alive success");
     }
 
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedRate = 300000)
     public void keepAlive() {
         var webClient = WebClient.create(variableConstants.getAPI_URL());
         webClient.get()
@@ -30,6 +32,7 @@ public class KeepAliveScheduler {
                 .bodyToMono(Void.class)
                 .doOnSuccess(this::logSuccess)
                 .doOnError(this::logError)
+                .timeout(Duration.ofSeconds(10))
                 .subscribe();
     }
 }
