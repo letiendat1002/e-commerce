@@ -11,7 +11,8 @@
 
 Run the application and open **SwaggerUI** at http://localhost:8080
 
-Use the **above link** to test and get detail information about APIs in this project **without to install Postman**.
+- Use the **above link** to test and get detail information about APIs in this project via UI.
+- Another approach is to use **Postman** to test APIs.
 
 ![api_example.png](../assets/images/api/swaggerUI.png)
 
@@ -36,4 +37,5 @@ All the json body template is included in SwaggerUI.
 
 ## Read next
 
-Check out the [Role & Permission Documentation](./RolePermission.md) to see the list of public APIs, roles and permissions.
+Check out the [Role & Permission Documentation](./RolePermission.md) to see the list of public APIs, roles and
+permissions.
