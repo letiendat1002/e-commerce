@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class OrderDetailJPADataAccessService implements OrderDetailDAO {
+public class OrderDetailJpaDAOImpl implements OrderDetailDAO {
     private final OrderDetailRepository orderDetailRepository;
 
     @Override

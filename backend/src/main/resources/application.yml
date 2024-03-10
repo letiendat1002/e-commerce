@@ -6,9 +6,7 @@ server:
     enabled: true
   compression:
     enabled: true
-    mime-types: text/javascript, application/javascript
-  servlet:
-    context-path: /prod
+    mime-types: text/javascript, application/javascript, text/css, application/json, application/xml, text/html, text/xml, text/plain
 
 spring:
   main:
@@ -30,7 +28,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: linkking.noreply@gmail.com
+    username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     properties:
       mail:
@@ -50,3 +48,8 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+
+management:
+  endpoint:
+    health:
+      show-details: always

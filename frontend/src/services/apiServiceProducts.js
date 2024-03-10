@@ -8,7 +8,7 @@ const SCHEMA = 'products';
 
 const productApi = {
   async getAllCategory() {
-    const categoryListFilter = await axios.get(`https://5i5iavxp88.execute-api.ap-southeast-1.amazonaws.com/prod/api/v1/categories`);
+    const categoryListFilter = await axios.get(`https://linkking.onrender.com/api/v1/categories`);
     // console.log(productListFilter)
     return categoryListFilter;
   },

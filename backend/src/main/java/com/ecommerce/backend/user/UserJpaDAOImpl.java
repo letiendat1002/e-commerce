@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class UserJPADataAccessService implements UserDAO {
+public class UserJpaDAOImpl implements UserDAO {
     private final UserRepository userRepository;
 
     @Override

@@ -30,7 +30,6 @@
 - **Admin**
     - All permissions
 
-
 - **Employee**
     - **User:**
         - `get:getUserByUserID`

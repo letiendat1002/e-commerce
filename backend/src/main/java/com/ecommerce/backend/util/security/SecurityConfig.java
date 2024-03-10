@@ -35,27 +35,16 @@ public class SecurityConfig {
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/swagger-ui*",
-                        "/prod/swagger-ui*",
                         "/swagger-ui.css",
                         "/swagger-ui-bundle.js",
                         "/swagger-ui-standalone-preset.js",
-                        "/prod/swagger-ui.css",
-                        "/prod/swagger-ui-bundle.js",
-                        "/prod/swagger-ui-standalone-preset.js",
                         "/api-docs",
                         "/api-docs/**",
-                        "/prod/api-docs",
-                        "/prod/api-docs/**",
                         "/index.html",
-                        "/css/**",
-                        "/js/**",
-                        "/*.js",
-                        "/*.css",
-                        "/index.css",
-                        "/prod/index.css",
                         "/favicon.ico",
                         "/webjars/**",
-                        "/webjars/swagger-ui/3.1.5/**"
+                        "/webjars/swagger-ui/3.1.5/**",
+                        "/actuator/health"
                 )
                 .permitAll()
                 .requestMatchers(
@@ -66,18 +55,12 @@ public class SecurityConfig {
                         "/api/v*/categories/**",
                         "/api/v*/ratings",
                         "/api/v*/auth/**",
-                        "/prod/api/v*/products",
-                        "/prod/api/v*/categories",
-                        "/prod/api/v*/products/**",
-                        "/prod/api/v*/categories/**",
-                        "/prod/api/v*/ratings",
-                        "/prod/api/v*/auth/**"
+                        "/api/v*/keep-alive"
                 )
                 .permitAll()
                 .requestMatchers(
                         HttpMethod.POST,
-                        "/api/v*/auth/**",
-                        "/prod/api/v*/auth/**"
+                        "/api/v*/auth/**"
                 )
                 .permitAll()
                 .anyRequest()
