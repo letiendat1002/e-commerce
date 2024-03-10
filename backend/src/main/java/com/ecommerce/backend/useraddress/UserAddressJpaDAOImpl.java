@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class UserAddressJPADataAccessService implements UserAddressDAO {
+public class UserAddressJpaDAOImpl implements UserAddressDAO {
     private final UserAddressRepository userAddressRepository;
 
     @Override

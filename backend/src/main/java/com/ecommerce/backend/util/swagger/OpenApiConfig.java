@@ -1,4 +1,4 @@
-package com.ecommerce.backend.util.config;
+package com.ecommerce.backend.util.swagger;
 
 
 import com.ecommerce.backend.util.constants.VariableConstants;
@@ -12,8 +12,6 @@ import io.swagger.v3.oas.models.servers.Server;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 @OpenAPIDefinition(
@@ -44,6 +42,6 @@ public class OpenApiConfig {
                                                 .bearerFormat("JWT")
                                 )
                 )
-                .addServersItem(new Server().url(variableConstants.getURL()));
+                .addServersItem(new Server().url(variableConstants.getAPI_URL()));
     }
 }

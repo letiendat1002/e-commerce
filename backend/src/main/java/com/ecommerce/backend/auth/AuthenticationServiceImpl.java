@@ -53,7 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         var registrationUrl = EmailTemplate.createRegistrationUrl(
-                variableConstants.getURL(),
+                variableConstants.getAPI_URL(),
                 token
         );
 

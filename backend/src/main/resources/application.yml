@@ -48,3 +48,8 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+
+management:
+  endpoint:
+    health:
+      show-details: always

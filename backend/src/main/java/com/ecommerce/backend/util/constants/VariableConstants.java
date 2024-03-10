@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class VariableConstants {
     @Value("${env-variable.api-url}")
-    private String URL;
+    private final String API_URL;
 }

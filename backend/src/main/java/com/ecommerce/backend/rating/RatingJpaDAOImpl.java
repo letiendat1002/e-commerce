@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class RatingJPADataAccessService implements RatingDAO {
+public class RatingJpaDAOImpl implements RatingDAO {
     private final RatingRepository ratingRepository;
 
     @Override

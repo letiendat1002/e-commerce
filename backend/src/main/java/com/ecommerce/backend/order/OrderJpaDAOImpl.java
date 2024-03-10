@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class OrderJPADataAccessService implements OrderDAO {
+public class OrderJpaDAOImpl implements OrderDAO {
     private final OrderRepository orderRepository;
 
     @Override

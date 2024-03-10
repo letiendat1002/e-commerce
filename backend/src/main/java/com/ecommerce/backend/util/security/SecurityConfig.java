@@ -43,7 +43,8 @@ public class SecurityConfig {
                         "/index.html",
                         "/favicon.ico",
                         "/webjars/**",
-                        "/webjars/swagger-ui/3.1.5/**"
+                        "/webjars/swagger-ui/3.1.5/**",
+                        "/actuator/health"
                 )
                 .permitAll()
                 .requestMatchers(
@@ -53,7 +54,8 @@ public class SecurityConfig {
                         "/api/v*/products/**",
                         "/api/v*/categories/**",
                         "/api/v*/ratings",
-                        "/api/v*/auth/**"
+                        "/api/v*/auth/**",
+                        "/api/v*/keep-alive"
                 )
                 .permitAll()
                 .requestMatchers(
