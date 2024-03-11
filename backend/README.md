@@ -9,6 +9,7 @@
     - [Spring Security](https://spring.io/projects/spring-security)
     - [Spring Web](https://spring.io/projects/spring-web)
     - [Spring Test](https://spring.io/guides/gs/testing-web/)
+    - More details please refer to [pom.xml](pom.xml)
 
 ## Requirements
 
@@ -20,10 +21,16 @@
 1. [MySQL Scripts](assets/databases/mysql)
 2. [Database Design](assets/images/database/database_design.png)
 3. [Spring Security Architecture](assets/images/security)
-4. [Documentation](docs)
 
 ## Documentation
 
-1. [Connect to database](docs/ConnectDatabase.md)
-2. [APIs](docs/APIs.md)
-3. [Role & Permission](docs/RolePermission.md)
+1. [Docs folder](docs)
+2. [Connect to database](docs/ConnectDatabase.md)
+3. [APIs](docs/APIs.md)
+4. [Role & Permission](docs/RolePermission.md)
+5. [Deployment](docs/Deployment.md)
+
+**Notice**:
+- To initiate the backend properly, please open this project in the `backend/` folder not the root `e-commerce/` folder.
+- To run the project locally, please refer to [Connect to database](docs/ConnectDatabase.md) for more details and remember to change `spring.profiles.active` in [application.yml](src/main/resources/application.yml) from `prod` to `dev` (default value is `prod`).
+- To deploy the project, please refer to [Deployment](docs/Deployment.md) for more details and remember to change `spring.profiles.active` in [application.yml](src/main/resources/application.yml) from `dev` to `prod`.
